@@ -23,16 +23,16 @@
   <div class="top-actions">
     <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
     <a class="github-link" href="../index.html">← Guide</a>
-    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Stages</button>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
   </div>
 </header>
 
 <aside class="sidebar" id="sidebar">
-  <p class="nav-label">Delivery lifecycle</p>
+  <p class="nav-label">Stage 06 · Assure</p>
   <nav id="sectionNav">
     <a href="#entry"><span>01</span> Entry criteria</a>
     <a href="#layers"><span>02</span> Assurance layers</a>
-    <a href="#controls"><span>03</span> Negative controls</a>
+    <a href="#controls"><span>03</span> Controls</a>
     <a href="#evidence"><span>04</span> Evidence manifest</a>
     <a href="#roles"><span>05</span> Roles</a>
     <a href="#gate"><span>06</span> Exit gate</a>
@@ -56,7 +56,7 @@
     </div>
   </div>
   <p class="lede">Assure is where a change stops being an assertion and becomes evidence. The implementing agent has claimed the Work Package is done. This stage decides whether that claim survives contact with a command.</p>
-  <p class="section-intro">Assure does not ask whether the code looks correct. It asks a narrower and more answerable question: <strong>for each acceptance criterion, which command was run, against which commit, and what did it print?</strong> A criterion no command can check is a defect in the plan, and it is returned to Define — not waved through here.</p>
+  <p class="section-intro">Assure does not ask whether the code looks correct. It asks a narrower and more answerable question: <strong>for each acceptance criterion, which command was run, against which commit, and what did it print?</strong> A criterion no command can check is a defect in the plan, and the package is returned to <a href="plan.html">Plan</a> — not waved through here.</p>
 
   <div class="invariant">
     <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
@@ -78,7 +78,7 @@
     </article>
     <article>
       <h3>CI has run against that exact SHA</h3>
-      <p>Not against the branch name, not against a rebased predecessor. Verify which head the run was bound to, and cite it.</p>
+      <p>Not against the branch name, not against a rebased predecessor. Name which revision is authoritative before you check: a pull-request workflow on GitHub runs against a <em>synthetic merge commit</em> of the head into the base, not against the head itself — so record the head SHA, the run's own SHA, and which of the two the criterion is asserted over.</p>
     </article>
   </div>
   <div class="callout">
@@ -104,12 +104,12 @@
       </tbody>
     </table>
   </div>
-  <p class="section-intro" style="margin-top:2rem">Layers 4 and 5 are the ones most often skipped and least often safe to skip. A unit test of an authorization helper proves the helper; only a request that crosses the real boundary proves the boundary. Where a control is meant to run in a deployed process, exercise it in that process — an in-memory test of the same function is necessary and not sufficient.</p>
+  <p class="section-intro" style="margin-top:2rem">Treat layers 4 and 5 as the ones to justify skipping in writing, because they are the cheapest to omit and the most expensive to omit wrongly. A unit test of an authorization helper proves the helper; only a request that crosses the real boundary proves the boundary. Where a control is meant to run in a deployed process, exercise it in that process — an in-memory test of the same function is necessary and not sufficient.</p>
 </section>
 
 <section id="controls" data-search="negative control positive control prove the check can fail mutation">
-  <div class="section-heading"><span>03</span><div><p>The discipline</p><h2>Negative controls</h2></div></div>
-  <p class="section-intro">This is the part of Assure that is most often skipped, and it is the part that does the work. Diligence catches nothing reliably; controls do.</p>
+  <div class="section-heading"><span>03</span><div><p>The discipline</p><h2>Controls</h2></div></div>
+  <p class="section-intro">This is the part of Assure most easily skipped, because nothing visibly breaks when it is. Diligence catches nothing reliably; controls do.</p>
 
   <div class="split">
     <div>
@@ -209,23 +209,23 @@
     <article>
       <h3>Periodic</h3>
       <ul class="check-list">
-        <li>Service-level objective review against actual burn</li>
         <li>Recovery exercise: resume a Work Package from repository evidence alone</li>
-        <li>Disaster-recovery drill with the result written up</li>
+        <li>Re-run the full isolation suite, not the subset the last change touched</li>
+        <li>Re-confirm each control can still fail, by making it fail on purpose</li>
       </ul>
     </article>
     <article>
       <h3>Event-driven</h3>
       <ul class="check-list">
-        <li>Every incident adds the test that would have caught it</li>
-        <li>Every recurrence promotes a soft lesson into a blocking check</li>
-        <li>Every near-miss records which control caught it</li>
+        <li>Every near-miss records which control caught it, and which did not</li>
+        <li>Every escaped defect names the layer that should have held it</li>
+        <li>Objectives, incident handling and recovery drills belong to <a href="operate.html">Operate</a> — this page does not restate them</li>
       </ul>
     </article>
   </div>
   <div class="invariant">
     <span>THE STEADY-STATE MEASURE</span>
-    <p>Count the defects caught by a control, not the defects caught by attention. If the ratio moves toward attention, the controls have stopped covering the surface that is changing.</p>
+    <p>Escaped defects are the measure of this stage. Every one names a layer that ran and did not hold, or a layer that was skipped — and which of the two it was decides whether you strengthen a control or stop omitting it. The control-versus-attention ratio itself belongs to <a href="operate.html">Operate</a>.</p>
   </div>
 </section>
 

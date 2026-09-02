@@ -115,7 +115,7 @@
   <div class="section-heading"><span>04</span><div><p>The risky part</p><h2>Migrations</h2></div></div>
   <p class="section-intro">Most changes are reversible by reverting a commit. Data changes are not, and treating them as though they were is the most common route from a routine release to an incident.</p>
   <div class="definition-list">
-    <div><span>Expand first</span><p>Add the new structure alongside the old. Deploy. Backfill. Only then switch reads, and only later remove the old structure. Each step is separately reversible.</p></div>
+    <div><span>Expand, then contract</span><p>Six steps, in this order. <strong>1.</strong> Add the new structure alongside the old. <strong>2.</strong> Deploy code that <strong>writes to both</strong>. <strong>3.</strong> Backfill the existing rows. <strong>4.</strong> Switch reads to the new structure. <strong>5.</strong> Stop writing the old one. <strong>6.</strong> Only then remove it. Each step is separately reversible <em>because</em> step 2 is there: without dual-write the old structure keeps taking writes while the backfill runs, so at step 4 the new structure is stale by exactly the write volume accumulated since the backfill began — and that staleness is silent.</p></div>
     <div><span>Never destroy in one step</span><p>A migration that drops or rewrites in the same deployment as the code change removes the option of rolling back the code.</p></div>
     <div><span>Backfills are jobs, not migrations</span><p>They are restartable, observable, and safe to run twice. A backfill that cannot be resumed will be run again from the start at the worst possible moment.</p></div>
     <div><span>State the reversal explicitly</span><p>Write what rollback means for this change. Where rollback is genuinely one-way, say so at planning time, not during the incident.</p></div>
@@ -126,10 +126,10 @@
   <div class="section-heading"><span>05</span><div><p>Instrument while building</p><h2>Telemetry as you go</h2></div></div>
   <p class="section-intro">You cannot add observability to an incident that is already happening. The instrumentation a change needs is part of that change, not a follow-up nobody schedules.</p>
   <ul class="check-list">
-    <li>Every material state transition emits an event carrying tenant, correlation and causation identifiers</li>
-    <li>Every external call records outcome, latency and the provider's own reference</li>
-    <li>Errors carry enough context to reconstruct what was attempted, without carrying sensitive data</li>
-    <li>New failure modes get a signal before they get a runbook, and a runbook before they get an alert</li>
+    <li>Every material state transition <strong>must emit</strong> an event carrying tenant, correlation and causation identifiers</li>
+    <li>Every external call <strong>must record</strong> outcome, latency and the provider's own reference</li>
+    <li>Errors <strong>must carry</strong> enough context to reconstruct what was attempted, without carrying sensitive data</li>
+    <li>Give a new failure mode a signal before a runbook, and a runbook before an alert</li>
   </ul>
   <div class="callout">
     <strong>Detail on operating the running service lives in <a href="operate.html">Operate</a></strong>

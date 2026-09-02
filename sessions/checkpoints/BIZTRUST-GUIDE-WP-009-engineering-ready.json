@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-009-001",
+  "created_at": "2026-09-02T20:44:38Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-009",
+  "state": "ENGINEERING_READY",
+  "objective": "Correct what independent review found to be wrong or untrue in the six merged stage manuals.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-009-review-defects",
+    "baseline_commit": "0e7e9b2567213c7d656f50b932e5b07daca0ba2f"
+  },
+  "completed": [
+    "Rewrote the expand-and-contract migration sequence to include the dual-write step, which was missing and would have lost data",
+    "Removed the claim that guidance cannot drift between copies, which was false while a drifted copy existed seventy lines below it",
+    "Deduplicated assure.html steady-state against operate.html: objectives, incident handling and recovery drills now belong to Operate alone",
+    "Settled acceptance-criteria ownership on Plan; assure.html no longer routes a defect to Define, which has no page",
+    "Rewrote nine bullets in operate.html cost and vulnerability sections into imperative mood; four in build.html telemetry; two in release.html communication",
+    "Replaced two frequency claims made over a taxonomy invented on the same page, for which no corpus exists",
+    "Corrected the CI-against-that-SHA instruction, which is unachievable under GitHub's pull-request trigger",
+    "Normalised assure.html nav-label and menu-button, which deviated from the other five without justification"
+  ],
+  "remaining": [
+    "Human review and merge of three open pull requests",
+    "Deferred structural findings in a follow-up work package",
+    "The binding-authority question, which no agent can answer"
+  ],
+  "files_changed": [
+    "stages/build.html",
+    "stages/assure.html",
+    "stages/operate.html",
+    "stages/release.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-009-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "grep for the removed claim and the duplicated invariant box",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "Four independent reviewers found four defects in work previously reported as evidenced and green: a data-loss migration sequence, an architecture freeze omitting the four most expensive retrofits, a false anti-drift claim beside a drifted copy, and a validator that failed open on an empty JSON object",
+    "html-refs rose from 185 to 188, reflecting three new cross-page links replacing restated guidance",
+    "The test suite does not run on this branch because tests/ lives on the unmerged WP-005 branch"
+  ],
+  "decisions": [
+    "Acceptance criteria are owned by Plan, not Define. Plan makes them a Work Package field; Define produces requirements",
+    "Structural findings are deferred to a follow-up work package rather than fixed opportunistically here",
+    "Frequency claims are replaced rather than hedged: no corpus exists, so no wording makes them measurable"
+  ],
+  "assumptions": [
+    "The reviewers' readings are correct; none has been independently re-verified by a third party"
+  ],
+  "blockers": [
+    {
+      "code": "MERGE_REQUIRES_HUMAN",
+      "owner_role": "human-reviewer",
+      "resolution": "A human reviews and merges. Agents must not merge."
+    }
+  ],
+  "authority": {
+    "granted": "Documentation fixes via pull request, per operator instruction 2026-09-03",
+    "withheld": "Architecture acceptance, platform implementation, Pages settings changes"
+  },
+  "next_action_id": "NS-021",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/13"
+    ],
+    "stop_if": [
+      "The validator does not return PASS",
+      "A migration sequence without dual-write reappears",
+      "Any merge is proposed without a recorded human decision"
+    ]
+  },
+  "declared_non_coverage": [
+    "Only defects classed WRONG or UNTRUE were fixed; structural findings are deferred and remain in the merged pages",
+    "The architecture findings are not addressed here at all and belong to the architecture contract, not the guide",
+    "No practitioner has reviewed the insurance content; the binding-authority question is unanswered",
+    "Discover, Define and Learn remain unwritten",
+    "The corrected pages have not themselves been re-reviewed by an independent reader"
+  ]
+}
