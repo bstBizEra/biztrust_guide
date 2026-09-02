@@ -3,8 +3,12 @@ name: Deploy BizTrust Guide to GitHub Pages
 on:
   push:
     branches: [main]
+  # No base-branch filter: a pull request into ANY branch must be validated.
+  # With `branches: [main]` a stacked pull request (base = a feature branch)
+  # produced no workflow run at all, and mergeable_state read "clean" whether
+  # CI had passed or had never run. Deploy steps stay gated on
+  # `github.event_name != 'pull_request'`, so this widens validation only.
   pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
