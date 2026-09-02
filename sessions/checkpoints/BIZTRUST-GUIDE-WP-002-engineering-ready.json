@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-002-001",
+  "created_at": "2026-09-02T14:15:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-002",
+  "state": "ENGINEERING_READY",
+  "objective": "Add live-preview guidance and repository-native agent continuity controls.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "main",
+    "baseline_commit": "ccef536f64603fc8ef2a0c0c88a0b5a0770d3a1f"
+  },
+  "completed": [
+    "Researched current official GitHub Pages and Python http.server procedures",
+    "Added Pages deployment workflow",
+    "Added preview and troubleshooting runbook",
+    "Added repository agent charter",
+    "Added machine-readable current state and next actions",
+    "Added checkpoint, handoff schemas and deterministic validator",
+    "Expanded the interactive guide with preview, continuity and next-step sections"
+  ],
+  "remaining": [
+    "Commit update to remote main",
+    "Repository administrator enables GitHub Actions as Pages source",
+    "QA verifies the public deployment"
+  ],
+  "files_changed": [
+    "README.md",
+    "AGENTS.md",
+    "index.html",
+    "styles.css",
+    ".github/workflows/pages.yml",
+    ".github/ISSUE_TEMPLATE/work-package.yml",
+    ".github/pull_request_template.md",
+    "docs/LIVE_PREVIEW.md",
+    "docs/AGENT_CONTINUITY.md",
+    "docs/NEXT_STEPS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "schemas/session-checkpoint.schema.json",
+    "schemas/handoff.schema.json",
+    "templates/session-checkpoint.json",
+    "templates/handoff.json",
+    "scripts/validate_continuity.py"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m http.server 8080 --bind 127.0.0.1; curl -I http://127.0.0.1:8080/",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The repository is a public static GitHub Pages candidate.",
+    "GitHub Pages activation is a repository administrator setting.",
+    "Python http.server is suitable only for trusted local preview."
+  ],
+  "decisions": ["DEC-001", "DEC-002", "DEC-003"],
+  "assumptions": [
+    "The repository administrator intends the guide to be public.",
+    "GitHub-hosted runners support the selected official Pages actions."
+  ],
+  "blockers": [
+    {
+      "code": "PAGES_SOURCE_NOT_CONFIRMED",
+      "owner_role": "repository-administrator",
+      "resolution": "Select GitHub Actions in repository Pages settings."
+    }
+  ],
+  "authority": {
+    "implementation": "GRANTED",
+    "remote_commit": "GRANTED",
+    "pages_activation": "NOT_GRANTED_TO_AGENT"
+  },
+  "next_action_id": "NS-001",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json"
+    ],
+    "stop_if": [
+      "The remote main branch no longer descends from the recorded baseline",
+      "The active Work Package or authority record has changed",
+      "Continuity validation fails"
+    ]
+  },
+  "declared_non_coverage": [
+    "GitHub Pages repository setting activation",
+    "Post-deployment browser verification",
+    "BizTrust production application implementation"
+  ]
+}

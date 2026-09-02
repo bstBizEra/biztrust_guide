@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biztrust.example/schemas/session-checkpoint.schema.json",
+  "title": "BizTrust Agent Session Checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "checkpoint_id",
+    "created_at",
+    "work_package_id",
+    "state",
+    "objective",
+    "source",
+    "completed",
+    "remaining",
+    "files_changed",
+    "validation",
+    "observations",
+    "decisions",
+    "assumptions",
+    "blockers",
+    "authority",
+    "next_action_id",
+    "recovery",
+    "declared_non_coverage"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "checkpoint_id": {"type": "string", "minLength": 8},
+    "created_at": {"type": "string", "format": "date-time"},
+    "work_package_id": {"type": "string", "pattern": "^[A-Z0-9-]+$"},
+    "state": {
+      "enum": ["DRAFT", "READY", "AUTHORIZED", "IN_PROGRESS", "VALIDATING", "ENGINEERING_READY", "ACCEPTED", "CLOSED", "BLOCKED", "WAIT_FOR_AUTHORITY", "RECOVERY_REQUIRED", "REJECTED", "CANCELLED"]
+    },
+    "objective": {"type": "string", "minLength": 10},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "branch", "baseline_commit"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 3},
+        "branch": {"type": "string", "minLength": 1},
+        "baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
+    "completed": {"type": "array", "items": {"type": "string"}},
+    "remaining": {"type": "array", "items": {"type": "string"}},
+    "files_changed": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "status", "exit_code"],
+        "properties": {
+          "command": {"type": "string"},
+          "status": {"enum": ["PASS", "FAIL", "PENDING_FINAL_RUN", "NOT_APPLICABLE"]},
+          "exit_code": {"type": ["integer", "null"]}
+        }
+      }
+    },
+    "observations": {"type": "array", "items": {"type": "string"}},
+    "decisions": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "owner_role", "resolution"],
+        "properties": {
+          "code": {"type": "string"},
+          "owner_role": {"type": "string"},
+          "resolution": {"type": "string"}
+        }
+      }
+    },
+    "authority": {"type": "object", "minProperties": 1},
+    "next_action_id": {"type": "string", "minLength": 3},
+    "recovery": {
+      "type": "object",
+      "required": ["first_safe_command", "read_first", "stop_if"],
+      "properties": {
+        "first_safe_command": {"type": "string"},
+        "read_first": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "stop_if": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "declared_non_coverage": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}
+

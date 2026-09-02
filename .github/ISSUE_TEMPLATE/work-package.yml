@@ -1,0 +1,83 @@
+name: BizTrust Work Package
+description: Create a bounded, authorized and evidence-driven delivery unit.
+title: "[BIZTRUST-WP-] "
+labels: ["work-package", "state:draft"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A Work Package is the smallest independently authorized, executed and verified delivery unit. Do not begin implementation until scope, authority and acceptance criteria are complete.
+  - type: input
+    id: work-package-id
+    attributes:
+      label: Work Package ID
+      placeholder: BIZTRUST-WP-DOMAIN-001
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Business outcome
+      description: State one bounded and testable outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: In scope
+      placeholder: "- Deliverable\n- Deliverable"
+    validations:
+      required: true
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: Out of scope
+      placeholder: "- Explicit exclusion"
+    validations:
+      required: true
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk class
+      options: [Low, Medium, High, Critical]
+    validations:
+      required: true
+  - type: textarea
+    id: authority
+    attributes:
+      label: Authority
+      description: Name approving role, allowed actions, tools, budget, expiry and prohibited actions.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: "- [ ] Criterion with measurable evidence"
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence
+      description: Identify commands, CI checks, artifacts and independent verification.
+    validations:
+      required: true
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Failure containment and rollback
+    validations:
+      required: true
+  - type: checkboxes
+    id: readiness
+    attributes:
+      label: Readiness declaration
+      options:
+        - label: Scope and exclusions are explicit.
+          required: true
+        - label: Authority is explicit and has not been inferred.
+          required: true
+        - label: Evidence and acceptance criteria are testable.
+          required: true
+

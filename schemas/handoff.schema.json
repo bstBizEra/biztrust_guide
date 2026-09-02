@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biztrust.example/schemas/handoff.schema.json",
+  "title": "BizTrust Agent Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "handoff_id",
+    "created_at",
+    "work_package_id",
+    "sender_role",
+    "receiver_role",
+    "source_commit",
+    "observations",
+    "decisions",
+    "completed",
+    "remaining",
+    "excluded",
+    "evidence",
+    "risks",
+    "first_safe_action",
+    "stop_conditions",
+    "acknowledgement"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "handoff_id": {"type": "string", "minLength": 8},
+    "created_at": {"type": "string", "format": "date-time"},
+    "work_package_id": {"type": "string", "pattern": "^[A-Z0-9-]+$"},
+    "sender_role": {"type": "string", "minLength": 2},
+    "receiver_role": {"type": "string", "minLength": 2},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "observations": {"type": "array", "items": {"type": "string"}},
+    "decisions": {"type": "array", "items": {"type": "string"}},
+    "completed": {"type": "array", "items": {"type": "string"}},
+    "remaining": {"type": "array", "items": {"type": "string"}},
+    "excluded": {"type": "array", "items": {"type": "string"}},
+    "evidence": {"type": "array", "items": {"type": "string"}},
+    "risks": {"type": "array", "items": {"type": "string"}},
+    "first_safe_action": {"type": "string", "minLength": 5},
+    "stop_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "acknowledgement": {
+      "type": "object",
+      "required": ["required", "status", "receiver", "timestamp"],
+      "properties": {
+        "required": {"const": true},
+        "status": {"enum": ["PENDING", "ACCEPTED", "REJECTED"]},
+        "receiver": {"type": ["string", "null"]},
+        "timestamp": {"type": ["string", "null"], "format": "date-time"}
+      }
+    }
+  }
+}
+

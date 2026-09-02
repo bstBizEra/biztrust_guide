@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-<WORK-PACKAGE-ID>-<SEQUENCE>",
+  "created_at": "<RFC3339-UTC>",
+  "work_package_id": "<WORK-PACKAGE-ID>",
+  "state": "IN_PROGRESS",
+  "objective": "<ONE BOUNDED OBJECTIVE>",
+  "source": {
+    "repository": "bstBizEra/<REPOSITORY>",
+    "branch": "<BRANCH>",
+    "baseline_commit": "<40-CHARACTER-COMMIT-SHA>"
+  },
+  "completed": [],
+  "remaining": [],
+  "files_changed": [],
+  "validation": [
+    {"command": "<COMMAND>", "status": "PASS", "exit_code": 0}
+  ],
+  "observations": [],
+  "decisions": [],
+  "assumptions": [],
+  "blockers": [],
+  "authority": {"implementation": "GRANTED"},
+  "next_action_id": "<ACTION-ID>",
+  "recovery": {
+    "first_safe_command": "<READ-ONLY OR VALIDATION COMMAND>",
+    "read_first": ["AGENTS.md", "badf/current-state.json", "badf/next-actions.json"],
+    "stop_if": ["<EXPLICIT STOP CONDITION>"]
+  },
+  "declared_non_coverage": ["<WHAT WAS NOT VERIFIED>"]
+}
+
