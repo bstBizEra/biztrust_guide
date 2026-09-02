@@ -149,6 +149,8 @@
     <div><span>Exit status</span><p>The status and the material output, quoted rather than summarized. Errors, failures and denials pass through raw.</p></div>
     <div><span>Verifier</span><p>The role that ran it. The implementing agent may produce evidence; it may not accept its own.</p></div>
     <div><span>Coverage</span><p>What was checked, and explicitly what was not. The non-coverage line is the one a reviewer reads first.</p></div>
+    <div><span>Control record</span><p>For each new check: the failing output observed on purpose, and the restored pass, both citing the same revision. Without this the discipline below has nowhere to land, and "we tested it" and "we watched it fail" become the same claim.</p></div>
+    <div><span>Deferred findings</span><p>The Work Package identifiers raised for anything found outside this scope.</p></div>
   </div>
   <div class="callout">
     <strong>Keep the pre-merge reading</strong>
@@ -163,7 +165,7 @@
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
       <tbody>
         <tr><td><strong>Implementing agent</strong></td><td>Produces evidence; states declared non-coverage; fixes what verification returns</td><td>Accept its own work, or grade the subset it chose</td></tr>
-        <tr><td><strong>Verifier</strong></td><td>Re-runs the checks independently; confirms each criterion maps to output; challenges aim, not just result</td><td>Re-run only the subset the implementer suggests</td></tr>
+        <tr><td><strong>Verifier</strong></td><td>Re-runs the checks independently; confirms each criterion maps to output; confirms each new check was observed to fail; challenges aim, not just result</td><td>Re-run only the subset the implementer suggests</td></tr>
         <tr><td><strong>Security reviewer</strong></td><td>Owns layer 4 for any change touching authentication, tenancy, or data access</td><td>Approve on unit-test evidence where a deployed path is what ships</td></tr>
         <tr><td><strong>Human authority</strong></td><td>Accepts the stage and authorizes the transition to Release</td><td>Be inferred from silence, a green check, or an agent's assertion</td></tr>
       </tbody>
@@ -181,10 +183,9 @@
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Every acceptance criterion maps to quoted command output</label>
     <label><input type="checkbox" disabled> Evidence is bound to the pushed commit SHA</label>
-    <label><input type="checkbox" disabled> Each new check has been observed to fail on purpose</label>
+    <label><input type="checkbox" disabled> Each new check has a control record: observed failing, then restored</label>
     <label><input type="checkbox" disabled> Declared non-coverage is written and reviewed</label>
     <label><input type="checkbox" disabled> Layer 4 signed off where authentication or tenancy changed</label>
-    <label><input type="checkbox" disabled> Rollback path is stated and has been exercised</label>
     <label><input type="checkbox" disabled> Findings outside scope became their own Work Packages</label>
     <label><input type="checkbox" disabled> A human recorded acceptance against the Work Package</label>
   </div>
@@ -237,7 +238,7 @@
   <p class="section-intro">Stop the stage and record the reason. Do not proceed on the assumption that the discrepancy is benign.</p>
   <ul class="cross-list">
     <li>Evidence cannot be bound to the source revision, or the measured SHA differs from the pushed head</li>
-    <li>An acceptance criterion has no command that could falsify it</li>
+    <li>A criterion survived <a href="plan.html#criteria">Plan</a> that verification cannot settle — return the package rather than inventing a proxy for it</li>
     <li>A check passes but has never been observed to fail</li>
     <li>The recorded state and the tracker disagree about what is in progress</li>
     <li>A change to authentication or tenancy carries only unit-test evidence</li>

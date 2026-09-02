@@ -87,6 +87,7 @@
     <div><span>Deployed revision identity</span><p>The exact revision now serving traffic, recorded and compared to the approved revision. If they differ, nothing else in this stage is meaningful.</p></div>
     <div><span>Smoke evidence</span><p>Output from checks run against the running system, bound to that deployed revision.</p></div>
     <div><span>Exposure log</span><p>Who saw the change, at what percentage, for how long, before it went wider.</p></div>
+    <div><span>Notification record</span><p>Who was told, when, through which channel, and which regulated obligation it discharged. Without it, "we notified them" is unfalsifiable at exactly the moment someone disputes it.</p></div>
   </div>
 </section>
 
@@ -162,7 +163,7 @@
     <table>
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
       <tbody>
-        <tr><td><strong>Release owner</strong></td><td>Runs the cutover, records the deployed revision, holds the abort decision</td><td>Deploy without an agreed abort signal</td></tr>
+        <tr><td><strong>Release owner</strong></td><td>Writes the change record, runs the cutover, records the deployed revision and the exposure log, confirms affected parties were notified, holds the abort decision</td><td>Deploy without an agreed abort signal</td></tr>
         <tr><td><strong>Verifier</strong></td><td>Runs smoke checks against the running system and records the output</td><td>Verify a branch, a build, or an intention</td></tr>
         <tr><td><strong>Authorizing role</strong></td><td>Grants the deployment explicitly, having read the evidence</td><td>Treat a green pipeline as authorization</td></tr>
         <tr><td><strong>Agents</strong></td><td>Prepare, verify, document, and report</td><td>Deploy to production or merge — both are reserved to a human</td></tr>

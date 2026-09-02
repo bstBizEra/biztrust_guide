@@ -154,19 +154,19 @@
     <section id="lifecycle" data-search="lifecycle PRD production discovery architecture build validate deploy operate learn gates">
       <div class="section-heading"><span>06</span><div><p>Value stream</p><h2>PRD-to-production lifecycle</h2></div></div>
       <div class="lifecycle">
-        <article><span>G0</span><h3>Discover</h3><p>Problem, stakeholder, baseline, constraints, KPI and evidence sources.</p><small>Exit: problem validated</small></article>
-        <article><span>G1</span><h3>Define</h3><p>PRD, journeys, requirements, data classification and risk tier.</p><small>Exit: requirements ready</small></article>
+        <article><span>G0</span><h3><a href="stages/discover.html">Discover →</a></h3><p>Problem, stakeholder, baseline, constraints, KPI and evidence sources.</p><small>Exit: problem validated</small></article>
+        <article><span>G1</span><h3><a href="stages/define.html">Define →</a></h3><p>PRD, journeys, requirements, data classification and risk tier.</p><small>Exit: requirements ready</small></article>
         <article><span>G2</span><h3><a href="stages/architect.html">Architect →</a></h3><p>Contracts, ADRs, threat model, data ownership, NFRs and rollback.</p><small>Exit: architecture frozen</small></article>
         <article><span>G3</span><h3><a href="stages/plan.html">Plan →</a></h3><p>Work packages, dependencies, estimates, test strategy and authority.</p><small>Exit: execution authorized</small></article>
         <article><span>G4</span><h3><a href="stages/build.html">Build →</a></h3><p>Small changes, contract tests, migrations, telemetry and documentation.</p><small>Exit: engineering ready</small></article>
         <article><span>G5</span><h3><a href="stages/assure.html">Assure →</a></h3><p>Independent QA, security, performance, domain and evidence review.</p><small>Exit: release candidate</small></article>
         <article><span>G6</span><h3><a href="stages/release.html">Release →</a></h3><p>Change record, progressive exposure, smoke tests and rollback window.</p><small>Exit: production accepted</small></article>
         <article><span>G7</span><h3><a href="stages/operate.html">Operate →</a></h3><p>SLOs, incidents, cost, vulnerability and business KPI monitoring.</p><small>Exit: value demonstrated</small></article>
-        <article><span>G8</span><h3>Learn</h3><p>Retrospective, decision quality, defect escape and knowledge promotion.</p><small>Exit: controls improved</small></article>
+        <article><span>G8</span><h3><a href="stages/learn.html">Learn →</a></h3><p>Retrospective, decision quality, defect escape and knowledge promotion.</p><small>Exit: controls improved</small></article>
       </div>
       <div class="callout">
         <strong>Stage manuals</strong>
-        <p>Each stage expands into an executable manual page — entry criteria, artifacts produced, roles, evidence required and the exit gate. <a href="stages/architect.html">Architect</a>, <a href="stages/plan.html">Plan</a>, <a href="stages/build.html">Build</a>, <a href="stages/assure.html">Assure</a>, <a href="stages/release.html">Release</a> and <a href="stages/operate.html">Operate</a> are written — the whole path from a frozen architecture to a running service. Discover, Define and Learn follow; they are not yet published and are not linked until they are.</p>
+        <p>Each stage expands into an executable manual page — entry criteria, artifacts produced, roles, evidence required and the exit gate. All nine stages are written. Each carries entry criteria, the artifacts it produces, roles, evidence, an exit gate and stop conditions — and a stage links another stage's guidance rather than restating it, which a cross-page duplicate detector enforces in CI rather than leaving to good intentions.</p>
       </div>
     </section>
 

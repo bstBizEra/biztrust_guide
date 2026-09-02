@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learn · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 09 of the BizTrust delivery lifecycle: judging decision quality apart from outcome, tracing each escaped defect to the gate that should have held it, and bounding the control set by a promotion bar and a retirement review.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 09 · Learn</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 09 · Learn</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#decision"><span>03</span> Decision quality</a>
+    <a href="#escape"><span>04</span> Defect escape</a>
+    <a href="#promotion"><span>05</span> The promotion bar</a>
+    <a href="#retire"><span>06</span> Retiring controls</a>
+    <a href="#roles"><span>07</span> Roles</a>
+    <a href="#gate"><span>08</span> Exit gate</a>
+    <a href="#stop"><span>09</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 09 of 09</strong><small>Learn · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+<section id="learn-intro" data-search="learn decision outcome escaped defect gate promotion bar soft lesson blocking retiring controls operate assure">
+  <div class="section-heading">
+    <span>09</span>
+    <div><p>Delivery lifecycle · Learn</p><h2>Learn</h2></div>
+  </div>
+  <p class="lede">Learn decides whether the eight stages before it run again the same way. Only what this stage changes settles that.</p>
+  <p class="section-intro">Four things belong here: judging a decision apart from its outcome; naming which stage's gate should have stopped each escaped defect; applying a promotion bar before a soft lesson becomes blocking; and retiring controls, so the set is bounded from above. Incident handling, service objectives, error budgets and the control-versus-attention measure belong to <a href="operate.html">Operate</a>; assurance layers and whether each control can still fail belong to <a href="assure.html#steady">Assure</a> — linked here, never restated.</p>
+
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>Grade a decision on what was knowable when it was taken; grade its outcome separately. A loop that grades decisions by outcomes is learning luck, and will teach luck back.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria window incident period artifacts memory inputs records blocking check role">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <p class="section-intro">All four must hold.</p>
+  <div class="three-col">
+    <article>
+      <h3>The window is named first</h3>
+      <p>One released Work Package, one incident, or a fixed period; undeclared, it drifts to the loudest grievance.</p>
+    </article>
+    <article>
+      <h3>Legible without the people</h3>
+      <p>Decisions, evidence, timings and approvals readable from artifacts. Otherwise the session grades a memory the outcome has already revised.</p>
+    </article>
+    <article>
+      <h3>Inputs assembled beforehand</h3>
+      <p>Escape list, decision records and near-miss entries in hand. A session spent reconstructing events adjourns on a resolution.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>Someone can amend a gate</strong>
+    <p>Name the role permitted to add, alter or remove a blocking check.</p>
+  </div>
+</section>
+
+<section id="produces" data-search="artifacts produces retrospective record decision review escape ledger candidate register control change set retirement improvement work package diff test">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <p class="section-intro">Seven artifacts, each a file with one owner below.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Learn artifacts and what each is for</caption>
+      <thead><tr><th>Artifact</th><th>Answers</th><th>Fails when</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Retrospective record</strong></td><td>What changed, what was declined, why</td><td>Outputs are adjectives, not diffs</td></tr>
+        <tr><td><strong>Decision-quality review</strong></td><td>Whether each decision was sound on the information then available</td><td>It reasons backwards</td></tr>
+        <tr><td><strong>Defect-escape ledger</strong></td><td>For each escaped defect, the stage that should have stopped it</td><td>A row names a person</td></tr>
+        <tr><td><strong>Candidate lesson register</strong></td><td>Which soft lessons accumulate, with occurrence counts</td><td>Entries are never re-counted</td></tr>
+        <tr><td><strong>Control change set</strong></td><td>Checks, gates and playbook steps changing this cycle</td><td>Empty where the bar was met</td></tr>
+        <tr><td><strong>Control retirement record</strong></td><td>What was removed, why, and what brings it back</td><td>Retirement waits for a complaint</td></tr>
+        <tr><td><strong>Improvement Work Packages</strong></td><td>Findings too large to land here</td><td>Left as comments</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>The diff test</strong>
+    <p>Of each proposed output ask which file changes, and who changes it. Where neither can be answered it is not an output: make it an Improvement Work Package with acceptance criteria, or a counted register entry.</p>
+  </div>
+</section>
+
+<section id="decision" data-search="decision outcome bet uncertainty expectation reversal narrative options sound unsound">
+  <div class="section-heading"><span>03</span><div><p>Judged separately</p><h2>Decision quality versus outcome quality</h2></div></div>
+  <p class="section-intro">A decision is a bet under uncertainty; an outcome is one draw from the distribution it bet on. Grading by outcome punishes sound bets that lost and ratifies reckless ones that won.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>The four cells, and what each licenses the review to conclude</caption>
+      <thead><tr><th>Decision</th><th>Outcome</th><th>What Learn may conclude</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sound</strong></td><td>Good</td><td>Keep the method; record what made it sound</td></tr>
+        <tr><td><strong>Sound</strong></td><td>Bad</td><td>Nothing about the decision. Test only whether reversal cost what was claimed — variance, not signal</td></tr>
+        <tr><td><strong>Unsound</strong></td><td>Good</td><td>The result argues for the method that produced it. Decline that argument</td></tr>
+        <tr><td><strong>Unsound</strong></td><td>Bad</td><td>The only cell where the outcome is evidence. Name the missing information, not the diligence</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="section-intro" style="margin-top:2rem">This works only on a record left when the decision was taken; a narrative retrofitted afterwards is composed by the party being graded. Two fields carry it:</p>
+  <div class="definition-list">
+    <div><span>Options</span><p>The alternatives genuinely available then. Architectural ones belong in an ADR — see <a href="architect.html#adr">Architect · ADR discipline</a>.</p></div>
+    <div><span>Expectation</span><p>What the decider expected, written before it happened, specific enough to turn out wrong. Without it no review can separate a decision that was right from one narrated as right.</p></div>
+  </div>
+</section>
+
+<section id="escape" data-search="defect escape analysis stage gate earliest skipped mis-aimed verdict candidate">
+  <div class="section-heading"><span>04</span><div><p>Where the gate was</p><h2>Defect-escape analysis</h2></div></div>
+  <p class="section-intro">A defect reaching production has passed nine gates. The question is not who wrote it, but: <strong>at which gate could a check have caught this, and in what condition was that gate?</strong></p>
+  <p class="section-intro"><a href="assure.html#steady">Assure</a> keeps the narrow form, scoped to its verification layers. Learn holds the wide form: an escape may belong to a requirement never written or a contract never frozen. Read it there, then ask the question one stage earlier. Each escape takes one of three verdicts, and the verdict picks the remedy.</p>
+  <div class="definition-list">
+    <div><span>No gate existed</span><p>Nothing watched for this class of defect. The output is a <em>candidate</em> control, which must clear the promotion bar below — not an immediate blocking check, or the checklist grows by one whenever anything goes wrong.</p></div>
+    <div><span>A gate existed and was skipped</span><p>The check was available and did not run. A second check does not repair that: make the skip visible, or the gate unbypassable without a trace.</p></div>
+    <div><span>A gate existed, ran, and passed</span><p>Mis-aimed, vacuous, or watching something adjacent. Before an amended check is trusted again it must be made to fail on purpose — see <a href="assure.html#controls">Assure · Controls</a>.</p></div>
+  </div>
+  <div class="callout">
+    <strong>Assign each escape to the earliest stage that could have held it</strong>
+    <p>Not the last stage it passed through. Every escape passes Assure last, so assigning by final opportunity makes Assure the only stage that ever improves, while the ambiguous requirement stays as it was.</p>
+  </div>
+</section>
+
+<section id="promotion" data-search="promotion bar blocking advisory soft lesson thresholds occurrences enforcement ladder rung near-miss filter">
+  <div class="section-heading"><span>05</span><div><p>The bound on growth</p><h2>The promotion bar</h2></div></div>
+  <p class="section-intro">Feed the candidate register from two queues: the escape ledger above, and the near-miss record kept by <a href="operate.html#incident">Operate</a> and <a href="assure.html#steady">Assure</a>. Read it through one filter — an entry saying a control caught it needs no promotion; one saying a person noticed means no control caught it, and becomes a candidate.</p>
+  <p class="section-intro">Enforce every candidate and the checklist grows without limit. A soft lesson therefore stays advisory until it clears one of these thresholds, cited with its occurrences in the control change set, during the retrospective rather than mid-task.</p>
+  <ul class="check-list">
+    <li><strong>(a) Three clean applications</strong> across distinct Work Packages</li>
+    <li><strong>(b) The failure it prevents has recurred twice</strong> — recurrence separates a pattern from an incident</li>
+    <li><strong>(c) Skipping it caused a merged change to be reverted or hot-fixed</strong> — one occurrence suffices</li>
+  </ul>
+  <p class="section-intro" style="margin-top:2rem">Promote one rung at a time.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Enforcement ladder — a lesson rises one rung per promotion</caption>
+      <thead><tr><th>Rung</th><th>Form</th><th>Cost per cycle</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>A counted note, or an advisory playbook line</td><td>Nothing until read</td></tr>
+        <tr><td><strong>2</strong></td><td>An item a reviewer must check</td><td>Reviewer attention, not spent elsewhere</td></tr>
+        <tr><td><strong>3</strong></td><td>An automated check that reports, not blocks</td><td>Runtime; becoming background noise</td></tr>
+        <tr><td><strong>4</strong></td><td>A blocking gate</td><td>Every run, every author, until retired</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Below the bar is not rejected</strong>
+    <p>A lesson that misses stays in the register, count incremented: the next occurrence is the second, not the first again.</p>
+  </div>
+</section>
+
+<section id="retire" data-search="retire retirement controls cost ritual re-add trigger review hard invariant asymmetry">
+  <div class="section-heading"><span>06</span><div><p>The step with no natural pressure</p><h2>Retiring controls</h2></div></div>
+  <p class="section-intro">A control added after every incident and never removed becomes a ritual — performed because it is on the list, by people who no longer know what it watches for — while its cost is charged on every run. The hard invariants below sit outside the cost argument.</p>
+  <div class="split">
+    <div>
+      <h3>Grounds for retirement</h3>
+      <ul class="check-list">
+        <li>The condition it guards is now structurally impossible — a constraint or withheld grant does the work</li>
+        <li>It cannot fail: no input reaching it would produce a red result</li>
+        <li>Its cost is charged every cycle while the failure it guards has never entered the escape ledger</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Never retired on cost grounds</h3>
+      <ul class="cross-list">
+        <li>Money correctness — premium, commission, posting and reversal arithmetic</li>
+        <li>Tenant isolation and identity gating</li>
+        <li>Human approval gates on release and production action</li>
+        <li>Anything between an operator and irreversible data loss</li>
+        <li>Any control implementing an architecture-contract invariant — see <a href="architect.html#invariants">Architect · Invariant criteria</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Every retirement names its re-add trigger</strong>
+    <p>State the observation that would bring the control back, before removing it.</p>
+  </div>
+  <div class="invariant">
+    <span>THE ASYMMETRY THIS STAGE CORRECTS</span>
+    <p>Growth in the control set is driven by events; shrinkage by nothing. Unless the retirement review is scheduled beside the promotion review and owned, the set can only grow — converging on being ignored rather than safe.</p>
+  </div>
+</section>
+
+<section id="roles" data-search="roles facilitator quality owner control owner accountable decision maker accepting authority">
+  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Retrospective facilitator</strong></td><td>Sets the window, assembles inputs, holds outputs to the diff test, raises Improvement Work Packages</td><td>Accept an output naming no file</td></tr>
+        <tr><td><strong>Quality owner</strong></td><td>Maintains the defect-escape ledger and candidate lesson register, keeping counts current</td><td>Assign an escape to the last stage it passed through</td></tr>
+        <tr><td><strong>Control owner</strong></td><td>Authors the control change set and control retirement record; the only role that may amend a blocking check</td><td>Promote below the bar, or retire a hard invariant</td></tr>
+        <tr><td><strong>Accountable decision-maker</strong></td><td>Supplies the decision record and the expectation written before the outcome</td><td>Revise it afterwards</td></tr>
+        <tr><td><strong>Accepting authority</strong></td><td>Accepts the cycle and authorizes its gate changes</td><td>Be inferred from an unopposed summary</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate controls improved discover loop closes acceptance recorded">
+  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <p class="section-intro">Learn exits to <strong>Discover</strong>; the loop closes. The exit condition is "controls improved" — a diff someone can open.</p>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Retrospective record by the retrospective facilitator, every output naming a file</label>
+    <label><input type="checkbox" disabled> Decision-quality review grades each decision against its pre-recorded expectation, from the accountable decision-maker</label>
+    <label><input type="checkbox" disabled> Defect-escape ledger assigns each escaped defect to one gate, maintained by the quality owner</label>
+    <label><input type="checkbox" disabled> Candidate lesson register carries current occurrence counts, kept by the quality owner</label>
+    <label><input type="checkbox" disabled> Control change set cites trigger and occurrences per promotion, authored by the control owner</label>
+    <label><input type="checkbox" disabled> Control retirement record shows the review ran, with re-add triggers, signed by the control owner</label>
+    <label><input type="checkbox" disabled> Improvement Work Packages raised for findings too large, by the retrospective facilitator</label>
+    <label><input type="checkbox" disabled> Acceptance recorded against the retrospective record by the accepting authority</label>
+  </div>
+  <div class="callout">
+    <strong>An empty control change set is a finding, not a clean bill</strong>
+    <p>Where the escape ledger has rows, or the register an entry that met the bar, and the change set is empty, the cycle has not exited.</p>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt resolution individual gate promoted retired re-add trigger expected comments">
+  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <p class="section-intro">Stop the session and record the reason.</p>
+  <ul class="cross-list">
+    <li>Every output names a resolution; none names a file, check or gate</li>
+    <li>A defect-escape row names an individual, not a gate</li>
+    <li>A lesson is promoted to blocking with no stated trigger or occurrence count</li>
+    <li>The candidate lesson register holds entries no cycle has re-counted</li>
+    <li>A control is retired with no re-add trigger, or implements a hard invariant</li>
+    <li>A decision is graded by its outcome, with no record of what was expected</li>
+    <li>No role is authorized to amend a blocking check</li>
+    <li>Findings are left as comments, not Improvement Work Packages</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Discover</h3>
+      <p>Problem framing, stakeholders, baseline, constraints and evidence sources — under the controls this cycle changed.</p>
+    </div>
+    <a class="github-link" href="discover.html">Discover →</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 09 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
