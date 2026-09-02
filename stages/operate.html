@@ -89,6 +89,7 @@
         <tr><td><strong>Objective</strong></td><td>The proportion of those that must succeed, over a stated window</td><td>A number chosen because it looks impressive rather than because it is affordable</td></tr>
         <tr><td><strong>Error budget</strong></td><td>The failure the objective permits — the amount of risk available to spend</td><td>Treating any failure as unacceptable, which makes the objective advisory</td></tr>
         <tr><td><strong>Consequence</strong></td><td>What changes when the budget is exhausted, agreed in advance</td><td>No consequence, which makes the whole exercise decorative</td></tr>
+        <tr><td><strong>Review</strong></td><td>A standing cadence at which actual burn is read against the objective, and the objective revised or defended</td><td>Setting objectives once and never reading the burn, so a budget is exhausted before anyone notices</td></tr>
       </tbody>
     </table>
   </div>
@@ -132,7 +133,7 @@
     <div><span>Declare</span><p>Say the word "incident" out loud and name a coordinator. Ambiguity about whether this is an incident costs more time than any technical step.</p></div>
     <div><span>Mitigate</span><p>Restore service before understanding the cause. Disable the flag, roll back, shed load. Diagnosis performed while users are affected is diagnosis performed badly.</p></div>
     <div><span>Communicate</span><p>What is known, what is not, and when the next update comes. The third is what people actually need; without it they ask, which costs the responder time.</p></div>
-    <div><span>Learn</span><p>Blameless review. The output is a change to a control, not a resolution to be more careful. Every incident adds the check that would have caught it.</p></div>
+    <div><span>Learn</span><p>Blameless review. The output is a change to a control, not a resolution to be more careful. Every incident adds the check that would have caught it, and every <em>recurrence</em> promotes a soft lesson into a blocking one.</p></div>
   </div>
   <div class="invariant">
     <span>THE MEASURE THAT MATTERS</span>
@@ -167,7 +168,7 @@
     <li><strong>Inventory and monitor every dependency.</strong> An unknown dependency cannot be assessed when an advisory lands</li>
     <li><strong>Agree a patching timeline by severity before the urgent case arrives</strong>, not during it</li>
     <li><strong>Rotate secrets on a schedule, and exercise the rotation</strong> rather than assuming it works</li>
-    <li><strong>Review access periodically</strong>, and expect the bulk of what you find to be accounts nobody has needed for a year</li>
+    <li><strong>Review access periodically</strong>, and look first for accounts nobody has needed for a year</li>
     <li><strong>Publish a disclosure route and answer it.</strong> Security researchers who cannot reach you publish instead</li>
   </ul>
 </section>
@@ -219,7 +220,7 @@
       <h3>Learn</h3>
       <p>Retrospective, decision quality, defect escape analysis, and promoting repeated lessons into blocking controls.</p>
     </div>
-    <b class="github-link">NOT YET WRITTEN</b>
+    <b>NOT YET WRITTEN</b>
   </div>
 </section>
 

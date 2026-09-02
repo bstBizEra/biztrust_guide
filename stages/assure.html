@@ -77,7 +77,7 @@
       <p>The commit SHA is known and matches the remote. Untracked files are invisible to <code>git</code>-based checks and to diff-scoped guards, so a green run taken before <code>git add</code> proves nothing about what shipped.</p>
     </article>
     <article>
-      <h3>CI has run against that exact SHA</h3>
+      <h3>CI has run, and you know which revision it ran</h3>
       <p>Not against the branch name, not against a rebased predecessor. Name which revision is authoritative before you check: a pull-request workflow on GitHub runs against a <em>synthetic merge commit</em> of the head into the base, not against the head itself — so record the head SHA, the run's own SHA, and which of the two the criterion is asserted over.</p>
     </article>
   </div>
@@ -194,7 +194,7 @@
   </div>
 </section>
 
-<section id="steady" data-search="steady state operations post release regression drift slo drill retention">
+<section id="steady" data-search="steady state assurance post release regression escaped defect controls re-run">
   <div class="section-heading"><span>07</span><div><p>After go-live</p><h2>Assurance in steady state</h2></div></div>
   <p class="section-intro">Assure does not end at Release. Once BizTrust is serving real traffic, the same layers run continuously, and the failure they guard against changes from "we shipped a defect" to "something drifted and nobody noticed."</p>
   <div class="three-col">
@@ -219,9 +219,12 @@
       <ul class="check-list">
         <li>Every near-miss records which control caught it, and which did not</li>
         <li>Every escaped defect names the layer that should have held it</li>
-        <li>Objectives, incident handling and recovery drills belong to <a href="operate.html">Operate</a> — this page does not restate them</li>
       </ul>
     </article>
+  </div>
+  <div class="callout">
+    <strong>Objectives, incident handling and recovery drills are not here</strong>
+    <p>They belong to <a href="operate.html">Operate</a>, and this page does not restate them. What stays here is verification: which layers re-run, and whether each control can still fail.</p>
   </div>
   <div class="invariant">
     <span>THE STEADY-STATE MEASURE</span>

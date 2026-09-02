@@ -115,10 +115,25 @@
   <div class="section-heading"><span>04</span><div><p>The risky part</p><h2>Migrations</h2></div></div>
   <p class="section-intro">Most changes are reversible by reverting a commit. Data changes are not, and treating them as though they were is the most common route from a routine release to an incident.</p>
   <div class="definition-list">
-    <div><span>Expand, then contract</span><p>Six steps, in this order. <strong>1.</strong> Add the new structure alongside the old. <strong>2.</strong> Deploy code that <strong>writes to both</strong>. <strong>3.</strong> Backfill the existing rows. <strong>4.</strong> Switch reads to the new structure. <strong>5.</strong> Stop writing the old one. <strong>6.</strong> Only then remove it. Each step is separately reversible <em>because</em> step 2 is there: without dual-write the old structure keeps taking writes while the backfill runs, so at step 4 the new structure is stale by exactly the write volume accumulated since the backfill began — and that staleness is silent.</p></div>
+    <div><span>Expand, then contract</span><p>Eight steps, in order — and only the first five can be undone by reversing them. See the sequence below.</p></div>
     <div><span>Never destroy in one step</span><p>A migration that drops or rewrites in the same deployment as the code change removes the option of rolling back the code.</p></div>
     <div><span>Backfills are jobs, not migrations</span><p>They are restartable, observable, and safe to run twice. A backfill that cannot be resumed will be run again from the start at the worst possible moment.</p></div>
     <div><span>State the reversal explicitly</span><p>Write what rollback means for this change. Where rollback is genuinely one-way, say so at planning time, not during the incident.</p></div>
+  </div>
+
+  <ol class="migration-steps">
+    <li><b>Add</b> the new structure alongside the old, nullable and unconstrained.</li>
+    <li><b>Dual-write.</b> Deploy code that writes both, still reading the old. Skipping this is what loses data: the old structure keeps taking writes while the backfill runs, so at the read switch the new one is stale by up to every write since the backfill began — silently.</li>
+    <li><b>Backfill</b> the existing rows, as a restartable job.</li>
+    <li><b>Verify.</b> Reconcile old against new and require agreement before continuing. Switching reads onto an unverified backfill is the second most common way this fails.</li>
+    <li><b>Switch reads</b> to the new structure, with dual-write still on.</li>
+    <li><b>Soak.</b> Run on the new reads long enough to see a problem, before giving up the ability to switch back cheaply.</li>
+    <li><b>Stop writing the old structure.</b> <em>Reversibility ends here</em> — from this moment the old copy goes stale, and returning to it needs a second backfill in the opposite direction.</li>
+    <li><b>Remove the old structure.</b> <em>One-way.</em> The only reversal is a restore from backup.</li>
+  </ol>
+  <div class="callout">
+    <strong>Steps 1&ndash;6 are separately reversible. Steps 7 and 8 are not.</strong>
+    <p>Do not let the shape of the procedure imply otherwise. Deploy steps 7 and 8 separately from the rest, and separately from each other, so the irreversible part is a decision someone makes rather than a consequence of a release.</p>
   </div>
 </section>
 
@@ -171,7 +186,7 @@
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Every acceptance criterion has a command that settles it</label>
     <label><input type="checkbox" disabled> Tests, telemetry and documentation ship in the same change</label>
-    <label><input type="checkbox" disabled> Migrations are expand-first and separately reversible</label>
+    <label><input type="checkbox" disabled> Migrations are expand-first, and each step states whether it can be reversed</label>
     <label><input type="checkbox" disabled> Interface changes are reflected in the contract file</label>
     <label><input type="checkbox" disabled> The diff contains nothing outside the package's scope</label>
     <label><input type="checkbox" disabled> The measured revision equals the pushed head</label>
