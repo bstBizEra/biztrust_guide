@@ -7,7 +7,7 @@
 >
 > `badf/next-actions.json` allocates NS ids as a rolling counter and has re-used **NS-004, NS-005, NS-006, NS-007, NS-008, NS-009, NS-010, NS-011 and NS-012** with different meanings and different owners. Only NS-001, NS-002 and NS-003 mean the same thing in both places.
 >
-> An `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
+> A `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
 
 ## Immediate — activate the public guide
 

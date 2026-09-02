@@ -68,6 +68,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | `scripts/` | Deterministic continuity validation |
 | `docs/` | Preview, continuity and next-step runbooks |
 | `.github/` | Pages deployment and governed work templates |
+| `.nojekyll` | Required by the validator, and copied into the published artifact |
 
 ## Validate before every handoff
 
@@ -86,7 +87,7 @@ Recorded here because none of it was written down, and each is a constraint on a
 | Mechanism | What it does |
 |---|---|
 | `tests/test_validator_fails_closed.py` | Proves the validator cannot fail **open**. A malformed artifact must produce exactly one `CONTINUITY_VALIDATION` line and a non-zero exit — never a traceback and silence, which reads as success. |
-| `tests/test_no_cross_page_duplication.py` | Fails when one stage page restates another instead of linking to it. Threshold `0.70`, calibrated against a duplicate that actually shipped (0.741) versus the highest legitimate pair (0.579). Deliberate parallels are allowlisted individually with a reason — **never raise the threshold**, which retires the check silently. |
+| `tests/test_no_cross_page_duplication.py` | Fails when one stage page restates another instead of linking to it. Threshold `0.70`. **Re-measured on the current nine-page tree: the highest legitimate pair is 0.692 at element level and 0.615 at sentence level — 0.008 of headroom, not the comfortable margin the six-page tree had.** Deliberate parallels are allowlisted individually with a reason. **Never raise the threshold**, which retires the check silently; if a legitimate pair crosses it, allowlist that pair and record why. |
 | CI *Verify every tracked page reached the artifact* | Fails the build if any tracked `*.html` is missing from `_site/`. Before it existed, a new page could be present in git, pass every check, and 404 in production. |
 
 The validator's exit codes carry meaning: **0** pass · **1** a data defect, the artifacts are wrong · **2** a validator defect, this script is broken · **130** interrupted. A consumer treating any non-zero as failure is correct; 1 and 2 differ so a reader knows which artifact to debug.
