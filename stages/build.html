@@ -173,7 +173,7 @@
     <table>
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
       <tbody>
-        <tr><td><strong>Implementing agent</strong></td><td>Writes code, tests, telemetry and documentation together; opens the pull request</td><td>Review, approve or merge their own change</td></tr>
+        <tr><td><strong>Implementing agent</strong></td><td>Writes code, tests, telemetry, migrations and documentation together; updates the contract when the interface changes; opens the pull request</td><td>Review, approve or merge their own change</td></tr>
         <tr><td><strong>Peer reviewer</strong></td><td>Reads the diff against the acceptance criteria, not against personal preference</td><td>Approve a change they could not follow</td></tr>
         <tr><td><strong>Domain reviewer</strong></td><td>Confirms the behaviour matches how the business actually operates</td><td>Be skipped because the change "looks technical"</td></tr>
       </tbody>
@@ -192,6 +192,7 @@
     <label><input type="checkbox" disabled> The measured revision equals the pushed head</label>
     <label><input type="checkbox" disabled> Findings outside scope were filed, not fixed in place</label>
     <label><input type="checkbox" disabled> The pull request links the authorizing package</label>
+    <label><input type="checkbox" disabled> A peer reviewer read the diff, and a domain reviewer read the behaviour</label>
   </div>
 </section>
 
