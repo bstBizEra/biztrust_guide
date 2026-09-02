@@ -1,11 +1,26 @@
 #!/usr/bin/env python3
-"""Fail-closed continuity and static-site validation for BizTrust Guide."""
+"""Continuity and static-site validation for BizTrust Guide.
+
+Fail-closed on MALFORMED input: a wrong-typed field, an unreadable file or an
+unforeseen exception always produces exactly one CONTINUITY_VALIDATION line
+and a non-zero exit. Content is checked for PRESENCE and shape, not for
+substance - a file that exists and parses satisfies its check.
+
+Exit codes:
+    0    PASS - every check ran and none recorded an error
+    1    FAIL - a data defect: the artifacts under validation are wrong
+    2    FAIL - a validator defect: an unforeseen exception in this script
+    130  FAIL - interrupted
+A consumer that treats any non-zero as failure is correct; 1 and 2 differ so
+that a reader knows which artifact to debug.
+"""
 
 from __future__ import annotations
 
 import json
 import re
 import sys
+import traceback
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -32,10 +47,47 @@ class SiteParser(HTMLParser):
 def load_json(relative: str, errors: list[str]) -> dict:
     path = ROOT / relative
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        # ValueError covers json.JSONDecodeError AND UnicodeDecodeError; a
+        # single bad byte previously aborted the whole run.
         errors.append(f"{relative}: cannot load valid JSON: {exc}")
         return {}
+    if not isinstance(document, dict):
+        errors.append(
+            f"{relative}: expected a JSON object at the top level, "
+            f"found {type(document).__name__}"
+        )
+        return {}
+    return document
+
+
+def as_object(value: object, label: str, errors: list[str]) -> dict:
+    """Return value as a mapping, or record why it is not one.
+
+    A wrong-typed field must become a recorded error, never an exception:
+    an uncaught AttributeError prints a traceback and no
+    CONTINUITY_VALIDATION line at all, so a caller checking for FAIL sees
+    neither PASS nor FAIL and may read the silence as success.
+    """
+    if value is None:
+        errors.append(f"{label}: expected an object, found nothing (key absent or null)")
+        return {}
+    if not isinstance(value, dict):
+        errors.append(f"{label}: expected an object, found {type(value).__name__}")
+        return {}
+    return value
+
+
+def as_array(value: object, label: str, errors: list[str]) -> list:
+    """Return value as a list, or record why it is not one."""
+    if value is None:
+        errors.append(f"{label}: expected an array, found nothing (key absent or null)")
+        return []
+    if not isinstance(value, list):
+        errors.append(f"{label}: expected an array, found {type(value).__name__}")
+        return []
+    return value
 
 
 def main() -> int:
@@ -68,15 +120,45 @@ def main() -> int:
 
     current = load_json("badf/current-state.json", errors)
     actions = load_json("badf/next-actions.json", errors)
+    # An empty object is valid JSON, loads without error, and is FALSY. Before
+    # these two lines, `{}` in either file skipped every continuity check below
+    # and still printed PASS with exit 0 - strictly worse than the crash this
+    # module was written to remove, because a crash is at least visible.
+    if not current:
+        errors.append("badf/current-state.json: document is empty; no state to validate")
+    if not actions:
+        errors.append("badf/next-actions.json: document is empty; no actions to validate")
     checkpoint: dict = {}
     checkpoint_path = current.get("latest_checkpoint")
+    if checkpoint_path is not None and not isinstance(checkpoint_path, str):
+        errors.append(
+            "current-state: latest_checkpoint must be a string path, "
+            f"found {type(checkpoint_path).__name__}"
+        )
+        checkpoint_path = None
+    if isinstance(checkpoint_path, str) and "\x00" in checkpoint_path:
+        errors.append("current-state: latest_checkpoint contains a null byte")
+        checkpoint_path = None
+    if isinstance(checkpoint_path, str) and checkpoint_path:
+        try:
+            resolved = (ROOT / checkpoint_path).resolve()
+        except (OSError, ValueError) as exc:
+            errors.append(f"current-state: latest_checkpoint is unusable as a path: {exc}")
+            resolved = ROOT
+        if ROOT not in resolved.parents and resolved != ROOT:
+            errors.append(
+                f"current-state: latest_checkpoint escapes the repository root: {checkpoint_path}"
+            )
+            checkpoint_path = None
     if checkpoint_path:
         checkpoint = load_json(checkpoint_path, errors)
+        if not checkpoint:
+            errors.append(f"{checkpoint_path}: checkpoint document is empty")
     else:
         errors.append("current-state: latest_checkpoint is missing")
 
     if current and actions:
-        wp = current.get("active_work_package", {})
+        wp = as_object(current.get("active_work_package"), "current-state.active_work_package", errors)
         wp_id = wp.get("id")
         if not wp_id or wp_id != actions.get("work_package_id"):
             errors.append("State/action Work Package IDs do not match")
@@ -84,11 +166,18 @@ def main() -> int:
             errors.append("Checkpoint Work Package ID does not match current state")
         if current.get("project_id") != actions.get("project_id"):
             errors.append("State/action project IDs do not match")
-        baseline = current.get("source", {}).get("baseline_commit", "")
-        if not SHA40.fullmatch(baseline):
+        baseline = as_object(current.get("source"), "current-state.source", errors).get("baseline_commit", "")
+        if not isinstance(baseline, str) or not SHA40.fullmatch(baseline):
             errors.append("Current-state baseline_commit is not a 40-character SHA")
-        action_rows = actions.get("actions", [])
-        action_ids = [row.get("id") for row in action_rows]
+        action_rows = as_array(actions.get("actions"), "next-actions.actions", errors)
+        malformed = [i for i, row in enumerate(action_rows) if not isinstance(row, dict)]
+        if malformed:
+            errors.append(f"next-actions: entries at positions {malformed} are not objects")
+            action_rows = [row for row in action_rows if isinstance(row, dict)]
+        unhashable = [i for i, row in enumerate(action_rows) if not isinstance(row.get("id"), str)]
+        if unhashable:
+            errors.append(f"next-actions: entries at positions {unhashable} have a non-string id")
+        action_ids = [row.get("id") for row in action_rows if isinstance(row.get("id"), str)]
         if len(action_ids) != len(set(action_ids)):
             errors.append("next-actions contains duplicate action IDs")
         primary = [row for row in action_rows if row.get("primary") is True]
@@ -97,9 +186,11 @@ def main() -> int:
         elif primary[0].get("id") != current.get("primary_next_action_id"):
             errors.append("Primary next action does not match current state")
         priorities = [row.get("priority") for row in action_rows]
-        if any(not isinstance(value, int) or value < 1 for value in priorities):
+        if any(not isinstance(value, int) or isinstance(value, bool) or value < 1 for value in priorities):
             errors.append("Every next action requires a positive integer priority")
-        if priorities != sorted(priorities):
+        elif priorities != sorted(priorities):
+            # Only comparable once every value is known to be a positive int:
+            # sorted() on mixed types raises, and the error above already fired.
             errors.append("Next actions must be stored in priority order")
         required_action_fields = {
             "id", "primary", "priority", "owner_role", "authority", "action",
@@ -112,14 +203,14 @@ def main() -> int:
         checks.append(f"continuity-actions:{len(action_rows)}")
 
     if checkpoint:
-        baseline = checkpoint.get("source", {}).get("baseline_commit", "")
-        if not SHA40.fullmatch(baseline):
+        baseline = as_object(checkpoint.get("source"), "checkpoint.source", errors).get("baseline_commit", "")
+        if not isinstance(baseline, str) or not SHA40.fullmatch(baseline):
             errors.append("Checkpoint baseline_commit is not a 40-character SHA")
         if checkpoint.get("next_action_id") != current.get("primary_next_action_id"):
             errors.append("Checkpoint next action does not match current state")
         if not checkpoint.get("declared_non_coverage"):
             errors.append("Checkpoint must declare non-coverage")
-        recovery = checkpoint.get("recovery", {})
+        recovery = as_object(checkpoint.get("recovery"), "checkpoint.recovery", errors)
         if not recovery.get("first_safe_command") or not recovery.get("stop_if"):
             errors.append("Checkpoint recovery contract is incomplete")
         checks.append("checkpoint:linked")
@@ -127,7 +218,12 @@ def main() -> int:
     decision_ids: set[str] = set()
     decision_path = ROOT / "badf/decision-log.jsonl"
     if decision_path.is_file():
-        for number, line in enumerate(decision_path.read_text(encoding="utf-8").splitlines(), 1):
+        try:
+            decision_lines = decision_path.read_text(encoding="utf-8").splitlines()
+        except (OSError, ValueError) as exc:
+            errors.append(f"badf/decision-log.jsonl: cannot read: {exc}")
+            decision_lines = []
+        for number, line in enumerate(decision_lines, 1):
             if not line.strip():
                 continue
             try:
@@ -135,34 +231,61 @@ def main() -> int:
             except json.JSONDecodeError as exc:
                 errors.append(f"decision-log line {number}: {exc}")
                 continue
+            if not isinstance(row, dict):
+                errors.append(
+                    f"decision-log line {number}: expected an object, "
+                    f"found {type(row).__name__}"
+                )
+                continue
             decision_id = row.get("id")
-            if not decision_id or decision_id in decision_ids:
-                errors.append(f"decision-log line {number}: missing or duplicate ID")
+            if not isinstance(decision_id, str) or not decision_id:
+                errors.append(f"decision-log line {number}: id must be a non-empty string")
+                continue
+            if decision_id in decision_ids:
+                errors.append(f"decision-log line {number}: duplicate ID {decision_id}")
             decision_ids.add(decision_id)
         checks.append(f"decisions:{len(decision_ids)}")
 
+    schemas_ok = True
     for schema in ("schemas/session-checkpoint.schema.json", "schemas/handoff.schema.json"):
         data = load_json(schema, errors)
-        if data and data.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
+        if not data:
+            schemas_ok = False
+        elif data.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
             errors.append(f"{schema}: unsupported or missing JSON Schema dialect")
-    checks.append("schemas:json-valid")
+            schemas_ok = False
+    if schemas_ok:
+        checks.append("schemas:json-valid")
 
     skip_parts = {".git", "_site", "node_modules"}
     pages = sorted(
         page
         for page in ROOT.rglob("*.html")
-        if not skip_parts.intersection(page.relative_to(ROOT).parts)
+        # is_file() matters: rglob matches a DIRECTORY named *.html too, and
+        # read_text on one raises IsADirectoryError.
+        if page.is_file() and not skip_parts.intersection(page.relative_to(ROOT).parts)
     )
     page_ids: dict[Path, set[str]] = {}
     page_refs: dict[Path, list[tuple[str, str]]] = {}
+    readable: list[Path] = []
     for page in pages:
+        try:
+            source = page.read_text(encoding="utf-8")
+        except (OSError, ValueError) as exc:
+            errors.append(f"{page.relative_to(ROOT).as_posix()}: cannot read page: {exc}")
+            continue
         parser = SiteParser()
-        parser.feed(page.read_text(encoding="utf-8"))
+        parser.feed(source)
         page_ids[page.resolve()] = parser.ids
         page_refs[page.resolve()] = parser.refs
+        readable.append(page)
+    pages = readable
 
-    if not (ROOT / "index.html").is_file():
+    index_path = ROOT / "index.html"
+    if not index_path.is_file():
         errors.append("index.html is not present at the publishing root")
+    elif index_path.stat().st_size == 0:
+        errors.append("index.html is present but empty")
 
     for page in pages:
         key = page.resolve()
@@ -170,14 +293,22 @@ def main() -> int:
         for tag, ref in page_refs[key]:
             if ref.startswith(("http://", "https://", "mailto:", "tel:", "data:")):
                 continue
-            parts = urlsplit(ref)
+            try:
+                parts = urlsplit(ref)
+            except ValueError as exc:
+                errors.append(f"{rel}: unparseable {tag} reference {ref!r}: {exc}")
+                continue
             if not parts.path and parts.fragment:
                 if parts.fragment not in page_ids[key]:
                     errors.append(f"{rel}: broken fragment #{parts.fragment}")
                 continue
             if not parts.path:
                 continue
-            target = (page.parent / parts.path).resolve()
+            try:
+                target = (page.parent / parts.path).resolve()
+            except (OSError, ValueError) as exc:
+                errors.append(f"{rel}: unusable {tag} path {parts.path!r}: {exc}")
+                continue
             if ROOT not in target.parents and target != ROOT:
                 errors.append(f"{rel}: {tag} reference escapes the site root: {parts.path}")
                 continue
@@ -193,9 +324,21 @@ def main() -> int:
                         f"{rel}: broken cross-page fragment {parts.path}#{parts.fragment}"
                     )
 
-    checks.append(f"html-pages:{len(pages)}")
-    checks.append(f"html-ids:{sum(len(v) for v in page_ids.values())}")
-    checks.append(f"html-refs:{sum(len(v) for v in page_refs.values())}")
+    total_ids = sum(len(v) for v in page_ids.values())
+    total_refs = sum(len(v) for v in page_refs.values())
+    # Appended CONDITIONALLY. When this ran unconditionally the "check did not
+    # run" assertion could never fire for it, and a site with every page
+    # deleted and index.html truncated to zero bytes still printed PASS.
+    if pages:
+        checks.append(f"html-pages:{len(pages)}")
+    else:
+        errors.append("no readable HTML page found under the site root")
+    if total_refs == 0:
+        errors.append(
+            "no local references found in any page: the link check validated nothing"
+        )
+    checks.append(f"html-ids:{total_ids}")
+    checks.append(f"html-refs:{total_refs}")
 
     workflow_path = ROOT / ".github/workflows/pages.yml"
     if workflow_path.is_file():
@@ -214,6 +357,17 @@ def main() -> int:
                 errors.append(f"pages workflow missing required token: {token}")
         checks.append("pages-workflow:baseline")
 
+    # A PASS is only meaningful if the checks actually executed. Without this,
+    # any guard that silently skips its block yields a clean verdict that
+    # establishes nothing - the defect class this module exists to prevent.
+    produced = {check.split(":", 1)[0] for check in checks}
+    for expected in (
+        "required-files", "continuity-actions", "checkpoint",
+        "decisions", "schemas", "html-pages", "pages-workflow",
+    ):
+        if expected not in produced:
+            errors.append(f"check did not run: {expected}")
+
     if errors:
         print("CONTINUITY_VALIDATION=FAIL")
         for error in errors:
@@ -228,6 +382,41 @@ def main() -> int:
     return 0
 
 
+def _emit_failure(exc: BaseException) -> None:
+    """Print the verdict, then the diagnosis, without letting either raise.
+
+    The verdict goes to stdout because that is the channel consumers grep.
+    The traceback goes to stderr so it cannot corrupt that channel, and so a
+    validator defect stays diagnosable - suppressing it entirely traded one
+    silent failure for a less informative one.
+    """
+    try:
+        print("CONTINUITY_VALIDATION=FAIL")
+        print(f"ERROR: unexpected validator failure: {type(exc).__name__}: {exc}")
+    except BaseException:  # noqa: BLE001 - a broken stdout must not hide the exit code
+        pass
+    try:
+        traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
+    except BaseException:  # noqa: BLE001
+        pass
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        # main() is called INSIDE the try and its result exits OUTSIDE it, so a
+        # SystemExit raised within main() is caught here rather than escaping
+        # with no verdict line at all.
+        _code = main()
+    except KeyboardInterrupt as exc:
+        # An aborted run must not be recorded as a content failure.
+        _emit_failure(exc)
+        sys.exit(130)
+    except BaseException as exc:  # noqa: BLE001 - fail closed, never fail open
+        # Exit 2, not 1: a VALIDATOR defect and a DATA defect are different
+        # facts, and a consumer that cannot tell them apart will debug the
+        # wrong artifact.
+        _emit_failure(exc)
+        sys.exit(2)
+    else:
+        sys.exit(_code)
 

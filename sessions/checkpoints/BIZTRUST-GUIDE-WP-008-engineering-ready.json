@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-008-001",
+  "created_at": "2026-09-02T19:54:04Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-008",
+  "state": "ENGINEERING_READY",
+  "objective": "Bring recorded continuity state into agreement with the repository after the stack merged, and record the outstanding review gap honestly.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-008-state-reconciliation",
+    "baseline_commit": "0e7e9b2567213c7d656f50b932e5b07daca0ba2f"
+  },
+  "completed": [
+    "Merged WP-004 (6c22fd9), WP-006 (32b48b0) and WP-007 (0e7e9b2) to main on explicit operator instruction",
+    "Used merge commits rather than squash, so each stacked branch retargeted cleanly and carried only its own diff",
+    "Retargeted each stacked pull request explicitly rather than deleting its base branch, so nothing was destroyed",
+    "Verified each head had a CI run by total_count before merging, not by absence of failure",
+    "Verified main fails only at Configure Pages, a pre-existing condition since before this session",
+    "Replaced stale state that still directed a resuming agent to merge an already-merged pull request"
+  ],
+  "remaining": [
+    "Independent review of the six merged stage manuals",
+    "Validator fail-open fix (#5)",
+    "Discover, Define and Learn",
+    "Resequence or close issue #2",
+    "Enable GitHub Pages"
+  ],
+  "files_changed": [
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-008-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git rev-parse HEAD against git ls-remote origin main",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The prior state directed a resuming agent to merge pull request #4, already merged. This is the same defect recorded against WP-002 earlier in this repository, reproduced by the implementing agent within one session of criticising it",
+    "GitHub does not auto-retarget a stacked pull request when its base merges; it retargets only when the base branch is deleted. Each was retargeted explicitly instead",
+    "main fails only at Configure Pages. Staging and completeness verification now run before it, so they execute even while Pages is unset",
+    "Six stage manuals were merged with no reader other than their author"
+  ],
+  "decisions": [
+    "Merge commits, not squash, so stacked branches stay mergeable",
+    "State records the missing content review as a gate value rather than presenting the merge as full acceptance",
+    "Branch deletion is left to a human; it is not agent housekeeping"
+  ],
+  "assumptions": [
+    "Independent review will follow; if it does not, six merged pages remain author-verified only"
+  ],
+  "blockers": [
+    {
+      "code": "NO_INDEPENDENT_CONTENT_REVIEW",
+      "owner_role": "independent-reviewer",
+      "resolution": "A reader other than the implementing agent reviews the six stage manuals and records a verdict."
+    }
+  ],
+  "authority": {
+    "granted": "Documentation changes via pull request; merge exercised on explicit operator instruction 2026-09-03",
+    "withheld": "Platform implementation, architecture acceptance, Pages settings changes, branch deletion"
+  },
+  "next_action_id": "NS-016",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/10"
+    ],
+    "stop_if": [
+      "The validator does not return PASS",
+      "A reviewer is proposed who authored the pages under review",
+      "Any further stage manual is written before the existing six are reviewed"
+    ]
+  },
+  "declared_non_coverage": [
+    "The six merged stage manuals have not been read by anyone other than their author",
+    "No domain expert has checked the insurance content; no operations engineer has checked the Operate content",
+    "Discover, Define and Learn remain unwritten",
+    "The validator fail-open defect (#5) is unfixed, so every PASS above is weaker evidence than it appears",
+    "The guide has never been served from GitHub Pages; no deployed verification exists",
+    "No BizTrust platform exists; every page describes procedure, never observed behaviour"
+  ]
+}
