@@ -27,7 +27,7 @@ At the beginning of every session, agent handoff or recovery:
 4. Locate the active Work Package, its scope and acceptance criteria.
 5. Read the latest checkpoint and handoff referenced by current state.
 6. Inspect the current Git branch, `HEAD`, worktree and remote divergence.
-7. Run `python3 scripts/validate_continuity.py`.
+7. Run `python3 -m unittest discover -s tests` — the validator's own self-tests — then `python3 scripts/validate_continuity.py`.
 8. Reconcile observed state with recorded state.
 9. Output one resume decision: `CONTINUE`, `BLOCKED`, `WAIT_FOR_AUTHORITY`, `RECOVERY_REQUIRED` or `COMPLETE`.
 
@@ -43,7 +43,7 @@ An agent must not continue from chat recollection alone.
 | Human coordination | GitHub Issue / Project item |
 | Delivery scope | Active Work Package |
 | Architecture decision | Accepted ADR |
-| Code and content | Git commit on protected branch |
+| Code and content | Git commit on `main` — **not branch-protected**; `GET /branches/main/protection` returns 404. The gate is convention, not mechanism |
 | Test result | CI run bound to commit SHA |
 | Session recovery | Latest valid checkpoint + handoff |
 | Approval | Explicit authority record; never inferred |
@@ -73,7 +73,10 @@ Create or update a checkpoint at every one of these boundaries:
 - before ending a session;
 - after verification or release.
 
-Every checkpoint must validate against `schemas/session-checkpoint.schema.json` and record:
+Every checkpoint must conform to `schemas/session-checkpoint.schema.json` and record:
+
+> Conformance is **not** mechanically checked. The validator confirms only that the schema files themselves parse and declare the right dialect — no checkpoint is validated against them.
+
 
 - work package and state;
 - objective and completed scope;
@@ -135,7 +138,7 @@ Before handoff or pull request:
 
 1. Run deterministic validation.
 2. Confirm no broken local asset references.
-3. Confirm `index.html` is at the publishing root.
+3. Confirm every tracked `*.html` reaches the publishing artifact — CI step *Verify every tracked page reached the artifact* — not only root `index.html`. Nine of the ten pages live in `stages/`.
 4. Update `badf/current-state.json` and `badf/next-actions.json`.
 5. Create a checkpoint from `templates/session-checkpoint.json`.
 6. Summarize risks, non-coverage and next action.

@@ -2,7 +2,7 @@
 
 **Document:** BIZTRUST-GUIDE-RUNBOOK-001  
 **Applies to:** `bstBizEra/biztrust_guide`  
-**Production URL:** `https://bstbizera.github.io/biztrust_guide/`
+**Production URL (not yet enabled):** `https://bstbizera.github.io/biztrust_guide/` — currently returns 404. GitHub Pages has never been activated on this repository; see NS-001.
 
 ## 1. Choose the correct preview mode
 
@@ -167,7 +167,7 @@ Start from the repository root or use `--directory`.
 ### CSS, JavaScript or images return 404
 
 1. Check capitalization; GitHub Pages paths are case-sensitive.
-2. Confirm `styles.css`, `script.js` and `assets/` exist beside `index.html`.
+2. Confirm `styles.css`, `script.js` and `assets/` resolve **from the page's own directory** — beside `index.html` at the root, and one level up (`../styles.css`) from any page in `stages/`.
 3. Use relative links such as `assets/unitrust-icon.png`.
 4. Run `python3 scripts/validate_continuity.py`.
 

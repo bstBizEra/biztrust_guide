@@ -45,7 +45,7 @@ Agents must resume from repository evidence, not conversation memory. The mandat
 3. Read [`badf/next-actions.json`](badf/next-actions.json).
 4. Inspect the active work package and latest checkpoint.
 5. Verify Git `HEAD`, worktree status and applicable authority.
-6. Run `python3 scripts/validate_continuity.py`.
+6. Run `python3 -m unittest discover -s tests`, then `python3 scripts/validate_continuity.py`.
 7. Continue only if the resume decision is `CONTINUE`; otherwise stop with the recorded reason.
 
 The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_CONTINUITY.md).
@@ -54,7 +54,11 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 
 | Path | Purpose |
 |---|---|
-| `index.html` | Interactive implementation guide |
+| `index.html` | The guide's hub — overview, lifecycle map and links to the nine stages |
+| `stages/` | Nine stage manuals — the bulk of the guide |
+| `tests/` | Validator fail-closed suite and cross-page duplicate detector |
+| `sessions/` | Session checkpoints, the recovery procedure's primary input |
+| `assets/` | Brand images referenced by every page |
 | `styles.css` | Responsive UniTrust/BizTrust visual system |
 | `script.js` | Navigation, search, theme and copy controls |
 | `AGENTS.md` | Repository-wide agent operating charter |
@@ -68,13 +72,30 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 ## Validate before every handoff
 
 ```bash
+python3 -m unittest discover -s tests
 python3 scripts/validate_continuity.py
 node --check script.js
 ```
 
+CI runs these in this order, then an asset check and an artifact-completeness check. **The suite runs first**: the validator is the instrument every other gate is read through, and an instrument never observed to fail is indistinguishable from one that passed. A handoff passing only the last two commands can still fail CI.
+
+## What the checks actually enforce
+
+Recorded here because none of it was written down, and each is a constraint on anyone changing this repository.
+
+| Mechanism | What it does |
+|---|---|
+| `tests/test_validator_fails_closed.py` | Proves the validator cannot fail **open**. A malformed artifact must produce exactly one `CONTINUITY_VALIDATION` line and a non-zero exit — never a traceback and silence, which reads as success. |
+| `tests/test_no_cross_page_duplication.py` | Fails when one stage page restates another instead of linking to it. Threshold `0.70`, calibrated against a duplicate that actually shipped (0.741) versus the highest legitimate pair (0.579). Deliberate parallels are allowlisted individually with a reason — **never raise the threshold**, which retires the check silently. |
+| CI *Verify every tracked page reached the artifact* | Fails the build if any tracked `*.html` is missing from `_site/`. Before it existed, a new page could be present in git, pass every check, and 404 in production. |
+
+The validator's exit codes carry meaning: **0** pass · **1** a data defect, the artifacts are wrong · **2** a validator defect, this script is broken · **130** interrupted. A consumer treating any non-zero as failure is correct; 1 and 2 differ so a reader knows which artifact to debug.
+
 ## Current delivery state
 
-The website implementation is complete. The remaining repository-administrator action is to select **GitHub Actions** under `Settings → Pages → Build and deployment → Source`. The included workflow will then publish the root static site.
+The guide is nine stage manuals plus the `index.html` hub. Documentation actions remain open — see `badf/next-actions.json`.
+
+Deployment is blocked on one repository-administrator action: select **GitHub Actions** under `Settings → Pages → Build and deployment → Source`. Until that is done, **every push to `main` fails CI at the `Configure Pages` step**, and `https://bstbizera.github.io/biztrust_guide/` returns 404. The workflow stages every tracked `*.html` — including the `stages/` subtree — not only the repository root.
 
 ## Authoritative references
 

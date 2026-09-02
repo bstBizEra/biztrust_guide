@@ -225,7 +225,9 @@ Recommended Project fields:
 | Evidence | Missing, Partial, Complete, Rejected |
 | Blocker | None, Internal, External, Authority |
 
-## 11. Minimum repository controls
+## 11. Minimum repository controls — RECOMMENDED, NONE CURRENTLY IN FORCE
+
+> As of 2026-09-03, `main` has **no branch protection** (`GET /branches/main/protection` → 404) and **no required status checks**. GitHub Pages has never been enabled. The list below is the target state, tracked as NS-004 in `docs/NEXT_STEPS.md` — not the current state. Do not read it as a floor that is already met.
 
 1. Protect `main`; no force push or deletion.
 2. Require pull requests and at least one independent approval.
