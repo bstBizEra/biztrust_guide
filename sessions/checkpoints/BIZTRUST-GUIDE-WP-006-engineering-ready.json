@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-006-001",
+  "created_at": "2026-09-02T18:58:14Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-006",
+  "state": "ENGINEERING_READY",
+  "objective": "Extend the multi-page operating manual with the Architect and Plan stages, following the pattern proven in WP-004.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-006-architect-plan",
+    "baseline_commit": "d353d675991c9b5e4a50c47461b0f59930a0c231"
+  },
+  "completed": [
+    "Wrote stages/architect.html at 1405 words covering entry criteria, artifacts, the freeze discipline, invariant criteria, ADR discipline, systems of record, roles, exit gate and stop conditions",
+    "Wrote stages/plan.html at 1329 words covering entry criteria, Work Package anatomy, measurable criteria, authority records, decomposition, package states, roles, exit gate and stop conditions",
+    "Added a package-states section after the first draft measured 1112 words, below the 1200-word acceptance criterion set for this Work Package",
+    "Linked both stages from the index lifecycle grid and updated the stage-manuals note to name three written stages and six remaining",
+    "Ran negative controls on both new pages: broken cross-page link, broken same-page fragment, broken cross-page fragment"
+  ],
+  "remaining": [
+    "Human review and merge of #4, then of this pull request",
+    "Author the six remaining stage manuals",
+    "Resequence or close issue #2"
+  ],
+  "files_changed": [
+    "index.html",
+    "stages/architect.html",
+    "stages/plan.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-006-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "negative control: broken cross-page link architect.html to plan.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: broken same-page fragment in plan.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: broken cross-page fragment plan.html to index.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "positive control: restore both pages and re-validate",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The three FAIL rows are negative controls, induced deliberately then reverted; restores were byte-identical by sha256 (plan 71c7a6e90f2ba795, architect 74fe668e11c1cafd)",
+    "html-pages rose from 2 to 4, html-ids from 44 to 76, html-refs from 56 to 105, confirming the validator parses the new pages rather than only index.html",
+    "The first plan.html draft failed this Work Package's own 1200-word criterion at 1112 words; the criterion was met by adding missing content rather than by lowering the bar"
+  ],
+  "decisions": [
+    "Architect and Plan were written before Discover and Define because the live work is the architecture contract freeze and Work Package definition",
+    "Neither page asserts that any BizTrust architecture artifact is accepted, implemented or production-ready",
+    "This Work Package is stacked on the WP-004 branch so its diff shows only the new stage manuals"
+  ],
+  "assumptions": [
+    "The pattern established across Architect, Plan and Assure is accepted; review may revise it before the remaining six are written"
+  ],
+  "blockers": [
+    {
+      "code": "STACKED_ON_UNMERGED_PR",
+      "owner_role": "human-reviewer",
+      "resolution": "Merge #4 first; this pull request retargets to main automatically."
+    },
+    {
+      "code": "MERGE_REQUIRES_HUMAN",
+      "owner_role": "human-reviewer",
+      "resolution": "A human reviews and merges. Agents must not merge."
+    }
+  ],
+  "authority": {
+    "granted": "Documentation changes via pull request, per operator instruction 2026-09-03",
+    "withheld": "Architecture acceptance, platform implementation, Pages settings changes, direct commits to main, merging"
+  },
+  "next_action_id": "NS-007",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/6"
+    ],
+    "stop_if": [
+      "The validator does not return PASS on the checked-out head",
+      "A stage page asserts an architecture artifact is accepted",
+      "Any merge is proposed without a recorded human decision"
+    ]
+  },
+  "declared_non_coverage": [
+    "Six stage manuals remain unwritten: Discover, Define, Build, Release, Operate, Learn",
+    "No deployed-site verification; GitHub Pages has never been enabled on this repository",
+    "Neither page has been reviewed by a domain expert for insurance-broking accuracy",
+    "The BT-G0..G6 versus G0..G8 gate terminology collision is untouched and remains WP-003 scope",
+    "Existing index.html section copy was not rewritten beyond the two lifecycle links and the stage-manuals note"
+  ]
+}
