@@ -1,73 +1,91 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-002",
-  "updated_at": "2026-09-02T14:15:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-004",
+  "updated_at": "2026-09-02T17:37:17Z",
   "actions": [
     {
-      "id": "NS-001",
+      "id": "NS-004",
       "primary": true,
       "priority": 1,
+      "owner_role": "human-reviewer",
+      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "action": "Review and merge the WP-004 pull request establishing the multi-page manual foundation.",
+      "prerequisites": [
+        "CI green on the pull-request head SHA",
+        "Negative controls recorded in the pull request body"
+      ],
+      "evidence_required": [
+        "Pull request URL",
+        "CI run bound to the head SHA",
+        "Artifact completeness step listing stages/assure.html"
+      ],
+      "stop_conditions": [
+        "Validator fails on the head SHA",
+        "A tracked page is missing from the staged artifact",
+        "Reviewer cannot reproduce the negative controls"
+      ],
+      "fallback": "Close the pull request without merging; main is unaffected."
+    },
+    {
+      "id": "NS-005",
+      "primary": false,
+      "priority": 2,
+      "owner_role": "governance-owner",
+      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "action": "Resequence or close issue #2 (WP-003) against the WP-004 structure, resolving the recorded state divergence.",
+      "prerequisites": [
+        "WP-004 merged"
+      ],
+      "evidence_required": [
+        "Updated or closed issue #2",
+        "current-state.json known_divergence field cleared"
+      ],
+      "stop_conditions": [
+        "No accountable governance owner"
+      ],
+      "fallback": "Leave both work packages open and keep the divergence explicitly recorded."
+    },
+    {
+      "id": "NS-006",
+      "primary": false,
+      "priority": 3,
+      "owner_role": "documentation-engineer",
+      "authority": "AFTER_NS_004",
+      "action": "Author the next stage page (Release) as WP-005, following the Assure page pattern.",
+      "prerequisites": [
+        "WP-004 merged",
+        "Assure page accepted as the pattern"
+      ],
+      "evidence_required": [
+        "stages/release.html at executable depth",
+        "validator PASS",
+        "index.html link added"
+      ],
+      "stop_conditions": [
+        "The Assure pattern is rejected in review"
+      ],
+      "fallback": "Revise the Assure pattern before writing further stages."
+    },
+    {
+      "id": "NS-001",
+      "primary": false,
+      "priority": 4,
       "owner_role": "repository-administrator",
       "authority": "ADMIN_REQUIRED",
       "action": "Select GitHub Actions as the GitHub Pages publishing source.",
       "prerequisites": [
-        "Continuity update is committed to main",
-        "Repository content is approved for public access"
+        "Repository content approved for public access"
       ],
       "evidence_required": [
         "Pages setting shows GitHub Actions",
-        "Deploy BizTrust Guide workflow run URL"
+        "Deploy workflow run URL"
       ],
       "stop_conditions": [
         "Sensitive content is discovered",
-        "Pages environment or workflow permissions are not approved"
+        "Pages environment permissions are not approved"
       ],
       "fallback": "Leave the repository undeployed and continue local preview only."
-    },
-    {
-      "id": "NS-002",
-      "primary": false,
-      "priority": 2,
-      "owner_role": "qa-engineer",
-      "authority": "AFTER_NS_001",
-      "action": "Verify the deployed site against the approved main commit and record deployment evidence.",
-      "prerequisites": [
-        "NS-001 complete",
-        "Pages workflow succeeded"
-      ],
-      "evidence_required": [
-        "HTTPS production URL",
-        "Deployed source SHA",
-        "Navigation and asset verification checklist"
-      ],
-      "stop_conditions": [
-        "Deployed SHA differs from approved main",
-        "Any required asset or interaction is broken"
-      ],
-      "fallback": "Do not declare the site live; open a defect Work Package."
-    },
-    {
-      "id": "NS-003",
-      "primary": false,
-      "priority": 3,
-      "owner_role": "governance-owner",
-      "authority": "HUMAN_APPROVAL_REQUIRED",
-      "action": "Create and link the canonical GitHub Work Package issue and project fields.",
-      "prerequisites": [
-        "Issue form merged",
-        "Accountable governance owner identified"
-      ],
-      "evidence_required": [
-        "GitHub Issue URL",
-        "Project item with lifecycle, risk, authority and evidence fields"
-      ],
-      "stop_conditions": [
-        "No accountable human owner",
-        "Issue scope conflicts with the active Work Package"
-      ],
-      "fallback": "Remain in WAIT_FOR_AUTHORITY and retain the repository checkpoint."
     }
   ]
 }
-
