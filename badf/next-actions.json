@@ -1,74 +1,53 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-007",
-  "updated_at": "2026-09-02T19:14:29Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-008",
+  "updated_at": "2026-09-02T19:54:04Z",
   "actions": [
     {
-      "id": "NS-011",
+      "id": "NS-016",
       "primary": true,
       "priority": 1,
-      "owner_role": "human-reviewer",
+      "owner_role": "independent-reviewer",
       "authority": "HUMAN_APPROVAL_REQUIRED",
-      "action": "Review and merge pull request #4 (WP-004), the root of the stack.",
+      "action": "Independently review the six merged stage manuals for accuracy, and the insurance content for domain correctness. They were merged without any reader other than their author.",
       "prerequisites": [
-        "CI green on the #4 head SHA"
+        "Stack merged to main at 0e7e9b2"
       ],
       "evidence_required": [
-        "Merge commit on main"
+        "Written review verdict per stage page",
+        "Named reviewer who is not the implementing agent"
       ],
       "stop_conditions": [
-        "CI fails",
-        "The stage-page pattern is rejected"
+        "The reviewer is the same agent that authored the pages"
       ],
-      "fallback": "Close #4; main is unaffected."
+      "fallback": "Record the pages explicitly as unreviewed so the gap stays visible rather than fading."
     },
     {
-      "id": "NS-012",
+      "id": "NS-017",
       "primary": false,
       "priority": 2,
-      "owner_role": "human-reviewer",
-      "authority": "AFTER_NS_011",
-      "action": "Review and merge pull request #7 (WP-006), Architect and Plan.",
+      "owner_role": "documentation-engineer",
+      "authority": "AFTER_NS_016",
+      "action": "Fix the validator fail-open defect recorded in issue #5 before further content is written.",
       "prerequisites": [
-        "#4 merged"
+        "Review verdict received"
       ],
       "evidence_required": [
-        "Merge commit",
-        "CI run bound to the head SHA"
+        "Malformed input produces CONTINUITY_VALIDATION=FAIL with no traceback",
+        "Negative controls recorded"
       ],
       "stop_conditions": [
-        "CI fails on the head SHA"
+        "The fix cannot be shown failing before it is trusted"
       ],
-      "fallback": "Close without merging."
+      "fallback": "Continue with content and accept that every PASS is weaker evidence than it appears."
     },
     {
-      "id": "NS-013",
+      "id": "NS-018",
       "primary": false,
       "priority": 3,
-      "owner_role": "human-reviewer",
-      "authority": "AFTER_NS_012",
-      "action": "Review and merge the WP-007 pull request, Build, Release and Operate.",
-      "prerequisites": [
-        "#7 merged"
-      ],
-      "evidence_required": [
-        "Merge commit",
-        "CI total_count >= 1 and success for the head SHA",
-        "html-pages:7 in validator output"
-      ],
-      "stop_conditions": [
-        "No CI run exists for the head SHA",
-        "A page claims BizTrust is deployed or production-ready"
-      ],
-      "fallback": "Close without merging."
-    },
-    {
-      "id": "NS-014",
-      "primary": false,
-      "priority": 4,
       "owner_role": "documentation-engineer",
-      "authority": "AFTER_NS_013",
+      "authority": "AFTER_NS_016",
       "action": "Author the final three stage manuals: Discover, Define and Learn.",
       "prerequisites": [
         "The six-stage pattern accepted in review"
@@ -83,14 +62,14 @@
       "fallback": "Revise the six existing pages before writing more."
     },
     {
-      "id": "NS-015",
+      "id": "NS-019",
       "primary": false,
-      "priority": 5,
+      "priority": 4,
       "owner_role": "governance-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Resequence or close issue #2 (WP-003), clearing the recorded divergence.",
       "prerequisites": [
-        "WP-004 merged"
+        "Stack merged"
       ],
       "evidence_required": [
         "Updated or closed issue #2",
@@ -99,26 +78,45 @@
       "stop_conditions": [
         "No accountable governance owner"
       ],
-      "fallback": "Keep both open with the divergence recorded."
+      "fallback": "Keep it open with the divergence recorded."
     },
     {
       "id": "NS-001",
       "primary": false,
-      "priority": 6,
+      "priority": 5,
       "owner_role": "repository-administrator",
       "authority": "ADMIN_REQUIRED",
-      "action": "Select GitHub Actions as the GitHub Pages publishing source.",
+      "action": "Select GitHub Actions as the GitHub Pages publishing source. Until this is done every push to main fails at Configure Pages.",
       "prerequisites": [
         "Repository content approved for public access"
       ],
       "evidence_required": [
         "Pages setting shows GitHub Actions",
-        "Deploy workflow run URL"
+        "Deploy workflow run URL",
+        "Deployed SHA equals main"
       ],
       "stop_conditions": [
         "Sensitive content is discovered"
       ],
-      "fallback": "Leave undeployed; main CI continues to fail at Configure Pages until this is done."
+      "fallback": "Leave undeployed and continue local preview only."
+    },
+    {
+      "id": "NS-020",
+      "primary": false,
+      "priority": 6,
+      "owner_role": "repository-administrator",
+      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "action": "Decide whether to delete the four merged feature branches on the remote.",
+      "prerequisites": [
+        "Stack merged"
+      ],
+      "evidence_required": [
+        "Branch list showing the decision applied"
+      ],
+      "stop_conditions": [
+        "A branch is still referenced by an open pull request"
+      ],
+      "fallback": "Leave them; they are harmless but accumulate."
     }
   ]
 }
