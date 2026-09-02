@@ -53,7 +53,7 @@
 <section id="operate-intro" data-search="operate production slo telemetry oncall incident recovery cost vulnerability">
   <div class="section-heading"><span>08</span><div><p>Delivery lifecycle · Operate</p><h2>Operate</h2></div></div>
   <p class="lede">Operate is the stage that does not end. Every stage before it happens once per change; this one happens continuously, and it is where most of a system's lifetime is spent.</p>
-  <p class="section-intro">This page is the single home for steady-state operational guidance. Other stages reference it rather than restating it, so the guidance has one place to be correct and cannot drift between copies. <a href="assure.html">Assure</a> keeps its own steady-state section because continuous <em>verification</em> is a distinct concern from operating a running service.</p>
+  <p class="section-intro">This page is the single home for steady-state operational guidance: objectives, telemetry, on-call, incident handling, recovery, cost and vulnerabilities. Other stages must link here rather than restate it — a stage that restates guidance creates a copy, and copies drift silently, because nothing fails when two pages disagree. <a href="assure.html">Assure</a> keeps a steady-state section of its own, scoped strictly to continuous <em>verification</em>: which layers re-run, and whether each control can still fail.</p>
   <div class="invariant">
     <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
     <p>A system nobody can observe is not in production. It is merely running.</p>
@@ -89,6 +89,7 @@
         <tr><td><strong>Objective</strong></td><td>The proportion of those that must succeed, over a stated window</td><td>A number chosen because it looks impressive rather than because it is affordable</td></tr>
         <tr><td><strong>Error budget</strong></td><td>The failure the objective permits — the amount of risk available to spend</td><td>Treating any failure as unacceptable, which makes the objective advisory</td></tr>
         <tr><td><strong>Consequence</strong></td><td>What changes when the budget is exhausted, agreed in advance</td><td>No consequence, which makes the whole exercise decorative</td></tr>
+        <tr><td><strong>Review</strong></td><td>A standing cadence at which actual burn is read against the objective, and the objective revised or defended</td><td>Setting objectives once and never reading the burn, so a budget is exhausted before anyone notices</td></tr>
       </tbody>
     </table>
   </div>
@@ -132,7 +133,7 @@
     <div><span>Declare</span><p>Say the word "incident" out loud and name a coordinator. Ambiguity about whether this is an incident costs more time than any technical step.</p></div>
     <div><span>Mitigate</span><p>Restore service before understanding the cause. Disable the flag, roll back, shed load. Diagnosis performed while users are affected is diagnosis performed badly.</p></div>
     <div><span>Communicate</span><p>What is known, what is not, and when the next update comes. The third is what people actually need; without it they ask, which costs the responder time.</p></div>
-    <div><span>Learn</span><p>Blameless review. The output is a change to a control, not a resolution to be more careful. Every incident adds the check that would have caught it.</p></div>
+    <div><span>Learn</span><p>Blameless review. The output is a change to a control, not a resolution to be more careful. Every incident adds the check that would have caught it, and every <em>recurrence</em> promotes a soft lesson into a blocking one.</p></div>
   </div>
   <div class="invariant">
     <span>THE MEASURE THAT MATTERS</span>
@@ -154,21 +155,21 @@
 <section id="cost" data-search="cost capacity growth budget efficiency forecast">
   <div class="section-heading"><span>07</span><div><p>Sustainability</p><h2>Cost and capacity</h2></div></div>
   <ul class="check-list">
-    <li>Cost is attributed per tenant and per capability, so a growing bill can be explained rather than absorbed</li>
-    <li>Capacity is forecast against real growth, not against the hope that current headroom is permanent</li>
-    <li>Rate limits and quotas exist before they are needed, because adding them under load changes behaviour for everyone at once</li>
-    <li>An unexpected cost movement is investigated as a signal — it is often the first visible symptom of a defect</li>
+    <li><strong>Attribute cost per tenant and per capability</strong>, so a growing bill can be explained rather than absorbed</li>
+    <li><strong>Forecast capacity against measured growth</strong>, not against the hope that whatever headroom exists is permanent</li>
+    <li><strong>Put rate limits and quotas in place before they are needed</strong> — adding them under load changes behaviour for everyone at once</li>
+    <li><strong>Investigate an unexpected cost movement as a signal.</strong> It can be the first visible symptom of a defect</li>
   </ul>
 </section>
 
 <section id="vuln" data-search="vulnerability patching dependencies secrets rotation disclosure">
   <div class="section-heading"><span>08</span><div><p>Staying safe over time</p><h2>Vulnerability management</h2></div></div>
   <ul class="check-list">
-    <li>Dependencies are inventoried and monitored; an unknown dependency cannot be assessed when an advisory lands</li>
-    <li>Patching has an agreed timeline by severity, decided before the urgent case arrives</li>
-    <li>Secrets rotate on a schedule, and rotation is exercised rather than assumed to work</li>
-    <li>Access is reviewed periodically; the most common finding is an account nobody has needed for a year</li>
-    <li>A disclosure route exists and is answered — security researchers who cannot reach you publish instead</li>
+    <li><strong>Inventory and monitor every dependency.</strong> An unknown dependency cannot be assessed when an advisory lands</li>
+    <li><strong>Agree a patching timeline by severity before the urgent case arrives</strong>, not during it</li>
+    <li><strong>Rotate secrets on a schedule, and exercise the rotation</strong> rather than assuming it works</li>
+    <li><strong>Review access periodically</strong>, and look first for accounts nobody has needed for a year</li>
+    <li><strong>Publish a disclosure route and answer it.</strong> Security researchers who cannot reach you publish instead</li>
   </ul>
 </section>
 
@@ -204,7 +205,7 @@
 
 <section id="stop" data-search="stop conditions halt unobserved no rota untested restore">
   <div class="section-heading"><span>11</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
-  <p class="section-intro">These are conditions to stop <em>shipping</em>, not to stop operating — the service keeps running while they are fixed.</p>
+  <p class="section-intro">These are conditions to stop <em>shipping</em>, not to stop operating: a service under any of them should keep serving while the condition is fixed, because withdrawing it usually harms more than the condition does.</p>
   <ul class="cross-list">
     <li>Telemetry has stopped arriving and the system is running unobserved</li>
     <li>No named person is on call, or the rota has an unfilled slot</li>
