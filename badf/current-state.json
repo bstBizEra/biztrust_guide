@@ -2,25 +2,25 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-02T17:37:17Z",
+  "updated_at": "2026-09-02T18:58:14Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-004",
-    "title": "Begin-to-production operating manual: multi-page foundation",
+    "id": "BIZTRUST-GUIDE-WP-006",
+    "title": "Architect and Plan stage manuals",
     "state": "ENGINEERING_READY",
-    "objective": "Establish a deployable, mechanically validated multi-page structure and prove it with one lifecycle stage written to executable depth.",
-    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/3",
+    "objective": "Extend the multi-page operating manual with the two stages the team is executing now, following the pattern proven in WP-004.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/6",
     "owner_role": "documentation-engineer",
     "scope": [
-      "multi-page site structure with stages/ subpages",
-      "Pages workflow stages every tracked page",
-      "validator covers every HTML page, not only index.html",
-      "Assure stage page at executable depth"
+      "stages/architect.html",
+      "stages/plan.html",
+      "index.html lifecycle links",
+      "continuity state update"
     ]
   },
   "source": {
-    "branch": "feat/biztrust-guide-wp-004-multipage-foundation",
-    "baseline_commit": "d6a5b2dd0adb1e39a1aaff1d68ff061cecd08b8d",
-    "baseline_kind": "branch-point-from-main",
+    "branch": "feat/biztrust-guide-wp-006-architect-plan",
+    "baseline_commit": "d353d675991c9b5e4a50c47461b0f59930a0c231",
+    "baseline_kind": "stacked-on-wp-004-branch",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
   "gates": {
@@ -36,10 +36,10 @@
     "production_platform_implementation": "NOT_GRANTED",
     "architecture_acceptance": "NOT_GRANTED"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-004-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-006-engineering-ready.json",
   "latest_handoff": null,
-  "primary_next_action_id": "NS-004",
+  "primary_next_action_id": "NS-007",
   "resume_decision": "WAIT_FOR_AUTHORITY",
-  "stop_reason": "The WP-004 pull request requires independent human review and merge. Agents must not merge.",
-  "known_divergence": "Issue #2 (BIZTRUST-GUIDE-WP-003) remains open and labelled state:in-progress. WP-004 does not supersede it; NS-005 resequences or closes it. Recorded rather than silently overwritten."
+  "stop_reason": "Two pull requests await independent human review. WP-006 is stacked on WP-004 and cannot land first. Agents must not merge.",
+  "known_divergence": "Issue #2 (BIZTRUST-GUIDE-WP-003) remains open and labelled state:in-progress; NS-009 resequences or closes it. Recorded rather than silently overwritten."
 }

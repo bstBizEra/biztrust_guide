@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Architect · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 03 of the BizTrust delivery lifecycle: turning requirements into contracts that can be violated, and freezing only what is expensive to retrofit.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 03 · Architect</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 03 · Architect</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#freeze"><span>03</span> The freeze discipline</a>
+    <a href="#invariants"><span>04</span> Invariant criteria</a>
+    <a href="#adr"><span>05</span> ADR discipline</a>
+    <a href="#ownership"><span>06</span> Systems of record</a>
+    <a href="#roles"><span>07</span> Roles</a>
+    <a href="#gate"><span>08</span> Exit gate</a>
+    <a href="#stop"><span>09</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 03 of 09</strong><small>Architect · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="architect-intro" data-search="architect contract freeze adr invariant boundary ownership">
+  <div class="section-heading">
+    <span>03</span>
+    <div><p>Delivery lifecycle · Architect</p><h2>Architect</h2></div>
+  </div>
+  <p class="lede">Architect turns requirements into contracts that can be violated. A statement nothing could contradict is prose, however carefully it is worded — and prose does not constrain an implementation that disagrees with it.</p>
+  <p class="section-intro">The stage exists to stop implementation from silently becoming the architecture. It is not finished when a document is long. It is finished when someone can name, for each commitment, what a violation would look like and which check would catch it.</p>
+
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>Freeze what is expensive to retrofit and cheap to hold now. Defer everything else, and say that it was deferred.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria requirements risk tier open decision constraints">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <p class="section-intro">All four must hold. Architecture work started before them produces decisions nobody can evaluate.</p>
+  <div class="three-col">
+    <article>
+      <h3>Requirements exist and are bounded</h3>
+      <p>Define has produced acceptance criteria and a risk tier. Architecting an unbounded problem produces an unbounded contract, which is the failure this stage is meant to prevent.</p>
+    </article>
+    <article>
+      <h3>The decision is genuinely open</h3>
+      <p>If the technology is already chosen and funded, this is ratification, not a decision. Record it as such. An ADR written backwards from a foregone conclusion trains readers to skip the alternatives section.</p>
+    </article>
+    <article>
+      <h3>Constraints are known and written</h3>
+      <p>Regulatory, jurisdictional, currency, data-residency and tenancy constraints. A constraint discovered after the freeze invalidates the freeze rather than adjusting it.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>Someone can accept the output</strong>
+    <p>Name the role authorized to accept this architecture before writing it. A contract frozen in a repository that disclaims authority over the system it governs, accepted by nobody, is a document rather than a contract.</p>
+  </div>
+</section>
+
+<section id="produces" data-search="artifacts produced contract adr ownership matrix state machines api standard">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <caption>Architecture artifacts and what each is for</caption>
+      <thead><tr><th>Artifact</th><th>Answers</th><th>Fails when</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Architecture contract</strong></td><td>What is committed, and at what version</td><td>It grows sections faster than it grows checks</td></tr>
+        <tr><td><strong>Invariant register</strong></td><td>What must always hold, and how a violation is detected</td><td>An entry names no check that could catch its violation</td></tr>
+        <tr><td><strong>Data ownership matrix</strong></td><td>Which system is authoritative for each datum</td><td>Two systems both claim a datum, or none does</td></tr>
+        <tr><td><strong>Bounded context map</strong></td><td>Where the seams are</td><td>Seams are frozen before any code has crossed them</td></tr>
+        <tr><td><strong>State machines</strong></td><td>Which transitions are legal, and who may cause them</td><td>One field is asked to carry several independent states</td></tr>
+        <tr><td><strong>API and event standard</strong></td><td>The shape of every interface before it is built</td><td>The normative version has no working tooling</td></tr>
+        <tr><td><strong>Integration boundaries</strong></td><td>Where provider-specific logic is allowed to live</td><td>Vendor concepts leak into domain models</td></tr>
+        <tr><td><strong>Rollback strategy</strong></td><td>How the decision is reversed if it is wrong</td><td>It is written as "revert the commit" for a schema change</td></tr>
+        <tr><td><strong>ADRs</strong></td><td>Why, and what was rejected</td><td>They are written for decisions nobody contested</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="freeze" data-search="freeze discipline defer scope boundaries hypothesis feedback">
+  <div class="section-heading"><span>03</span><div><p>Judgement</p><h2>The freeze discipline</h2></div></div>
+  <p class="section-intro">Freezing is expensive. A frozen boundary becomes a contract amendment rather than a refactor, so freeze narrowly and deliberately.</p>
+  <div class="split">
+    <div>
+      <h3>Freeze</h3>
+      <ul class="check-list">
+        <li>Anything that changes the shape of stored data — ownership keys, version pinning, immutability</li>
+        <li>Anything a later migration cannot undo cheaply</li>
+        <li>Anything whose violation is a legal or financial problem rather than a defect</li>
+        <li>Interfaces other teams or tenants will build against</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Defer, and record the deferral</h3>
+      <ul class="cross-list">
+        <li>Seams no code has crossed yet — they are hypotheses until something runs across them</li>
+        <li>Decisions with no forcing function this quarter</li>
+        <li>Anything you would freeze only to feel finished</li>
+        <li>Technology choices a later stage will make with better information</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Deferral is an output, not an omission</strong>
+    <p>Write what was deferred and what would trigger revisiting it. A silent gap and a deliberate deferral read identically six months later, and only one of them was a decision.</p>
+  </div>
+</section>
+
+<section id="invariants" data-search="invariant criteria falsifiable check detection convention">
+  <div class="section-heading"><span>04</span><div><p>The test of an invariant</p><h2>Invariant criteria</h2></div></div>
+  <p class="section-intro">An invariant is a claim that something is always true. The claim is only useful if its violation is detectable.</p>
+  <div class="definition-list">
+    <div><span>Name the check</span><p>Every invariant states the command, query or introspection that would catch a violation. If none exists, it is a convention — enforce it in review and stop calling it an invariant.</p></div>
+    <div><span>Prefer structure to intent</span><p>A constraint the database enforces beats a rule the code intends. A missing grant beats a code review that remembers.</p></div>
+    <div><span>Count them honestly</span><p>A register where most entries cannot fail trains readers to skim the few that can. Fewer, checkable entries outperform a longer list.</p></div>
+    <div><span>Separate the invariant from the mechanism</span><p>"Posted journals are append-only" is the invariant. "The application role holds no UPDATE grant" is one mechanism for it. The mechanism may change; the invariant should not.</p></div>
+  </div>
+  <div class="callout">
+    <strong>Hard invariants are never traded for convenience</strong>
+    <p>Where an invariant protects money correctness, identity, tenant isolation or a human approval gate, it is not subject to the cost argument that trims everything else. Trim effort and surface; never correctness or safety.</p>
+  </div>
+</section>
+
+<section id="adr" data-search="adr decision record alternatives consequences validation contested">
+  <div class="section-heading"><span>05</span><div><p>Recording decisions</p><h2>ADR discipline</h2></div></div>
+  <p class="section-intro">Write an Architecture Decision Record when a decision is contested, consequential and hard to reverse. Writing one for a decision nobody disputed produces documentation, not a record.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Section</th><th>What belongs there</th></tr></thead>
+      <tbody>
+        <tr><td>Status</td><td>Proposed, accepted, superseded — with the date and the accepting role</td></tr>
+        <tr><td>Context</td><td>The forces in play, including the ones pushing the other way</td></tr>
+        <tr><td>Problem</td><td>Stated so that someone could disagree with the framing</td></tr>
+        <tr><td>Decision</td><td>What was chosen, in one unambiguous sentence</td></tr>
+        <tr><td>Alternatives</td><td>Options genuinely considered, with why each was rejected. If this section is thin, the decision was not open</td></tr>
+        <tr><td>Consequences</td><td>What becomes easier and what becomes harder. Both</td></tr>
+        <tr><td>Risks</td><td>What would make this the wrong call, and how it would show up</td></tr>
+        <tr><td>Implementation implications</td><td>What must change downstream for this to be real</td></tr>
+        <tr><td>Validation requirements</td><td>The check that proves the decision is actually in force</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="ownership" data-search="systems of record ownership authoritative broker insurer datum">
+  <div class="section-heading"><span>06</span><div><p>Authority over data</p><h2>Systems of record</h2></div></div>
+  <p class="section-intro">Every authoritative datum has exactly one owner. Ambiguity here is not a documentation gap; it is a future reconciliation incident.</p>
+  <ul class="check-list">
+    <li>For each datum, name the one system that is authoritative and the systems that hold copies</li>
+    <li>Where an external party is authoritative, the internal record is explicitly a representation, not the fact</li>
+    <li>A representation must never be presented in the interface as though it carried the authority of the original</li>
+    <li>Cross-domain direct mutation is prohibited; modules exchange contracts, not table access</li>
+  </ul>
+  <div class="invariant">
+    <span>THE DISTINCTION THAT MUST SURVIVE</span>
+    <p>An operating record of a request is not a confirmation that the request was granted. Where the two are conflated, the interface will eventually tell someone they are covered when they are not.</p>
+  </div>
+</section>
+
+<section id="roles" data-search="roles architect reviewer authority accept">
+  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Architect</strong></td><td>Drafts the contract, invariants and ADRs; names what is deferred</td><td>Accept their own architecture, or begin implementation from it</td></tr>
+        <tr><td><strong>Domain reviewer</strong></td><td>Checks the model against how the business actually works, including the awkward cases</td><td>Approve a model whose vocabulary they had to guess at</td></tr>
+        <tr><td><strong>Security reviewer</strong></td><td>Owns tenancy, identity and data-access commitments</td><td>Accept an invariant with no detection mechanism</td></tr>
+        <tr><td><strong>Accepting authority</strong></td><td>Records acceptance against the Work Package, with a date</td><td>Be inferred from absence of objection</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate architecture frozen plan authorized">
+  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <p class="section-intro">Architect exits to Plan when every condition holds. Acceptance is recorded explicitly; a stage does not advance because nobody objected.</p>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Every invariant names the check that would catch its violation</label>
+    <label><input type="checkbox" disabled> Every authoritative datum has exactly one named owner</label>
+    <label><input type="checkbox" disabled> Deferred decisions are written down with their revisit triggers</label>
+    <label><input type="checkbox" disabled> Each ADR records alternatives that were genuinely available</label>
+    <label><input type="checkbox" disabled> The normative interface standard has working tooling</label>
+    <label><input type="checkbox" disabled> Rollback is described in terms the change actually permits</label>
+    <label><input type="checkbox" disabled> A named role has recorded acceptance against the Work Package</label>
+    <label><input type="checkbox" disabled> Nothing in the contract asserts a capability exists that does not</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt ambiguous authority constraint discovered">
+  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <ul class="cross-list">
+    <li>No role is authorized to accept the architecture being written</li>
+    <li>A constraint surfaces that would invalidate a decision already frozen</li>
+    <li>An invariant cannot be given a detection mechanism, and is still being called an invariant</li>
+    <li>The contract asserts a capability is implemented, secure or production-ready without linked evidence</li>
+    <li>Two systems claim authority over the same datum and neither will yield</li>
+    <li>Implementation has already begun and is defining the architecture in practice</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Plan</h3>
+      <p>Work Packages with bounded scope, measurable acceptance criteria, explicit authority and a rollback path.</p>
+    </div>
+    <a class="github-link" href="plan.html">Plan →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 03 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

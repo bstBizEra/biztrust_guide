@@ -1,76 +1,93 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-004",
-  "updated_at": "2026-09-02T17:37:17Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-006",
+  "updated_at": "2026-09-02T18:58:14Z",
   "actions": [
     {
-      "id": "NS-004",
+      "id": "NS-007",
       "primary": true,
       "priority": 1,
       "owner_role": "human-reviewer",
       "authority": "HUMAN_APPROVAL_REQUIRED",
-      "action": "Review and merge the WP-004 pull request establishing the multi-page manual foundation.",
+      "action": "Review and merge pull request #4 (WP-004). WP-006 is stacked on it and cannot land first.",
       "prerequisites": [
-        "CI green on the pull-request head SHA",
-        "Negative controls recorded in the pull request body"
+        "CI green on the #4 head SHA"
+      ],
+      "evidence_required": [
+        "Merge commit on main",
+        "CI run bound to the merged SHA"
+      ],
+      "stop_conditions": [
+        "CI fails on the head SHA",
+        "The Assure page pattern is rejected in review"
+      ],
+      "fallback": "Close #4 without merging; both branches are additive and main is unaffected."
+    },
+    {
+      "id": "NS-008",
+      "primary": false,
+      "priority": 2,
+      "owner_role": "human-reviewer",
+      "authority": "AFTER_NS_007",
+      "action": "Review and merge the WP-006 pull request adding the Architect and Plan stage manuals.",
+      "prerequisites": [
+        "#4 merged",
+        "CI green on the WP-006 head SHA"
       ],
       "evidence_required": [
         "Pull request URL",
         "CI run bound to the head SHA",
-        "Artifact completeness step listing stages/assure.html"
+        "html-pages:4 in validator output"
       ],
       "stop_conditions": [
         "Validator fails on the head SHA",
-        "A tracked page is missing from the staged artifact",
-        "Reviewer cannot reproduce the negative controls"
+        "A page claims an architecture artifact is accepted"
       ],
-      "fallback": "Close the pull request without merging; main is unaffected."
+      "fallback": "Close without merging; the two pages are additive."
     },
     {
-      "id": "NS-005",
+      "id": "NS-009",
       "primary": false,
-      "priority": 2,
+      "priority": 3,
       "owner_role": "governance-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
-      "action": "Resequence or close issue #2 (WP-003) against the WP-004 structure, resolving the recorded state divergence.",
+      "action": "Resequence or close issue #2 (WP-003) against the multi-page structure, clearing the recorded divergence.",
       "prerequisites": [
         "WP-004 merged"
       ],
       "evidence_required": [
         "Updated or closed issue #2",
-        "current-state.json known_divergence field cleared"
+        "known_divergence cleared from current-state.json"
       ],
       "stop_conditions": [
         "No accountable governance owner"
       ],
-      "fallback": "Leave both work packages open and keep the divergence explicitly recorded."
+      "fallback": "Keep both work packages open with the divergence explicitly recorded."
     },
     {
-      "id": "NS-006",
+      "id": "NS-010",
       "primary": false,
-      "priority": 3,
+      "priority": 4,
       "owner_role": "documentation-engineer",
-      "authority": "AFTER_NS_004",
-      "action": "Author the next stage page (Release) as WP-005, following the Assure page pattern.",
+      "authority": "AFTER_NS_008",
+      "action": "Author the six remaining stage manuals: Discover, Define, Build, Release, Operate, Learn.",
       "prerequisites": [
-        "WP-004 merged",
-        "Assure page accepted as the pattern"
+        "The Architect, Plan and Assure pattern accepted in review"
       ],
       "evidence_required": [
-        "stages/release.html at executable depth",
-        "validator PASS",
-        "index.html link added"
+        "Six stage pages at executable depth",
+        "validator PASS with html-pages:10"
       ],
       "stop_conditions": [
-        "The Assure pattern is rejected in review"
+        "The established pattern is rejected and needs revision first"
       ],
-      "fallback": "Revise the Assure pattern before writing further stages."
+      "fallback": "Revise the three existing stage pages before writing further ones."
     },
     {
       "id": "NS-001",
       "primary": false,
-      "priority": 4,
+      "priority": 5,
       "owner_role": "repository-administrator",
       "authority": "ADMIN_REQUIRED",
       "action": "Select GitHub Actions as the GitHub Pages publishing source.",
@@ -82,10 +99,9 @@
         "Deploy workflow run URL"
       ],
       "stop_conditions": [
-        "Sensitive content is discovered",
-        "Pages environment permissions are not approved"
+        "Sensitive content is discovered"
       ],
-      "fallback": "Leave the repository undeployed and continue local preview only."
+      "fallback": "Leave undeployed; main CI continues to fail at Configure Pages until this is done."
     }
   ]
 }

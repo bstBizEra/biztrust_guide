@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 04 of the BizTrust delivery lifecycle: converting a frozen architecture into Work Packages that can be authorized, executed and verified independently.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 04 · Plan</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 04 · Plan</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#anatomy"><span>02</span> Work Package anatomy</a>
+    <a href="#criteria"><span>03</span> Measurable criteria</a>
+    <a href="#authority"><span>04</span> Authority records</a>
+    <a href="#decompose"><span>05</span> Decomposition</a>
+    <a href="#states"><span>06</span> Package states</a>
+    <a href="#roles"><span>07</span> Roles</a>
+    <a href="#gate"><span>08</span> Exit gate</a>
+    <a href="#stop"><span>09</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 04 of 09</strong><small>Plan · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="plan-intro" data-search="plan work package authority acceptance criteria decomposition scope">
+  <div class="section-heading">
+    <span>04</span>
+    <div><p>Delivery lifecycle · Plan</p><h2>Plan</h2></div>
+  </div>
+  <p class="lede">Plan converts a frozen architecture into units of work that can be authorized, executed and verified independently. The unit is the Work Package, and its quality determines everything downstream — a vague plan produces unverifiable work no matter how good the engineering is.</p>
+  <p class="section-intro">Most delivery failures attributed to execution are planning failures wearing execution's clothes. An acceptance criterion nobody can check does not become checkable because a capable engineer implements it.</p>
+
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>No ticket, no work. One Work Package has one objective, bounded scope and acceptance criteria that a command can settle.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria architecture frozen authority risk tier capacity">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>Architecture is frozen for this scope</h3>
+      <p>Not for the whole system — for the part this work touches. Planning against an unfrozen boundary produces work packages that are invalidated by a decision taken later.</p>
+    </article>
+    <article>
+      <h3>An accepting authority is named</h3>
+      <p>A specific role that will authorize execution and later accept the result. If nobody can be named, the work has no destination and planning it wastes the effort.</p>
+    </article>
+    <article>
+      <h3>The risk tier is assigned</h3>
+      <p>Risk determines how much verification the work must carry. Assigning it after the work is done invites assigning it to match the evidence that happens to exist.</p>
+    </article>
+  </div>
+</section>
+
+<section id="anatomy" data-search="work package anatomy fields scope authority evidence rollback">
+  <div class="section-heading"><span>02</span><div><p>The unit</p><h2>Work Package anatomy</h2></div></div>
+  <p class="section-intro">Every field below is required. A Work Package missing any of them is a draft, whatever its state label says.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Field</th><th>What it must contain</th><th>Failure signature</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Identifier</strong></td><td>A stable ID that branches, commits and evidence all reference</td><td>Work that cannot be traced back to an authorization</td></tr>
+        <tr><td><strong>Business outcome</strong></td><td>One bounded, testable outcome — not a list of activities</td><td>"Improve the platform"</td></tr>
+        <tr><td><strong>In scope</strong></td><td>Named deliverables</td><td>Deliverables discovered during implementation</td></tr>
+        <tr><td><strong>Out of scope</strong></td><td>Explicit exclusions, especially the tempting adjacent ones</td><td>Scope that grew because something was convenient</td></tr>
+        <tr><td><strong>Risk class</strong></td><td>Assigned before work starts</td><td>A tier chosen to match the evidence already collected</td></tr>
+        <tr><td><strong>Authority</strong></td><td>Approving role, permitted actions, prohibited actions, expiry</td><td>Authority inferred from a previous, unrelated approval</td></tr>
+        <tr><td><strong>Acceptance criteria</strong></td><td>Conditions a command can settle</td><td>Criteria that read as intentions</td></tr>
+        <tr><td><strong>Evidence</strong></td><td>The commands or artifacts that will discharge each criterion</td><td>Evidence decided after the fact, to fit the result</td></tr>
+        <tr><td><strong>Rollback</strong></td><td>How this is reversed, in terms the change permits</td><td>"Revert the commit" for something with side effects</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="criteria" data-search="acceptance criteria measurable falsifiable command evidence">
+  <div class="section-heading"><span>03</span><div><p>The hard part</p><h2>Writing criteria that can fail</h2></div></div>
+  <p class="section-intro">A criterion is measurable when two people running the same command would agree on whether it passed. Test each one by asking what its failure would look like.</p>
+  <div class="split">
+    <div>
+      <h3>Measurable</h3>
+      <ul class="check-list">
+        <li>"A cross-tenant read returns denied, proven by a test that is shown failing when the policy is removed"</li>
+        <li>"The validator returns PASS on the committed tree, and the SHA measured equals the pushed head"</li>
+        <li>"Every mutating path declares an idempotency key, asserted by parsing the interface file"</li>
+        <li>"A deliberately broken link causes the build to fail — control recorded"</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Not measurable</h3>
+      <ul class="cross-list">
+        <li>"Tenant isolation works correctly"</li>
+        <li>"The code is well tested"</li>
+        <li>"Performance is acceptable"</li>
+        <li>"Documentation is updated"</li>
+        <li>"Three tests exist" — a count of artifacts, not a measurement of behaviour</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>State the expected value before running the check</strong>
+    <p>Where a criterion asserts a number, compute it once at planning time and confirm the assertion holds. This catches expectation-versus-tolerance mismatches while they are still cheap, rather than at the boundary between the engineer and the reviewer.</p>
+  </div>
+</section>
+
+<section id="authority" data-search="authority granted withheld expiry approval prohibited">
+  <div class="section-heading"><span>04</span><div><p>Permission</p><h2>Authority records</h2></div></div>
+  <p class="section-intro">Authority is granted explicitly, bounded, and expires. Unknown or conflicting authority is not permission.</p>
+  <div class="definition-list">
+    <div><span>Granted</span><p>The specific actions permitted, by whom, and for what scope.</p></div>
+    <div><span>Withheld</span><p>Named prohibitions. Silence about an action is not permission to take it.</p></div>
+    <div><span>Expiry</span><p>When the grant lapses. An open-ended grant becomes a standing licence nobody remembers issuing.</p></div>
+    <div><span>Reserved acts</span><p>Actions no agent performs regardless of grant — merging, authorizing a demand, deploying to production, or any irreversible action outside explicit scope.</p></div>
+  </div>
+  <div class="callout">
+    <strong>When authority is ambiguous, stop</strong>
+    <p>Record the blocker and halt the affected action. Proceeding on an assumed grant is the failure mode that governance exists to prevent, and it is indistinguishable from correct behaviour right up until it is not.</p>
+  </div>
+</section>
+
+<section id="decompose" data-search="decomposition sizing dependency order reviewable one objective">
+  <div class="section-heading"><span>05</span><div><p>Sizing</p><h2>Decomposition</h2></div></div>
+  <ul class="check-list">
+    <li><strong>One objective per package.</strong> If the outcome needs the word "and", it is two packages</li>
+    <li><strong>Sized to be reviewable.</strong> A change nobody can hold in their head is accepted on trust, which is not acceptance</li>
+    <li><strong>Ordered by dependency, not by appetite.</strong> Sequence what unblocks the most work, not what is most enjoyable to build</li>
+    <li><strong>Enabling work is named, not smuggled.</strong> If a change requires plumbing first, that plumbing is in scope explicitly or it is its own package</li>
+    <li><strong>Findings become packages.</strong> A gap surfaced mid-flight gets its own package with its own criteria — never an opportunistic fix, never an unactioned comment</li>
+  </ul>
+  <div class="invariant">
+    <span>THE SEQUENCING TEST</span>
+    <p>Plan the work the deadline actually needs first. A lifecycle built in narrative order will schedule the urgent thing last, behind stages it does not use.</p>
+  </div>
+</section>
+
+<section id="states" data-search="states draft ready authorized in progress validating blocked transitions">
+  <div class="section-heading"><span>06</span><div><p>Lifecycle</p><h2>Package states</h2></div></div>
+  <p class="section-intro">A Work Package moves through declared states. Only an authorized transition advances delivery, and validation success is never itself a transition — passing tests does not authorize deployment any more than a green build authorizes a merge.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>State</th><th>Means</th><th>Advanced by</th></tr></thead>
+      <tbody>
+        <tr><td><strong>DRAFT</strong></td><td>Being written; fields still incomplete</td><td>The planner, once every required field is present</td></tr>
+        <tr><td><strong>READY</strong></td><td>Complete and reviewable, but not yet permitted to start</td><td>Review of scope and criteria</td></tr>
+        <tr><td><strong>AUTHORIZED</strong></td><td>Execution is permitted, within a recorded and expiring grant</td><td>The authorizing role, explicitly</td></tr>
+        <tr><td><strong>IN_PROGRESS</strong></td><td>Work is under way against this package alone</td><td>The implementing agent</td></tr>
+        <tr><td><strong>VALIDATING</strong></td><td>Evidence is being produced and independently checked</td><td>Entering Assure</td></tr>
+        <tr><td><strong>ENGINEERING_READY</strong></td><td>Evidence is complete; awaiting a human decision</td><td>The verifier</td></tr>
+        <tr><td><strong>ACCEPTED</strong></td><td>A human has recorded acceptance</td><td>The accepting authority, never an agent</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="section-intro" style="margin-top:2rem">Exceptional states — <strong>BLOCKED</strong>, <strong>WAIT_FOR_AUTHORITY</strong>, <strong>RECOVERY_REQUIRED</strong>, <strong>REJECTED</strong>, <strong>CANCELLED</strong> — are recorded outcomes, not failures of process. A package sitting in <strong>WAIT_FOR_AUTHORITY</strong> with a written reason is functioning correctly; one silently stalled in <strong>IN_PROGRESS</strong> is not.</p>
+  <div class="callout">
+    <strong>The recorded state and the tracker must agree</strong>
+    <p>When the machine-readable state and the issue tracker disagree about what is active, an agent resuming from evidence stops — correctly. Reconcile the divergence rather than working around it, and record which source was wrong.</p>
+  </div>
+</section>
+
+<section id="roles" data-search="roles planner authority engineer reviewer">
+  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Planner</strong></td><td>Writes the package, criteria, evidence plan and rollback; validates the change tier</td><td>Begin implementation, or authorize their own package</td></tr>
+        <tr><td><strong>Implementing agent</strong></td><td>Challenges criteria they cannot verify, before starting</td><td>Start work on a package whose criteria they know are uncheckable</td></tr>
+        <tr><td><strong>Authorizing role</strong></td><td>Grants bounded authority with an expiry, recorded against the package</td><td>Grant authority verbally, or by not objecting</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate execution authorized build">
+  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Every acceptance criterion names a command that could settle it</label>
+    <label><input type="checkbox" disabled> Out-of-scope exclusions are written, including the tempting ones</label>
+    <label><input type="checkbox" disabled> Authority is recorded with permitted actions, prohibitions and expiry</label>
+    <label><input type="checkbox" disabled> The rollback path suits what the change actually does</label>
+    <label><input type="checkbox" disabled> The package has one objective, expressible without "and"</label>
+    <label><input type="checkbox" disabled> Dependencies are ordered and named</label>
+    <label><input type="checkbox" disabled> Exactly one next action is identified as primary</label>
+    <label><input type="checkbox" disabled> A human has authorized execution against the package</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt uncheckable criteria authority missing">
+  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <ul class="cross-list">
+    <li>An acceptance criterion has no command that could falsify it, and is still being called a criterion</li>
+    <li>Authority is absent, ambiguous, expired, or inferred from an unrelated approval</li>
+    <li>The architecture this plan depends on is not frozen for the relevant scope</li>
+    <li>Scope has grown during planning because an adjacent change was convenient</li>
+    <li>No accountable human owner can be named</li>
+    <li>Two packages claim overlapping ownership with no coordination record</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Build</h3>
+      <p>Small changes, contract tests, migrations, telemetry and documentation, executed against an authorized package.</p>
+    </div>
+    <b>NOT YET WRITTEN</b>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 04 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
