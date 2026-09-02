@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Fail-closed continuity and static-site validation for BizTrust Guide."""
+"""Continuity and static-site validation for BizTrust Guide.
+
+Fail-closed on MALFORMED input: a wrong-typed field, an unreadable file or an
+unforeseen exception always produces exactly one CONTINUITY_VALIDATION line
+and a non-zero exit. Content is checked for PRESENCE and shape, not for
+substance - a file that exists and parses satisfies its check.
+
+Exit codes:
+    0    PASS - every check ran and none recorded an error
+    1    FAIL - a data defect: the artifacts under validation are wrong
+    2    FAIL - a validator defect: an unforeseen exception in this script
+    130  FAIL - interrupted
+A consumer that treats any non-zero as failure is correct; 1 and 2 differ so
+that a reader knows which artifact to debug.
+"""
 
 from __future__ import annotations
 
@@ -126,8 +140,12 @@ def main() -> int:
         errors.append("current-state: latest_checkpoint contains a null byte")
         checkpoint_path = None
     if isinstance(checkpoint_path, str) and checkpoint_path:
-        resolved = (ROOT / checkpoint_path).resolve()
-        if ROOT not in resolved.parents:
+        try:
+            resolved = (ROOT / checkpoint_path).resolve()
+        except (OSError, ValueError) as exc:
+            errors.append(f"current-state: latest_checkpoint is unusable as a path: {exc}")
+            resolved = ROOT
+        if ROOT not in resolved.parents and resolved != ROOT:
             errors.append(
                 f"current-state: latest_checkpoint escapes the repository root: {checkpoint_path}"
             )
@@ -263,8 +281,11 @@ def main() -> int:
         readable.append(page)
     pages = readable
 
-    if not (ROOT / "index.html").is_file():
+    index_path = ROOT / "index.html"
+    if not index_path.is_file():
         errors.append("index.html is not present at the publishing root")
+    elif index_path.stat().st_size == 0:
+        errors.append("index.html is present but empty")
 
     for page in pages:
         key = page.resolve()
@@ -303,9 +324,21 @@ def main() -> int:
                         f"{rel}: broken cross-page fragment {parts.path}#{parts.fragment}"
                     )
 
-    checks.append(f"html-pages:{len(pages)}")
-    checks.append(f"html-ids:{sum(len(v) for v in page_ids.values())}")
-    checks.append(f"html-refs:{sum(len(v) for v in page_refs.values())}")
+    total_ids = sum(len(v) for v in page_ids.values())
+    total_refs = sum(len(v) for v in page_refs.values())
+    # Appended CONDITIONALLY. When this ran unconditionally the "check did not
+    # run" assertion could never fire for it, and a site with every page
+    # deleted and index.html truncated to zero bytes still printed PASS.
+    if pages:
+        checks.append(f"html-pages:{len(pages)}")
+    else:
+        errors.append("no readable HTML page found under the site root")
+    if total_refs == 0:
+        errors.append(
+            "no local references found in any page: the link check validated nothing"
+        )
+    checks.append(f"html-ids:{total_ids}")
+    checks.append(f"html-refs:{total_refs}")
 
     workflow_path = ROOT / ".github/workflows/pages.yml"
     if workflow_path.is_file():
@@ -363,16 +396,17 @@ def _emit_failure(exc: BaseException) -> None:
     except BaseException:  # noqa: BLE001 - a broken stdout must not hide the exit code
         pass
     try:
-        traceback.print_exception(exc, file=sys.stderr)
+        traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
     except BaseException:  # noqa: BLE001
         pass
 
 
 if __name__ == "__main__":
     try:
-        sys.exit(main())
-    except SystemExit:
-        raise
+        # main() is called INSIDE the try and its result exits OUTSIDE it, so a
+        # SystemExit raised within main() is caught here rather than escaping
+        # with no verdict line at all.
+        _code = main()
     except KeyboardInterrupt as exc:
         # An aborted run must not be recorded as a content failure.
         _emit_failure(exc)
@@ -383,4 +417,6 @@ if __name__ == "__main__":
         # wrong artifact.
         _emit_failure(exc)
         sys.exit(2)
+    else:
+        sys.exit(_code)
 

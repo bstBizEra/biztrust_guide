@@ -169,13 +169,25 @@ class TestUnreadableInputs(ValidatorHarness):
         (self.root / STATE).write_bytes(b'{"a": "\xff\xfe"}')
         self.assert_fails_closed("cannot load valid JSON")
 
-    def test_directory_named_like_a_page(self) -> None:
-        """rglob('*.html') matches directories; read_text on one raises."""
+    def test_directory_named_like_a_page_is_ignored(self) -> None:
+        """rglob('*.html') matches DIRECTORIES; read_text on one raises.
+
+        This asserts the exact outcome, not "either is fine". The earlier
+        version accepted both 0 and 1, so it passed against the unfixed
+        validator for the wrong reason and could not fail when the is_file()
+        filter was removed.
+        """
+        before_code, before_out, _ = self.run_validator()
+        self.assertEqual(before_code, 0)
+        pages_before = [l for l in before_out if l.startswith("PASS: html-pages:")]
+
         (self.root / "trap.html").mkdir()
         code, out, _ = self.run_validator()
-        self.assertEqual(len(self.verdicts(out)), 1)
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
+        self.assertEqual(code, 0)
         self.assertNotIn("Traceback", "\n".join(out))
-        self.assertIn(code, (0, 1))
+        pages_after = [l for l in out if l.startswith("PASS: html-pages:")]
+        self.assertEqual(pages_before, pages_after, "a directory must not change the page count")
 
     def test_unparseable_href_is_reported_not_raised(self) -> None:
         """urlsplit raises ValueError on '//[' - reachable from hand-written HTML."""
@@ -207,6 +219,80 @@ class TestVerdictChannelDiscipline(ValidatorHarness):
         self.assertNotIn("Traceback", "\n".join(out), "stdout is the verdict channel")
         self.assertIn("Traceback", err, "stderr must keep the diagnosis")
         self.assertIn("injected control", err)
+
+
+class TestContentPresence(ValidatorHarness):
+    """A check that runs against nothing must not report PASS.
+
+    These two passed on the pre-fix validator AND on main: the html-pages
+    token was appended unconditionally, so the "check did not run" assertion
+    could never fire for it.
+    """
+
+    def test_gutted_site_is_not_a_pass(self) -> None:
+        for page in (self.root / "stages").glob("*.html"):
+            page.unlink()
+        (self.root / "index.html").write_text("", encoding="utf-8")
+        joined = self.assert_fails_closed("index.html is present but empty")
+        self.assertIn("the link check validated nothing", joined)
+
+    def test_empty_index_is_not_a_pass(self) -> None:
+        (self.root / "index.html").write_text("", encoding="utf-8")
+        self.assert_fails_closed("index.html is present but empty")
+
+
+class TestGuardsWithoutCoverage(ValidatorHarness):
+    """Behaviours that survived mutation testing undetected."""
+
+    def test_latest_checkpoint_with_null_byte(self) -> None:
+        state = self.load(STATE)
+        state["latest_checkpoint"] = "sessions/\x00evil.json"
+        self.save(STATE, state)
+        # Discriminate on the message UNIQUE to this guard. Asserting the
+        # bare phrase "null byte" passes even with the guard removed, because
+        # resolve() then raises ValueError("embedded null byte") and the
+        # generic handler reports it - a test matching something adjacent to
+        # what it is testing.
+        self.assert_fails_closed("latest_checkpoint contains a null byte")
+
+    def test_latest_checkpoint_escaping_the_repository(self) -> None:
+        state = self.load(STATE)
+        state["latest_checkpoint"] = "../../../../etc/hostname"
+        self.save(STATE, state)
+        self.assert_fails_closed("escapes the repository root")
+
+    def test_boolean_priority_is_not_an_integer(self) -> None:
+        """True is an int in Python. A priority of true must still be rejected."""
+        actions = self.load(ACTIONS)
+        actions["actions"][0]["priority"] = True
+        self.save(ACTIONS, actions)
+        self.assert_fails_closed("positive integer priority")
+
+    def test_wrong_schema_dialect_withholds_the_check(self) -> None:
+        path = "schemas/session-checkpoint.schema.json"
+        schema = self.load(path)
+        schema["$schema"] = "https://json-schema.org/draft-07/schema#"
+        self.save(path, schema)
+        joined = self.assert_fails_closed("unsupported or missing JSON Schema dialect")
+        self.assertIn("check did not run: schemas", joined)
+
+
+class TestExitPathDiscipline(ValidatorHarness):
+    def test_systemexit_inside_main_still_emits_a_verdict(self) -> None:
+        """A SystemExit raised in main() previously escaped with NO verdict."""
+        script = self.root / "scripts/validate_continuity.py"
+        script.write_text(
+            script.read_text(encoding="utf-8").replace(
+                "def main() -> int:",
+                "def main() -> int:\n    raise SystemExit(7)",
+                1,
+            ),
+            encoding="utf-8",
+        )
+        code, out, _err = self.run_validator()
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=FAIL"],
+                         "a SystemExit inside main() must not escape silently")
+        self.assertEqual(code, 2)
 
 
 if __name__ == "__main__":
