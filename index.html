@@ -51,6 +51,9 @@
       <a href="#operations"><span>12</span>Production operations</a>
       <a href="#roadmap"><span>13</span>90-day roadmap</a>
       <a href="#checklists"><span>14</span>Go-live checklists</a>
+      <a href="#preview"><span>15</span>Live preview</a>
+      <a href="#continuity"><span>16</span>Agent continuity</a>
+      <a href="#next-steps"><span>17</span>Next steps</a>
     </nav>
     <div class="sidebar-card">
       <span class="status-dot"></span>
@@ -217,7 +220,42 @@
         <details><summary>Operational readiness <span>8 controls</span></summary><ul class="check-list"><li>SLOs and error budgets approved</li><li>Dashboards and alerts verified</li><li>Runbooks linked from alerts</li><li>Rollback rehearsed</li><li>RTO/RPO exercise passed</li><li>Support and escalation trained</li><li>Cost guardrails active</li><li>Release ownership confirmed</li></ul></details>
         <details><summary>Business readiness <span>6 controls</span></summary><ul class="check-list"><li>UAT acceptance signed</li><li>Legal and compliance conditions closed</li><li>Tenant configuration validated</li><li>Support communications ready</li><li>Business KPIs instrumented</li><li>Go/no-go authority recorded</li></ul></details>
       </div>
-      <div class="closing"><img src="assets/unitrust-icon.png" alt=""><div><span>EXECUTION DIRECTIVE</span><h2>Freeze contracts. Prove isolation. Then build the brokerage core.</h2><p>The next authorized action is `BIZTRUST-WP-ARCH-001A`, followed by the P0 tenant-security vertical slice only after architecture approval.</p></div></div>
+    </section>
+
+    <section id="preview" data-search="live preview GitHub Pages python http server localhost 8080 deploy workflow troubleshooting">
+      <div class="section-heading"><span>15</span><div><p>Publishing runbook</p><h2>Live preview</h2></div></div>
+      <p class="section-intro">Use GitHub Pages for the persistent public site. Use Python only for a trusted local preview while editing.</p>
+      <div class="preview-choice">
+        <article class="recommended"><span>RECOMMENDED · PUBLIC</span><h3>GitHub Pages</h3><p>Publishes the approved root-level HTML, CSS, JavaScript and brand assets with an auditable Actions deployment.</p><ol><li>Open repository <b>Settings</b></li><li>Select <b>Pages</b></li><li>Set Source to <b>GitHub Actions</b></li><li>Run or await the Pages workflow</li><li>Open the verified production URL</li></ol><a href="https://bstbizera.github.io/biztrust_guide/" target="_blank" rel="noreferrer">Open expected live URL ↗</a></article>
+        <article><span>LOCAL · TEMPORARY</span><h3>Python HTTP server</h3><p>Serves the repository from your computer so relative styles, scripts and images behave like a website.</p><div class="mini-code"><code>git clone https://github.com/bstBizEra/biztrust_guide.git<br>cd biztrust_guide<br>python3 -m http.server 8080 --bind 127.0.0.1</code></div><a href="http://127.0.0.1:8080/">Open local preview →</a><small>Stop with Ctrl+C. Never use this server for production.</small></article>
+      </div>
+      <div class="preview-flow"><div><b>Change</b><span>Feature branch</span></div><i>→</i><div><b>Review</b><span>Pull request</span></div><i>→</i><div><b>Validate</b><span>Continuity + assets</span></div><i>→</i><div><b>Approve</b><span>Merge to main</span></div><i>→</i><div><b>Publish</b><span>GitHub Pages</span></div></div>
+      <div class="table-wrap"><table><caption>Preview troubleshooting</caption><thead><tr><th>Symptom</th><th>Likely cause</th><th>Resolution</th></tr></thead><tbody><tr><td>Directory listing</td><td>Server started in wrong folder</td><td>Start from the folder containing `index.html` or use `--directory`.</td></tr><tr><td>Address already in use</td><td>Port 8080 is occupied</td><td>Use port 8081 and open the matching URL.</td></tr><tr><td>GitHub Pages 404</td><td>Pages source, workflow or URL is wrong</td><td>Check Actions, root `index.html` and include `/biztrust_guide/`.</td></tr><tr><td>Missing styles or images</td><td>Case mismatch or broken relative path</td><td>Run the continuity validator and inspect asset names.</td></tr></tbody></table></div>
+      <div class="callout"><strong>Security boundary</strong><p>`python -m http.server` is intentionally limited to local review. Bind it to `127.0.0.1`, serve only this repository, and never place secrets or client data in the public Pages source.</p></div>
+    </section>
+
+    <section id="continuity" data-search="agent continuity memory checkpoint handoff resume recovery next action source truth issue project no lose track">
+      <div class="section-heading"><span>16</span><div><p>Persistent execution</p><h2>Agent continuity</h2></div></div>
+      <p class="section-intro">Agents resume from versioned repository facts—not from chat memory. A dual ledger connects human coordination in GitHub with machine-readable execution state in the repository.</p>
+      <div class="continuity-map">
+        <article><span>HUMAN LEDGER</span><h3>GitHub Issue + Project</h3><p>Outcome, accountable owner, priority, discussion, approval, risk and milestone.</p></article>
+        <i>↕</i>
+        <article><span>DELIVERY CONTRACT</span><h3>Work Package</h3><p>Scope, exclusion, authority, acceptance criteria, evidence and rollback.</p></article>
+        <i>↕</i>
+        <article><span>AGENT LEDGER</span><h3>Current state + checkpoint</h3><p>Exact branch, baseline, completed work, blockers, evidence and one next action.</p></article>
+      </div>
+      <h3 class="subheading">Mandatory resume sequence</h3>
+      <div class="resume-grid"><article><b>01</b><span>Read</span><p>`AGENTS.md`, current state and next actions</p></article><article><b>02</b><span>Resolve</span><p>Active Work Package, issue and authority</p></article><article><b>03</b><span>Observe</span><p>Branch, HEAD, worktree and remote divergence</p></article><article><b>04</b><span>Validate</span><p>Run deterministic continuity checks</p></article><article><b>05</b><span>Reconcile</span><p>Compare observed and recorded state</p></article><article><b>06</b><span>Decide</span><p>Continue, block, recover, wait or complete</p></article></div>
+      <div class="code-card continuity-command"><div class="code-head"><span>First safe command for every new session</span><button class="copy" data-copy="resume-command">Copy</button></div><pre id="resume-command"><code>python3 scripts/validate_continuity.py</code></pre></div>
+      <div class="invariant"><span>CONTINUITY INVARIANT</span><p>A new agent must be able to identify the authorized outcome, authoritative revision, verified evidence, blockers and exactly one next safe action without access to prior chat history.</p></div>
+      <div class="continuity-controls"><article><b>Stable identity</b><p>One Work Package ID follows issue → branch → commit → PR → evidence.</p></article><article><b>Fresh checkpoints</b><p>Persist state at every coherent slice, blocker, authority boundary and handoff.</p></article><article><b>Explicit handoffs</b><p>Sender records; receiver independently verifies and acknowledges.</p></article><article><b>Fail-closed recovery</b><p>Missing or conflicting state becomes `RECOVERY_REQUIRED`, never implicit permission.</p></article></div>
+    </section>
+
+    <section id="next-steps" data-search="next steps GitHub Pages enable verify protect main issue project architecture P0 P1">
+      <div class="section-heading"><span>17</span><div><p>Controlled execution queue</p><h2>Recommended next steps</h2></div></div>
+      <div class="next-action primary-next"><span>NS-001 · HUMAN ADMIN · BLOCKING</span><div><h3>Enable GitHub Pages</h3><p>Select <b>GitHub Actions</b> in `Settings → Pages`. This is the single primary next action and must complete before the guide can be declared live.</p></div><b>WAIT_FOR_AUTHORITY</b></div>
+      <div class="next-actions-grid"><article><span>NS-002 · QA</span><h3>Verify production</h3><p>Bind the live URL to the deployed source SHA; check navigation, assets, search, responsive behavior and HTTPS.</p></article><article><span>NS-003 · GOVERNANCE</span><h3>Create Work Package issue</h3><p>Use the repository issue form, assign an accountable owner and add Project fields for lifecycle, risk, authority and evidence.</p></article><article><span>NS-004 · ADMIN</span><h3>Protect main</h3><p>Require pull request review, continuity validation, conversation resolution and prohibit force-push or deletion.</p></article><article><span>NS-005 · COUNCIL</span><h3>Freeze ARCH-001</h3><p>Review the twelve ADRs, domain glossary, ERD, RBAC, state machines and P0 acceptance contract.</p></article><article><span>NS-006 · SECURITY</span><h3>Prove P0 isolation</h3><p>Demonstrate that Tenant A cannot access Tenant B through API or database paths, including manipulated requests.</p></article><article><span>NS-007 · PRODUCT</span><h3>Authorize P1</h3><p>Start the broker-core vertical slice only after architecture acceptance, security proof and explicit implementation authority.</p></article></div>
+      <div class="closing"><img src="assets/unitrust-icon.png" alt=""><div><span>EXECUTION DIRECTIVE</span><h2>Persist state before ending every session.</h2><p>For this guide: enable Pages, verify the deployed SHA, then establish protected Work Package governance. For the BizTrust platform: freeze contracts, prove tenant isolation, then build the brokerage core.</p></div></div>
     </section>
   </main>
 

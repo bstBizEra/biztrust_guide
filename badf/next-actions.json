@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "BIZTRUST-GUIDE",
+  "work_package_id": "BIZTRUST-GUIDE-WP-002",
+  "updated_at": "2026-09-02T14:15:00Z",
+  "actions": [
+    {
+      "id": "NS-001",
+      "primary": true,
+      "priority": 1,
+      "owner_role": "repository-administrator",
+      "authority": "ADMIN_REQUIRED",
+      "action": "Select GitHub Actions as the GitHub Pages publishing source.",
+      "prerequisites": [
+        "Continuity update is committed to main",
+        "Repository content is approved for public access"
+      ],
+      "evidence_required": [
+        "Pages setting shows GitHub Actions",
+        "Deploy BizTrust Guide workflow run URL"
+      ],
+      "stop_conditions": [
+        "Sensitive content is discovered",
+        "Pages environment or workflow permissions are not approved"
+      ],
+      "fallback": "Leave the repository undeployed and continue local preview only."
+    },
+    {
+      "id": "NS-002",
+      "primary": false,
+      "priority": 2,
+      "owner_role": "qa-engineer",
+      "authority": "AFTER_NS_001",
+      "action": "Verify the deployed site against the approved main commit and record deployment evidence.",
+      "prerequisites": [
+        "NS-001 complete",
+        "Pages workflow succeeded"
+      ],
+      "evidence_required": [
+        "HTTPS production URL",
+        "Deployed source SHA",
+        "Navigation and asset verification checklist"
+      ],
+      "stop_conditions": [
+        "Deployed SHA differs from approved main",
+        "Any required asset or interaction is broken"
+      ],
+      "fallback": "Do not declare the site live; open a defect Work Package."
+    },
+    {
+      "id": "NS-003",
+      "primary": false,
+      "priority": 3,
+      "owner_role": "governance-owner",
+      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "action": "Create and link the canonical GitHub Work Package issue and project fields.",
+      "prerequisites": [
+        "Issue form merged",
+        "Accountable governance owner identified"
+      ],
+      "evidence_required": [
+        "GitHub Issue URL",
+        "Project item with lifecycle, risk, authority and evidence fields"
+      ],
+      "stop_conditions": [
+        "No accountable human owner",
+        "Issue scope conflicts with the active Work Package"
+      ],
+      "fallback": "Remain in WAIT_FOR_AUTHORITY and retain the repository checkpoint."
+    }
+  ]
+}
+

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "HOF-<WORK-PACKAGE-ID>-<SEQUENCE>",
+  "created_at": "<RFC3339-UTC>",
+  "work_package_id": "<WORK-PACKAGE-ID>",
+  "sender_role": "<SENDER>",
+  "receiver_role": "<RECEIVER>",
+  "source_commit": "<40-CHARACTER-COMMIT-SHA>",
+  "observations": [],
+  "decisions": [],
+  "completed": [],
+  "remaining": [],
+  "excluded": [],
+  "evidence": [],
+  "risks": [],
+  "first_safe_action": "python3 scripts/validate_continuity.py",
+  "stop_conditions": ["Continuity validation fails"],
+  "acknowledgement": {
+    "required": true,
+    "status": "PENDING",
+    "receiver": null,
+    "timestamp": null
+  }
+}
+

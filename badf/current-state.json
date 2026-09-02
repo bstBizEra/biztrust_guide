@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "BIZTRUST-GUIDE",
+  "repository": "bstBizEra/biztrust_guide",
+  "updated_at": "2026-09-02T14:15:00Z",
+  "active_work_package": {
+    "id": "BIZTRUST-GUIDE-WP-002",
+    "title": "Live Preview and Agent Continuity Deepening",
+    "state": "ENGINEERING_READY",
+    "objective": "Publish verified preview guidance and an executable continuity baseline so agents can resume without chat history.",
+    "issue_url": null,
+    "owner_role": "documentation-engineer",
+    "scope": [
+      "GitHub Pages deployment workflow",
+      "local Python preview runbook",
+      "agent continuity charter and contracts",
+      "interactive guide expansion"
+    ]
+  },
+  "source": {
+    "branch": "main",
+    "baseline_commit": "ccef536f64603fc8ef2a0c0c88a0b5a0770d3a1f",
+    "baseline_kind": "last-published-parent",
+    "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
+  },
+  "gates": {
+    "content": "PASS",
+    "continuity": "PASS_PENDING_CI",
+    "security": "PASS_WITH_LOCAL_PREVIEW_LIMITATION",
+    "deployment": "WAIT_FOR_AUTHORITY"
+  },
+  "authority": {
+    "implementation": "GRANTED_BY_USER_REQUEST",
+    "repository_publish": "GRANTED_BY_USER_REQUEST",
+    "github_pages_activation": "REQUIRES_REPOSITORY_ADMIN",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-002-engineering-ready.json",
+  "latest_handoff": null,
+  "primary_next_action_id": "NS-001",
+  "resume_decision": "WAIT_FOR_AUTHORITY",
+  "stop_reason": "A repository administrator must select GitHub Actions as the Pages source before production deployment can be verified."
+}
+
