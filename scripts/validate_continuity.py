@@ -32,10 +32,43 @@ class SiteParser(HTMLParser):
 def load_json(relative: str, errors: list[str]) -> dict:
     path = ROOT / relative
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         errors.append(f"{relative}: cannot load valid JSON: {exc}")
         return {}
+    if not isinstance(document, dict):
+        errors.append(
+            f"{relative}: expected a JSON object at the top level, "
+            f"found {type(document).__name__}"
+        )
+        return {}
+    return document
+
+
+def as_object(value: object, label: str, errors: list[str]) -> dict:
+    """Return value as a mapping, or record why it is not one.
+
+    A wrong-typed field must become a recorded error, never an exception:
+    an uncaught AttributeError prints a traceback and no
+    CONTINUITY_VALIDATION line at all, so a caller checking for FAIL sees
+    neither PASS nor FAIL and may read the silence as success.
+    """
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        errors.append(f"{label}: expected an object, found {type(value).__name__}")
+        return {}
+    return value
+
+
+def as_array(value: object, label: str, errors: list[str]) -> list:
+    """Return value as a list, or record why it is not one."""
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        errors.append(f"{label}: expected an array, found {type(value).__name__}")
+        return []
+    return value
 
 
 def main() -> int:
@@ -70,13 +103,19 @@ def main() -> int:
     actions = load_json("badf/next-actions.json", errors)
     checkpoint: dict = {}
     checkpoint_path = current.get("latest_checkpoint")
+    if checkpoint_path is not None and not isinstance(checkpoint_path, str):
+        errors.append(
+            "current-state: latest_checkpoint must be a string path, "
+            f"found {type(checkpoint_path).__name__}"
+        )
+        checkpoint_path = None
     if checkpoint_path:
         checkpoint = load_json(checkpoint_path, errors)
     else:
         errors.append("current-state: latest_checkpoint is missing")
 
     if current and actions:
-        wp = current.get("active_work_package", {})
+        wp = as_object(current.get("active_work_package"), "current-state.active_work_package", errors)
         wp_id = wp.get("id")
         if not wp_id or wp_id != actions.get("work_package_id"):
             errors.append("State/action Work Package IDs do not match")
@@ -84,10 +123,14 @@ def main() -> int:
             errors.append("Checkpoint Work Package ID does not match current state")
         if current.get("project_id") != actions.get("project_id"):
             errors.append("State/action project IDs do not match")
-        baseline = current.get("source", {}).get("baseline_commit", "")
+        baseline = as_object(current.get("source"), "current-state.source", errors).get("baseline_commit", "")
         if not SHA40.fullmatch(baseline):
             errors.append("Current-state baseline_commit is not a 40-character SHA")
-        action_rows = actions.get("actions", [])
+        action_rows = as_array(actions.get("actions"), "next-actions.actions", errors)
+        malformed = [i for i, row in enumerate(action_rows) if not isinstance(row, dict)]
+        if malformed:
+            errors.append(f"next-actions: entries at positions {malformed} are not objects")
+            action_rows = [row for row in action_rows if isinstance(row, dict)]
         action_ids = [row.get("id") for row in action_rows]
         if len(action_ids) != len(set(action_ids)):
             errors.append("next-actions contains duplicate action IDs")
@@ -112,14 +155,14 @@ def main() -> int:
         checks.append(f"continuity-actions:{len(action_rows)}")
 
     if checkpoint:
-        baseline = checkpoint.get("source", {}).get("baseline_commit", "")
+        baseline = as_object(checkpoint.get("source"), "checkpoint.source", errors).get("baseline_commit", "")
         if not SHA40.fullmatch(baseline):
             errors.append("Checkpoint baseline_commit is not a 40-character SHA")
         if checkpoint.get("next_action_id") != current.get("primary_next_action_id"):
             errors.append("Checkpoint next action does not match current state")
         if not checkpoint.get("declared_non_coverage"):
             errors.append("Checkpoint must declare non-coverage")
-        recovery = checkpoint.get("recovery", {})
+        recovery = as_object(checkpoint.get("recovery"), "checkpoint.recovery", errors)
         if not recovery.get("first_safe_command") or not recovery.get("stop_if"):
             errors.append("Checkpoint recovery contract is incomplete")
         checks.append("checkpoint:linked")
@@ -134,6 +177,12 @@ def main() -> int:
                 row = json.loads(line)
             except json.JSONDecodeError as exc:
                 errors.append(f"decision-log line {number}: {exc}")
+                continue
+            if not isinstance(row, dict):
+                errors.append(
+                    f"decision-log line {number}: expected an object, "
+                    f"found {type(row).__name__}"
+                )
                 continue
             decision_id = row.get("id")
             if not decision_id or decision_id in decision_ids:
@@ -229,5 +278,15 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except SystemExit:
+        raise
+    except BaseException as exc:  # noqa: BLE001 - fail closed, never fail open
+        # Without this, an unforeseen error prints a traceback and no verdict
+        # line, so a caller grepping for CONTINUITY_VALIDATION sees neither
+        # PASS nor FAIL. Silence must never be readable as success.
+        print("CONTINUITY_VALIDATION=FAIL")
+        print(f"ERROR: unexpected validator failure: {type(exc).__name__}: {exc}")
+        sys.exit(1)
 
