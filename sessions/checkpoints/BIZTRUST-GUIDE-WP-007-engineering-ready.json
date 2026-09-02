@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-007-001",
+  "created_at": "2026-09-02T19:14:29Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-007",
+  "state": "ENGINEERING_READY",
+  "objective": "Complete the path that reaches production and keeps it running, closing the arc from an authorized package to a service under steady-state operation.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-007-build-release-operate",
+    "baseline_commit": "84923e40e0ffa742c5bf9dc580ac98af18f3d4b8"
+  },
+  "completed": [
+    "Wrote stages/build.html at 1261 words: entry criteria, outputs, change discipline, migrations, telemetry as you go, building to contract, roles, exit gate, stop conditions",
+    "Wrote stages/release.html at 1208 words: the distinction between a deployment that succeeded and a change that worked, progressive exposure, verification bound to the deployed revision, rollback, communication",
+    "Wrote stages/operate.html at 1452 words: service objectives with error budgets, minimum telemetry, on-call, incident response, recovery, cost and capacity, vulnerability management",
+    "Added an outputs section to build.html after the first draft measured 1067 words, below this Work Package's 1200-word criterion",
+    "Linked all six written stages from the index lifecycle grid",
+    "Resolved two stale NOT YET WRITTEN placeholders: assure.html now links Release, plan.html now links Build",
+    "Ran negative controls on all three new pages and confirmed byte-identical restores"
+  ],
+  "remaining": [
+    "Human review and merge of #4, #7, then this pull request, in that order",
+    "Author the final three stage manuals: Discover, Define, Learn",
+    "Resequence or close issue #2"
+  ],
+  "files_changed": [
+    "index.html",
+    "stages/build.html",
+    "stages/release.html",
+    "stages/operate.html",
+    "stages/assure.html",
+    "stages/plan.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-007-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "negative control: broken cross-page link in build.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: broken same-page fragment in release.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: broken cross-page fragment in operate.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "positive control: restore all three pages and re-validate",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The three FAIL rows are deliberate negative controls, reverted; restores byte-identical by sha256 (build 9d80139c83dac282, release 0e775ee7c69978d9, operate 4a4adb4173cb0211)",
+    "html-pages rose from 4 to 7, html-ids from 76 to 126, html-refs from 105 to 185",
+    "The WP-006 pull request received no CI run at all: pull_request.branches filtered on the base branch, and a stacked pull request based on a feature branch matched nothing. GitHub reported total_count 0 for that head while mergeable_state read clean. Fixed on the WP-006 branch by removing the base filter; verified by a run appearing for the new head where none existed before",
+    "build.html failed this Work Package's own 1200-word criterion at 1067 words on first draft, the second such occurrence; met by adding a missing outputs section rather than by amending the criterion"
+  ],
+  "decisions": [
+    "Steady-state operational guidance concentrates in operate.html; other pages reference it rather than each carrying a slice, so it has one place to be correct",
+    "assure.html retains its own steady-state section because continuous verification is distinct from operating a running service; the boundary is stated on both pages",
+    "Acceptance criteria now require a CI run to exist for the head SHA, confirmed by total_count, rather than inferred from the absence of a failure"
+  ],
+  "assumptions": [
+    "The six-stage pattern is accepted; review may revise it before Discover, Define and Learn are written"
+  ],
+  "blockers": [
+    {
+      "code": "STACK_ORDER",
+      "owner_role": "human-reviewer",
+      "resolution": "Merge #4, then #7, then this pull request. Each retargets automatically as its base lands."
+    },
+    {
+      "code": "MERGE_REQUIRES_HUMAN",
+      "owner_role": "human-reviewer",
+      "resolution": "A human reviews and merges. Agents must not merge."
+    }
+  ],
+  "authority": {
+    "granted": "Documentation changes via pull request, per operator instruction 2026-09-03 conditional on CI evidence covering the work",
+    "withheld": "Platform implementation, architecture acceptance, Pages settings changes, direct commits to main, merging"
+  },
+  "next_action_id": "NS-011",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/8"
+    ],
+    "stop_if": [
+      "The validator does not return PASS on the checked-out head",
+      "No CI run exists for the head SHA of the pull request under review",
+      "A stage page claims BizTrust is deployed, monitored or production-ready",
+      "Any merge is proposed without a recorded human decision"
+    ]
+  },
+  "declared_non_coverage": [
+    "Three stage manuals remain unwritten: Discover, Define and Learn",
+    "No BizTrust system is deployed; every operational page describes procedure, never observed behaviour",
+    "No deployed-site verification of the guide itself; GitHub Pages has never been enabled on this repository",
+    "No page has been reviewed by a domain expert for insurance-broking accuracy, nor by an operations engineer for the operate content",
+    "Service objectives are described as a method; no BizTrust objective values are proposed or agreed",
+    "The BT-G0..G6 versus G0..G8 gate terminology collision remains WP-003 scope"
+  ]
+}
