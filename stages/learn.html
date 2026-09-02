@@ -75,7 +75,7 @@
     </article>
     <article>
       <h3>Inputs assembled beforehand</h3>
-      <p>Escape list, decision records and and any near-miss entries that exist — see the note in Promotion; no stage owns a register for them, so do not treat their absence as evidence of none. A session spent reconstructing events adjourns on a resolution.</p>
+      <p>Escape list, decision records and any near-miss entries that exist — see the note in Promotion; no stage owns a register for them, so do not treat their absence as evidence of none. A session spent reconstructing events adjourns on a resolution.</p>
     </article>
   </div>
   <div class="callout">
@@ -147,7 +147,7 @@
 
 <section id="promotion" data-search="promotion bar blocking advisory soft lesson thresholds occurrences enforcement ladder rung near-miss filter">
   <div class="section-heading"><span>05</span><div><p>The bound on growth</p><h2>The promotion bar</h2></div></div>
-  <p class="section-intro">Feed the candidate register from the escape ledger above, and from the near-miss signal in <a href="assure.html#steady">Assure</a> — "every near-miss records which control caught it, and which did not". <strong>That signal is one line in one section: no stage owns a near-miss register, and <a href="operate.html">Operate</a> keeps none.</strong> Until one exists, the escape ledger is the only queue that reliably fills, and any judgement below that needs the near-miss distinction cannot be made. Read it through one filter — an entry saying a control caught it needs no promotion; one saying a person noticed means no control caught it, and becomes a candidate.</p>
+  <p class="section-intro">Feed the candidate register from the escape ledger above, and from the near-miss signal in <a href="assure.html#steady">Assure</a> — "every near-miss records which control caught it, and which did not". <strong>That signal is one line in one section: no stage owns a near-miss register, and <a href="operate.html">Operate</a> keeps none.</strong> Until one exists, the escape ledger is the only queue that reliably fills, and any judgement below that needs the near-miss distinction cannot be made. Where a near-miss entry exists, read it through one filter: an entry saying a control caught it needs no promotion; one saying a person noticed means no control caught it, and becomes a candidate. Absent the register, that filter has nothing to run over.</p>
   <p class="section-intro">Enforce every candidate and the checklist grows without limit. A soft lesson therefore stays advisory until it clears one of these thresholds, cited with its occurrences in the control change set, during the retrospective rather than mid-task.</p>
   <ul class="check-list">
     <li><strong>(a) Three clean applications</strong> across distinct Work Packages</li>
@@ -175,21 +175,21 @@
 
 <section id="retire" data-search="retire retirement controls cost ritual re-add trigger review hard invariant asymmetry">
   <div class="section-heading"><span>06</span><div><p>The step with no natural pressure</p><h2>Retiring controls</h2></div></div>
-  <p class="section-intro">A control added after every incident and never removed becomes a ritual — performed because it is on the list, by people who no longer know what it watches for — while its cost is charged on every run. The hard invariants below sit outside the cost argument.</p>
+  <p class="section-intro">A control added after every incident and never removed becomes a ritual — performed because it is on the list, by people who no longer know what it watches for — while its cost is charged on every run. The classes below sit outside the cost argument, whatever their cost.</p>
   <div class="split">
     <div>
       <h3>Grounds for retirement</h3>
       <ul class="check-list">
         <li>The condition it guards is now structurally impossible — a constraint or withheld grant does the work</li>
-        <li>It cannot fail <em>and the condition it was aimed at is already covered by ground 1</em>. A check that cannot fail while its condition is still live is <strong>mis-aimed, not redundant</strong> — <a href="#escape">the gate-ran-and-passed verdict</a> applies, and the remedy is to amend it and make it fail on purpose. Deleting it removes coverage of a live condition and leaves the ledger showing nothing, which reads like success</li>
+        <li><em>Subsumed by the first, and kept only to name the error:</em> it cannot fail. A check that cannot fail while its condition is still live is <strong>mis-aimed, not redundant</strong> — <a href="#escape">the gate-ran-and-passed verdict</a> applies, and the remedy is to amend it and make it fail on purpose. Deleting it removes coverage of a live condition and leaves the ledger showing nothing, which reads like success</li>
         <li>Its cost is charged every cycle and the near-miss record shows it has never been the control that caught anything — not merely that no defect escaped, which is what a control doing its job looks like. <strong>Absence from the escape ledger is evidence the control is working, never evidence it is unnecessary.</strong> This requires the near-miss distinction between "a control caught it" and "a person noticed" — and no stage currently owns a register for it. <strong>Until one does, this ground is unusable and no control may be retired under it.</strong> The escape ledger cannot answer the question and must not be substituted</li>
       </ul>
     </div>
     <div>
       <h3>Never retired on cost grounds</h3>
       <ul class="cross-list">
-        <li>Any control implementing a hard invariant — the list is <a href="architect.html#invariants">Architect's</a> and is not copied here, because two copies of an invariant list drift and only one of them is the contract</li>
-        <li>Any control implementing an architecture-contract invariant — see <a href="architect.html#invariants">Architect · Invariant criteria</a></li>
+        <li>Anything standing between an operator and irreversible data loss — named here because it is named nowhere else. <a href="architect.html#invariants">Architect</a> covers money correctness, identity, tenant isolation and human approval gates, and does not cover this</li>
+        <li>Any control implementing a hard invariant — those belong to <a href="architect.html#invariants">Architect</a> and are not copied here, because two copies of one list drift and only one of them is the contract</li>
       </ul>
     </div>
   </div>
@@ -246,6 +246,7 @@
     <li>A defect-escape row names an individual, not a gate</li>
     <li>A lesson is promoted to blocking with no stated trigger or occurrence count</li>
     <li>The candidate lesson register holds entries no cycle has re-counted</li>
+    <li>A control is retired on the grounds of never having caught anything, while no stage owns a near-miss register — the ground is unusable and the retirement is not permitted</li>
     <li>A control is retired with no re-add trigger, or implements a hard invariant</li>
     <li>A decision is graded by its outcome, with no record of what was expected</li>
     <li>No role is authorized to amend a blocking check</li>
