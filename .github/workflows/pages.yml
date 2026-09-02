@@ -30,6 +30,12 @@ jobs:
         with:
           persist-credentials: false
 
+      # Runs BEFORE the validator is trusted below. The validator is the
+      # instrument every other gate is read through; an instrument that has
+      # never been observed to fail is indistinguishable from one that passed.
+      - name: Prove the validator fails closed
+        run: python3 -m unittest discover -s tests -v
+
       - name: Validate continuity contracts
         run: python3 scripts/validate_continuity.py
 
