@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Enterprise implementation guide for the BizTrust Agentic Engineer Team.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — Agentic Engineer Team Implementation Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to guide</a>
+  <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="BizTrust guide home">
+      <img src="assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+      <span class="brand-copy"><strong>BizTrust</strong><small>Engineering Guide · v1.0</small></span>
+    </a>
+    <div class="top-actions">
+      <button class="icon-button" id="searchButton" aria-label="Search guide" title="Search (Ctrl/⌘ K)">⌕</button>
+      <button class="icon-button" id="themeButton" aria-label="Toggle color theme" title="Toggle theme">◐</button>
+      <a class="github-link" href="https://github.com/bstbizera/biztrust_guide" target="_blank" rel="noreferrer">GitHub ↗</a>
+      <button class="menu-button" id="menuButton" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-label="Search guide">
+      <div class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Search roles, gates, controls…" autocomplete="off"><kbd>Esc</kbd></div>
+      <div class="search-results" id="searchResults"><p>Start typing to search the implementation guide.</p></div>
+    </div>
+  </div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="nav-label">Implementation guide</div>
+    <nav id="sectionNav" aria-label="Guide sections">
+      <a href="#overview"><span>01</span>Executive overview</a>
+      <a href="#principles"><span>02</span>Operating principles</a>
+      <a href="#team"><span>03</span>Team topology</a>
+      <a href="#governance"><span>04</span>Governance model</a>
+      <a href="#repository"><span>05</span>Repository design</a>
+      <a href="#lifecycle"><span>06</span>Delivery lifecycle</a>
+      <a href="#work-package"><span>07</span>First work package</a>
+      <a href="#p0"><span>08</span>P0 security slice</a>
+      <a href="#architecture"><span>09</span>Architecture contract</a>
+      <a href="#quality"><span>10</span>Quality & evidence</a>
+      <a href="#security"><span>11</span>Security engineering</a>
+      <a href="#operations"><span>12</span>Production operations</a>
+      <a href="#roadmap"><span>13</span>90-day roadmap</a>
+      <a href="#checklists"><span>14</span>Go-live checklists</a>
+    </nav>
+    <div class="sidebar-card">
+      <span class="status-dot"></span>
+      <div><strong>Control posture</strong><small>Evidence before authority</small></div>
+    </div>
+  </aside>
+
+  <main id="main">
+    <section class="hero" id="overview" data-search="executive overview mission outcomes">
+      <div class="eyebrow">Enterprise Delivery System · 2026</div>
+      <h1>Agentic engineering,<br><em>governed by evidence.</em></h1>
+      <p class="lede">A complete operating guide for an AI-enabled engineering team to design, build, validate and operate BizTrust—from architecture contract freeze to production—without allowing agents to expand their own authority.</p>
+      <div class="hero-actions">
+        <a class="primary-button" href="#team">Explore the team <span>↓</span></a>
+        <a class="text-button" href="#work-package">Start WP-ARCH-001A →</a>
+      </div>
+      <div class="outcome-grid">
+        <article><span>01</span><strong>Deterministic gates</strong><p>Every phase has machine-checkable entry and exit criteria.</p></article>
+        <article><span>02</span><strong>Independent assurance</strong><p>Builders cannot approve their own architecture, security or release.</p></article>
+        <article><span>03</span><strong>Traceable decisions</strong><p>Requirements, commits, tests and evidence remain bound end to end.</p></article>
+        <article><span>04</span><strong>Fail-closed authority</strong><p>Unknown, missing or conflicting approval always results in stop.</p></article>
+      </div>
+    </section>
+
+    <section id="principles" data-search="principles constitution authority separation fail closed human">
+      <div class="section-heading"><span>02</span><div><p>Foundation</p><h2>Operating principles</h2></div></div>
+      <div class="principle-stack">
+        <article><b>Authority ≠ capability</b><p>An agent may possess the technical capability to modify or deploy, but may act only within explicitly granted scope, budget and risk boundaries.</p></article>
+        <article><b>Observation ≠ decision</b><p>Agents gather facts; policy evaluates facts; authorized stakeholders make decisions. These records remain separate and independently auditable.</p></article>
+        <article><b>Evidence ≠ assertion</b><p>“Tests passed” is not evidence. The authoritative run, immutable source revision, environment, output and verifier identity form the evidence bundle.</p></article>
+        <article><b>Completion ≠ acceptance</b><p>Implementation completion starts assurance. A work package closes only after validation, review, authority and evidence gates pass.</p></article>
+      </div>
+      <blockquote>Human stakeholders own purpose, risk appetite and approval. Agents own bounded execution, transparent reasoning, verification and escalation.</blockquote>
+    </section>
+
+    <section id="team" data-search="team topology orchestrator architect developer security qa sre product domain data reviewer">
+      <div class="section-heading"><span>03</span><div><p>Organization</p><h2>Team topology</h2></div></div>
+      <p class="section-intro">The team is a controlled system of specialized roles. For low-risk work, roles may share an agent runtime; for high-risk decisions, independence is mandatory.</p>
+      <div class="team-map">
+        <article class="team-lead"><div class="role-icon">O</div><h3>SARCHI · Chief Orchestrator</h3><p>Translates authorized outcomes into work packages, routes specialists, controls state transitions and stops on ambiguity.</p><ul><li>Owns execution plan and dependency graph</li><li>Never self-grants authority</li><li>Publishes session checkpoint and handoff</li></ul></article>
+        <div class="team-grid">
+          <article><div class="role-icon">P</div><h3>Product & Domain</h3><p>Owns user outcomes, insurance semantics, acceptance criteria and regulatory assumptions.</p><small>PRD · Domain glossary · UAT</small></article>
+          <article><div class="role-icon">A</div><h3>Architecture</h3><p>Owns bounded contexts, contracts, ADRs, data ownership and non-functional architecture.</p><small>C4 · ADR · OpenAPI · Events</small></article>
+          <article><div class="role-icon">E</div><h3>Engineering</h3><p>Implements approved contracts with tests, migrations and reversible delivery practices.</p><small>Code · Tests · Migrations</small></article>
+          <article><div class="role-icon">S</div><h3>Security & Privacy</h3><p>Threat-models trust boundaries, validates tenant isolation and controls secrets and supply chain.</p><small>STRIDE · SAST · RLS · SBOM</small></article>
+          <article><div class="role-icon">Q</div><h3>Quality Engineering</h3><p>Builds independent verification, contract tests, negative tests and release evidence.</p><small>QA · E2E · Performance</small></article>
+          <article><div class="role-icon">R</div><h3>SRE & Operations</h3><p>Defines SLOs, telemetry, recovery, capacity, incident response and production readiness.</p><small>SLO · Runbooks · DR · FinOps</small></article>
+          <article><div class="role-icon">D</div><h3>Data & Financial Control</h3><p>Owns data quality, lineage, ledger integrity, reconciliation and retention controls.</p><small>Ledger · Lineage · Reconcile</small></article>
+          <article><div class="role-icon">C</div><h3>Independent Council</h3><p>Reviews significant decisions through separate architecture, security, QA and domain lenses.</p><small>Ballots · Findings · Dissent</small></article>
+        </div>
+      </div>
+      <div class="callout"><strong>Separation-of-duty rule</strong><p>The same agent instance must not be the sole author, verifier and approver of a high-impact artifact. At least one independent lens must reproduce the critical evidence.</p></div>
+    </section>
+
+    <section id="governance" data-search="governance control plane RACI authority risk work package state">
+      <div class="section-heading"><span>04</span><div><p>Control plane</p><h2>Governance model</h2></div></div>
+      <div class="split">
+        <div><h3>Every task becomes a Work Package</h3><p>A Work Package is the smallest independently authorized, executed and verified delivery unit.</p><div class="definition-list"><div><b>Identity</b><span>Stable ID, owner, parent initiative</span></div><div><b>Intent</b><span>Business outcome and value hypothesis</span></div><div><b>Boundary</b><span>In scope, out of scope, dependencies</span></div><div><b>Authority</b><span>Allowed actions, tools, spend and time</span></div><div><b>Risk</b><span>Impact class, threat model and rollback</span></div><div><b>Evidence</b><span>Required proofs and independent verifier</span></div></div></div>
+        <div class="state-card"><span>Canonical state machine</span><ol><li><b>DRAFT</b><small>Intent captured</small></li><li><b>READY</b><small>Contracts complete</small></li><li><b>AUTHORIZED</b><small>Authority granted</small></li><li><b>IN_PROGRESS</b><small>Bounded execution</small></li><li><b>VALIDATING</b><small>Independent checks</small></li><li><b>ACCEPTED</b><small>Evidence approved</small></li><li><b>CLOSED</b><small>Knowledge retained</small></li></ol><p>Any failed invariant transitions to <b>BLOCKED</b>; any unknown authority transitions to <b>WAIT_FOR_AUTHORITY</b>.</p></div>
+      </div>
+      <div class="table-wrap"><table><caption>Decision rights</caption><thead><tr><th>Decision</th><th>Proposes</th><th>Verifies</th><th>Approves</th></tr></thead><tbody><tr><td>Business priority</td><td>Product Agent</td><td>Finance / Domain</td><td>Human Sponsor</td></tr><tr><td>Architecture baseline</td><td>Architecture Agent</td><td>Council</td><td>Architecture Authority</td></tr><tr><td>Security exception</td><td>Security Agent</td><td>Independent Security</td><td>Risk Owner</td></tr><tr><td>Production release</td><td>Orchestrator</td><td>QA + SRE</td><td>Release Authority</td></tr><tr><td>Emergency rollback</td><td>SRE</td><td>Telemetry</td><td>Pre-authorized policy</td></tr></tbody></table></div>
+    </section>
+
+    <section id="repository" data-search="repository structure folders agents md badf docs schemas evidence sessions prompts">
+      <div class="section-heading"><span>05</span><div><p>Implementation substrate</p><h2>Repository design</h2></div></div>
+      <div class="code-card"><div class="code-head"><span>Target repository architecture</span><button class="copy" data-copy="repo-tree">Copy</button></div><pre id="repo-tree"><code>biztrust/
+├── AGENTS.md                  # Repository operating charter
+├── apps/                      # Broker, admin and partner experiences
+├── services/                  # API and worker entry points
+├── modules/                   # Domain-owned modular-monolith contexts
+├── packages/                  # Shared contracts, UI and observability
+├── openapi/                   # Contract-first API specifications
+├── events/                    # Versioned event contracts
+├── db/                        # Migrations, policies, seeds and RLS tests
+├── badf/
+│   ├── lifecycle.yaml         # Allowed state transitions
+│   ├── authority.yaml         # Decision and tool authority
+│   ├── gates.yaml             # Deterministic gate registry
+│   ├── agents.yaml            # Role and routing registry
+│   └── skills.yaml            # Governed capability registry
+├── docs/
+│   ├── architecture/          # ARCH-001, C4 and boundaries
+│   ├── adr/                   # ADR-001…012
+│   ├── product/               # PRD and domain glossary
+│   ├── security/              # Threat models and controls
+│   ├── operations/            # SLOs, runbooks and DR
+│   └── decisions/             # Human authority records
+├── work-packages/             # Authorized delivery units
+├── evidence/                  # Manifests; immutable evidence in CI
+├── sessions/                  # Checkpoints and resumable handoffs
+├── schemas/                   # Machine-readable governance contracts
+├── scripts/                   # Deterministic validators
+├── tests/                     # Unit, contract, security and E2E
+└── .github/workflows/         # CI, security and release enforcement</code></pre></div>
+      <div class="rule-grid"><article><b>Root charter</b><p>`AGENTS.md` defines non-negotiable behavior, authority boundaries, evidence rules and escalation paths.</p></article><article><b>Machine-readable controls</b><p>Human policy is paired with schemas and validators so enforcement does not depend on prompt interpretation.</p></article><article><b>Evidence binding</b><p>Every manifest records source commit, workflow run, environment, tool versions and artifact digests.</p></article></div>
+    </section>
+
+    <section id="lifecycle" data-search="lifecycle PRD production discovery architecture build validate deploy operate learn gates">
+      <div class="section-heading"><span>06</span><div><p>Value stream</p><h2>PRD-to-production lifecycle</h2></div></div>
+      <div class="lifecycle">
+        <article><span>G0</span><h3>Discover</h3><p>Problem, stakeholder, baseline, constraints, KPI and evidence sources.</p><small>Exit: problem validated</small></article>
+        <article><span>G1</span><h3>Define</h3><p>PRD, journeys, acceptance criteria, data classification and risk tier.</p><small>Exit: requirements ready</small></article>
+        <article><span>G2</span><h3>Architect</h3><p>Contracts, ADRs, threat model, data ownership, NFRs and rollback.</p><small>Exit: architecture frozen</small></article>
+        <article><span>G3</span><h3>Plan</h3><p>Work packages, dependencies, estimates, test strategy and authority.</p><small>Exit: execution authorized</small></article>
+        <article><span>G4</span><h3>Build</h3><p>Small changes, contract tests, migrations, telemetry and documentation.</p><small>Exit: engineering ready</small></article>
+        <article><span>G5</span><h3>Assure</h3><p>Independent QA, security, performance, domain and evidence review.</p><small>Exit: release candidate</small></article>
+        <article><span>G6</span><h3>Release</h3><p>Change record, progressive exposure, smoke tests and rollback window.</p><small>Exit: production accepted</small></article>
+        <article><span>G7</span><h3>Operate</h3><p>SLOs, incidents, cost, vulnerability and business KPI monitoring.</p><small>Exit: value demonstrated</small></article>
+        <article><span>G8</span><h3>Learn</h3><p>Retrospective, decision quality, defect escape and knowledge promotion.</p><small>Exit: controls improved</small></article>
+      </div>
+    </section>
+
+    <section id="work-package" data-search="BIZTRUST WP ARCH 001A contract freeze deliverables ADR glossary ERD RBAC">
+      <div class="section-heading"><span>07</span><div><p>Controlled starting point</p><h2>BIZTRUST-WP-ARCH-001A</h2></div></div>
+      <div class="wp-banner"><div><span>WORK PACKAGE</span><h3>Architecture Capability Contract Freeze</h3><p>Produce the authoritative architecture baseline before any production business logic begins.</p></div><div class="wp-state"><small>Implementation authority</small><strong>NOT GRANTED</strong></div></div>
+      <div class="three-col"><article><h3>Required outputs</h3><ul class="check-list"><li>ARCH-001 v0.1</li><li>ADR-001 through ADR-012</li><li>Domain glossary</li><li>Bounded context map</li><li>Conceptual ERD</li><li>Data ownership matrix</li><li>RBAC and state contracts</li></ul></article><article><h3>Explicitly excluded</h3><ul class="cross-list"><li>Production business logic</li><li>Complete UX/UI</li><li>Live insurer and bank APIs</li><li>Production payment processing</li><li>AI insurance agents</li><li>Microservice extraction</li><li>Tenant-specific forks</li></ul></article><article><h3>Exit conditions</h3><ul class="check-list"><li>All data owners named</li><li>Tenant model testable</li><li>Lifecycle states resolved</li><li>Critical findings closed</li><li>P0 scope bounded</li><li>Acceptance tests defined</li><li>Authority explicitly recorded</li></ul></article></div>
+      <div class="adr-grid"><span>ADR-001<br><b>Modular monolith</b></span><span>ADR-002<br><b>Logto IAM</b></span><span>ADR-003<br><b>Org → tenant</b></span><span>ADR-004<br><b>Postgres RLS</b></span><span>ADR-005<br><b>OpenAPI first</b></span><span>ADR-006<br><b>Product versions</b></span><span>ADR-007<br><b>Broker vs insurer</b></span><span>ADR-008<br><b>Immutable ledger</b></span><span>ADR-009<br><b>Adapter boundary</b></span><span>ADR-010<br><b>Durable workflow</b></span><span>ADR-011<br><b>Tenant packs</b></span><span>ADR-012<br><b>Idempotency</b></span></div>
+    </section>
+
+    <section id="p0" data-search="P0 security slice logto APISIX tenant context PostgreSQL RLS audit">
+      <div class="section-heading"><span>08</span><div><p>First implementation</p><h2>P0 tenant security slice</h2></div></div>
+      <div class="flow" aria-label="P0 security architecture"><div><b>Identity</b><span>Logto organization token</span></div><i>→</i><div><b>Edge</b><span>APISIX validation</span></div><i>→</i><div><b>Application</b><span>Tenant context + policy</span></div><i>→</i><div><b>Data</b><span>PostgreSQL RLS</span></div><i>→</i><div><b>Evidence</b><span>Immutable audit trail</span></div></div>
+      <div class="invariant"><span>SECURITY INVARIANT</span><p>No valid or manipulated Tenant A request can access protected Tenant B business data through supported application or database paths.</p></div>
+      <div class="test-matrix"><article><h3>Authentication</h3><ul><li>Valid token accepted</li><li>Expired token denied</li><li>Wrong audience denied</li><li>Malformed token denied</li></ul></article><article><h3>Tenant context</h3><ul><li>Missing organization denied</li><li>Unknown tenant denied</li><li>Mismatched tenant denied</li><li>Disabled tenant denied</li></ul></article><article><h3>Database isolation</h3><ul><li>Cross-tenant read denied</li><li>Cross-tenant write denied</li><li>Cross-tenant delete denied</li><li>App bypass blocked by RLS</li></ul></article><article><h3>Audit evidence</h3><ul><li>Actor and tenant recorded</li><li>Decision and outcome recorded</li><li>Trace and request IDs linked</li><li>Evidence digest verifiable</li></ul></article></div>
+    </section>
+
+    <section id="architecture" data-search="architecture domain product quote policy claim payment ledger states tenancy API">
+      <div class="section-heading"><span>09</span><div><p>Business platform</p><h2>Architecture contract</h2></div></div>
+      <div class="architecture-layers"><article><span>Experience</span><p>Broker Portal · Tenant Admin · Partner API · Operations Console</p></article><article><span>Brokerage</span><p>Client · Risk · Product · Submission · Placement · Quote · Recommendation · Binding · Policy · Claims · Renewal</p></article><article><span>Financial</span><p>Billing · Payment · Ledger · Commission · Settlement · Reconciliation</p></article><article><span>Platform</span><p>Tenancy · Identity · Authorization · Audit · Documents · Notifications · Workflow</p></article><article><span>Infrastructure</span><p>Logto · APISIX · PostgreSQL · Temporal · Object Storage · Observability</p></article></div>
+      <div class="table-wrap"><table><caption>Authoritative ownership examples</caption><thead><tr><th>Information</th><th>System of record</th><th>BizTrust responsibility</th></tr></thead><tbody><tr><td>User identity</td><td>Logto</td><td>Business role and tenant authority</td></tr><tr><td>Insurer-issued policy</td><td>Insurer</td><td>Broker policy representation</td></tr><tr><td>Claim adjudication</td><td>Insurer</td><td>Claim advocacy and coordination</td></tr><tr><td>Bank transaction</td><td>Bank / PSP</td><td>Payment orchestration and allocation</td></tr><tr><td>Broker subledger</td><td>BizTrust Ledger</td><td>Immutable journal and reconciliation</td></tr></tbody></table></div>
+      <div class="api-rules"><h3>Canonical API rules</h3><div><span><b>Base</b>/api/v1</span><span><b>Identity</b>UUIDv7</span><span><b>Money</b>Decimal string + ISO currency</span><span><b>Time</b>RFC3339 UTC</span><span><b>Errors</b>application/problem+json</span><span><b>Safety</b>Idempotency-Key + If-Match</span></div></div>
+    </section>
+
+    <section id="quality" data-search="quality evidence test pyramid definition done CI coverage mutation traceability">
+      <div class="section-heading"><span>10</span><div><p>Assurance system</p><h2>Quality & evidence</h2></div></div>
+      <div class="evidence-chain"><div><span>REQ</span><b>Requirement</b></div><i>→</i><div><span>ADR</span><b>Decision</b></div><i>→</i><div><span>WP</span><b>Work package</b></div><i>→</i><div><span>COMMIT</span><b>Change</b></div><i>→</i><div><span>TEST</span><b>Verification</b></div><i>→</i><div><span>EVD</span><b>Evidence</b></div></div>
+      <div class="metric-grid"><article><strong>100%</strong><span>Critical requirements mapped to tests</span></article><article><strong>0</strong><span>Open critical/high security findings at release</span></article><article><strong>≥80%</strong><span>Mutation score on control logic</span></article><article><strong>&lt;15m</strong><span>Rollback or feature-disable objective</span></article></div>
+      <h3>Definition of Done</h3><div class="dod-grid"><label><input type="checkbox">Acceptance criteria pass</label><label><input type="checkbox">Contracts and docs updated</label><label><input type="checkbox">Negative tests included</label><label><input type="checkbox">Threat model reviewed</label><label><input type="checkbox">Telemetry implemented</label><label><input type="checkbox">Rollback validated</label><label><input type="checkbox">Evidence manifest signed</label><label><input type="checkbox">Independent review complete</label></div>
+    </section>
+
+    <section id="security" data-search="security devsecops secrets dependency SAST DAST SBOM threat incident privacy">
+      <div class="section-heading"><span>11</span><div><p>DevSecOps</p><h2>Security engineering</h2></div></div>
+      <div class="security-grid"><article><span>01</span><h3>Design</h3><p>Data classification, abuse cases, STRIDE, trust boundaries and least-privilege design.</p></article><article><span>02</span><h3>Code</h3><p>Secret scanning, SAST, dependency review, signed commits and protected branches.</p></article><article><span>03</span><h3>Build</h3><p>Reproducible builds, SBOM, provenance attestations, image scanning and pinned actions.</p></article><article><span>04</span><h3>Verify</h3><p>Tenant-negative tests, DAST, authorization matrix, fuzzing and independent reproduction.</p></article><article><span>05</span><h3>Release</h3><p>Artifact signing, environment approvals, progressive rollout and protected production secrets.</p></article><article><span>06</span><h3>Operate</h3><p>Detection rules, vulnerability SLA, incident runbooks, forensics and key rotation.</p></article></div>
+      <div class="policy-line"><b>Risk SLA</b><span>Critical: block release / remediate immediately</span><span>High: ≤7 days</span><span>Medium: ≤30 days</span><span>Low: planned backlog</span></div>
+    </section>
+
+    <section id="operations" data-search="operations SRE SLO observability incident runbook recovery RTO RPO deployment">
+      <div class="section-heading"><span>12</span><div><p>Reliability</p><h2>Production operations</h2></div></div>
+      <div class="split"><div><h3>Service-level objectives</h3><div class="definition-list"><div><b>Availability</b><span>Target per critical user journey</span></div><div><b>Latency</b><span>p95 and p99 by API class</span></div><div><b>Correctness</b><span>Financial reconciliation and policy state</span></div><div><b>Durability</b><span>Audit, ledger and document retention</span></div><div><b>Recovery</b><span>RTO/RPO proven by exercises</span></div></div></div><div><h3>Minimum telemetry</h3><ul class="check-list"><li>Structured logs with tenant-safe fields</li><li>Distributed traces with causation IDs</li><li>Golden signals and business KPIs</li><li>Workflow backlog and retry health</li><li>Payment and ledger reconciliation drift</li><li>Security events and authorization denials</li><li>Cost by tenant, product and environment</li></ul></div></div>
+      <div class="incident-flow"><div><b>Detect</b><span>Alert on user impact</span></div><div><b>Contain</b><span>Limit blast radius</span></div><div><b>Recover</b><span>Restore safely</span></div><div><b>Learn</b><span>Blameless review</span></div><div><b>Improve</b><span>Update controls</span></div></div>
+    </section>
+
+    <section id="roadmap" data-search="roadmap 90 days weeks milestones phases kickoff">
+      <div class="section-heading"><span>13</span><div><p>Mobilization plan</p><h2>First 90 days</h2></div></div>
+      <div class="roadmap"><article><span>Days 1–15</span><h3>Mobilize & freeze</h3><ul><li>Approve team charter and decision rights</li><li>Complete WP-ARCH-001A</li><li>Freeze ADR-001…012</li><li>Establish branch and evidence controls</li></ul></article><article><span>Days 16–35</span><h3>Prove the platform</h3><ul><li>Implement P0 security slice</li><li>Prove cross-tenant denial</li><li>Stand up CI/CD and observability</li><li>Run independent security review</li></ul></article><article><span>Days 36–65</span><h3>Deliver broker core</h3><ul><li>Build P1 vertical slice</li><li>Validate quote-to-policy lifecycle</li><li>Complete domain and UAT evidence</li><li>Exercise rollback and recovery</li></ul></article><article><span>Days 66–90</span><h3>Pilot & learn</h3><ul><li>Onboard controlled pilot tenant</li><li>Progressively release workflows</li><li>Measure SLO and business KPI baseline</li><li>Authorize P2 based on evidence</li></ul></article></div>
+      <div class="kpi-band"><span><b>Flow</b>Lead time · Deployment frequency</span><span><b>Quality</b>Escaped defects · Rework</span><span><b>Safety</b>Change failure · MTTR</span><span><b>Governance</b>Gate failures · Exceptions</span><span><b>Value</b>Activation · Cycle completion</span></div>
+    </section>
+
+    <section id="checklists" data-search="checklist go live readiness launch production">
+      <div class="section-heading"><span>14</span><div><p>Release control</p><h2>Go-live checklists</h2></div></div>
+      <div class="accordion-list">
+        <details open><summary>Architecture readiness <span>7 controls</span></summary><ul class="check-list"><li>Bounded contexts and ownership approved</li><li>ADRs accepted and linked</li><li>APIs and events versioned</li><li>State machines deterministic</li><li>Failure modes and compensations defined</li><li>Capacity assumptions recorded</li><li>Architecture council findings resolved</li></ul></details>
+        <details><summary>Security readiness <span>8 controls</span></summary><ul class="check-list"><li>Tenant isolation mechanically proven</li><li>Threat model current</li><li>No critical or high findings</li><li>Secrets externalized and rotated</li><li>SBOM and provenance available</li><li>Backup restoration tested</li><li>Incident roles assigned</li><li>Production access reviewed</li></ul></details>
+        <details><summary>Operational readiness <span>8 controls</span></summary><ul class="check-list"><li>SLOs and error budgets approved</li><li>Dashboards and alerts verified</li><li>Runbooks linked from alerts</li><li>Rollback rehearsed</li><li>RTO/RPO exercise passed</li><li>Support and escalation trained</li><li>Cost guardrails active</li><li>Release ownership confirmed</li></ul></details>
+        <details><summary>Business readiness <span>6 controls</span></summary><ul class="check-list"><li>UAT acceptance signed</li><li>Legal and compliance conditions closed</li><li>Tenant configuration validated</li><li>Support communications ready</li><li>Business KPIs instrumented</li><li>Go/no-go authority recorded</li></ul></details>
+      </div>
+      <div class="closing"><img src="assets/unitrust-icon.png" alt=""><div><span>EXECUTION DIRECTIVE</span><h2>Freeze contracts. Prove isolation. Then build the brokerage core.</h2><p>The next authorized action is `BIZTRUST-WP-ARCH-001A`, followed by the P0 tenant-security vertical slice only after architecture approval.</p></div></div>
+    </section>
+  </main>
+
+  <footer><img src="assets/unitrust-horizontal.png" alt="UniTrust"><p>BizTrust Agentic Engineer Team · Enterprise Implementation Guide v1.0</p><a href="#overview">Back to top ↑</a></footer>
+  <script src="script.js"></script>
+</body>
+</html>
