@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Release · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 07 of the BizTrust delivery lifecycle: cutover, progressive exposure, smoke verification bound to the deployed revision, and a rollback that has been exercised.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 07 · Release</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 07 · Release</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#exposure"><span>03</span> Progressive exposure</a>
+    <a href="#smoke"><span>04</span> Verifying the deployed thing</a>
+    <a href="#rollback"><span>05</span> Rollback</a>
+    <a href="#comms"><span>06</span> Communication</a>
+    <a href="#roles"><span>07</span> Roles</a>
+    <a href="#gate"><span>08</span> Exit gate</a>
+    <a href="#stop"><span>09</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 07 of 09</strong><small>Release · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="release-intro" data-search="release cutover deploy exposure smoke rollback change record">
+  <div class="section-heading"><span>07</span><div><p>Delivery lifecycle · Release</p><h2>Release</h2></div></div>
+  <p class="lede">Release is where a change stops being an artifact and becomes something a person can be hurt by. Everything before this stage was rehearsal.</p>
+  <p class="section-intro">The distinction this stage exists to hold is between <strong>a deployment that succeeded</strong> and <strong>a change that worked</strong>. A pipeline reports the first. Only a check against the running system reports the second, and the two are routinely conflated because the green tick arrives first and looks conclusive.</p>
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>Verify the revision that is serving traffic, not the revision you intended to ship. Confirm they are the same before believing either.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria assure accepted rollback exercised change record window">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>Assure is accepted, by a human</h3>
+      <p>Evidence complete, criteria discharged, acceptance recorded. Validation success is not deployment authority; passing tests authorize nothing on their own.</p>
+    </article>
+    <article>
+      <h3>Rollback has been exercised</h3>
+      <p>Not designed — exercised, at least once, somewhere. A rollback path that has never been run is a plan, and plans fail in the conditions that make them necessary.</p>
+    </article>
+    <article>
+      <h3>Someone is available to reverse it</h3>
+      <p>Named, reachable, with the access required, for the duration of the exposure window. A release nobody can undo is a release nobody should start.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>Release into a window, not into a gap in the calendar</strong>
+    <p>Deploy when the people who understand the change are present and unhurried. The cheapest incident mitigation is that the person who wrote it is awake.</p>
+  </div>
+</section>
+
+<section id="produces" data-search="artifacts change record deployed revision smoke evidence">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <div class="definition-list">
+    <div><span>Change record</span><p>What is being released, by whom, when, the expected effect, and the signal that would prompt reversal. Written before the deployment, not reconstructed afterwards.</p></div>
+    <div><span>Deployed revision identity</span><p>The exact revision now serving traffic, recorded and compared to the approved revision. If they differ, nothing else in this stage is meaningful.</p></div>
+    <div><span>Smoke evidence</span><p>Output from checks run against the running system, bound to that deployed revision.</p></div>
+    <div><span>Exposure log</span><p>Who saw the change, at what percentage, for how long, before it went wider.</p></div>
+  </div>
+</section>
+
+<section id="exposure" data-search="progressive exposure canary flags percentage blast radius">
+  <div class="section-heading"><span>03</span><div><p>Limiting harm</p><h2>Progressive exposure</h2></div></div>
+  <p class="section-intro">Exposure control is the difference between a defect affecting some traffic briefly and all traffic indefinitely. It is worth the operational cost precisely because you cannot predict which release needs it.</p>
+  <ul class="check-list">
+    <li><strong>Separate deploying from enabling.</strong> Ship the code dark, then turn it on. Two smaller decisions beat one large one</li>
+    <li><strong>Start with traffic you can apologise to.</strong> Internal users, then a single tenant that has agreed, then a percentage</li>
+    <li><strong>Define the abort signal before starting.</strong> "Error rate above X for Y minutes" — decided in advance, because during an incident everything looks like noise or like catastrophe</li>
+    <li><strong>Hold at each step long enough to see the signal.</strong> A canary observed for less time than the metric's own window has been observed for zero time</li>
+    <li><strong>One change per exposure.</strong> Two simultaneous changes make an aborted release ambiguous</li>
+  </ul>
+  <div class="invariant">
+    <span>WHAT EXPOSURE CONTROL CANNOT DO</span>
+    <p>It bounds who is affected, never whether the effect is reversible. A data change that reaches one percent of tenants has still reached them.</p>
+  </div>
+</section>
+
+<section id="smoke" data-search="smoke verification deployed revision sha matches approved running system">
+  <div class="section-heading"><span>04</span><div><p>The check that matters</p><h2>Verifying the deployed thing</h2></div></div>
+  <p class="section-intro">Every check in this stage runs against the running system and is bound to the revision actually serving it. Verification against a branch, a build artifact or an intention proves something true about an object that is not in production.</p>
+  <div class="split">
+    <div>
+      <h3>Establish identity first</h3>
+      <ul class="check-list">
+        <li>Read the revision the running system reports</li>
+        <li>Compare it to the approved revision, exactly</li>
+        <li>Stop if they differ — everything after this depends on it</li>
+        <li>Record the value you read, not the one you expected</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Then verify behaviour</h3>
+      <ul class="check-list">
+        <li>The critical path completes end to end</li>
+        <li>Authorization still denies what it must deny</li>
+        <li>A known-bad request is still rejected — a positive control, so success carries information</li>
+        <li>Telemetry from the new revision is arriving, not merely configured</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>An absent error is not a working system</strong>
+    <p>A smoke suite that only checks for the absence of failures passes identically against a system that is serving correctly and one that is serving nothing. Include at least one check that fails when the system is down.</p>
+  </div>
+</section>
+
+<section id="rollback" data-search="rollback reverse one-way data irreversible decision authority">
+  <div class="section-heading"><span>05</span><div><p>Reversal</p><h2>Rollback</h2></div></div>
+  <ul class="check-list">
+    <li><strong>Decide the trigger in advance.</strong> Who may call it, on what signal, and within what window — agreed before the deployment starts</li>
+    <li><strong>Prefer disabling to reverting.</strong> Turning a flag off is faster and less risky than redeploying, and it is available while the diagnosis is still unclear</li>
+    <li><strong>Name the one-way parts explicitly.</strong> Where a data change cannot be undone, say so in the change record. Discovering it mid-incident converts a rollback into a recovery</li>
+    <li><strong>Rolling back is not a failure of the release.</strong> It is the release working as designed. Treating reversal as an embarrassment is how teams learn to push through instead</li>
+  </ul>
+</section>
+
+<section id="comms" data-search="communication stakeholders notification status tenants partners">
+  <div class="section-heading"><span>06</span><div><p>Who is told</p><h2>Communication</h2></div></div>
+  <p class="section-intro">A release that changes what people see is a change to their working day. Tell them before it surprises them.</p>
+  <ul class="check-list">
+    <li>Affected tenants and partners are notified before behaviour changes, not after they notice</li>
+    <li>External integrators get contract changes with lead time proportional to the work they imply</li>
+    <li>During an incident, communicate what is known, what is not, and when the next update comes — the third is the part people actually need</li>
+    <li>Where a regulated obligation attaches to a change, the notification is part of the release, not an afterthought</li>
+  </ul>
+</section>
+
+<section id="roles" data-search="roles release manager operator approver">
+  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Release owner</strong></td><td>Runs the cutover, records the deployed revision, holds the abort decision</td><td>Deploy without an agreed abort signal</td></tr>
+        <tr><td><strong>Verifier</strong></td><td>Runs smoke checks against the running system and records the output</td><td>Verify a branch, a build, or an intention</td></tr>
+        <tr><td><strong>Authorizing role</strong></td><td>Grants the deployment explicitly, having read the evidence</td><td>Treat a green pipeline as authorization</td></tr>
+        <tr><td><strong>Agents</strong></td><td>Prepare, verify, document, and report</td><td>Deploy to production or merge — both are reserved to a human</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate production accepted operate">
+  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> The deployed revision equals the approved revision, measured not assumed</label>
+    <label><input type="checkbox" disabled> Smoke checks ran against the running system and are recorded</label>
+    <label><input type="checkbox" disabled> At least one check is known to fail when the system is unhealthy</label>
+    <label><input type="checkbox" disabled> Exposure proceeded in steps, each held long enough to read the signal</label>
+    <label><input type="checkbox" disabled> One-way parts of the change are named in the change record</label>
+    <label><input type="checkbox" disabled> Telemetry from the new revision is arriving</label>
+    <label><input type="checkbox" disabled> Affected parties were notified before behaviour changed</label>
+    <label><input type="checkbox" disabled> A human recorded production acceptance</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt revision mismatch rollback unavailable">
+  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <ul class="cross-list">
+    <li>The deployed revision does not match the approved revision</li>
+    <li>Rollback cannot be performed, or nobody with the access is available</li>
+    <li>Smoke checks pass but no check in the suite could have failed</li>
+    <li>Telemetry from the new revision is absent, so the system is running unobserved</li>
+    <li>The abort signal was never agreed, and exposure has already begun</li>
+    <li>An irreversible step is about to run that the change record does not mention</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Operate</h3>
+      <p>Objectives, telemetry, on-call, incident response, recovery, cost and vulnerability management — the stage that never ends.</p>
+    </div>
+    <a class="github-link" href="operate.html">Operate →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 07 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

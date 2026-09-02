@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Operate · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 08 of the BizTrust delivery lifecycle: objectives, telemetry, on-call, incident response, recovery, cost and vulnerability management for a running service.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 08 · Operate</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 08 · Operate</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#objectives"><span>02</span> Service objectives</a>
+    <a href="#telemetry"><span>03</span> Minimum telemetry</a>
+    <a href="#oncall"><span>04</span> On-call</a>
+    <a href="#incident"><span>05</span> Incident response</a>
+    <a href="#recovery"><span>06</span> Recovery</a>
+    <a href="#cost"><span>07</span> Cost and capacity</a>
+    <a href="#vuln"><span>08</span> Vulnerability management</a>
+    <a href="#roles"><span>09</span> Roles</a>
+    <a href="#gate"><span>10</span> Continuous exit</a>
+    <a href="#stop"><span>11</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 08 of 09</strong><small>Operate · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="operate-intro" data-search="operate production slo telemetry oncall incident recovery cost vulnerability">
+  <div class="section-heading"><span>08</span><div><p>Delivery lifecycle · Operate</p><h2>Operate</h2></div></div>
+  <p class="lede">Operate is the stage that does not end. Every stage before it happens once per change; this one happens continuously, and it is where most of a system's lifetime is spent.</p>
+  <p class="section-intro">This page is the single home for steady-state operational guidance. Other stages reference it rather than restating it, so the guidance has one place to be correct and cannot drift between copies. <a href="assure.html">Assure</a> keeps its own steady-state section because continuous <em>verification</em> is a distinct concern from operating a running service.</p>
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>A system nobody can observe is not in production. It is merely running.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria production accepted telemetry oncall runbook">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>Telemetry is arriving</h3>
+      <p>Configured is not arriving. Confirm the signal reaches the destination and can be queried, before it is the only thing standing between you and a blind incident.</p>
+    </article>
+    <article>
+      <h3>Someone is accountable</h3>
+      <p>A named role owns this service's availability, with the access and the authority to act. A rota with an empty slot is not a rota.</p>
+    </article>
+    <article>
+      <h3>A runbook exists for the known failures</h3>
+      <p>Written for the person who was not there when it was built, at three in the morning, under time pressure.</p>
+    </article>
+  </div>
+</section>
+
+<section id="objectives" data-search="slo sli error budget availability latency correctness objectives">
+  <div class="section-heading"><span>02</span><div><p>What "working" means</p><h2>Service objectives</h2></div></div>
+  <p class="section-intro">An objective is useful when it can be missed. "High availability" cannot be missed; it can only be disagreed with. Define what a user experiences, then the threshold, then what happens when the threshold is breached.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Element</th><th>What it is</th><th>Common mistake</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Indicator</strong></td><td>A measurement of something a user feels — a request served correctly, within a time bound</td><td>Measuring whether a process is alive, which users do not experience</td></tr>
+        <tr><td><strong>Objective</strong></td><td>The proportion of those that must succeed, over a stated window</td><td>A number chosen because it looks impressive rather than because it is affordable</td></tr>
+        <tr><td><strong>Error budget</strong></td><td>The failure the objective permits — the amount of risk available to spend</td><td>Treating any failure as unacceptable, which makes the objective advisory</td></tr>
+        <tr><td><strong>Consequence</strong></td><td>What changes when the budget is exhausted, agreed in advance</td><td>No consequence, which makes the whole exercise decorative</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>For BizTrust, correctness objectives matter more than uptime ones</strong>
+    <p>A brokerage platform that is available and quotes the wrong premium, or shows a request to bind as confirmed cover, has failed more seriously than one that was briefly unreachable. Objectives should cover financial correctness and state accuracy, not only whether requests returned.</p>
+  </div>
+</section>
+
+<section id="telemetry" data-search="minimum telemetry logs metrics traces audit correlation tenant">
+  <div class="section-heading"><span>03</span><div><p>The floor</p><h2>Minimum telemetry</h2></div></div>
+  <ul class="check-list">
+    <li><strong>Request-level:</strong> outcome, latency, tenant context, correlation and causation identifiers, and the revision serving it</li>
+    <li><strong>Domain-level:</strong> every material state transition, emitted as a business fact rather than inferred from logs</li>
+    <li><strong>Integration-level:</strong> outcome, latency and the provider's own reference for every external call, so their record and yours can be reconciled</li>
+    <li><strong>Financial:</strong> every posting, allocation and reversal, traceable to its source transaction</li>
+    <li><strong>Audit:</strong> who did what, to which resource, under what authority, protected from ordinary application modification</li>
+  </ul>
+  <div class="callout">
+    <strong>Sensitive data does not belong in telemetry</strong>
+    <p>Identifiers, references and categories — not personal details, credentials or payment data. Telemetry is copied, forwarded, retained and read by more people than the database is.</p>
+  </div>
+</section>
+
+<section id="oncall" data-search="oncall rota escalation alert fatigue paging">
+  <div class="section-heading"><span>04</span><div><p>Who answers</p><h2>On-call</h2></div></div>
+  <ul class="check-list">
+    <li><strong>Every alert is actionable.</strong> If the response is to look and do nothing, it is not an alert — it is a dashboard entry, and it should be moved there</li>
+    <li><strong>Alert on symptoms, not causes.</strong> Users experience slow and wrong; they do not experience high memory usage</li>
+    <li><strong>Alert fatigue is a system failure.</strong> A rota that has learned to ignore pages has been trained to, by whoever configured them</li>
+    <li><strong>Escalation is named in advance.</strong> Who is called second, and after how long</li>
+    <li><strong>The rota is humane.</strong> An exhausted responder makes worse decisions than an absent one, because they act</li>
+  </ul>
+</section>
+
+<section id="incident" data-search="incident response detect triage mitigate communicate learn postmortem">
+  <div class="section-heading"><span>05</span><div><p>When it breaks</p><h2>Incident response</h2></div></div>
+  <p class="section-intro">The order matters, and it is not the intuitive one. Stop the harm first; understand it second.</p>
+  <div class="definition-list">
+    <div><span>Detect</span><p>Ideally from a signal, not from a customer. Time-to-detect is worth measuring on its own, because it bounds everything downstream.</p></div>
+    <div><span>Declare</span><p>Say the word "incident" out loud and name a coordinator. Ambiguity about whether this is an incident costs more time than any technical step.</p></div>
+    <div><span>Mitigate</span><p>Restore service before understanding the cause. Disable the flag, roll back, shed load. Diagnosis performed while users are affected is diagnosis performed badly.</p></div>
+    <div><span>Communicate</span><p>What is known, what is not, and when the next update comes. The third is what people actually need; without it they ask, which costs the responder time.</p></div>
+    <div><span>Learn</span><p>Blameless review. The output is a change to a control, not a resolution to be more careful. Every incident adds the check that would have caught it.</p></div>
+  </div>
+  <div class="invariant">
+    <span>THE MEASURE THAT MATTERS</span>
+    <p>Count what a control caught, not what attention caught. If the ratio shifts toward attention, the controls have stopped covering the surface that is changing.</p>
+  </div>
+</section>
+
+<section id="recovery" data-search="recovery disaster rto rpo backup drill restore">
+  <div class="section-heading"><span>06</span><div><p>When it breaks badly</p><h2>Recovery</h2></div></div>
+  <ul class="check-list">
+    <li><strong>State the objectives:</strong> how much time may pass before service returns, and how much data may be lost. Both are business decisions, not technical ones</li>
+    <li><strong>A backup that has never been restored is not a backup.</strong> It is an untested hypothesis with a storage cost</li>
+    <li><strong>Drill on a schedule, and write up the result</strong> — including the parts that went badly, which are the only parts with information in them</li>
+    <li><strong>Rehearse the human path too:</strong> who has access, who authorizes, how they are reached when the usual channel is the thing that is down</li>
+    <li><strong>Recovery for a multi-tenant system is per-tenant.</strong> Restoring everything to recover one tenant's data is not a recovery plan</li>
+  </ul>
+</section>
+
+<section id="cost" data-search="cost capacity growth budget efficiency forecast">
+  <div class="section-heading"><span>07</span><div><p>Sustainability</p><h2>Cost and capacity</h2></div></div>
+  <ul class="check-list">
+    <li>Cost is attributed per tenant and per capability, so a growing bill can be explained rather than absorbed</li>
+    <li>Capacity is forecast against real growth, not against the hope that current headroom is permanent</li>
+    <li>Rate limits and quotas exist before they are needed, because adding them under load changes behaviour for everyone at once</li>
+    <li>An unexpected cost movement is investigated as a signal — it is often the first visible symptom of a defect</li>
+  </ul>
+</section>
+
+<section id="vuln" data-search="vulnerability patching dependencies secrets rotation disclosure">
+  <div class="section-heading"><span>08</span><div><p>Staying safe over time</p><h2>Vulnerability management</h2></div></div>
+  <ul class="check-list">
+    <li>Dependencies are inventoried and monitored; an unknown dependency cannot be assessed when an advisory lands</li>
+    <li>Patching has an agreed timeline by severity, decided before the urgent case arrives</li>
+    <li>Secrets rotate on a schedule, and rotation is exercised rather than assumed to work</li>
+    <li>Access is reviewed periodically; the most common finding is an account nobody has needed for a year</li>
+    <li>A disclosure route exists and is answered — security researchers who cannot reach you publish instead</li>
+  </ul>
+</section>
+
+<section id="roles" data-search="roles operations owner responder security finance">
+  <div class="section-heading"><span>09</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Service owner</strong></td><td>Owns the objectives, the error budget and the consequence of exhausting it</td><td>Set an objective with no agreed consequence</td></tr>
+        <tr><td><strong>Responder</strong></td><td>Mitigates first, communicates continuously, hands over cleanly</td><td>Diagnose while users are still affected and mitigation is available</td></tr>
+        <tr><td><strong>Security</strong></td><td>Owns patching timelines, access review and the disclosure route</td><td>Learn the dependency inventory during an advisory</td></tr>
+        <tr><td><strong>Agents</strong></td><td>Observe, summarize, prepare changes, and produce evidence</td><td>Take irreversible production action; that remains reserved to a human</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="continuous exit learn feedback promotion">
+  <div class="section-heading"><span>10</span><div><p>Transition</p><h2>Continuous exit to Learn</h2></div></div>
+  <p class="section-intro">Operate does not exit once. It feeds <strong>Learn</strong> continuously, and the quality of that feed is what stops the same incident recurring.</p>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Objectives are defined so they can be missed, with an agreed consequence</label>
+    <label><input type="checkbox" disabled> Telemetry meets the minimum, and carries no sensitive data</label>
+    <label><input type="checkbox" disabled> Every alert is actionable and points at a symptom</label>
+    <label><input type="checkbox" disabled> Escalation is named and reachable</label>
+    <label><input type="checkbox" disabled> A restore has been performed, not merely scheduled</label>
+    <label><input type="checkbox" disabled> Every incident produced a control change, not a resolution to be careful</label>
+    <label><input type="checkbox" disabled> Cost is attributable per tenant and per capability</label>
+    <label><input type="checkbox" disabled> Patch timelines and access review are on a schedule that is met</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt unobserved no rota untested restore">
+  <div class="section-heading"><span>11</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <p class="section-intro">These are conditions to stop <em>shipping</em>, not to stop operating — the service keeps running while they are fixed.</p>
+  <ul class="cross-list">
+    <li>Telemetry has stopped arriving and the system is running unobserved</li>
+    <li>No named person is on call, or the rota has an unfilled slot</li>
+    <li>A restore has never been successfully performed for the current data model</li>
+    <li>The error budget is exhausted and releases are continuing regardless</li>
+    <li>An incident produced no control change and the same failure remains possible</li>
+    <li>A known vulnerability is past its agreed patch timeline with no recorded decision</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Learn</h3>
+      <p>Retrospective, decision quality, defect escape analysis, and promoting repeated lessons into blocking controls.</p>
+    </div>
+    <b>NOT YET WRITTEN</b>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 08 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

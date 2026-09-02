@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 05 of the BizTrust delivery lifecycle: executing an authorized Work Package in changes small enough to verify and reverse.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 05 · Build</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 05 · Build</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#discipline"><span>03</span> Change discipline</a>
+    <a href="#migrations"><span>04</span> Migrations</a>
+    <a href="#telemetry"><span>05</span> Telemetry as you go</a>
+    <a href="#contracts"><span>06</span> Building to contract</a>
+    <a href="#roles"><span>07</span> Roles</a>
+    <a href="#gate"><span>08</span> Exit gate</a>
+    <a href="#stop"><span>09</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 05 of 09</strong><small>Build · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="build-intro" data-search="build implementation change discipline migration telemetry contract">
+  <div class="section-heading"><span>05</span><div><p>Delivery lifecycle · Build</p><h2>Build</h2></div></div>
+  <p class="lede">Build executes one authorized Work Package. The discipline is not speed — it is keeping each change small enough that a reviewer can hold it in their head and an operator can reverse it under pressure.</p>
+  <p class="section-intro">A large change is not accepted; it is tolerated. The reviewer approves what they could follow and assumes the rest, and the assumption is invisible in the record. Size is therefore a correctness property, not a preference.</p>
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>Every change traces to one authorized package, and carries the tests, telemetry and documentation it needs in the same change.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria authorized package branch environment reproducible">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>The package is authorized</h3>
+      <p>Not ready, not drafted — authorized, with a recorded grant that has not expired. Work begun on an unauthorized package cannot be accepted without retrospectively inventing the authority.</p>
+    </article>
+    <article>
+      <h3>The criteria can be checked</h3>
+      <p>Read the acceptance criteria before writing code. If one cannot be settled by a command, say so now. Discovering it at verification wastes the whole implementation.</p>
+    </article>
+    <article>
+      <h3>The branch starts from current main</h3>
+      <p>Pull before branching. A branch cut from a stale base produces a diff that includes other people's work and a review that cannot tell them apart.</p>
+    </article>
+  </div>
+</section>
+
+<section id="produces" data-search="artifacts produced code tests telemetry migration reversal documentation pull request">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <p class="section-intro">Build produces a single reviewable change carrying everything needed to verify it. An artifact promised as a follow-up is an artifact that does not exist.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>What ships together, and what it costs when it does not</caption>
+      <thead><tr><th>Artifact</th><th>Ships with the change because</th><th>When deferred</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Implementation</strong></td><td>It is the point of the package</td><td>—</td></tr>
+        <tr><td><strong>Tests</strong></td><td>They define what "working" means for this change specifically</td><td>Written later against the behaviour that exists, which proves the code does what it does</td></tr>
+        <tr><td><strong>Telemetry</strong></td><td>The first incident is too late to add it</td><td>The change is invisible in production until someone reports a symptom</td></tr>
+        <tr><td><strong>Migration and its reversal</strong></td><td>The reversal is only cheap to design before it is needed</td><td>Rollback is improvised during an incident</td></tr>
+        <tr><td><strong>Contract updates</strong></td><td>An interface change that skips the contract is a silent breaking change</td><td>Consumers discover the change by failing</td></tr>
+        <tr><td><strong>Documentation</strong></td><td>The person who knows why is available right now and will not be later</td><td>The reasoning is reconstructed from the diff, badly</td></tr>
+        <tr><td><strong>Pull request with the evidence plan</strong></td><td>It states which command settles which criterion</td><td>Verification becomes a negotiation about what was meant</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="discipline" data-search="change discipline small commits scope creep branch naming traceability">
+  <div class="section-heading"><span>03</span><div><p>How changes are made</p><h2>Change discipline</h2></div></div>
+  <ul class="check-list">
+    <li><strong>One package per branch.</strong> Branch names carry the package identifier so the trace from change to authority survives without anyone remembering it</li>
+    <li><strong>Commits are conventional and reference the package.</strong> The commit message is read by someone under pressure, months later, who was not there</li>
+    <li><strong>No adjacent improvements.</strong> The tempting refactor next to your change belongs in its own package. "While we were here" is how scope becomes unreviewable</li>
+    <li><strong>Findings become packages.</strong> A defect noticed mid-build is filed, not fixed, unless it blocks the current criteria</li>
+    <li><strong>Update every guard in one pass.</strong> Where automated scope checks exist, editing one puts it in the diff and wakes its siblings; fix them together rather than iteratively</li>
+  </ul>
+  <div class="callout">
+    <strong>Verify against the tree that ships</strong>
+    <p>Untracked files are invisible to change-scoped checks, so a green run taken before staging proves nothing about what was pushed. Cite the revision you measured, and confirm it equals the pushed head.</p>
+  </div>
+</section>
+
+<section id="migrations" data-search="migrations expand contract reversible destructive schema data">
+  <div class="section-heading"><span>04</span><div><p>The risky part</p><h2>Migrations</h2></div></div>
+  <p class="section-intro">Most changes are reversible by reverting a commit. Data changes are not, and treating them as though they were is the most common route from a routine release to an incident.</p>
+  <div class="definition-list">
+    <div><span>Expand first</span><p>Add the new structure alongside the old. Deploy. Backfill. Only then switch reads, and only later remove the old structure. Each step is separately reversible.</p></div>
+    <div><span>Never destroy in one step</span><p>A migration that drops or rewrites in the same deployment as the code change removes the option of rolling back the code.</p></div>
+    <div><span>Backfills are jobs, not migrations</span><p>They are restartable, observable, and safe to run twice. A backfill that cannot be resumed will be run again from the start at the worst possible moment.</p></div>
+    <div><span>State the reversal explicitly</span><p>Write what rollback means for this change. Where rollback is genuinely one-way, say so at planning time, not during the incident.</p></div>
+  </div>
+</section>
+
+<section id="telemetry" data-search="telemetry observability instrumentation logs metrics traces during build">
+  <div class="section-heading"><span>05</span><div><p>Instrument while building</p><h2>Telemetry as you go</h2></div></div>
+  <p class="section-intro">You cannot add observability to an incident that is already happening. The instrumentation a change needs is part of that change, not a follow-up nobody schedules.</p>
+  <ul class="check-list">
+    <li>Every material state transition emits an event carrying tenant, correlation and causation identifiers</li>
+    <li>Every external call records outcome, latency and the provider's own reference</li>
+    <li>Errors carry enough context to reconstruct what was attempted, without carrying sensitive data</li>
+    <li>New failure modes get a signal before they get a runbook, and a runbook before they get an alert</li>
+  </ul>
+  <div class="callout">
+    <strong>Detail on operating the running service lives in <a href="operate.html">Operate</a></strong>
+    <p>This section covers what to instrument while building. Objectives, alerting policy, on-call and incident handling are concentrated there so the guidance has one home and does not drift between pages.</p>
+  </div>
+</section>
+
+<section id="contracts" data-search="contract tests interface published schema implementation agreement">
+  <div class="section-heading"><span>06</span><div><p>Interfaces</p><h2>Building to contract</h2></div></div>
+  <p class="section-intro">Build against the published contract, not against your reading of it. Where the two differ, the contract is wrong or the implementation is — and both are worth knowing before release rather than after.</p>
+  <ul class="check-list">
+    <li>Request and response shapes are asserted against the contract file, not against a fixture someone wrote by hand</li>
+    <li>A change to a public interface changes the contract in the same package, or it is not a change to a public interface</li>
+    <li>Modules exchange contracts, never direct access to each other's tables</li>
+    <li>Provider-specific behaviour stays behind the adapter boundary the architecture defined</li>
+  </ul>
+  <div class="invariant">
+    <span>THE FAILURE THIS PREVENTS</span>
+    <p>An implementation that quietly redefines the contract is indistinguishable from a correct one until a second consumer arrives.</p>
+  </div>
+</section>
+
+<section id="roles" data-search="roles engineer reviewer domain">
+  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Implementing agent</strong></td><td>Writes code, tests, telemetry and documentation together; opens the pull request</td><td>Review, approve or merge their own change</td></tr>
+        <tr><td><strong>Peer reviewer</strong></td><td>Reads the diff against the acceptance criteria, not against personal preference</td><td>Approve a change they could not follow</td></tr>
+        <tr><td><strong>Domain reviewer</strong></td><td>Confirms the behaviour matches how the business actually operates</td><td>Be skipped because the change "looks technical"</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate engineering ready assure">
+  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Every acceptance criterion has a command that settles it</label>
+    <label><input type="checkbox" disabled> Tests, telemetry and documentation ship in the same change</label>
+    <label><input type="checkbox" disabled> Migrations are expand-first and separately reversible</label>
+    <label><input type="checkbox" disabled> Interface changes are reflected in the contract file</label>
+    <label><input type="checkbox" disabled> The diff contains nothing outside the package's scope</label>
+    <label><input type="checkbox" disabled> The measured revision equals the pushed head</label>
+    <label><input type="checkbox" disabled> Findings outside scope were filed, not fixed in place</label>
+    <label><input type="checkbox" disabled> The pull request links the authorizing package</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt scope authority migration irreversible">
+  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <ul class="cross-list">
+    <li>An acceptance criterion turns out to be uncheckable — return the package to Plan rather than inventing a proxy</li>
+    <li>The change requires an irreversible data operation that the package did not authorize</li>
+    <li>Scope has grown beyond the package and the growth is not itself authorized</li>
+    <li>The authority granted for this package has expired</li>
+    <li>The contract and the implementation disagree and nobody will decide which is wrong</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Assure</h3>
+      <p>Independent verification: each criterion bound to quoted command output, with every new check proven able to fail.</p>
+    </div>
+    <a class="github-link" href="assure.html">Assure →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 05 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
