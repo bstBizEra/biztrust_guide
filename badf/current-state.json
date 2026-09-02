@@ -2,25 +2,27 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-02T20:44:38Z",
+  "updated_at": "2026-09-02T21:31:14Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-009",
-    "title": "Fix correctness and honesty defects found in review",
+    "id": "BIZTRUST-GUIDE-WP-010",
+    "title": "Complete the nine stages, and make the two preconditions mechanical",
     "state": "ENGINEERING_READY",
-    "objective": "Correct what independent review found to be wrong or untrue in the six merged stage manuals; defer structural improvements.",
-    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/13",
+    "objective": "Finish the nine-stage manual and convert two declared rules into checks that fail.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/16",
     "owner_role": "documentation-engineer",
     "scope": [
-      "build.html migrations dual-write",
-      "operate.html drift claim and mood",
-      "assure.html deduplication and ownership",
-      "release.html mood"
+      "cross-page duplicate detector",
+      "retroactive exit-gate audit",
+      "discover.html",
+      "define.html",
+      "learn.html",
+      "index.html links all nine"
     ]
   },
   "source": {
-    "branch": "fix/biztrust-guide-wp-009-review-defects",
-    "baseline_commit": "0e7e9b2567213c7d656f50b932e5b07daca0ba2f",
-    "baseline_kind": "post-merge-main",
+    "branch": "feat/biztrust-guide-wp-010-complete-nine-stages",
+    "baseline_commit": "7946d0229de7b54f7cf2042d1c5bcc3108a9080c",
+    "baseline_kind": "stacked-on-wp-009-branch",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
   "gates": {
@@ -36,10 +38,10 @@
     "production_platform_implementation": "NOT_GRANTED",
     "architecture_acceptance": "NOT_GRANTED"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-009-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-010-engineering-ready.json",
   "latest_handoff": null,
-  "primary_next_action_id": "NS-021",
+  "primary_next_action_id": "NS-026",
   "resume_decision": "WAIT_FOR_AUTHORITY",
-  "stop_reason": "Three pull requests await human review: #11 state reconciliation, #12 validator fails closed, and the WP-009 defect fixes. Agents must not merge.",
+  "stop_reason": "Four pull requests await human review: #11, #12, #14 and WP-010. Agents must not merge.",
   "known_divergence": "Issue #2 (BIZTRUST-GUIDE-WP-003) remains open and labelled state:in-progress; NS-015 resequences or closes it."
 }

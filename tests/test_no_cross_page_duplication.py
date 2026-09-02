@@ -42,6 +42,32 @@ DELIBERATE_PARALLELS: list[tuple[str, str]] = [
 ]
 
 
+def body_elements(path: Path) -> list[str]:
+    """Normalised text of each leaf element: <td>, <li>, <p>, <label>.
+
+    A SECOND granularity, because the sentence splitter below is blind to a
+    shape it cannot see from inside: a table row's cells strip into one long
+    run with no terminal punctuation, so a cell-for-cell lift of another
+    page's roles table never becomes a comparable unit. That is exactly how a
+    lifted "Accepting authority" row survived both a shingle check and the
+    sentence pass here. Found by an agent re-implementing this detector and
+    disagreeing with it.
+    """
+    html = path.read_text(encoding="utf-8")
+    match = re.search(r"<main\b.*?>(.*)</main>", html, re.S)
+    body = match.group(1) if match else html
+    body = re.sub(r"<(script|style).*?</\1>", " ", body, flags=re.S)
+    units = []
+    for chunk in re.findall(r"<(?:td|li|p|label)\b[^>]*>(.*?)</(?:td|li|p|label)>", body, re.S):
+        text = re.sub(r"<[^>]+>", " ", chunk)
+        text = text.replace("&ndash;", "-").replace("&nbsp;", " ").replace("&amp;", "&")
+        text = re.sub(r"\s+", " ", text).strip().lower()
+        text = re.sub(r"[^a-z0-9 ]", "", text)
+        if len(text.split()) >= MIN_WORDS:
+            units.append(text)
+    return units
+
+
 def body_sentences(path: Path) -> list[str]:
     """Normalised sentences from a page's <main>, long enough to be meaningful."""
     html = path.read_text(encoding="utf-8")
@@ -75,6 +101,7 @@ def is_deliberate(a: str, b: str) -> bool:
 class TestNoCrossPageDuplication(unittest.TestCase):
     def setUp(self) -> None:
         self.pages = {p: body_sentences(p) for p in sorted(STAGES.glob("*.html"))}
+        self.elements = {p: body_elements(p) for p in sorted(STAGES.glob("*.html"))}
 
     def test_pages_exist_and_have_content(self) -> None:
         """A detector over zero pages passes trivially and proves nothing."""
@@ -84,9 +111,16 @@ class TestNoCrossPageDuplication(unittest.TestCase):
                 len(sentences), 15, f"{path.name}: too little body prose to check meaningfully"
             )
 
+    def test_no_stage_restates_another_element_for_element(self) -> None:
+        """Catches a lifted table row, which the sentence pass cannot see."""
+        self._assert_no_duplicates(self.elements, "element")
+
     def test_no_stage_restates_another(self) -> None:
+        self._assert_no_duplicates(self.pages, "sentence")
+
+    def _assert_no_duplicates(self, corpus: dict, level: str) -> None:
         offenders = []
-        for (pa, sa), (pb, sb) in itertools.combinations(self.pages.items(), 2):
+        for (pa, sa), (pb, sb) in itertools.combinations(corpus.items(), 2):
             for x in sa:
                 for y in sb:
                     score = similarity(x, y)
@@ -99,7 +133,8 @@ class TestNoCrossPageDuplication(unittest.TestCase):
                 for s, a, b, x, y in offenders[:10]
             )
             self.fail(
-                f"{len(offenders)} cross-page near-duplicate(s) at or above {THRESHOLD}.\n"
+                f"{len(offenders)} cross-page {level}-level near-duplicate(s) "
+                f"at or above {THRESHOLD}.\n"
                 f"Link to the owning stage instead of restating it:{report}"
             )
 

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Define · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 02 of the BizTrust delivery lifecycle: turning a validated problem into requirements that can be shown unmet, with data classification and a risk tier decided before anyone architects against them.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 02 · Define</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Stage 02 · Define</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#writing"><span>03</span> Requirements that can be unmet</a>
+    <a href="#versus"><span>04</span> Requirements vs criteria</a>
+    <a href="#classification"><span>05</span> Data classification</a>
+    <a href="#risk"><span>06</span> Risk tier</a>
+    <a href="#unspecified"><span>07</span> Deliberately unspecified</a>
+    <a href="#roles"><span>08</span> Roles</a>
+    <a href="#gate"><span>09</span> Exit gate</a>
+    <a href="#stop"><span>10</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 02 of 09</strong><small>Define · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="define-intro" data-search="define requirement specification risk tier unmet classification biztrust broker laos">
+  <div class="section-heading">
+    <span>02</span>
+    <div><p>Delivery lifecycle · Define</p><h2>Define</h2></div>
+  </div>
+  <p class="lede">Define turns a validated problem into a specification someone can architect against. Its characteristic failure is quiet: a requirement nobody can tell they have met.</p>
+  <p class="section-intro">Nothing on this page describes software that runs. BizTrust is a planned multi-tenant platform for an insurance broker in Laos. Two obligations are settled here rather than later — data classification and risk tier — because both cost a paragraph now and a migration at Build.</p>
+
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>Write every requirement so that someone holding the finished product could show it unmet. A requirement that cannot be failed is an aspiration with an identifier attached.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria preconditions problem validated discover users tenant classes government residency accept">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <p class="section-intro">All four must hold.</p>
+  <div class="three-col">
+    <article>
+      <h3>The problem is validated</h3>
+      <p>Discover must have established whose problem this is and what evidence says it is real. Define is not where it is discovered.</p>
+    </article>
+    <article>
+      <h3>The affected users can be named</h3>
+      <p>Brokers, underwriting staff, claims handlers, tenant administrators, clients — named as roles, not as departments.</p>
+    </article>
+    <article>
+      <h3>The tenant classes in scope are declared</h3>
+      <p>A government-linked tenant may carry obligations a commercial one does not: residency, retention, disclosure, audit. Which classes are in scope changes what must be classified.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>Someone is authorized to accept requirements</strong>
+    <p>Name that role before the first requirement is drafted. Later stages will treat this register as binding whether or not anyone accepted it.</p>
+  </div>
+</section>
+
+<section id="produces" data-search="artifacts outputs requirement register journeys glossary classification risk tier out-of-scope open questions non-functional">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <p class="section-intro">Nine artifacts. Every exit-gate condition below names one of them and its accountable role.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Each Define artifact and the question it closes</caption>
+      <thead><tr><th>Artifact</th><th>What it settles</th><th>Fails when</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Product requirements document</strong></td><td>The problem, the users, the outcome sought</td><td>Opens with a chosen implementation</td></tr>
+        <tr><td><strong>Requirement register</strong></td><td>Each requirement, its identifier and its negation</td><td>An entry cannot be unmet</td></tr>
+        <tr><td><strong>User journeys</strong></td><td>The paths users take, including the ones that fail</td><td>Only the happy path</td></tr>
+        <tr><td><strong>Domain glossary</strong></td><td>One meaning per term, in the business's vocabulary</td><td>Two definitions of "policy"</td></tr>
+        <tr><td><strong>Data classification register</strong></td><td>Class, retention and residency per data element</td><td>An element seems obvious</td></tr>
+        <tr><td><strong>Non-functional requirements</strong></td><td>Obligations carrying a number and a measuring method</td><td>A number with no method</td></tr>
+        <tr><td><strong>Risk tier assignment</strong></td><td>The tier this work carries, and why</td><td>It waits for Build</td></tr>
+        <tr><td><strong>Out-of-scope register</strong></td><td>What was not specified, and what would reverse that</td><td>No reversing condition</td></tr>
+        <tr><td><strong>Open questions register</strong></td><td>What is unresolved, who owns it, and by when</td><td>Resolved by whoever implements</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="writing" data-search="requirement unmet negation subject identifier solution technology vagueness broker tenant">
+  <div class="section-heading"><span>03</span><div><p>The hard part</p><h2>Writing a requirement that can be unmet</h2></div></div>
+  <p class="section-intro">Test each requirement by writing its negation. If the negation is a sentence nobody could say about the finished product, the requirement constrains nothing. Name a subject a reader could point at, and give each one a stable identifier that Work Packages and evidence can cite.</p>
+  <div class="split">
+    <div>
+      <h3>Can be unmet</h3>
+      <ul class="check-list">
+        <li>"A renewal falling due within thirty days must reach the assigned broker without that broker searching for it."</li>
+        <li>"A client's identity document number must be visible only to users of the tenant that captured it."</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Cannot be unmet</h3>
+      <ul class="cross-list">
+        <li>"The system should be fast" — no subject, no threshold, no observer</li>
+        <li>"Onboarding must be user-friendly"</li>
+        <li>"The platform must be secure"</li>
+                <li>"Use PostgreSQL row-level security for tenant separation" — a solution wearing a requirement's clothes</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>A requirement written as a solution forecloses the architecture before it is designed</strong>
+    <p>It looks rigorous because it names a technology, so it survives a review that only checks for vagueness. But it settles a question belonging to <a href="architect.html">Architect</a>, without alternatives and without an accepting role. Write the obligation — provable separation between tenants — and leave the mechanism there.</p>
+  </div>
+</section>
+
+<section id="versus" data-search="requirements acceptance criteria distinction plan work package artifact measurable">
+  <div class="section-heading"><span>04</span><div><p>The distinction</p><h2>Requirements are not acceptance criteria</h2></div></div>
+
+  <div class="invariant">
+    <span>THE DISTINCTION</span>
+    <p>A <strong>requirement</strong> says what must be true of the product. An <strong>acceptance criterion</strong> says what command settles whether one Work Package delivered it. Define produces requirements. <a href="plan.html">Plan</a> derives Work Package acceptance criteria from those requirements. They are not the same artifact, they are not written at the same time, and they are not owned by the same role.</p>
+  </div>
+
+  <p class="section-intro">Define does not produce acceptance criteria; guidance on making a criterion measurable is not repeated here, because it lives in <a href="plan.html">Plan</a>.</p>
+
+  <div class="table-wrap">
+    <table>
+      <caption>One obligation, in each stage's own artifact</caption>
+      <thead><tr><th>Requirement · Define</th><th>Acceptance criterion · <a href="plan.html">Plan</a></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>A client's identity document number must be visible only to users of the tenant that captured it.</td>
+          <td>Reading that field as a user of a second tenant must return denied, status recorded.</td>
+        </tr>
+        <tr>
+          <td>Every premium figure shown to a client must carry its currency and, where converted, the rate and its date.</td>
+          <td>The quotation payload must emit currency, rate and rate date for every converted amount; one missing the date must be rejected.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="classification" data-search="classification residency retention exposure logs traces tenant restricted confidential payment identity migration encryption">
+  <div class="section-heading"><span>05</span><div><p>Decided now, not later</p><h2>Data classification</h2></div></div>
+  <p class="section-intro">An insurance brokerage handles identity documents, health and risk survey detail, and payment instructions. BizTrust is planned to hold all three, across tenant classes that may include a government-linked one. Classification decided here costs a paragraph; taken at Build it costs a migration and a backfill.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>What each classification entry settles</caption>
+      <thead><tr><th>Property</th><th>What it fixes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Class</strong></td><td>Public, internal, confidential or restricted — chosen for the element, not for the screen</td></tr>
+        <tr><td><strong>Residency and retention</strong></td><td>Where it may be stored, how long it is kept, and what happens then</td></tr>
+        <tr><td><strong>Exposure</strong></td><td>Whether it may appear in logs, traces or support tooling, and who may extract it</td></tr>
+              </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>The stricter obligation governs</strong>
+    <p>Where the element's class and the tenant class disagree, take the stricter and record why. A single default cannot be correct for both, and the class it is wrong for is the one nobody is reviewing.</p>
+  </div>
+  <div class="invariant">
+    <span>WHY THIS CANNOT WAIT</span>
+    <p>Encryption boundaries, log redaction and tenant isolation all sit downstream of classification, so an unclassified element handed to <a href="architect.html">Architect</a> is a decision disguised as a detail.</p>
+  </div>
+</section>
+
+<section id="risk" data-search="risk tier assurance layers adr rollback rehearsed evidence rigour scrutiny">
+  <div class="section-heading"><span>06</span><div><p>What the tier buys</p><h2>Risk tier</h2></div></div>
+  <p class="section-intro">The tier fixes, in advance, the depth of scrutiny this work must survive at <a href="assure.html">Assure</a> — a purchase order for rigour, signed before anyone knows its cost.</p>
+  <div class="definition-list">
+    <div><span>The assurance burden</span><p>Which layers must run, and which may be skipped with a written reason; the layers are defined in <a href="assure.html">Assure</a>.</p></div>
+    <div><span>Who must sign</span><p>Higher tiers require more authority to accept, and forbid the implementing party from also verifying.</p></div>
+    <div><span>Whether a decision record is owed</span><p>Work above a threshold obliges an ADR at <a href="architect.html">Architect</a>, not a design note.</p></div>
+    <div><span>The rollback obligation</span><p>Whether reversal must be described, or described and rehearsed.</p></div>
+  </div>
+  <div class="callout">
+    <strong>Assign the tier before the cost of verifying it is known</strong>
+    <p>A tier chosen once the evidence is in hand can only be a tier that evidence satisfies — a property of the ordering, not of anyone's honesty. <a href="plan.html">Plan</a> treats it as an entry condition, so a blank tier blocks planning.</p>
+  </div>
+</section>
+
+<section id="unspecified" data-search="boundaries technology schema sequencing authority verification controls manifests incidents screen journeys scope">
+  <div class="section-heading"><span>07</span><div><p>Boundaries</p><h2>What Define deliberately does not specify</h2></div></div>
+  <p class="section-intro">Each item below belongs to a named later stage.</p>
+  <ul class="cross-list">
+    <li><strong>Technology, schema and interface shape</strong> — <a href="architect.html">Architect</a></li>
+    <li><strong>Work Package boundaries, sequencing and authority</strong> — <a href="plan.html">Plan</a></li>
+    <li><strong>Acceptance criteria, commands and evidence plans</strong> — derived in <a href="plan.html">Plan</a> from the requirements written here</li>
+    <li><strong>Verification layers, controls and manifests</strong> — <a href="assure.html">Assure</a></li>
+    <li><strong>Service levels, incidents and cost monitoring</strong> — <a href="operate.html">Operate</a></li>
+    <li><strong>Screen-level interface design</strong> — journeys fix what a user must accomplish, not how</li>
+  </ul>
+  <div class="callout">
+    <strong>An omission you meant and an omission you missed leave the same trace</strong>
+    <p>Every item left unspecified goes in the out-of-scope register with the condition that would bring it back. Without it, a boundary you drew and a question you never reached look the same.</p>
+  </div>
+</section>
+
+<section id="roles" data-search="roles product owner domain expert data protection risk accepting authority register journeys glossary">
+  <div class="section-heading"><span>08</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Product owner</strong></td><td>Drafts the product requirements document, requirement register, non-functional requirements and out-of-scope register</td><td>Name a technology in a requirement, or accept their own register</td></tr>
+        <tr><td><strong>Domain expert</strong></td><td>Confirms the user journeys and domain glossary match how broking is actually transacted</td><td>Sign off a journey containing a term the business does not use</td></tr>
+        <tr><td><strong>Data protection owner</strong></td><td>Owns the data classification register: class, residency, retention, exposure, tenant sensitivity</td><td>Defer an element's classification to whoever builds it</td></tr>
+        <tr><td><strong>Risk owner</strong></td><td>Assigns and reasons the risk tier assignment before planning begins</td><td>Set or revise the tier once verification evidence exists</td></tr>
+        <tr><td><strong>Accepting authority</strong></td><td>Signs the requirement register and closes the open questions register, dated, against the Work Package</td><td>Accept a register they have not read end to end</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate transition architect acceptance requirement register classification tier owner">
+  <div class="section-heading"><span>09</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <p class="section-intro">Define exits to <a href="architect.html">Architect</a> when every condition holds. Acceptance is an act with a date and a name against it, not the absence of a complaint.</p>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> The product requirements document states the problem and affected users without naming an implementation — product owner</label>
+    <label><input type="checkbox" disabled> Every entry in the requirement register has a stated negation and a stable identifier — product owner</label>
+    <label><input type="checkbox" disabled> User journeys include the paths that fail, not only the path that succeeds — domain expert</label>
+    <label><input type="checkbox" disabled> The domain glossary gives each term exactly one meaning — domain expert</label>
+    <label><input type="checkbox" disabled> The data classification register covers every data element named in the requirements — data protection owner</label>
+    <label><input type="checkbox" disabled> Each non-functional requirement carries a number and the method that would measure it — product owner</label>
+    <label><input type="checkbox" disabled> The risk tier assignment is recorded with its reasoning, before planning begins — risk owner</label>
+    <label><input type="checkbox" disabled> The out-of-scope register names each deferral and the condition that would reverse it — product owner</label>
+    <label><input type="checkbox" disabled> The requirement register is signed and no open questions register entry is unowned — accepting authority</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt negation classification tier technology validated tenant acceptance criteria plan">
+  <div class="section-heading"><span>10</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <p class="section-intro">Halt, and write down which condition tripped.</p>
+  <ul class="cross-list">
+    <li>A requirement cannot be given a negation anyone could observe, and nobody will withdraw it</li>
+    <li>A data element appears in the requirements with no classification, and the answer is "we will decide that when we build it"</li>
+    <li>The risk tier is blank, or is being chosen after someone knows what verifying it would cost</li>
+    <li>A requirement names a technology, a table or an endpoint</li>
+    <li>The problem has not been validated, and Define is being used to discover it</li>
+    <li>A tenant class is in scope whose obligations nobody present can name</li>
+    <li>Nobody has been named who can record acceptance of the requirement register</li>
+    <li>Acceptance criteria are being written here rather than derived in <a href="plan.html">Plan</a></li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Architect</h3>
+      <p>Requirements become contracts that can be violated — invariants with detection mechanisms, systems of record, and a freeze narrow enough to hold.</p>
+    </div>
+    <a class="github-link" href="architect.html">Architect →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 02 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
