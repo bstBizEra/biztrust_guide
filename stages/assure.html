@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assure · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Stage 06 of the BizTrust delivery lifecycle: how a change is proven against its acceptance criteria and bound to evidence before release.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Stage 06 · Assure</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Stages</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Delivery lifecycle</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#layers"><span>02</span> Assurance layers</a>
+    <a href="#controls"><span>03</span> Negative controls</a>
+    <a href="#evidence"><span>04</span> Evidence manifest</a>
+    <a href="#roles"><span>05</span> Roles</a>
+    <a href="#gate"><span>06</span> Exit gate</a>
+    <a href="#steady"><span>07</span> Steady state</a>
+    <a href="#stop"><span>08</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Stage 06 of 09</strong><small>Assure · this page</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="assure-intro" data-search="assure verification evidence acceptance criteria proof">
+  <div class="section-heading">
+    <span>06</span>
+    <div>
+      <p>Delivery lifecycle · Assure</p>
+      <h2>Assure</h2>
+    </div>
+  </div>
+  <p class="lede">Assure is where a change stops being an assertion and becomes evidence. The implementing agent has claimed the Work Package is done. This stage decides whether that claim survives contact with a command.</p>
+  <p class="section-intro">Assure does not ask whether the code looks correct. It asks a narrower and more answerable question: <strong>for each acceptance criterion, which command was run, against which commit, and what did it print?</strong> A criterion no command can check is a defect in the plan, and it is returned to Define — not waved through here.</p>
+
+  <div class="invariant">
+    <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
+    <p>Silence is never evidence of completion, and a passing check that has never been observed to fail is not a check.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria preconditions commit sha pushed">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <p class="section-intro">All four must hold. If any fails, Assure has not started — the change returns to the prior stage rather than entering a queue.</p>
+  <div class="three-col">
+    <article>
+      <h3>Criteria are measurable</h3>
+      <p>Every acceptance criterion on the Work Package names a command, a file, or an observable output. "Works correctly" is not a criterion. If a criterion cannot fail, it cannot pass.</p>
+    </article>
+    <article>
+      <h3>The change is committed and pushed</h3>
+      <p>The commit SHA is known and matches the remote. Untracked files are invisible to <code>git</code>-based checks and to diff-scoped guards, so a green run taken before <code>git add</code> proves nothing about what shipped.</p>
+    </article>
+    <article>
+      <h3>CI has run against that exact SHA</h3>
+      <p>Not against the branch name, not against a rebased predecessor. Verify which head the run was bound to, and cite it.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>Declared non-coverage exists</strong>
+    <p>The implementing agent states, in writing, what this change does <em>not</em> verify. A verification with no stated limit is the least trustworthy kind, because it cannot be wrong.</p>
+  </div>
+</section>
+
+<section id="layers" data-search="assurance layers tests contract isolation invariant conformance">
+  <div class="section-heading"><span>02</span><div><p>What gets run</p><h2>Six assurance layers</h2></div></div>
+  <p class="section-intro">Run every layer that applies to the change. Skipping a layer is a decision that is recorded, not an omission that goes unmentioned.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Assurance layers, in ascending cost</caption>
+      <thead><tr><th>Layer</th><th>Question it answers</th><th>Applies when</th></tr></thead>
+      <tbody>
+        <tr><td><strong>L1 · Repository validation</strong></td><td>Is the repository internally consistent — contracts parse, links resolve, required files present?</td><td>Every change, without exception</td></tr>
+        <tr><td><strong>L2 · Unit and integration</strong></td><td>Does the code do what its tests say, and do the parts compose?</td><td>Any executable change</td></tr>
+        <tr><td><strong>L3 · Contract tests</strong></td><td>Do request and response match the published API contract, rather than the implementation's opinion of it?</td><td>Any change to a public or inter-module interface</td></tr>
+        <tr><td><strong>L4 · Isolation tests</strong></td><td>Is access denied where it must be denied? Cross-tenant read, missing organization context, tampered tenant identifier, expired token, wrong audience, database policy.</td><td>Any change touching authentication, tenancy or data access</td></tr>
+        <tr><td><strong>L5 · Invariant conformance</strong></td><td>Do the structural invariants still hold — by introspecting the schema and the contract, not by reading the code?</td><td>Any migration, schema change or new endpoint</td></tr>
+        <tr><td><strong>L6 · Operational readiness</strong></td><td>If this reaches production, can it be observed, alerted on, and reversed?</td><td>Anything intended for release</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="section-intro" style="margin-top:2rem">Layers 4 and 5 are the ones most often skipped and least often safe to skip. A unit test of an authorization helper proves the helper; only a request that crosses the real boundary proves the boundary. Where a control is meant to run in a deployed process, exercise it in that process — an in-memory test of the same function is necessary and not sufficient.</p>
+</section>
+
+<section id="controls" data-search="negative control positive control prove the check can fail mutation">
+  <div class="section-heading"><span>03</span><div><p>The discipline</p><h2>Negative controls</h2></div></div>
+  <p class="section-intro">This is the part of Assure that is most often skipped, and it is the part that does the work. Diligence catches nothing reliably; controls do.</p>
+
+  <div class="split">
+    <div>
+      <h3>Before you trust a new check</h3>
+      <p class="section-intro">Make it fail on purpose. Record the failing output. Then restore the tree and record the pass. A check whose failure mode you have never seen is a check whose aim you have not verified — it may be watching the wrong file, the wrong field, or nothing at all.</p>
+      <ul class="check-list">
+        <li>Break the thing the check exists to catch</li>
+        <li>Observe and record the failure</li>
+        <li>Restore, and confirm the restore is byte-identical</li>
+        <li>Record the pass, citing the same commit</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Absence claims need a positive control</h3>
+      <p class="section-intro">"No cross-tenant read occurred" and "the query never ran" produce identical output. Any check that reports an absence must carry, in the same invocation, a case it is known to detect — otherwise a broken instrument and a clean result are indistinguishable.</p>
+      <ul class="cross-list">
+        <li>A zero that agrees with your expectation ends the search early</li>
+        <li>A stale checkout returns PASS against fewer controls than you think</li>
+        <li>An exit code is a claim about the work, not the work</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>State the expected magnitude first</strong>
+    <p>Before running a count, say what number you expect. A result that silently agrees with a prior belief is the one least likely to be examined, and the one most likely to be measuring the wrong thing.</p>
+  </div>
+</section>
+
+<section id="evidence" data-search="evidence manifest commit sha exit status verifier coverage">
+  <div class="section-heading"><span>04</span><div><p>What is produced</p><h2>Evidence manifest</h2></div></div>
+  <p class="section-intro">Assure produces one artifact: a manifest binding each acceptance criterion to the evidence that discharges it. Evidence that is not bound to a revision is not evidence.</p>
+  <div class="definition-list">
+    <div><span>Repository</span><p>Repository identity and the commit SHA the check ran against, confirmed equal to the pushed head.</p></div>
+    <div><span>Command</span><p>The exact command or workflow identity, including tool version. Not a description of it.</p></div>
+    <div><span>Environment</span><p>Where it ran and when, with the timezone stated. A local rendering can cross midnight and change the calendar day.</p></div>
+    <div><span>Exit status</span><p>The status and the material output, quoted rather than summarized. Errors, failures and denials pass through raw.</p></div>
+    <div><span>Verifier</span><p>The role that ran it. The implementing agent may produce evidence; it may not accept its own.</p></div>
+    <div><span>Coverage</span><p>What was checked, and explicitly what was not. The non-coverage line is the one a reviewer reads first.</p></div>
+  </div>
+  <div class="callout">
+    <strong>Keep the pre-merge reading</strong>
+    <p>A claim about what landed is falsifiable only if the value was recorded before it landed. Retain the measurement taken at verification time, not only the one taken afterwards.</p>
+  </div>
+</section>
+
+<section id="roles" data-search="roles raci verifier independent security review authority">
+  <div class="section-heading"><span>05</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Implementing agent</strong></td><td>Produces evidence; states declared non-coverage; fixes what verification returns</td><td>Accept its own work, or grade the subset it chose</td></tr>
+        <tr><td><strong>Verifier</strong></td><td>Re-runs the checks independently; confirms each criterion maps to output; challenges aim, not just result</td><td>Re-run only the subset the implementer suggests</td></tr>
+        <tr><td><strong>Security reviewer</strong></td><td>Owns layer 4 for any change touching authentication, tenancy, or data access</td><td>Approve on unit-test evidence where a deployed path is what ships</td></tr>
+        <tr><td><strong>Human authority</strong></td><td>Accepts the stage and authorizes the transition to Release</td><td>Be inferred from silence, a green check, or an agent's assertion</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Re-running the suggested subset grades its own homework</strong>
+    <p>When a fix names the tests that prove it, the verifier's job is to run the set that existed before the fix was proposed, plus the new one — not the set the fix selected.</p>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate release authorization conditions transition">
+  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <p class="section-intro">Assure exits to Release when every condition below holds. Validation success is not deployment authority; the gate is a human decision recorded against the Work Package.</p>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Every acceptance criterion maps to quoted command output</label>
+    <label><input type="checkbox" disabled> Evidence is bound to the pushed commit SHA</label>
+    <label><input type="checkbox" disabled> Each new check has been observed to fail on purpose</label>
+    <label><input type="checkbox" disabled> Declared non-coverage is written and reviewed</label>
+    <label><input type="checkbox" disabled> Layer 4 signed off where authentication or tenancy changed</label>
+    <label><input type="checkbox" disabled> Rollback path is stated and has been exercised</label>
+    <label><input type="checkbox" disabled> Findings outside scope became their own Work Packages</label>
+    <label><input type="checkbox" disabled> A human recorded acceptance against the Work Package</label>
+  </div>
+  <div class="callout">
+    <strong>Findings become Work Packages, not in-flight fixes</strong>
+    <p>A gap surfaced during verification that sits outside the current acceptance criteria is deferred into a named Work Package with its own criteria. It is never fixed opportunistically in the same change, and never left as an unactioned comment.</p>
+  </div>
+</section>
+
+<section id="steady" data-search="steady state operations post release regression drift slo drill retention">
+  <div class="section-heading"><span>07</span><div><p>After go-live</p><h2>Assurance in steady state</h2></div></div>
+  <p class="section-intro">Assure does not end at Release. Once BizTrust is serving real traffic, the same layers run continuously, and the failure they guard against changes from "we shipped a defect" to "something drifted and nobody noticed."</p>
+  <div class="three-col">
+    <article>
+      <h3>Continuous</h3>
+      <ul class="check-list">
+        <li>L1 and L2 on every merge to the protected branch</li>
+        <li>L5 invariant conformance on every migration, blocking</li>
+        <li>L4 isolation suite on a schedule, not only on change</li>
+      </ul>
+    </article>
+    <article>
+      <h3>Periodic</h3>
+      <ul class="check-list">
+        <li>Service-level objective review against actual burn</li>
+        <li>Recovery exercise: resume a Work Package from repository evidence alone</li>
+        <li>Disaster-recovery drill with the result written up</li>
+      </ul>
+    </article>
+    <article>
+      <h3>Event-driven</h3>
+      <ul class="check-list">
+        <li>Every incident adds the test that would have caught it</li>
+        <li>Every recurrence promotes a soft lesson into a blocking check</li>
+        <li>Every near-miss records which control caught it</li>
+      </ul>
+    </article>
+  </div>
+  <div class="invariant">
+    <span>THE STEADY-STATE MEASURE</span>
+    <p>Count the defects caught by a control, not the defects caught by attention. If the ratio moves toward attention, the controls have stopped covering the surface that is changing.</p>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt blocked authority conflict">
+  <div class="section-heading"><span>08</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <p class="section-intro">Stop the stage and record the reason. Do not proceed on the assumption that the discrepancy is benign.</p>
+  <ul class="cross-list">
+    <li>Evidence cannot be bound to the source revision, or the measured SHA differs from the pushed head</li>
+    <li>An acceptance criterion has no command that could falsify it</li>
+    <li>A check passes but has never been observed to fail</li>
+    <li>The recorded state and the tracker disagree about what is in progress</li>
+    <li>A change to authentication or tenancy carries only unit-test evidence</li>
+    <li>The implementing agent is also the only verifier</li>
+    <li>Required authority is absent, ambiguous or expired</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT STAGE</span>
+    <div>
+      <h3>Release</h3>
+      <p>Authorized cutover, smoke verification bound to the deployed SHA, and a rollback that has been exercised rather than assumed.</p>
+    </div>
+    <b>NOT YET WRITTEN</b>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery lifecycle stage 06 of 09 · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

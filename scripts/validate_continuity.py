@@ -147,22 +147,55 @@ def main() -> int:
             errors.append(f"{schema}: unsupported or missing JSON Schema dialect")
     checks.append("schemas:json-valid")
 
-    html_path = ROOT / "index.html"
-    if html_path.is_file():
+    skip_parts = {".git", "_site", "node_modules"}
+    pages = sorted(
+        page
+        for page in ROOT.rglob("*.html")
+        if not skip_parts.intersection(page.relative_to(ROOT).parts)
+    )
+    page_ids: dict[Path, set[str]] = {}
+    page_refs: dict[Path, list[tuple[str, str]]] = {}
+    for page in pages:
         parser = SiteParser()
-        parser.feed(html_path.read_text(encoding="utf-8"))
-        for tag, ref in parser.refs:
+        parser.feed(page.read_text(encoding="utf-8"))
+        page_ids[page.resolve()] = parser.ids
+        page_refs[page.resolve()] = parser.refs
+
+    if not (ROOT / "index.html").is_file():
+        errors.append("index.html is not present at the publishing root")
+
+    for page in pages:
+        key = page.resolve()
+        rel = page.relative_to(ROOT).as_posix()
+        for tag, ref in page_refs[key]:
             if ref.startswith(("http://", "https://", "mailto:", "tel:", "data:")):
                 continue
             parts = urlsplit(ref)
             if not parts.path and parts.fragment:
-                if parts.fragment not in parser.ids:
-                    errors.append(f"index.html: broken fragment #{parts.fragment}")
+                if parts.fragment not in page_ids[key]:
+                    errors.append(f"{rel}: broken fragment #{parts.fragment}")
                 continue
-            if parts.path and not (ROOT / parts.path).exists():
-                errors.append(f"index.html: missing local {tag} reference {parts.path}")
-        checks.append(f"html-ids:{len(parser.ids)}")
-        checks.append(f"html-refs:{len(parser.refs)}")
+            if not parts.path:
+                continue
+            target = (page.parent / parts.path).resolve()
+            if ROOT not in target.parents and target != ROOT:
+                errors.append(f"{rel}: {tag} reference escapes the site root: {parts.path}")
+                continue
+            if not target.exists():
+                errors.append(f"{rel}: missing local {tag} reference {parts.path}")
+                continue
+            if parts.fragment and target.suffix == ".html":
+                target_ids = page_ids.get(target)
+                if target_ids is None:
+                    errors.append(f"{rel}: cross-page fragment target not validated: {parts.path}")
+                elif parts.fragment not in target_ids:
+                    errors.append(
+                        f"{rel}: broken cross-page fragment {parts.path}#{parts.fragment}"
+                    )
+
+    checks.append(f"html-pages:{len(pages)}")
+    checks.append(f"html-ids:{sum(len(v) for v in page_ids.values())}")
+    checks.append(f"html-refs:{sum(len(v) for v in page_refs.values())}")
 
     workflow_path = ROOT / ".github/workflows/pages.yml"
     if workflow_path.is_file():

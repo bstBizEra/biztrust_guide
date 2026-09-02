@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-004-001",
+  "created_at": "2026-09-02T17:38:36Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-004",
+  "state": "ENGINEERING_READY",
+  "objective": "Establish a deployable, mechanically validated multi-page structure and prove it with one lifecycle stage written to executable depth.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-004-multipage-foundation",
+    "baseline_commit": "d6a5b2dd0adb1e39a1aaff1d68ff061cecd08b8d"
+  },
+  "completed": [
+    "Measured the baseline: 17 sections, 2528 words, 12 sections under 180 words",
+    "Fixed pages.yml, which staged _site by explicit filename and would have omitted every new page",
+    "Made staging and artifact-completeness verification run on pull requests, not only on main",
+    "Extended validate_continuity.py from index.html only to every HTML page in the tree",
+    "Added cross-page fragment validation, which did not previously exist",
+    "Added null guards to script.js so a page without the full chrome does not lose all JavaScript",
+    "Wrote stages/assure.html at 1592 words: entry criteria, six assurance layers, negative-control discipline, evidence manifest, roles, exit gate, steady state, stop conditions",
+    "Linked the stage from index.html without claiming the unwritten stages exist"
+  ],
+  "remaining": [
+    "Human review and merge of the pull request",
+    "Resequence or close issue #2 (WP-003)",
+    "Author the remaining eight stage pages, one Work Package each",
+    "Repository administrator enables GitHub Actions as the Pages source"
+  ],
+  "files_changed": [
+    "index.html",
+    "script.js",
+    "stages/assure.html",
+    ".github/workflows/pages.yml",
+    "scripts/validate_continuity.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-004-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "negative control: broken local path in stages/assure.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: broken same-page fragment in stages/assure.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: broken cross-page fragment to ../index.html",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "negative control: tracked page absent from staged artifact",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "positive control: restore mutated page and re-validate",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The four FAIL rows above are negative controls and are the evidence, not defects: each was induced deliberately to prove the corresponding check can fire, then reverted. Restore was confirmed byte-identical by sha256 858a4045379167ef.",
+    "pages.yml copied site files by explicit name, so a new page would have existed in git, passed every check, and returned 404 in production with no error raised anywhere",
+    "validate_continuity.py parsed only index.html, so any link inside a new page was unvalidated",
+    "script.js had no null guards; a page lacking the search or menu chrome would throw and lose all JavaScript including the theme toggle",
+    "The guide was deepest on how agents are organised (team topology 248 words, repository design 246) and thinnest on what they produce (quality 74, security 92, operations 92)",
+    "validate_continuity.py raises AttributeError on a malformed recovery object instead of recording FAIL, so a consumer grepping for CONTINUITY_VALIDATION sees neither PASS nor FAIL. Observed while authoring this checkpoint. Deferred to its own issue rather than fixed in this Work Package."
+  ],
+  "decisions": [
+    "Multi-page structure with index.html as the map, rather than progressive disclosure in a single file",
+    "Stage pages carry entry criteria, artifacts, roles, evidence and an exit gate, so a stage can be executed rather than described",
+    "Artifact completeness is verified on pull requests, converting a silent omission into a failed build",
+    "Every new check was proven to fail on purpose before being trusted"
+  ],
+  "assumptions": [
+    "The Assure page depth and shape are the pattern the remaining eight stages will follow; review may revise it before they are written",
+    "Search remains index-scoped; stage pages do not carry the search overlay"
+  ],
+  "blockers": [
+    {
+      "code": "MERGE_REQUIRES_HUMAN",
+      "owner_role": "human-reviewer",
+      "resolution": "A human reviews and merges the pull request. Agents must not merge."
+    },
+    {
+      "code": "PAGES_SOURCE_UNSET",
+      "owner_role": "repository-administrator",
+      "resolution": "Select GitHub Actions as the Pages publishing source, then verify the deployed SHA."
+    }
+  ],
+  "authority": {
+    "granted": "Documentation and repository tooling changes via pull request, per operator request 2026-09-03",
+    "withheld": "Production platform implementation, architecture acceptance, Pages settings changes, direct commits to main, merging"
+  },
+  "next_action_id": "NS-004",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/3"
+    ],
+    "stop_if": [
+      "The validator does not return CONTINUITY_VALIDATION=PASS on the checked-out head",
+      "A tracked HTML page is missing from the staged artifact",
+      "current-state.json and issue #3 disagree about the active Work Package",
+      "Any merge is proposed without a recorded human decision"
+    ]
+  },
+  "declared_non_coverage": [
+    "The eight remaining stage pages are not written; the lifecycle is not yet executable end to end",
+    "No deployed-site verification was performed, because GitHub Pages has never been enabled on this repository",
+    "The staging fix is proven by local simulation and by CI on this pull request; it has never run against a live Pages deployment",
+    "Existing section copy in index.html was not rewritten beyond the lifecycle link and the stage-manuals note",
+    "The BT-G0..G6 versus G0..G8 gate terminology collision is untouched and remains WP-003 scope",
+    "Search does not span pages; a query on a stage page searches that page only"
+  ]
+}

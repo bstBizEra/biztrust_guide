@@ -40,16 +40,32 @@ jobs:
           test -s assets/unitrust-horizontal.png
           test -s assets/unitrust-icon.png
 
+      - name: Stage immutable site artifact
+        run: |
+          mkdir -p _site/assets
+          cp styles.css script.js .nojekyll _site/
+          cp assets/unitrust-horizontal.png assets/unitrust-vertical.png assets/unitrust-icon.png _site/assets/
+          git ls-files '*.html' | while read -r page; do
+            mkdir -p "_site/$(dirname "$page")"
+            cp "$page" "_site/$page"
+          done
+
+      - name: Verify every tracked page reached the artifact
+        run: |
+          status=0
+          for page in $(git ls-files '*.html'); do
+            if [ ! -f "_site/$page" ]; then
+              echo "MISSING FROM ARTIFACT: $page"
+              status=1
+            fi
+          done
+          echo "--- staged pages ---"
+          find _site -name '*.html' | sort
+          exit $status
+
       - name: Configure Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
-
-      - name: Stage immutable site artifact
-        if: github.event_name != 'pull_request'
-        run: |
-          mkdir -p _site/assets
-          cp index.html styles.css script.js .nojekyll _site/
-          cp assets/unitrust-horizontal.png assets/unitrust-vertical.png assets/unitrust-icon.png _site/assets/
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'

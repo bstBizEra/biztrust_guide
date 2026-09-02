@@ -2,43 +2,44 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-02T14:15:00Z",
+  "updated_at": "2026-09-02T17:37:17Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-002",
-    "title": "Live Preview and Agent Continuity Deepening",
+    "id": "BIZTRUST-GUIDE-WP-004",
+    "title": "Begin-to-production operating manual: multi-page foundation",
     "state": "ENGINEERING_READY",
-    "objective": "Publish verified preview guidance and an executable continuity baseline so agents can resume without chat history.",
-    "issue_url": null,
+    "objective": "Establish a deployable, mechanically validated multi-page structure and prove it with one lifecycle stage written to executable depth.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/3",
     "owner_role": "documentation-engineer",
     "scope": [
-      "GitHub Pages deployment workflow",
-      "local Python preview runbook",
-      "agent continuity charter and contracts",
-      "interactive guide expansion"
+      "multi-page site structure with stages/ subpages",
+      "Pages workflow stages every tracked page",
+      "validator covers every HTML page, not only index.html",
+      "Assure stage page at executable depth"
     ]
   },
   "source": {
-    "branch": "main",
-    "baseline_commit": "ccef536f64603fc8ef2a0c0c88a0b5a0770d3a1f",
-    "baseline_kind": "last-published-parent",
+    "branch": "feat/biztrust-guide-wp-004-multipage-foundation",
+    "baseline_commit": "d6a5b2dd0adb1e39a1aaff1d68ff061cecd08b8d",
+    "baseline_kind": "branch-point-from-main",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
   "gates": {
     "content": "PASS",
-    "continuity": "PASS_PENDING_CI",
+    "continuity": "PASS_WITH_NEGATIVE_CONTROLS",
     "security": "PASS_WITH_LOCAL_PREVIEW_LIMITATION",
     "deployment": "WAIT_FOR_AUTHORITY"
   },
   "authority": {
-    "implementation": "GRANTED_BY_USER_REQUEST",
-    "repository_publish": "GRANTED_BY_USER_REQUEST",
+    "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
     "github_pages_activation": "REQUIRES_REPOSITORY_ADMIN",
-    "production_platform_implementation": "NOT_GRANTED"
+    "production_platform_implementation": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-002-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-004-engineering-ready.json",
   "latest_handoff": null,
-  "primary_next_action_id": "NS-001",
+  "primary_next_action_id": "NS-004",
   "resume_decision": "WAIT_FOR_AUTHORITY",
-  "stop_reason": "A repository administrator must select GitHub Actions as the Pages source before production deployment can be verified."
+  "stop_reason": "The WP-004 pull request requires independent human review and merge. Agents must not merge.",
+  "known_divergence": "Issue #2 (BIZTRUST-GUIDE-WP-003) remains open and labelled state:in-progress. WP-004 does not supersede it; NS-005 resequences or closes it. Recorded rather than silently overwritten."
 }
-
