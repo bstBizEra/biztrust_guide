@@ -75,7 +75,7 @@
     </article>
     <article>
       <h3>Inputs assembled beforehand</h3>
-      <p>Escape list, decision records and near-miss entries in hand. A session spent reconstructing events adjourns on a resolution.</p>
+      <p>Escape list, decision records and any near-miss entries that exist — see the note in Promotion; no stage owns a register for them, so do not treat their absence as evidence of none. A session spent reconstructing events adjourns on a resolution.</p>
     </article>
   </div>
   <div class="callout">
@@ -132,7 +132,7 @@
 
 <section id="escape" data-search="defect escape analysis stage gate earliest skipped mis-aimed verdict candidate">
   <div class="section-heading"><span>04</span><div><p>Where the gate was</p><h2>Defect-escape analysis</h2></div></div>
-  <p class="section-intro">A defect reaching production has passed nine gates. The question is not who wrote it, but: <strong>at which gate could a check have caught this, and in what condition was that gate?</strong></p>
+  <p class="section-intro">A defect reaching production has passed seven exit gates — Discover through Release. Operate is production and Learn comes after it, so neither can have been passed by a defect that has just arrived. The question is not who wrote it, but: <strong>at which gate could a check have caught this, and in what condition was that gate?</strong></p>
   <p class="section-intro"><a href="assure.html#steady">Assure</a> keeps the narrow form, scoped to its verification layers. Learn holds the wide form: an escape may belong to a requirement never written or a contract never frozen. Read it there, then ask the question one stage earlier. Each escape takes one of three verdicts, and the verdict picks the remedy.</p>
   <div class="definition-list">
     <div><span>No gate existed</span><p>Nothing watched for this class of defect. The output is a <em>candidate</em> control, which must clear the promotion bar below — not an immediate blocking check, or the checklist grows by one whenever anything goes wrong.</p></div>
@@ -141,13 +141,13 @@
   </div>
   <div class="callout">
     <strong>Assign each escape to the earliest stage that could have held it</strong>
-    <p>Not the last stage it passed through. Every escape passes Assure last, so assigning by final opportunity makes Assure the only stage that ever improves, while the ambiguous requirement stays as it was.</p>
+    <p>Not the last stage it passed through. Assigning by final opportunity makes the late stages the only ones that ever improve, while the ambiguous requirement that caused the defect stays exactly as it was. (Release, not Assure, is the last gate an escape passes — it has its own exit gate and its own smoke checks. Assigning to <em>either</em> is the error.)</p>
   </div>
 </section>
 
 <section id="promotion" data-search="promotion bar blocking advisory soft lesson thresholds occurrences enforcement ladder rung near-miss filter">
   <div class="section-heading"><span>05</span><div><p>The bound on growth</p><h2>The promotion bar</h2></div></div>
-  <p class="section-intro">Feed the candidate register from two queues: the escape ledger above, and the near-miss record kept by <a href="operate.html#incident">Operate</a> and <a href="assure.html#steady">Assure</a>. Read it through one filter — an entry saying a control caught it needs no promotion; one saying a person noticed means no control caught it, and becomes a candidate.</p>
+  <p class="section-intro">Feed the candidate register from the escape ledger above, and from the near-miss signal in <a href="assure.html#steady">Assure</a> — "every near-miss records which control caught it, and which did not". <strong>That signal is one line in one section: no stage owns a near-miss register, and <a href="operate.html">Operate</a> keeps none.</strong> Until one exists, the escape ledger is the only queue that reliably fills, and any judgement below that needs the near-miss distinction cannot be made. Where a near-miss entry exists, read it through one filter: an entry saying a control caught it needs no promotion; one saying a person noticed means no control caught it, and becomes a candidate. Absent the register, that filter has nothing to run over.</p>
   <p class="section-intro">Enforce every candidate and the checklist grows without limit. A soft lesson therefore stays advisory until it clears one of these thresholds, cited with its occurrences in the control change set, during the retrospective rather than mid-task.</p>
   <ul class="check-list">
     <li><strong>(a) Three clean applications</strong> across distinct Work Packages</li>
@@ -175,24 +175,21 @@
 
 <section id="retire" data-search="retire retirement controls cost ritual re-add trigger review hard invariant asymmetry">
   <div class="section-heading"><span>06</span><div><p>The step with no natural pressure</p><h2>Retiring controls</h2></div></div>
-  <p class="section-intro">A control added after every incident and never removed becomes a ritual — performed because it is on the list, by people who no longer know what it watches for — while its cost is charged on every run. The hard invariants below sit outside the cost argument.</p>
+  <p class="section-intro">A control added after every incident and never removed becomes a ritual — performed because it is on the list, by people who no longer know what it watches for — while its cost is charged on every run. The classes below sit outside the cost argument, whatever their cost.</p>
   <div class="split">
     <div>
       <h3>Grounds for retirement</h3>
       <ul class="check-list">
         <li>The condition it guards is now structurally impossible — a constraint or withheld grant does the work</li>
-        <li>It cannot fail: no input reaching it would produce a red result</li>
-        <li>Its cost is charged every cycle while the failure it guards has never entered the escape ledger</li>
+        <li><em>Subsumed by the first, and kept only to name the error:</em> it cannot fail. A check that cannot fail while its condition is still live is <strong>mis-aimed, not redundant</strong> — <a href="#escape">the gate-ran-and-passed verdict</a> applies, and the remedy is to amend it and make it fail on purpose. Deleting it removes coverage of a live condition and leaves the ledger showing nothing, which reads like success</li>
+        <li>Its cost is charged every cycle and the near-miss record shows it has never been the control that caught anything — not merely that no defect escaped, which is what a control doing its job looks like. <strong>Absence from the escape ledger is evidence the control is working, never evidence it is unnecessary.</strong> This requires the near-miss distinction between "a control caught it" and "a person noticed" — and no stage currently owns a register for it. <strong>Until one does, this ground is unusable and no control may be retired under it.</strong> The escape ledger cannot answer the question and must not be substituted</li>
       </ul>
     </div>
     <div>
       <h3>Never retired on cost grounds</h3>
       <ul class="cross-list">
-        <li>Money correctness — premium, commission, posting and reversal arithmetic</li>
-        <li>Tenant isolation and identity gating</li>
-        <li>Human approval gates on release and production action</li>
-        <li>Anything between an operator and irreversible data loss</li>
-        <li>Any control implementing an architecture-contract invariant — see <a href="architect.html#invariants">Architect · Invariant criteria</a></li>
+        <li>Anything standing between an operator and irreversible data loss — named here because <a href="architect.html#invariants">Architect</a> does not name it</li>
+        <li>Any control implementing a hard invariant — those belong to <a href="architect.html#invariants">Architect</a> and are not copied here, because two copies of one list drift and only one of them is the contract</li>
       </ul>
     </div>
   </div>
@@ -212,10 +209,10 @@
     <table>
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
       <tbody>
-        <tr><td><strong>Retrospective facilitator</strong></td><td>Sets the window, assembles inputs, holds outputs to the diff test, raises Improvement Work Packages</td><td>Accept an output naming no file</td></tr>
+        <tr><td><strong>Retrospective facilitator</strong></td><td>Sets the window, assembles inputs, holds outputs to the diff test, raises Improvement Work Packages; authors the decision-quality review</td><td>Accept an output naming no file</td></tr>
         <tr><td><strong>Quality owner</strong></td><td>Maintains the defect-escape ledger and candidate lesson register, keeping counts current</td><td>Assign an escape to the last stage it passed through</td></tr>
         <tr><td><strong>Control owner</strong></td><td>Authors the control change set and control retirement record; the only role that may amend a blocking check</td><td>Promote below the bar, or retire a hard invariant</td></tr>
-        <tr><td><strong>Accountable decision-maker</strong></td><td>Supplies the decision record and the expectation written before the outcome</td><td>Revise it afterwards</td></tr>
+        <tr><td><strong>Accountable decision-maker</strong></td><td>Supplies the decision record and the expectation written before the outcome. Does <strong>not</strong> author the review that grades it</td><td>Revise it afterwards</td></tr>
         <tr><td><strong>Accepting authority</strong></td><td>Accepts the cycle and authorizes its gate changes</td><td>Be inferred from an unopposed summary</td></tr>
       </tbody>
     </table>
@@ -227,7 +224,7 @@
   <p class="section-intro">Learn exits to <strong>Discover</strong>; the loop closes. The exit condition is "controls improved" — a diff someone can open.</p>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Retrospective record by the retrospective facilitator, every output naming a file</label>
-    <label><input type="checkbox" disabled> Decision-quality review grades each decision against its pre-recorded expectation, from the accountable decision-maker</label>
+    <label><input type="checkbox" disabled> Decision-quality review grades each decision against its pre-recorded expectation, authored by the retrospective facilitator from the record the accountable decision-maker supplied</label>
     <label><input type="checkbox" disabled> Defect-escape ledger assigns each escaped defect to one gate, maintained by the quality owner</label>
     <label><input type="checkbox" disabled> Candidate lesson register carries current occurrence counts, kept by the quality owner</label>
     <label><input type="checkbox" disabled> Control change set cites trigger and occurrences per promotion, authored by the control owner</label>
@@ -249,6 +246,7 @@
     <li>A defect-escape row names an individual, not a gate</li>
     <li>A lesson is promoted to blocking with no stated trigger or occurrence count</li>
     <li>The candidate lesson register holds entries no cycle has re-counted</li>
+    <li>A control is retired on the grounds of never having caught anything, while no stage owns a near-miss register — the ground is unusable and the retirement is not permitted</li>
     <li>A control is retired with no re-add trigger, or implements a hard invariant</li>
     <li>A decision is graded by its outcome, with no record of what was expected</li>
     <li>No role is authorized to amend a blocking check</li>

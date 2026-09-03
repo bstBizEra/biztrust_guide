@@ -55,7 +55,7 @@
     <div><p>Delivery lifecycle · Define</p><h2>Define</h2></div>
   </div>
   <p class="lede">Define turns a validated problem into a specification someone can architect against. Its characteristic failure is quiet: a requirement nobody can tell they have met.</p>
-  <p class="section-intro">Nothing on this page describes software that runs. BizTrust is a planned multi-tenant platform for an insurance broker in Laos. Two obligations are settled here rather than later — data classification and risk tier — because both cost a paragraph now and a migration at Build.</p>
+  <p class="section-intro">Nothing on this page describes software that runs. BizTrust is a planned multi-tenant platform for an insurance broker in Laos. Two obligations are settled here rather than later — data classification and risk tier — because classification costs a paragraph now and a migration with a backfill at Build, and because a tier assigned after the evidence is in can only be one that evidence satisfies.</p>
 
   <div class="invariant">
     <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
@@ -82,7 +82,7 @@
   </div>
   <div class="callout">
     <strong>Someone is authorized to accept requirements</strong>
-    <p>Name that role before the first requirement is drafted. Later stages will treat this register as binding whether or not anyone accepted it.</p>
+    <p>Name that role before the first requirement is drafted. An unaccepted register is not binding — but it is the only written thing later stages have, so it will be <em>used</em> whether or not anyone accepted it. Acceptance is what makes using it legitimate; naming the role late means the register is already load-bearing before anyone owns it.</p>
   </div>
 </section>
 
@@ -98,7 +98,7 @@
         <tr><td><strong>Requirement register</strong></td><td>Each requirement, its identifier and its negation</td><td>An entry cannot be unmet</td></tr>
         <tr><td><strong>User journeys</strong></td><td>The paths users take, including the ones that fail</td><td>Only the happy path</td></tr>
         <tr><td><strong>Domain glossary</strong></td><td>One meaning per term, in the business's vocabulary</td><td>Two definitions of "policy"</td></tr>
-        <tr><td><strong>Data classification register</strong></td><td>Class, retention and residency per data element</td><td>An element seems obvious</td></tr>
+        <tr><td><strong>Data classification register</strong></td><td>Class, residency, retention and exposure per data element, matching the table below and the roles row</td><td>An element seems obvious</td></tr>
         <tr><td><strong>Non-functional requirements</strong></td><td>Obligations carrying a number and a measuring method</td><td>A number with no method</td></tr>
         <tr><td><strong>Risk tier assignment</strong></td><td>The tier this work carries, and why</td><td>It waits for Build</td></tr>
         <tr><td><strong>Out-of-scope register</strong></td><td>What was not specified, and what would reverse that</td><td>No reversing condition</td></tr>
@@ -187,20 +187,19 @@
   </div>
 </section>
 
-<section id="risk" data-search="risk tier assurance layers adr rollback rehearsed evidence rigour scrutiny">
-  <div class="section-heading"><span>06</span><div><p>What the tier buys</p><h2>Risk tier</h2></div></div>
-  <p class="section-intro">The tier fixes, in advance, the depth of scrutiny this work must survive at <a href="assure.html">Assure</a> — a purchase order for rigour, signed before anyone knows its cost.</p>
-  <div class="definition-list">
-    <div><span>The assurance burden</span><p>Which layers must run, and which may be skipped with a written reason; the layers are defined in <a href="assure.html">Assure</a>.</p></div>
-    <div><span>Who must sign</span><p>Higher tiers require more authority to accept, and forbid the implementing party from also verifying.</p></div>
-    <div><span>Whether a decision record is owed</span><p>Work above a threshold obliges an ADR at <a href="architect.html">Architect</a>, not a design note.</p></div>
-    <div><span>The rollback obligation</span><p>Whether reversal must be described, or described and rehearsed.</p></div>
-  </div>
-  <div class="callout">
-    <strong>Assign the tier before the cost of verifying it is known</strong>
-    <p>A tier chosen once the evidence is in hand can only be a tier that evidence satisfies — a property of the ordering, not of anyone's honesty. <a href="plan.html">Plan</a> treats it as an entry condition, so a blank tier blocks planning.</p>
-  </div>
-</section>
+<section id="risk" data-search="risk tier assigned entry condition rollback evidence blank">
+    <div class="section-heading"><span>06</span><div><p>What the tier is for</p><h2>Risk tier</h2></div></div>
+    <p class="section-intro">The tier records, in advance, how much this work is worth being wrong about. Two stages require it to <em>exist</em>: <a href="plan.html">Plan</a> treats a blank tier as blocking, and <a href="architect.html">Architect</a> lists it among what Define must have produced. <strong>No stage yet varies its behaviour by the tier&rsquo;s value.</strong> <a href="assure.html">Assure</a> selects layers by change type and never reads a tier at all.</p>
+    <div class="definition-list">
+      <div><span>Required to exist</span><p>Plan will not start on a package with a blank tier, and Architect&rsquo;s entry criteria name it. That much is real today, and it is why the field is not optional.</p></div>
+      <div><span>Not yet graduated</span><p>Nothing downstream does more or less because a tier is high rather than low &mdash; not layer selection, not approval authority, not the rollback obligation. Three earlier entries here claimed otherwise; none was supported by any stage page, and one of them implied low-tier work may be self-verified, which <a href="assure.html">Assure</a> forbids <em>unconditionally</em> and lists as a stop condition. They are removed rather than softened.</p></div>
+      <div><span>The gap, stated</span><p>A tier that no stage varies on is a field, not a control. Making it one is a lifecycle change and belongs in its own work package &mdash; recorded here rather than described as though it already happened.</p></div>
+    </div>
+    <div class="callout">
+      <strong>Assign the tier before the cost of verifying it is known</strong>
+      <p>A tier chosen once the evidence is in hand can only be a tier that evidence satisfies &mdash; a property of the ordering, not of anyone&rsquo;s honesty. <a href="plan.html">Plan</a> treats it as an entry condition, so a blank tier blocks planning.</p>
+    </div>
+  </section>
 
 <section id="unspecified" data-search="boundaries technology schema sequencing authority verification controls manifests incidents screen journeys scope">
   <div class="section-heading"><span>07</span><div><p>Boundaries</p><h2>What Define deliberately does not specify</h2></div></div>
@@ -211,7 +210,7 @@
     <li><strong>Acceptance criteria, commands and evidence plans</strong> — derived in <a href="plan.html">Plan</a> from the requirements written here</li>
     <li><strong>Verification layers, controls and manifests</strong> — <a href="assure.html">Assure</a></li>
     <li><strong>Service levels, incidents and cost monitoring</strong> — <a href="operate.html">Operate</a></li>
-    <li><strong>Screen-level interface design</strong> — journeys fix what a user must accomplish, not how</li>
+    <li><strong>Screen-level interface design — no stage in this guide covers it</strong> — journeys fix what a user must accomplish, not how; where the how gets decided is itself undecided, and saying so beats naming a stage that never mentions it</li>
   </ul>
   <div class="callout">
     <strong>An omission you meant and an omission you missed leave the same trace</strong>
@@ -227,7 +226,7 @@
       <tbody>
         <tr><td><strong>Product owner</strong></td><td>Drafts the product requirements document, requirement register, non-functional requirements and out-of-scope register</td><td>Name a technology in a requirement, or accept their own register</td></tr>
         <tr><td><strong>Domain expert</strong></td><td>Confirms the user journeys and domain glossary match how broking is actually transacted</td><td>Sign off a journey containing a term the business does not use</td></tr>
-        <tr><td><strong>Data protection owner</strong></td><td>Owns the data classification register: class, residency, retention, exposure, tenant sensitivity</td><td>Defer an element's classification to whoever builds it</td></tr>
+        <tr><td><strong>Data protection owner</strong></td><td>Owns the data classification register: class, residency, retention and exposure</td><td>Defer an element's classification to whoever builds it</td></tr>
         <tr><td><strong>Risk owner</strong></td><td>Assigns and reasons the risk tier assignment before planning begins</td><td>Set or revise the tier once verification evidence exists</td></tr>
         <tr><td><strong>Accepting authority</strong></td><td>Signs the requirement register and closes the open questions register, dated, against the Work Package</td><td>Accept a register they have not read end to end</td></tr>
       </tbody>
