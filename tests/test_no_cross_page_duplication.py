@@ -5,16 +5,26 @@
 and `assure.html` violated it anyway. A declared rule caught nothing, because
 nothing failed when two pages disagreed. This is the mechanical form.
 
-CALIBRATION, against the drift that actually shipped rather than a guess:
+CALIBRATION. Every figure below is labelled with the pass that produced it,
+because the two passes disagree by more than the margin they are measuring:
 
-    the drift pair, as it stood on main          0.741
-    highest scoring pair on the corrected tree   0.579
-    THRESHOLD                                    0.70
+    drift pair (assure/operate) at fbb6959, sentence   0.938
+    drift pair (assure/operate) at fbb6959, element    0.741
+    highest legitimate pair, current tree, sentence    0.615
+    highest legitimate pair, current tree, element     0.692
+    THRESHOLD                                          0.70
 
-So the check fires on the defect that occurred and stays silent on the
-deliberate cross-references and parallel ledes that remain. If a legitimate
-pair ever scores above the threshold, add it to DELIBERATE_PARALLELS with a
-reason — never raise the threshold, which would silently retire the check.
+HEADROOM IS 0.008, at element level, which is the binding one. Two earlier
+versions of this docstring got that wrong in opposite directions: the first
+quoted 0.579 from the six-page tree under the sentence pass alone; the second
+declared 0.741 unobtainable at any revision, having swept only the sentence
+pass — it is the element score above. Both errors came from reporting a number
+without the pass that produced it.
+
+The check is one edit from firing on legitimate content, so treat a new flag
+as a question rather than a verdict. If a legitimate pair crosses, add it to
+DELIBERATE_PARALLELS with a reason. NEVER raise the threshold: that retires
+the check without anyone deciding to.
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """

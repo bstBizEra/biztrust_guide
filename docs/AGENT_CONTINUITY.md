@@ -225,7 +225,9 @@ Recommended Project fields:
 | Evidence | Missing, Partial, Complete, Rejected |
 | Blocker | None, Internal, External, Authority |
 
-## 11. Minimum repository controls
+## 11. Minimum repository controls — RECOMMENDED, NONE IN FORCE
+
+> As of 2026-09-03, `main` has **no branch protection** (`GET /branches/main/protection` → 404) and **no required status checks**. GitHub Pages has never been enabled. The `github-pages` environment does exist and `pages.yml` binds the deploy job to it — but its only branch policy is a custom pattern literally named `None`, matching no branch; `GET /pages` returns 404 and there has never been a deployment. The control has never run and cannot. An earlier version of this note called that "one control in force", which moved a safety statement in the permissive direction — the one direction a correction must never move. Everything below is the target state, tracked as NS-004 in `docs/NEXT_STEPS.md`. Do not read the list as a floor already met.
 
 1. Protect `main`; no force push or deletion.
 2. Require pull requests and at least one independent approval.

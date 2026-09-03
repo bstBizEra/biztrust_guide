@@ -1,7 +1,13 @@
 # Recommended Next Steps
 
 **Document:** BIZTRUST-GUIDE-ROADMAP-002  
-**Decision posture:** The guide is implemented; deployment activation and governance hardening remain.
+**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Deployment activation and governance hardening remain.
+
+> ⚠️ **The NS ids in this document are frozen roadmap labels from 2026-09-02. They are NOT the live action ledger.**
+>
+> `badf/next-actions.json` allocates NS ids as a rolling counter, a fresh block per work package, retiring the previous block. It never re-uses an id with a different meaning *within* its own ledger — but **NS-004 through NS-012 name different work there than they do here**, because both files number from one. Only NS-001, NS-002 and NS-003 mean the same thing in both places.
+>
+> A `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
 
 ## Immediate — activate the public guide
 
