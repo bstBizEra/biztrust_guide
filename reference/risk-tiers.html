@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Risk-tier schedule &middot; BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="What each of the four BizTrust risk tiers obliges: which assurance layers must run, whether an ADR is owed, whether rollback must be rehearsed, who signs, and whether the verifier must be independent.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>.undef{color:#a3410f;font-size:.66rem;letter-spacing:.03em}
+td small{color:var(--muted);font-size:.62rem}
+tr.stage-break td{background:#eaf0f2;font-weight:700;font-size:.66rem;text-transform:uppercase;letter-spacing:.06em}
+td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-size:.63rem}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Reference &middot; Risk-tier schedule</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">&#9689;</button>
+    <a class="github-link" href="../index.html">&larr; Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Reference &middot; Risk-tier schedule</p>
+  <nav id="sectionNav">
+    <a href="#where"><span>01</span> Where the tier comes from</a>
+    <a href="#schedule"><span>02</span> The schedule</a>
+    <a href="#layers"><span>03</span> Layers, tier by tier</a>
+    <a href="#collision"><span>04</span> A name used twice</a>
+    <a href="#limits"><span>05</span> What this does not do</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Reference</strong><small>Not a stage &middot; a lookup</small></div>
+  </div>
+</aside>
+
+<main id="main">
+<section id="tiers-intro" data-search="risk tier schedule low medium high critical scrutiny assure layers adr rollback">
+  <div class="section-heading"><span>REF</span><div><p>Reference &middot; not a stage</p><h2>Risk-tier schedule</h2></div></div>
+  <p class="lede">Define assigns a risk tier and calls it a purchase order for rigour. Plan refuses to start without one. Until this page existed the guide printed no price list: four tier names existed on the work-package form and nothing anywhere said what any of them bought.</p>
+  <p class="section-intro">The four names below are the ones the work-package form already offers, so the form and the guide agree rather than describing two scales. Every obligation is drawn from a rule the stage manuals already state; none of it is new machinery.</p>
+  <div class="invariant">
+    <span>THE ORDERING IS THE WHOLE POINT</span>
+    <p>A tier chosen once the evidence is in hand can only be a tier that evidence satisfies.</p>
+  </div>
+</section>
+
+<section id="where" data-search="define assigns tier plan blocks entry criterion risk owner">
+  <div class="section-heading"><span>01</span><div><p>Where the tier comes from</p><h2>Assigned once, at Define, by a named role</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>Assigned at Define</h3>
+      <p>The risk owner records the tier and its reasoning before planning begins, and may not revise it once verification evidence exists. It is one of Define&rsquo;s nine artifacts and one of its nine gate conditions.</p>
+    </article>
+    <article>
+      <h3>Blocking at Plan</h3>
+      <p>Plan treats an assigned tier as an entry criterion. A blank tier stops planning outright, which is what makes the assignment unavoidable rather than advisory.</p>
+    </article>
+    <article>
+      <h3>Spent at Assure</h3>
+      <p>The tier decides how much scrutiny the work must survive. The layers themselves, and the conditions under which each applies, are defined on the Assure manual and are not restated here.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>The tier adds; the change&rsquo;s own nature decides what applies</strong>
+    <p>Each assurance layer carries its own &ldquo;applies when&rdquo; condition, keyed to what the change touches. The tier is keyed to what it costs to be wrong. Both have to be satisfied, and they compose in one direction only: a tier can remove the written-reason skip from a layer that already applies, and at the top tier it can make a layer apply that otherwise would not. It can never excuse a layer whose condition is met.</p>
+  </div>
+</section>
+
+<section id="schedule" data-search="schedule obligations table four tiers mandatory adr rollback signature independence">
+  <div class="section-heading"><span>02</span><div><p>The schedule</p><h2>What each tier obliges</h2></div></div>
+  <p class="section-intro">Read down a column for one package&rsquo;s obligations. Each row is cumulative: a High package owes everything a Medium package owes.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Obligations by risk class</caption>
+      <thead><tr><th>Obligation</th><th>Low</th><th>Medium</th><th>High</th><th>Critical</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Assurance layers</strong></td><td>L1 always. Any other layer whose &ldquo;applies when&rdquo; condition is met runs, and may be skipped with a written reason recorded as declared non-coverage.</td><td>L1 and L2 unconditionally. L4 and L5 run wherever their condition is met and may not be skipped; the rest keep the written-reason skip.</td><td>Every layer whose condition is met runs. No skips. L6 runs whether or not release is imminent.</td><td>Every layer runs, and L4 and L5 are treated as applicable whether or not the change obviously touches authentication, tenancy or schema.</td></tr>
+        <tr><td><strong>Decision record (ADR)</strong></td><td>Not owed. A design note inside the package is enough.</td><td>Owed where the change alters an architecture-contract artifact &mdash; a contract, an invariant, a system of record, a boundary, a state machine or the interface standard.</td><td>Owed, and it records the alternatives that were genuinely available.</td><td>Owed, accepted by a named role with a date, and in place before planning opens rather than written alongside the change.</td></tr>
+        <tr><td><strong>Rollback</strong></td><td>Described in the package, in terms the change actually permits. Release will not accept it until the path has been exercised at least once, somewhere &mdash; the tier does not lower that floor.</td><td>Described; and where reversal is genuinely one-way, that is stated at planning time rather than discovered in the change record.</td><td>Rehearsed on this change, not on some earlier one, with the output recorded against the same revision as the rest of the evidence.</td><td>Rehearsed on this change, the restore path exercised rather than scheduled, and the irreversible migration steps deployed separately from the rest and from each other.</td></tr>
+        <tr><td><strong>Who accepts</strong></td><td>The accepting authority named at Plan.</td><td>The accepting authority, plus the domain reviewer where the behaviour a user sees changes.</td><td>The accepting authority, plus the security reviewer wherever L4 applies.</td><td>Human authority accepts the stage and authorises the transition to Release, and is neither the party that planned it nor the party that built it.</td></tr>
+        <tr><td><strong>Independence of the verifier</strong></td><td>The verifier may share a runtime with the implementing agent. The implementing agent still never accepts its own work.</td><td>The verifier re-runs the set of checks that existed before the fix was proposed, plus the new one &mdash; not the subset the fix selected.</td><td>Independence is mandatory: the party that implemented may not also verify.</td><td>As High, and no single party is author, verifier and approver of the same artifact.</td></tr>
+        <tr><td><strong>Control record for a new check</strong></td><td>Required of every new check &mdash; observed failing on purpose, then restored, both citing the same revision. Assure&rsquo;s gate demands this of every change, so no tier lowers it.</td><td>As Low, and any check that reports an absence carries, in the same invocation, a case it is known to detect.</td><td>As Medium, and the expected magnitude of a count is stated before the count is run.</td><td>As High, and the full suite is re-run rather than the subset this change happened to touch.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Two pages disagree about rehearsed rollback, and this row reads them together</strong>
+    <p>Define says the tier decides whether reversal must be described, or described and rehearsed. Release&rsquo;s entry criteria require rehearsal of everything that reaches it &mdash; &ldquo;not designed, exercised, at least once, somewhere.&rdquo; Both sentences are in the guide. The row above takes Release&rsquo;s floor as binding at every tier and lets the tier grade how specific the rehearsal has to be: at Low it may be a path exercised on some earlier occasion, at High it is this change&rsquo;s reversal, run and recorded. If that reading is wrong, one of the two pages needs correcting, and this is where the disagreement was noticed.</p>
+  </div>
+  <div class="callout">
+    <strong>A skip is a decision, at every tier</strong>
+    <p>Where a tier still permits a layer to be skipped, the reason is written into the evidence manifest as declared non-coverage. An unmentioned omission is not a skip; it is a gap, and it is the one thing the schedule cannot price.</p>
+  </div>
+</section>
+
+<section id="layers" data-search="assurance layers by tier L1 L2 L3 L4 L5 L6 isolation invariant operational readiness">
+  <div class="section-heading"><span>03</span><div><p>Layers, tier by tier</p><h2>Which of the six are mandatory</h2></div></div>
+  <p class="section-intro">A tick means the layer runs whenever its own condition is met and may not be waived. A circle means it runs when its condition is met but may be waived in writing. The conditions themselves live on the <a href="../stages/assure.html#layers">Assure manual</a>.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Waiver available (&#9675;) or not (&#10003;)</caption>
+      <thead><tr><th>Layer</th><th>Low</th><th>Medium</th><th>High</th><th>Critical</th></tr></thead>
+      <tbody>
+        <tr><td><strong>L1 &middot; Repository validation</strong></td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
+        <tr><td><strong>L2 &middot; Unit and integration</strong></td><td>&#9675;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
+        <tr><td><strong>L3 &middot; Contract tests</strong></td><td>&#9675;</td><td>&#9675;</td><td>&#10003;</td><td>&#10003;</td></tr>
+        <tr><td><strong>L4 &middot; Isolation tests</strong></td><td>&#9675;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003; &mdash; and treated as applicable</td></tr>
+        <tr><td><strong>L5 &middot; Invariant conformance</strong></td><td>&#9675;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003; &mdash; and treated as applicable</td></tr>
+        <tr><td><strong>L6 &middot; Operational readiness</strong></td><td>&#9675;</td><td>&#9675;</td><td>&#10003;</td><td>&#10003;</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Why L4 and L5 harden first</strong>
+    <p>Assure singles them out as the layers cheapest to omit and most expensive to omit wrongly, so they are the first to lose their waiver as the tier rises. That is a restatement of a judgement the Assure manual already makes, not a new one.</p>
+  </div>
+</section>
+
+<section id="collision" data-search="risk sla vulnerability remediation critical high medium low collision two scales">
+  <div class="section-heading"><span>04</span><div><p>A name used twice</p><h2>Two different scales share four words</h2></div></div>
+  <p class="section-intro">The guide&rsquo;s front page carries a <em>Risk SLA</em> using the same four words &mdash; Critical, High, Medium, Low &mdash; to set how fast a security finding must be remediated: block release, seven days, thirty days, planned backlog. That scale grades a discovered vulnerability. This one grades a unit of work before it starts.</p>
+  <ul class="cross-list">
+    <li>A Critical work package is not a critical vulnerability, and neither implies the other.</li>
+    <li>A Low package can still surface a Critical finding, which is remediated on the vulnerability scale regardless of the package&rsquo;s tier.</li>
+    <li>Nothing in the guide states the two are different, which is why a reader meeting the second one first will read this schedule as a remediation timetable.</li>
+  </ul>
+  <div class="callout">
+    <strong>Say which scale you mean</strong>
+    <p>The work-package form labels its field <em>Risk class</em>. Where a record could be read either way, write the field name, not the bare word.</p>
+  </div>
+</section>
+
+<section id="limits" data-search="provenance limits derivation not enforced advisory">
+  <div class="section-heading"><span>05</span><div><p>What this does not do</p><h2>Provenance, and the edges</h2></div></div>
+  <p class="section-intro">Every cell above traces to a rule already written on a stage manual. The tiering &mdash; which obligation attaches at which of the four names &mdash; is this page&rsquo;s contribution, and it is the only part that is new.</p>
+  <ul class="check-list">
+    <li>The four obligation types are Define&rsquo;s own list of what the tier buys: the assurance burden, who must sign, whether a decision record is owed, and the rollback obligation.</li>
+    <li>The six layers, their conditions, and the judgement that L4 and L5 are the ones to justify skipping come from Assure.</li>
+    <li>The independence rule &mdash; that a higher tier forbids the implementing party from also verifying &mdash; is Define&rsquo;s sentence, and the separation-of-duty rule behind the Critical row is the front page&rsquo;s.</li>
+    <li>Rehearsed rollback, the exercised restore and the separately-deployed irreversible migration steps come from Define, Operate and Build respectively.</li>
+  </ul>
+  <ul class="cross-list">
+    <li>No test enforces any of this. Nothing fails when a High package ships without a rehearsed rollback; the schedule is read by people and by the reviewer, not by CI.</li>
+    <li>The thresholds are a first calibration, not a measured one. No corpus of packages was graded against them, so the boundary between Medium and High is a judgement that should move once there is evidence to move it with.</li>
+    <li>It says nothing about who assigns which tier to which kind of work. The risk owner decides, and the reasoning &mdash; not the tier &mdash; is what a reviewer should challenge.</li>
+  </ul>
+  <div class="next-action">
+    <span>THE OTHER HALF</span>
+    <div>
+      <h3>Artifact catalogue</h3>
+      <p>Every artifact the nine manuals name, with its format, its location, and the roles that produce and accept it.</p>
+    </div>
+    <a class="github-link" href="artifact-catalogue.html">Artifact catalogue &rarr;</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team &middot; Reference &middot; Risk-tier schedule &middot; <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top &uarr;</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
