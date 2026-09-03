@@ -185,6 +185,23 @@ def main() -> int:
             errors.append("next-actions must contain exactly one primary action")
         elif primary[0].get("id") != current.get("primary_next_action_id"):
             errors.append("Primary next action does not match current state")
+        if len(primary) == 1:
+            # resume_decision is a CONCLUSION about the primary action, not an
+            # independent field. It was carried forward unrecomputed across a
+            # re-anchor once, leaving WAIT_FOR_AUTHORITY beside a granted action -
+            # which tells a resuming agent to stop and to proceed at the same time.
+            # Narrow on purpose: this asserts the one contradiction that occurred,
+            # not a full decision function, because inventing the rest would make
+            # the check unfalsifiable.
+            authority = primary[0].get("authority", "")
+            decision = current.get("resume_decision", "")
+            if isinstance(authority, str) and authority.startswith("GRANTED") \
+                    and decision == "WAIT_FOR_AUTHORITY":
+                errors.append(
+                    f"resume_decision is WAIT_FOR_AUTHORITY but the primary action "
+                    f"{primary[0].get('id')} carries authority {authority!r}: a resuming "
+                    f"agent is told to stop and to proceed at once"
+                )
         priorities = [row.get("priority") for row in action_rows]
         if any(not isinstance(value, int) or isinstance(value, bool) or value < 1 for value in priorities):
             errors.append("Every next action requires a positive integer priority")
