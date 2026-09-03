@@ -17,7 +17,11 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  # Deployments must serialise, so every push shares one group. Validation runs
+  # must NOT: a single shared group meant a queued pull-request run was cancelled
+  # and replaced by the next arrival, which is the same "CI never ran but nothing
+  # says so" failure the unfiltered pull_request trigger above was added to fix.
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
   cancel-in-progress: false
 
 jobs:
@@ -75,11 +79,11 @@ jobs:
 
       - name: Configure Pages
         if: github.event_name != 'pull_request'
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
@@ -94,5 +98,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
