@@ -92,7 +92,7 @@ Run a controlled exercise in which one agent stops mid-Work Package and a separa
 
 ### NS-010: Freeze BIZTRUST-ARCH-001
 
-Complete `BIZTRUST-WP-ARCH-001A`, ADR-001…012, domain glossary, conceptual ERD, RBAC and state-machine contracts.
+Complete `BIZTRUST-WP-ARCH-001A`, ADR-001…020, domain glossary, conceptual ERD, RBAC and state-machine contracts.
 
 ### NS-011: Prove P0 tenant isolation
 

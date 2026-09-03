@@ -36,7 +36,36 @@ Expected URL:
 https://bstbizera.github.io/biztrust_guide/
 ```
 
-GitHub notes that initial publication or updates can take several minutes. The Actions run is the authoritative deployment record.
+GitHub notes that initial publication or updates can take several minutes.
+
+**The Actions run is a convenience pointer, not the deployment record.** From 1 October 2026
+GitHub's Actions retention setting covers checks, workflow runs and statuses, defaulting to 90
+days. A `workflow_run` URL recorded as evidence therefore stops resolving roughly three months
+after it is written, and an evidence record whose only citation has expired proves nothing.
+
+The durable record is the pair **`source_commit` + what the live URL actually serves**, because
+git objects and the deployed bytes both outlive the run that produced them. Verify a deployment
+by comparing them directly rather than by opening a run:
+
+```bash
+# what the live site serves, vs what the commit says it should
+curl -sS https://bstbizera.github.io/biztrust_guide/index.html | wc -c
+git show <source_commit>:index.html | wc -c
+curl -sS https://bstbizera.github.io/biztrust_guide/index.html | sha256sum
+git show <source_commit>:index.html | sha256sum
+```
+
+Compare **byte counts first, then the SHA-256 of the same bytes**. A bare hash carries no
+algorithm and no length, so two digests from different tools look like two different files;
+the byte count discriminates on its own and makes the comparison checkable by a reader who
+has neither tool to hand.
+
+**Pipe directly; do not stage the response in a shell variable.** `$(curl ...)` strips
+trailing newlines, so `printf '%s' "$LIVE" | wc -c` reports one byte short of the file and the
+two SHA-256 values then disagree — a mismatch that is an artifact of the harness, not of the
+deployment. This was observed while writing this section: the variable form reported 39226
+against a source of 39227, and the piped form reported 39227 on both sides for the same commit.
+A verification procedure that can produce a confident false negative is worse than none.
 
 ### Every later update
 
@@ -210,7 +239,11 @@ entry_file: index.html
 assets_checked: true
 validation_command: python3 scripts/validate_continuity.py
 validation_exit_code: 0
-workflow_run: <URL or not-applicable>
+workflow_run: <URL or not-applicable>          # expires ~90 days; pointer only
+deployed_bytes: <byte count of the fetched entry_file>
+deployed_sha256: <sha256 of the same bytes>
+source_bytes: <byte count of git show <source_commit>:index.html>
+source_sha256: <sha256 of the same bytes>
 verified_by: <role>
 verified_at: <RFC3339 timestamp>
 ```
