@@ -38,7 +38,7 @@
   "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-024-engineering-ready.json",
   "latest_handoff": null,
   "primary_next_action_id": "NS-030",
-  "resume_decision": "WAIT_FOR_AUTHORITY",
+  "resume_decision": "CONTINUE",
   "stop_reason": "No pull requests are open. The next governed action is sealing the WP-024 fixtures and oracles; no run may execute before they exist.",
-  "known_divergence": "This re-anchor is the third hand-correction of operational state in two days (NS-026 -> #30, WP-017 -> here). It is the defect WP-024 exists to test, not evidence for the proposal."
+  "known_divergence": "This re-anchor is the third hand-correction of operational state in two days (NS-026 -> #30, WP-017 -> here). It is the defect WP-024 exists to test, not evidence for the proposal. A fourth instance surfaced in that same commit: resume_decision is a computed field and was carried forward unrecomputed, so it read WAIT_FOR_AUTHORITY while the primary action was granted. Corrected here, and the validator now refuses the contradiction."
 }

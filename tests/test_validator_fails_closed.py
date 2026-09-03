@@ -376,5 +376,38 @@ class TestExitPathDiscipline(ValidatorHarness):
         self.assertEqual(code, 2)
 
 
+class TestResumeDecisionAgreesWithAuthority(ValidatorHarness):
+    """A resuming agent must not be told to stop and to proceed at the same time.
+
+    This shipped on main at e5ae250: `resume_decision` read WAIT_FOR_AUTHORITY while
+    the primary action NS-030 carried GRANTED_BY_USER_REQUEST_2026_09_03. It happened
+    because `resume_decision` is a conclusion about the primary action, and a re-anchor
+    carried it forward without recomputing it - the fourth instance of stale operational
+    state in two days, introduced by the commit that documented the third.
+    """
+
+    def test_granted_authority_beside_wait_for_authority_fails(self) -> None:
+        state = self.load(STATE)
+        state["resume_decision"] = "WAIT_FOR_AUTHORITY"
+        self.save(STATE, state)
+        joined = self.assert_fails_closed("resume_decision is WAIT_FOR_AUTHORITY")
+        self.assertIn("told to stop and to proceed at once", joined)
+
+    def test_wait_for_authority_is_correct_when_approval_is_required(self) -> None:
+        """The negative control. Without it this check could fire on every repo state
+        and still look like it was discriminating."""
+        actions = self.load(ACTIONS)
+        for row in actions["actions"]:
+            if row.get("primary") is True:
+                row["authority"] = "HUMAN_APPROVAL_REQUIRED"
+        self.save(ACTIONS, actions)
+        state = self.load(STATE)
+        state["resume_decision"] = "WAIT_FOR_AUTHORITY"
+        self.save(STATE, state)
+        code, out, _err = self.run_validator()
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
+        self.assertEqual(code, 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
