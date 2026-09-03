@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artifact catalogue &middot; BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Every artifact the nine BizTrust stage manuals name, with its format, its location, the role that produces it, the role that accepts it, and the exit gate that requires it.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>.undef{color:#a3410f;font-size:.66rem;letter-spacing:.03em}
+td small{color:var(--muted);font-size:.62rem}
+tr.stage-break td{background:#eaf0f2;font-weight:700;font-size:.66rem;text-transform:uppercase;letter-spacing:.06em}
+td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-size:.63rem}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Reference &middot; Artifact catalogue</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">&#9689;</button>
+    <a class="github-link" href="../index.html">&larr; Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Reference &middot; Artifact catalogue</p>
+  <nav id="sectionNav">
+    <a href="#read"><span>01</span> How to read this</a>
+    <a href="#catalogue"><span>02</span> The catalogue</a>
+    <a href="#visible"><span>03</span> What it makes visible</a>
+    <a href="#charter"><span>04</span> Named by the charter only</a>
+    <a href="#method"><span>05</span> Method and limits</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Reference</strong><small>Not a stage &middot; a lookup</small></div>
+  </div>
+</aside>
+
+<main id="main">
+<section id="catalogue-intro" data-search="artifact catalogue path format producing role accepting role exit gate">
+  <div class="section-heading"><span>REF</span><div><p>Reference &middot; not a stage</p><h2>Artifact catalogue</h2></div></div>
+  <p class="lede">The nine stage manuals name 63 artifacts, 55 of them required at an exit gate. Until this page existed none of them had a stated format or a stated location, so &ldquo;hand over the constraint register&rdquo; was an instruction two engineers could satisfy in two incompatible ways and both be right.</p>
+  <p class="section-intro">This table is a lookup, not guidance. It restates no rule: for what an artifact must contain and why, follow the stage link in the first column. What it adds is the four facts a gate condition needs before it can be checked at all &mdash; what shape the thing is, where it goes, who writes it, and who accepts it.</p>
+
+  <div class="invariant">
+    <span>WHAT THIS TABLE IS FOR</span>
+    <p>An exit-gate condition that names an artifact nobody can locate is not a condition. It is a sentence.</p>
+  </div>
+</section>
+
+<section id="read" data-search="legend path states not yet defined target layout roles vocabulary">
+  <div class="section-heading"><span>01</span><div><p>How to read this</p><h2>Three kinds of location, and one warning</h2></div></div>
+  <p class="section-intro">The <strong>Path</strong> column carries one of three answers, and the difference between them matters more than any single row. Guessing a path would have filled the column and taught a reader something false. One row &mdash; Build&rsquo;s telemetry &mdash; belongs to none of the three, because it is instrumentation inside the implementation rather than a document with a location of its own.</p>
+  <div class="three-col">
+    <article>
+      <h3>A path in monospace</h3>
+      <p>A file that exists in this repository today. Seven rows. Open it and you will find the artifact&rsquo;s real shape.</p>
+    </article>
+    <article>
+      <h3>A directory, marked <em>target layout</em></h3>
+      <p>A directory the guide&rsquo;s own repository design assigns to that artifact, where that directory&rsquo;s own comment names it. Fourteen rows. Nothing has created any of them.</p>
+    </article>
+    <article>
+      <h3><span class="undef">NOT YET DEFINED</span></h3>
+      <p>Forty-one rows. Nothing in the guide says what shape the artifact takes or where it lives. This is the finding, not an omission in the table.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>The roles here are the stage manuals&rsquo; roles, and only those</strong>
+    <p>The nine stage pages name 28 distinct roles. The guide&rsquo;s front page names a separate nine &mdash; SARCHI, Product &amp; Domain, Architecture, Engineering, and so on. The two vocabularies never meet: no page maps one onto the other, and no page says they are the same people. This table uses the stage vocabulary because that is where the exit gates are written. It does not merge them, and a reader should not assume a mapping that the guide has not made.</p>
+  </div>
+</section>
+
+<section id="catalogue" data-search="table artifacts format path producer accepter gate">
+  <div class="section-heading"><span>02</span><div><p>The table</p><h2>Every artifact the stage manuals name</h2></div></div>
+  <p class="section-intro">Ordered by stage. A row marked <em>not gated</em> is an artifact the stage names but no exit-gate condition requires &mdash; it can be omitted without failing anything.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>63 artifacts across nine stages</caption>
+      <thead><tr><th>Stage</th><th>Artifact</th><th>Format</th><th>Path</th><th>Produced by</th><th>Accepted by</th><th>Required by</th></tr></thead>
+      <tbody>
+        <tr class="stage-break"><td colspan="7">Discover &mdash; <a href="../stages/discover.html">discover.html</a></td></tr>
+        <tr><td><small>Discover</small></td><td><strong>Problem statement</strong></td><td>Prose document: harm, who bears it, at what cost; no technology named</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Discovery lead</td><td>Accepting authority — signed, dated, bound to the Work Package</td><td>Discover §09</td></tr>
+        <tr><td><small>Discover</small></td><td><strong>Baseline measurement record</strong><em>The gate names the owner, not an accepter.</em></td><td>Register; one row per number, each carrying method, window, source and date</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Baseline analyst</td><td><small>not named</small></td><td>Discover §09</td></tr>
+        <tr><td><small>Discover</small></td><td><strong>Stakeholder register</strong></td><td>Register: who is affected, who decides, who was not asked</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Discovery lead</td><td><small>not named</small></td><td>Discover §09</td></tr>
+        <tr><td><small>Discover</small></td><td><strong>Constraint register</strong><em>Architect consumes the jurisdictional entries; no page says in what shape.</em></td><td>Graded register; every entry carries its citation or its speaker</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Regulatory and compliance adviser</td><td><small>not named</small></td><td>Discover §09</td></tr>
+        <tr><td><small>Discover</small></td><td><strong>KPI definition sheet</strong></td><td>Register; each indicator has a starting value taken from the baseline record</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Business sponsor</td><td><small>not named</small></td><td>Discover §09</td></tr>
+        <tr><td><small>Discover</small></td><td><strong>Evidence source index</strong></td><td>Index; every carried-forward fact names its origin, same-origin entries marked</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Baseline analyst</td><td><small>not named</small></td><td>Discover §09</td></tr>
+        <tr><td><small>Discover</small></td><td><strong>Open questions log</strong></td><td>Log: question, what would settle it</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Discovery lead</td><td><small>not named</small></td><td>Discover §09</td></tr>
+        <tr class="stage-break"><td colspan="7">Define &mdash; <a href="../stages/define.html">define.html</a></td></tr>
+        <tr><td><small>Define</small></td><td><strong>Product requirements document</strong></td><td>Prose: the problem, the users, the outcome sought</td><td><code>docs/product/</code><br><small>target layout &mdash; no file exists</small></td><td>Product owner</td><td>Accepting authority</td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Requirement register</strong></td><td>Register; each entry has a stable identifier and a stated negation</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Product owner</td><td>Accepting authority — signs the register</td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>User journeys</strong></td><td>Prose or diagram; includes the paths that fail</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Domain expert</td><td><small>not named</small></td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Domain glossary</strong></td><td>Glossary; one meaning per term</td><td><code>docs/product/</code><br><small>target layout &mdash; no file exists</small></td><td>Domain expert</td><td><small>not named</small></td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Data classification register</strong></td><td>Register: class, residency, retention and exposure per data element</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Data protection owner</td><td><small>not named</small></td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Non-functional requirements</strong></td><td>Register; every obligation carries a number and the method that measures it</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Product owner</td><td><small>not named</small></td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Risk tier assignment</strong><em>The form offers the four names. What each buys is on the tier schedule.</em></td><td>One of Low / Medium / High / Critical, with its reasoning</td><td><code>.github/ISSUE_TEMPLATE/work-package.yml — field <code>risk</code> (&ldquo;Risk class&rdquo;)</code></td><td>Risk owner</td><td><small>not named</small></td><td>Define §09; Plan §01 entry</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Out-of-scope register</strong><em>The per-package equivalent is the work-package form&rsquo;s <code>exclusions</code> field; the stage artifact is wider than one package.</em></td><td>Register: each deferral and the condition that would reverse it</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Product owner</td><td><small>not named</small></td><td>Define §09</td></tr>
+        <tr><td><small>Define</small></td><td><strong>Open questions register</strong><em>The roles table gives this register no producer. Recorded, not resolved.</em></td><td>Register: question, owner, date by which it is owed</td><td><strong class="undef">NOT YET DEFINED</strong></td><td><small>not named</small></td><td>Accepting authority — closes it</td><td>Define §09</td></tr>
+        <tr class="stage-break"><td colspan="7">Architect &mdash; <a href="../stages/architect.html">architect.html</a></td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Architecture contract</strong></td><td>Versioned contract document: what is committed, and at what version</td><td><code>docs/architecture/</code><br><small>target layout &mdash; no file exists</small></td><td>Architect</td><td>Accepting authority — records acceptance, with a date</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Invariant register</strong></td><td>Register; each invariant names the check that detects its violation</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Security reviewer</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Data ownership matrix</strong></td><td>Table: one authoritative owner per datum</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Bounded context map</strong><em>No exit-gate line names it.</em></td><td>Map or diagram of the seams</td><td><code>docs/architecture/</code><br><small>target layout &mdash; no file exists</small></td><td>Architect</td><td>Domain reviewer</td><td><small>not gated</small></td></tr>
+        <tr><td><small>Architect</small></td><td><strong>State machines</strong><em>No exit-gate line names it.</em></td><td>Transition table: which transitions are legal, and who may cause them</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Domain reviewer</td><td><small>not gated</small></td></tr>
+        <tr><td><small>Architect</small></td><td><strong>API and event standard</strong></td><td>Normative interface specification with working tooling</td><td><code>openapi/ &middot; events/</code><br><small>target layout &mdash; no file exists</small></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Integration boundaries</strong><em>No exit-gate line names it.</em></td><td>Specification of where provider-specific logic may live</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td><small>not gated</small></td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Rollback strategy</strong></td><td>Prose: how the decision is reversed, in terms the change permits</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>ADRs</strong><em>Whether one is owed at all is a function of the risk tier.</em></td><td>One record per decision: context, decision, alternatives genuinely available</td><td><code>docs/adr/</code><br><small>target layout &mdash; no file exists</small></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Deferred-decision register</strong><em>Gated but absent from the outputs table &mdash; the inverse of the three rows above.</em></td><td>Register: each deferral and its revisit trigger</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
+        <tr class="stage-break"><td colspan="7">Plan &mdash; <a href="../stages/plan.html">plan.html</a></td></tr>
+        <tr><td><small>Plan</small></td><td><strong>Work Package</strong><em>The form carries nine of the eleven fields. Dependencies and the primary next action are not on it.</em></td><td>Eleven required fields; a package missing any of them is a draft</td><td><code>.github/ISSUE_TEMPLATE/work-package.yml</code></td><td>Planner</td><td>Authorizing role — grants execution</td><td>Plan §08</td></tr>
+        <tr><td><small>Plan</small></td><td><strong>Authority record</strong><em>Target layout also assigns <code>docs/decisions/</code> to human authority records.</em></td><td>Granted actions, withheld actions, expiry, reserved acts</td><td><code>.github/ISSUE_TEMPLATE/work-package.yml — field <code>authority</code></code></td><td>Authorizing role</td><td>Authorizing role</td><td>Plan §08</td></tr>
+        <tr><td><small>Plan</small></td><td><strong>Machine-readable package state</strong><em>No stage page names this file. It is this repository&rsquo;s implementation of the state Plan §06 requires.</em></td><td>JSON state document reconciled against the issue tracker</td><td><code>badf/current-state.json</code></td><td><small>not named</small></td><td><small>not named</small></td><td>Plan §06 prose; not gated</td></tr>
+        <tr><td><small>Plan</small></td><td><strong>Ordered next actions</strong><em>Same provenance caveat as the row above.</em></td><td>JSON; exactly one action marked primary</td><td><code>badf/next-actions.json</code></td><td>Planner</td><td><small>not named</small></td><td>Plan §08</td></tr>
+        <tr class="stage-break"><td colspan="7">Build &mdash; <a href="../stages/build.html">build.html</a></td></tr>
+        <tr><td><small>Build</small></td><td><strong>Implementation</strong><em>Branch naming carries the package identifier. The convention itself is still unstated (issue #31, item 5).</em></td><td>Source change scoped to one package, on one branch</td><td><code>modules/ &middot; services/ &middot; apps/</code><br><small>target layout &mdash; no file exists</small></td><td>Implementing agent</td><td>Peer reviewer</td><td>Build §08</td></tr>
+        <tr><td><small>Build</small></td><td><strong>Tests</strong></td><td>Executable checks that define what working means for this change</td><td><code>tests/</code><br><small>target layout &mdash; no file exists</small></td><td>Implementing agent</td><td>Peer reviewer</td><td>Build §08</td></tr>
+        <tr><td><small>Build</small></td><td><strong>Telemetry</strong><em>Operate §10 re-checks the same instrument against the minimum set and for sensitive data.</em></td><td>Instrumentation: request, domain, integration, financial and audit levels</td><td><small>ships inside the implementation</small></td><td>Implementing agent</td><td>Peer reviewer</td><td>Build §08; Operate §10</td></tr>
+        <tr><td><small>Build</small></td><td><strong>Migration and its reversal</strong><em>Steps 7 and 8 are one-way; the tier decides whether the reversal must be rehearsed.</em></td><td>Expand-then-contract sequence; each step states whether it reverses</td><td><code>db/</code><br><small>target layout &mdash; no file exists</small></td><td>Implementing agent</td><td>Peer reviewer</td><td>Build §08</td></tr>
+        <tr><td><small>Build</small></td><td><strong>Contract updates</strong></td><td>Change to the published interface specification, in the same package</td><td><code>openapi/ &middot; events/</code><br><small>target layout &mdash; no file exists</small></td><td>Implementing agent</td><td>Peer reviewer</td><td>Build §08</td></tr>
+        <tr><td><small>Build</small></td><td><strong>Documentation</strong></td><td>Written while the person who knows why is still available</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Implementing agent</td><td>Peer reviewer</td><td>Build §08</td></tr>
+        <tr><td><small>Build</small></td><td><strong>Pull request with the evidence plan</strong><em>The template carries an evidence table with a Source SHA column and a Risk class field.</em></td><td>States which command settles which criterion; links the authorizing package</td><td><code>.github/pull_request_template.md</code></td><td>Implementing agent</td><td>Peer reviewer &middot; domain reviewer</td><td>Build §08</td></tr>
+        <tr class="stage-break"><td colspan="7">Assure &mdash; <a href="../stages/assure.html">assure.html</a></td></tr>
+        <tr><td><small>Assure</small></td><td><strong>Evidence manifest</strong><em>The only artifact Assure produces. Findings outside scope leave as their own Work Packages, not as manifest entries.</em></td><td>Nine parts: repository and SHA, command, environment, exit status, verifier, coverage, control record, deferred findings, the pre-merge reading</td><td><code>evidence/</code><br><small>target layout &mdash; no file exists</small></td><td>Implementing agent</td><td>Verifier, then human authority</td><td>Assure §06</td></tr>
+        <tr class="stage-break"><td colspan="7">Release &mdash; <a href="../stages/release.html">release.html</a></td></tr>
+        <tr><td><small>Release</small></td><td><strong>Change record</strong><em>Written before the deployment, not reconstructed afterwards.</em></td><td>What is released, by whom, when, expected effect, the signal that prompts reversal</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Release owner</td><td>Authorizing role — grants the deployment</td><td>Release §08</td></tr>
+        <tr><td><small>Release</small></td><td><strong>Deployed revision identity</strong></td><td>The exact revision serving traffic, compared to the approved revision</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Release owner</td><td>Verifier</td><td>Release §08</td></tr>
+        <tr><td><small>Release</small></td><td><strong>Smoke evidence</strong></td><td>Output of checks run against the running system, bound to the deployed revision</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Verifier</td><td>Authorizing role</td><td>Release §08</td></tr>
+        <tr><td><small>Release</small></td><td><strong>Exposure log</strong></td><td>Who saw the change, at what percentage, for how long, before it went wider</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Release owner</td><td>Authorizing role</td><td>Release §08</td></tr>
+        <tr><td><small>Release</small></td><td><strong>Notification record</strong></td><td>Who was told, when, on which channel, which regulated obligation it discharged</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Release owner</td><td>Authorizing role</td><td>Release §08</td></tr>
+        <tr class="stage-break"><td colspan="7">Operate &mdash; <a href="../stages/operate.html">operate.html</a></td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Service objective definition</strong><em>Operate has no outputs section. Every row in this block is derived from its gate or its body.</em></td><td>Indicator, objective, error budget, agreed consequence, review cadence</td><td><code>docs/operations/</code><br><small>target layout &mdash; no file exists</small></td><td>Service owner</td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Alert definitions</strong><em>The roles table names a responder, not an owner of the alert set.</em></td><td>One per symptom; each actionable</td><td><strong class="undef">NOT YET DEFINED</strong></td><td><small>not named</small></td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Escalation rota</strong></td><td>Who is called second, and after how long</td><td><strong class="undef">NOT YET DEFINED</strong></td><td><small>not named</small></td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Incident record</strong><em>The gate requires a control change per incident; the change itself lands in Learn&rsquo;s control change set.</em></td><td>Detect, declare, mitigate, communicate, learn &mdash; and the control change it produced</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Responder</td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Restore drill record</strong><em>&ldquo;A restore has been performed, not merely scheduled.&rdquo;</em></td><td>Result of a performed restore, including the parts that went badly</td><td><code>docs/operations/</code><br><small>target layout &mdash; no file exists</small></td><td>Service owner</td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Recovery objectives</strong><em>Named in §06; no gate line requires them.</em></td><td>How much time may pass before service returns, and how much data may be lost</td><td><code>docs/operations/</code><br><small>target layout &mdash; no file exists</small></td><td>Service owner</td><td><small>not named</small></td><td><small>not gated</small></td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Cost attribution record</strong></td><td>Cost per tenant and per capability</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Finance</td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Capacity forecast</strong><em>Named in §07; no gate line requires it.</em></td><td>Forecast against measured growth, with rate limits and quotas in place</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Finance</td><td><small>not named</small></td><td><small>not gated</small></td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Dependency inventory</strong><em>Named in §08 and in the roles table; no gate line requires it.</em></td><td>Every dependency, monitored</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Security</td><td><small>not named</small></td><td><small>not gated</small></td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Patching timeline</strong></td><td>Agreed timeline by severity, set before the urgent case arrives</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Security</td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Access review record</strong></td><td>Periodic review; accounts nobody has needed for a year first</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Security</td><td><small>not named</small></td><td>Operate §10</td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Secret rotation record</strong><em>Named in §08; no gate line requires it.</em></td><td>Rotation exercised on a schedule, not assumed to work</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Security</td><td><small>not named</small></td><td><small>not gated</small></td></tr>
+        <tr><td><small>Operate</small></td><td><strong>Disclosure route</strong><em>Named in §08; no gate line requires it.</em></td><td>A published route, and evidence that it is answered</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Security</td><td><small>not named</small></td><td><small>not gated</small></td></tr>
+        <tr class="stage-break"><td colspan="7">Learn &mdash; <a href="../stages/learn.html">learn.html</a></td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Retrospective record</strong></td><td>What changed, what was declined, why &mdash; every output naming a file</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Retrospective facilitator</td><td>Accepting authority</td><td>Learn §08</td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Decision-quality review</strong></td><td>Each decision graded against the expectation recorded before the outcome</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Accountable decision-maker</td><td>Accepting authority</td><td>Learn §08</td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Defect-escape ledger</strong></td><td>One row per escaped defect, assigned to the gate that should have stopped it</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Quality owner</td><td>Accepting authority</td><td>Learn §08</td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Candidate lesson register</strong></td><td>Soft lessons with current occurrence counts</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Quality owner</td><td>Accepting authority</td><td>Learn §08</td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Control change set</strong><em>An empty set where the ledger has rows is a finding, not a clean bill.</em></td><td>Checks, gates and playbook steps changing this cycle, with trigger and counts</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Control owner</td><td>Accepting authority</td><td>Learn §08</td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Control retirement record</strong></td><td>What was removed, why, and what brings it back</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Control owner</td><td>Accepting authority</td><td>Learn §08</td></tr>
+        <tr><td><small>Learn</small></td><td><strong>Improvement Work Packages</strong><em>Same form as Plan&rsquo;s Work Package.</em></td><td>Findings too large to land in the cycle, raised as packages with criteria</td><td><code>.github/ISSUE_TEMPLATE/work-package.yml</code></td><td>Retrospective facilitator</td><td>Authorizing role</td><td>Learn §08</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="visible" data-search="findings ungated artifacts operate outputs section producer missing">
+  <div class="section-heading"><span>03</span><div><p>What the table makes visible</p><h2>Six things that only show up once the rows are side by side</h2></div></div>
+  <div class="split">
+    <div>
+      <h3>Eight artifacts are named and never gated</h3>
+      <p class="section-intro">Architect&rsquo;s bounded context map, state machines and integration boundaries appear in its outputs table and in no exit-gate condition. Five Operate artifacts &mdash; recovery objectives, capacity forecast, dependency inventory, secret rotation and the disclosure route &mdash; are named in the body and required by nothing. Producing none of them fails no check.</p>
+      <h3>One gate condition has no artifact behind it</h3>
+      <p class="section-intro">Architect&rsquo;s gate requires that &ldquo;deferred decisions are written down with their revisit triggers&rdquo;, but the outputs table lists no deferred-decision register. The condition is gated and the thing it gates is unnamed &mdash; the exact inverse of the three rows above it.</p>
+    </div>
+    <div>
+      <h3>Two stages produce artifacts through no outputs section</h3>
+      <p class="section-intro">Operate and Plan have none. Plan&rsquo;s Work Package is described field by field instead; Operate&rsquo;s thirteen rows here were reconstructed from its gate and its prose, which is why five of them turn out to be ungated. A stage with no outputs section cannot be checked for whether its gate names things it produces.</p>
+      <h3>Four artifacts have no named author</h3>
+      <p class="section-intro">Define&rsquo;s roles table gives the accepting authority the job of closing the open questions register and gives nobody the job of writing it. Operate&rsquo;s alert definitions and escalation rota name a responder who answers them and no owner who sets them. Recorded here rather than resolved: assigning an owner would be a content decision, not a transcription.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Seven of 63 artifacts have somewhere to go today</strong>
+    <p>Five live in the two GitHub templates this repository already ships &mdash; four of them are the same work-package form, read for different fields &mdash; and two in its <code>badf/</code> state files. Fourteen more have a directory named in the guide&rsquo;s repository design and nothing that creates it. The remaining 41 have no stated home at all &mdash; among them the constraint register, which Architect&rsquo;s entry criteria require to be &ldquo;known and written&rdquo; before the stage may begin, and which therefore has to arrive from somewhere.</p>
+  </div>
+  <div class="callout">
+    <strong>27 artifacts have no named accepter</strong>
+    <p>Where a stage&rsquo;s gate names an artifact and its owner but nobody who receives it, this table says <em>not named</em> rather than promoting the stage&rsquo;s accepting authority into the gap. Discover is the clean case to copy: its gate ends with the problem statement signed by the accepting authority, dated and bound to the Work Package, so exactly one artifact carries the stage&rsquo;s acceptance and the other six do not pretend to.</p>
+  </div>
+</section>
+
+<section id="charter" data-search="checkpoint handoff schema agents charter not named by any stage">
+  <div class="section-heading"><span>04</span><div><p>Named by the charter, by no stage page</p><h2>Two artifacts the lifecycle never mentions</h2></div></div>
+  <p class="section-intro">These two have schemas, templates and a validator in this repository, and they are mandatory at boundaries every stage crosses. No stage manual names either. A reader who works only from the nine pages will never produce one.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Required by <code>AGENTS.md</code>, absent from the lifecycle</caption>
+      <thead><tr><th>Artifact</th><th>Format</th><th>Path</th><th>Required by</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Session checkpoint</strong></td><td>JSON, nineteen required fields, validated by the continuity script</td><td><code>schemas/session-checkpoint.schema.json &middot; templates/session-checkpoint.json</code></td><td>AGENTS.md §6 &mdash; required at every risky action, agent switch, block and session end</td></tr>
+        <tr><td><strong>Handoff record</strong></td><td>JSON, seventeen required fields</td><td><code>schemas/handoff.schema.json &middot; templates/handoff.json</code></td><td>AGENTS.md §7 &mdash; required whenever responsibility changes</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="method" data-search="method limits derivation how this table was built">
+  <div class="section-heading"><span>05</span><div><p>Method and limits</p><h2>How this was derived, and what it does not settle</h2></div></div>
+  <ul class="check-list">
+    <li>Every row was read off a stage page &mdash; its outputs section, its exit gate, or, where a stage has neither, its body. No artifact was added because it seemed necessary.</li>
+    <li>Role names are copied verbatim from the roles table of the stage that produces the artifact. Where a stage names no role for an artifact, the cell reads <em>not named</em>.</li>
+    <li>A path in monospace was opened and confirmed present. A <em>target layout</em> directory is quoted from the guide&rsquo;s repository design, where the directory&rsquo;s own comment names that artifact.</li>
+    <li>Format descriptions summarise what the stage page says the artifact must contain. Where the page says nothing about shape, the cell says what the artifact is, not what file type it should be.</li>
+  </ul>
+  <ul class="cross-list">
+    <li>This page does not decide any of the ambiguities it records &mdash; an unnamed accepter stays unnamed here, because filling it in would be an invented rule wearing a table&rsquo;s clothes.</li>
+    <li>It does not reconcile the two role vocabularies, and nothing here should be read as evidence that they correspond.</li>
+    <li>A <em>target layout</em> directory is not a promise that anything writes there. Nothing in this repository creates any of the fourteen.</li>
+    <li>Nothing is checked mechanically. No test asserts that a stage page and this table still agree, so a stage that gains an artifact will silently fall out of step.</li>
+  </ul>
+  <div class="next-action">
+    <span>THE OTHER HALF</span>
+    <div>
+      <h3>Risk-tier schedule</h3>
+      <p>Define assigns a tier and Plan blocks on it. What each of the four tiers obliges is set out on its own page.</p>
+    </div>
+    <a class="github-link" href="risk-tiers.html">Risk tiers &rarr;</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team &middot; Reference &middot; Artifact catalogue &middot; <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top &uarr;</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

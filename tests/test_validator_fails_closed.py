@@ -231,8 +231,16 @@ class TestContentPresence(ValidatorHarness):
     """
 
     def test_gutted_site_is_not_a_pass(self) -> None:
-        for page in (self.root / "stages").glob("*.html"):
-            page.unlink()
+        # rglob, not stages/*.html. When `reference/` was added the narrow glob
+        # left two pages standing, so their local links kept total_refs above
+        # zero and the assertion below could not fire - the site was not gutted
+        # and the test said nothing while still passing for the first clause.
+        # The premise is "no page has any content", so it must reach every page
+        # wherever a future one is filed.
+        index = (self.root / "index.html").resolve()
+        for page in self.root.rglob("*.html"):
+            if page.is_file() and page.resolve() != index:
+                page.unlink()
         (self.root / "index.html").write_text("", encoding="utf-8")
         joined = self.assert_fails_closed("index.html is present but empty")
         self.assertIn("the link check validated nothing", joined)

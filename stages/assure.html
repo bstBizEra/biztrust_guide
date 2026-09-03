@@ -104,6 +104,7 @@
       </tbody>
     </table>
   </div>
+  <p class="section-intro" style="margin-top:2rem">Which of the six a given package may skip in writing, and which it may not, is decided by its risk class &mdash; see the <a href="../reference/risk-tiers.html">risk-tier schedule</a>.</p>
   <p class="section-intro" style="margin-top:2rem">Treat layers 4 and 5 as the ones to justify skipping in writing, because they are the cheapest to omit and the most expensive to omit wrongly. A unit test of an authorization helper proves the helper; only a request that crosses the real boundary proves the boundary. Where a control is meant to run in a deployed process, exercise it in that process — an in-memory test of the same function is necessary and not sufficient.</p>
 </section>
 
@@ -142,6 +143,7 @@
 <section id="evidence" data-search="evidence manifest commit sha exit status verifier coverage">
   <div class="section-heading"><span>04</span><div><p>What is produced</p><h2>Evidence manifest</h2></div></div>
   <p class="section-intro">Assure produces one artifact: a manifest binding each acceptance criterion to the evidence that discharges it. Evidence that is not bound to a revision is not evidence.</p>
+  <p class="section-intro">It is the only one. Every artifact the other eight stages produce is listed, with its location, in the <a href="../reference/artifact-catalogue.html">artifact catalogue</a>.</p>
   <div class="definition-list">
     <div><span>Repository</span><p>Repository identity and the commit SHA the check ran against, confirmed equal to the pushed head.</p></div>
     <div><span>Command</span><p>The exact command or workflow identity, including tool version. Not a description of it.</p></div>
