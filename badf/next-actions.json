@@ -1,52 +1,35 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-017",
-  "updated_at": "2026-09-03T11:44:08Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-024",
+  "updated_at": "2026-09-03T18:03:11Z",
   "actions": [
     {
-      "id": "NS-001",
+      "id": "NS-030",
       "primary": true,
       "priority": 1,
-      "owner_role": "repository-administrator",
-      "authority": "ADMIN_REQUIRED",
-      "action": "Select GitHub Actions as the GitHub Pages publishing source.",
+      "owner_role": "documentation-engineer",
+      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
+      "action": "Author and seal all nine WP-024 fixtures and all nine oracles before run 1, per docs/experiments/WP-024-blind-handoff-preregistration.md v2.",
       "prerequisites": [
-        "Repository admin access"
+        "The v2 preregistration is merged on main",
+        "No results file and no fixture directory exist yet"
       ],
       "evidence_required": [
-        "GET /repos/bstBizEra/biztrust_guide/pages returns 200",
-        "A push-triggered run reaches 'Configure Pages' with conclusion success"
+        "Nine fixture bundles with per-file manifests",
+        "Nine sealed oracles",
+        "The commit SHA that sealed them, cited in the results file"
       ],
       "stop_conditions": [
-        "The account cannot enable Pages on a private repository"
+        "Any run has already executed - sealing after a run voids the experiment",
+        "A fixture cannot be authored without inventing repository facts"
       ],
-      "fallback": "The guide stays reviewable in-repo; every stage page is readable on GitHub."
-    },
-    {
-      "id": "NS-029",
-      "primary": false,
-      "priority": 2,
-      "owner_role": "human-reviewer",
-      "authority": "HUMAN_APPROVAL_REQUIRED",
-      "action": "Review and merge the seven open pull requests. Only one ordering constraint exists: #24 is based on #22, so #22 merges first. #19, #20, #21, #25 and #28 are independent.",
-      "prerequisites": [
-        "CI green on each head SHA"
-      ],
-      "evidence_required": [
-        "Merge commits",
-        "CI conclusion success per head SHA"
-      ],
-      "stop_conditions": [
-        "A pull request's head SHA has no CI run",
-        "A rebase changes a head after its review"
-      ],
-      "fallback": "Merge the subset that is reviewed; the remainder stays open and main is unaffected."
+      "fallback": "Withdraw the proposal. It is marked PROPOSED so that it can be."
     },
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 3,
+      "priority": 2,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -64,7 +47,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 4,
+      "priority": 3,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -82,7 +65,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 5,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",
