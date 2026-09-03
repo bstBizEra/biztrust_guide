@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-026-001",
+  "created_at": "2026-09-03T18:44:13Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-026",
+  "state": "ENGINEERING_READY",
+  "objective": "Record the WP-024 outcome, file the three schema repairs it found, and hold the proposal at PROPOSED pending a human ruling on the taxonomy question.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-026-post-experiment-state",
+    "baseline_commit": "cfa0dbaba20a05fd64a4b9cbd1b221a0c1652344"
+  },
+  "completed": [
+    "Executed round 1 of WP-024: 9 of 27 runs, sealed fixtures at e37fa3b",
+    "Scored against the sealed oracles: 4 of 9 on criterion 1, mandatory fixtures 07 and 08 failed",
+    "Recorded the experiment as FAILED under the criteria exactly as sealed; no threshold, fixture or oracle was adjusted",
+    "Halted rounds 2 and 3 and recorded the halt as a halt rather than as a completion",
+    "Filed issue #52 with the three schema repairs the experiment found",
+    "Retired NS-030 (complete) and re-anchored operational state on WP-026"
+  ],
+  "remaining": [
+    "Human decision on issue #52 item 1 - define the taxonomy or drop it from scoring - NS-031",
+    "Schema repairs 2 and 3, after that decision",
+    "Independent oracle authorship before any re-run"
+  ],
+  "files_changed": [
+    "docs/ideas/derived-resume-control-plane.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-026-engineering-ready.json"
+  ],
+  "validation": [
+    "python3 -m unittest discover -s tests - 53 tests",
+    "python3 scripts/validate_continuity.py - exit 0"
+  ],
+  "observations": [
+    "9 of 9 agents refused to read computed.resume_decision off the artifact and re-derived independently. That was the design's central bet and it held under adversarial conditions.",
+    "9 of 9 identified stop_conditions: [] as untrustworthy: an empty list from a stub is indistinguishable from an empty list from a clean evaluation.",
+    "Every failure traced to an artifact defect the author sealed, and the agents named all three unprompted. On fixture 08 the agent's analysis was better than the oracle's.",
+    "The experiment cannot distinguish 'agents are appropriately cautious' from 'the fixtures were untrustworthy', because the bundles never identified their repository. That confound is unresolved and is why the proposal is neither refuted nor supported.",
+    "NS-030 remained primary after completion and after the experiment it authorised had run and failed - the fifth instance of stale operational state in three days, inside the workflow testing whether hand-maintenance can be retired."
+  ],
+  "decisions": [
+    "Halt rather than complete: three design defects, all upstream of agent behaviour, fully explain the failures. The pre-registration forbids changing criteria after results; it does not require finishing a mis-aimed instrument.",
+    "Do not re-run until the oracles have an author who did not write the fixtures. Where fixture and oracle disagreed, the agents were right more often than the author.",
+    "Hold the proposal at PROPOSED. A failed instrument neither refutes nor supports the hypothesis."
+  ],
+  "assumptions": [
+    "That a human will rule on the taxonomy question rather than an agent choosing it, since agent-chosen taxonomy is the defect the experiment found"
+  ],
+  "blockers": [
+    {
+      "code": "TAXONOMY_DECISION_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Decide issue #52 item 1: define when each resume_decision value applies, or drop it from scoring."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Assign oracle authorship to someone who did not author the fixtures."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "HUMAN_RESERVED",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-031",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "docs/experiments/WP-024-results.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/52",
+      "badf/current-state.json"
+    ],
+    "stop_if": [
+      "A re-run is proposed before the oracles have an independent author",
+      "An agent attempts to choose the resume_decision taxonomy itself",
+      "PRIMARY_NEXT_ACTION names work that has already been completed"
+    ]
+  },
+  "declared_non_coverage": [
+    "WP-024 established nothing about whether a deriver can produce these bundles; fixtures were hand-authored",
+    "It did not test derivation correctness, only the consumer contract - and it could not measure that either",
+    "9 runs is a third of a discovery round and supports no reliability claim whatsoever",
+    "The proposal is neither refuted nor supported by this result"
+  ]
+}

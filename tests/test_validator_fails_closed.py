@@ -387,6 +387,20 @@ class TestResumeDecisionAgreesWithAuthority(ValidatorHarness):
     """
 
     def test_granted_authority_beside_wait_for_authority_fails(self) -> None:
+        """Construct BOTH halves of the contradiction.
+
+        The first version of this test set only `resume_decision` and relied on the
+        committed primary action happening to carry granted authority. When the ledger
+        legitimately moved to a HUMAN_APPROVAL_REQUIRED action, WAIT_FOR_AUTHORITY became
+        correct and this test failed - not because the validator regressed, but because
+        the test was coupled to mutable repository data. A guard that depends on today's
+        ledger tests the ledger, not the guard.
+        """
+        actions = self.load(ACTIONS)
+        for row in actions["actions"]:
+            if row.get("primary") is True:
+                row["authority"] = "GRANTED_BY_TEST_FIXTURE"
+        self.save(ACTIONS, actions)
         state = self.load(STATE)
         state["resume_decision"] = "WAIT_FOR_AUTHORITY"
         self.save(STATE, state)

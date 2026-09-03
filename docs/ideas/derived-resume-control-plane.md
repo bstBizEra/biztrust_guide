@@ -1,8 +1,25 @@
 # Derived Resume Control Plane
 
-> **Status: `PROPOSED`.** Not an approved architecture decision. Exit criteria for the
-> bounded experiment are in *Key Assumptions*; nothing here is implemented, and no
-> repository change should follow until the blind handoff experiment reports.
+> **Status: `PROPOSED`.** Not an approved architecture decision. Nothing here is implemented.
+>
+> **The experiment reported on 2026-09-04, and it FAILED.** See
+> [`../experiments/WP-024-results.md`](../experiments/WP-024-results.md). Round 1 scored 4 of 9
+> on criterion 1, with two mandatory fixtures failing. **This proposal is neither refuted nor
+> supported: the instrument could not measure it.** Three design defects in the experiment's own
+> artifacts — an undefined decision taxonomy that was scored anyway, bundles that never
+> identified their repository, and no dependency edge from `next_action` to the observations it
+> consumes — are filed as issue #52 and must land before any re-run, together with oracles
+> written by someone who did not author the fixtures.
+>
+> **What the experiment did establish, and it is the premise this document rests on:** 9 of 9
+> agents refused to read `computed.resume_decision` off the artifact and re-derived
+> independently, and 9 of 9 identified `stop_conditions: []` as untrustworthy. The consumer
+> behaviour the design needs was present under adversarial conditions.
+>
+> **What it could not distinguish:** whether agents were appropriately cautious, or whether the
+> fixtures were simply untrustworthy. The bundles never named their repository, so every refusal
+> has two available explanations. That confound is unresolved and is the reason this stays
+> `PROPOSED` rather than moving either way.
 
 ## Problem Statement
 
