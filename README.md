@@ -68,7 +68,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | `scripts/` | Deterministic continuity validation |
 | `docs/` | Preview, continuity and next-step runbooks |
 | `.github/` | Pages deployment and governed work templates |
-| `.nojekyll` | Required by the validator, and copied into the published artifact |
+| `.nojekyll` | Required by the validator and copied into `_site/`, but **it does not reach the published artifact** — `actions/upload-pages-artifact` defaults `include-hidden-files` to `false`, so dotfiles are excluded. GitHub's own static-Pages starter workflow never creates one, because a custom Actions workflow uploads a prebuilt artifact and Jekyll never runs over it. |
 
 ## Validate before every handoff
 
