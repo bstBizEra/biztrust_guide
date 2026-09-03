@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-03T18:43:39Z",
+  "updated_at": "2026-09-03T19:35:23Z",
   "active_work_package": {
     "id": "BIZTRUST-GUIDE-WP-026",
     "title": "Post-experiment disposition of the derived resume control plane",
@@ -40,5 +40,5 @@
   "primary_next_action_id": "NS-031",
   "resume_decision": "WAIT_FOR_AUTHORITY",
   "stop_reason": "WP-024 failed. The next decision - whether to define the resume_decision taxonomy or drop it from scoring - is issue #52 item 1 and belongs to a human. No re-run until the oracles have an independent author.",
-  "known_divergence": "NS-030 stayed the primary action after it was completed and after the experiment it authorised had already run and failed. That is the FIFTH instance of stale operational state in three days, and it occurred inside the workflow testing whether hand-maintenance can be retired. It is evidence for the proposal's premise and against its own author's ability to maintain state by hand."
+  "known_divergence": "NS-030 stayed the primary action after it was completed and after the experiment it authorised had already run and failed. That is the FIFTH instance of stale operational state in three days, and it occurred inside the workflow testing whether hand-maintenance can be retired. It is evidence for the proposal's premise and against its own author's ability to maintain state by hand. A SIXTH instance followed within thirty minutes: PR #56 applied issue #52 items 2 and 3 while this checkpoint's own remaining[1] said 'Schema repairs 2 and 3, AFTER that decision', and left no badf/ file in its diff. #56 is reverted; the fixtures are byte-identical to the sealed set at e37fa3b again."
 }

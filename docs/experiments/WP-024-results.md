@@ -8,15 +8,6 @@
 | Runs executed | **9 of 27** — round 1 only |
 | Verdict | **FAILED**, by the protocol's own rule |
 | Status | **HALTED after round 1.** Rationale in §5 |
-| Fixtures tested | **the originals, at `e37fa3b`** — see the note below |
-
-> **The fixtures on `main` are no longer the fixtures this result describes.** Issue #52
-> items 2 and 3 were applied afterwards: `static.repository` is now required, observation
-> sources must be resolved rather than templated, and `next_action.requires` names the
-> observations an action consumes. Every result below was produced against the **original**
-> fixtures sealed at `e37fa3b`, which are recoverable from git history. **The revised
-> fixtures have never been run**, and running them needs oracles written by someone who did
-> not author the fixtures — see §6.
 
 ## 1. Result
 
