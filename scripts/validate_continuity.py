@@ -343,11 +343,31 @@ def main() -> int:
     workflow_path = ROOT / ".github/workflows/pages.yml"
     if workflow_path.is_file():
         workflow = workflow_path.read_text(encoding="utf-8")
+        # Each action must be USED and PINNED - but not pinned to a version this
+        # file names. Asserting the literal string "actions/deploy-pages@v4" made
+        # the check fail on every upgrade, so the only way to move to v5 was to
+        # edit the check that exists to guard the workflow. A gate that makes
+        # maintenance fail is a gate that gets deleted or worked around.
+        #
+        # A full commit SHA is accepted because that is GitHub's own hardening
+        # recommendation; refusing it would push the workflow toward the weaker
+        # of the two supported pinning styles.
+        pinned = re.compile(r"^(?:v\d+(?:\.\d+)*|[0-9a-f]{40})$")
+        for action in (
+            "actions/checkout",
+            "actions/configure-pages",
+            "actions/upload-pages-artifact",
+            "actions/deploy-pages",
+        ):
+            match = re.search(rf"uses:\s*{re.escape(action)}@(\S+)", workflow)
+            if not match:
+                errors.append(f"pages workflow does not use {action}")
+            elif not pinned.fullmatch(match.group(1)):
+                errors.append(
+                    f"pages workflow pins {action} to {match.group(1)!r}: "
+                    "expected a version tag such as v5, or a full 40-character commit SHA"
+                )
         for token in (
-            "actions/checkout@v7",
-            "actions/configure-pages@v5",
-            "actions/upload-pages-artifact@v4",
-            "actions/deploy-pages@v4",
             "pages: write",
             "id-token: write",
             "environment:",
