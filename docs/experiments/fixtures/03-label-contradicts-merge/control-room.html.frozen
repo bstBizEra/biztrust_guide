@@ -30,7 +30,10 @@
     "next_action": {
       "action": "Author and seal the nine WP-024 fixtures and oracles.",
       "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "id": "NS-030"
+      "id": "NS-030",
+      "requires": [
+        "main_sha"
+      ]
     },
     "resume_decision": "CONTINUE",
     "stop_conditions": []
@@ -44,13 +47,13 @@
     "ci_conclusion": {
       "freshness": "CURRENT",
       "observed_at": "2026-09-04T09:00:00+07:00",
-      "source": "GET /repos/:o/:r/commits/:sha/check-runs",
+      "source": "GET https://api.github.com/repos/bstBizEra/biztrust_guide/commits/e23143ef91dcf0fd03e1686a1b2880c0696b798d/check-runs",
       "value": "success"
     },
     "issue_2_labels": {
       "freshness": "CURRENT",
       "observed_at": "2026-09-04T09:00:00+07:00",
-      "source": "GET /repos/:o/:r/issues/2",
+      "source": "GET https://api.github.com/repos/bstBizEra/biztrust_guide/issues/2",
       "value": [
         "state:in-progress"
       ]
@@ -58,13 +61,13 @@
     "issue_2_linked_pr_merged": {
       "freshness": "CURRENT",
       "observed_at": "2026-09-04T09:00:00+07:00",
-      "source": "GET /repos/:o/:r/pulls/28",
+      "source": "GET https://api.github.com/repos/bstBizEra/biztrust_guide/pulls/28",
       "value": true
     },
     "issue_2_state": {
       "freshness": "CURRENT",
       "observed_at": "2026-09-04T09:00:00+07:00",
-      "source": "GET /repos/:o/:r/issues/2",
+      "source": "GET https://api.github.com/repos/bstBizEra/biztrust_guide/issues/2",
       "value": "open"
     },
     "main_sha": {
@@ -76,13 +79,13 @@
     "open_pull_requests": {
       "freshness": "CURRENT",
       "observed_at": "2026-09-04T09:00:00+07:00",
-      "source": "GET /repos/:o/:r/pulls?state=open",
+      "source": "GET https://api.github.com/repos/bstBizEra/biztrust_guide/pulls?state=open",
       "value": 0
     },
     "pages_status": {
       "freshness": "CURRENT",
       "observed_at": "2026-09-04T09:00:00+07:00",
-      "source": "GET /repos/:o/:r/pages",
+      "source": "GET https://api.github.com/repos/bstBizEra/biztrust_guide/pages",
       "value": "serving"
     }
   },
@@ -90,7 +93,12 @@
   "source_sha": "e23143ef91dcf0fd03e1686a1b2880c0696b798d",
   "static": {
     "deriver_policy_version": "0.1.0-fixture",
-    "project_id": "BIZTRUST-GUIDE"
+    "project_id": "BIZTRUST-GUIDE",
+    "repository": {
+      "name": "biztrust_guide",
+      "owner": "bstBizEra",
+      "remote": "https://github.com/bstBizEra/biztrust_guide"
+    }
   }
 }
 </script>
