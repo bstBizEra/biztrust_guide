@@ -50,10 +50,21 @@
 
 <main id="main">
 
-<section id="operate-intro" data-search="operate production slo telemetry oncall incident recovery cost vulnerability">
+<section id="operate-intro" data-search="operate production slo telemetry oncall incident recovery cost vulnerability cadence per change architecture cycle where to enter">
   <div class="section-heading"><span>08</span><div><p>Delivery lifecycle · Operate</p><h2>Operate</h2></div></div>
-  <p class="lede">Operate is the stage that does not end. Every stage before it happens once per change; this one happens continuously, and it is where most of a system's lifetime is spent.</p>
+  <p class="lede">Operate is the stage that does not end. The stages before it run on two different clocks — Discover to Architect once per architecture cycle, Plan to Release once per change — while this one never stops, and it is where most of a system's lifetime is spent.</p>
   <p class="section-intro">This page is the single home for steady-state operational guidance: objectives, telemetry, on-call, incident handling, recovery, cost and vulnerabilities. Other stages must link here rather than restate it — a stage that restates guidance creates a copy, and copies drift silently, because nothing fails when two pages disagree. <a href="assure.html">Assure</a> keeps a steady-state section of its own, scoped strictly to continuous <em>verification</em>: which layers re-run, and whether each control can still fail.</p>
+  <p class="section-intro">Those clocks decide where a reader with a task in hand should start. Reading the nine stages as one sequence per ticket sends an engineer back to measure a baseline for a problem nobody is questioning; which clock a stage runs on is settled by its own entry criteria, not by its number.</p>
+  <div class="definition-list">
+    <div><span>Per cycle</span><p><strong>01&ndash;03 · Discover, Define, Architect.</strong> <a href="architect.html#entry">Architect</a> exists to freeze a scope and asks only for a decision that is still "genuinely open" — work that fits inside the freeze re-runs none of the three.</p></div>
+    <div><span>Per change</span><p><strong>04&ndash;07 · Plan, Build, Assure, Release.</strong> <a href="plan.html#entry">Plan</a> starts from a frozen architecture and <a href="build.html#entry">Build</a> from one authorized package, so both turn over every time a package does.</p></div>
+    <div><span>Continuous</span><p><strong>08 · Operate.</strong> The three criteria below are held rather than passed: telemetry keeps arriving, the rota keeps its slots filled, the runbook keeps up with the failures.</p></div>
+    <div><span>Per window</span><p><strong>09 · Learn.</strong> <a href="learn.html#entry">Learn</a> opens on a window someone declares — a released package, an incident, or a fixed period — so one session may cover many changes or one.</p></div>
+  </div>
+  <div class="callout">
+    <strong>Enter at the earliest stage whose entry criteria are not already met</strong>
+    <p>Not at stage 01. An already-authorized package enters at <a href="build.html">Build</a>. A change with no package yet, under an architecture already frozen where it touches, enters at <a href="plan.html">Plan</a>. Only a change that would break that freeze reopens <a href="architect.html">Architect</a>, and only a problem nobody has validated starts at <a href="discover.html">Discover</a>.</p>
+  </div>
   <div class="invariant">
     <span>THE RULE THIS STAGE EXISTS TO ENFORCE</span>
     <p>A system nobody can observe is not in production. It is merely running.</p>
