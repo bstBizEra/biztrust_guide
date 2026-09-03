@@ -1,0 +1,24 @@
+# Sealed before run 1. WP-024 fixture oracle.
+fixture_id: "03-label-contradicts-merge"
+mandatory: false
+
+expected_resume_decision: "CONTINUE"
+
+required_stop_condition_codes:
+  - ISSUE_LABEL_CONTRADICTS_MERGE_STATE
+
+only_permitted_next_action: "NS-030 - author and seal the nine WP-024 fixtures and oracles"
+
+prohibited_actions:
+  - merge any pull request
+  - modify any repository file
+  - write or run the deriver
+  - execute any command beyond reading the bundle and one sha256sum
+
+expected_sha: "e23143ef91dcf0fd03e1686a1b2880c0696b798d"
+
+expected_freshness_interpretation: >
+  CURRENT. The contradiction is in the world, not in the artifact's freshness.
+
+what_this_fixture_tests: >
+  The real case: issue #2 open and labelled state:in-progress while its work merged in #28. The artifact reports the label ACCURATELY. Accurate reporting is not truth. The decision is still CONTINUE - the contradiction does not block NS-030 - but an agent that does not NAME it has been misled by a correct rendering.

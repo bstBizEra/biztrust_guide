@@ -1,0 +1,84 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Delivery state &middot; 05-zero-candidates</title>
+<h1>Delivery state</h1>
+<p>Derived from <code>e23143ef91dcf0fd03e1686a1b2880c0696b798d</code> at <code>2026-09-04T09:00:00+07:00</code>.</p>
+<p>Decision: <strong>COMPLETE</strong></p>
+<p>Next action: <strong>NONE_SAFE</strong></p>
+<script type="application/json" id="state">
+{
+  "asserted": {
+    "active_work_package": {
+      "effective_at": "2026-09-03T00:00:00+07:00",
+      "evidence": "operator instruction, recorded in DEC-021",
+      "issuer": "operator",
+      "revoked_at": null,
+      "valid_until": null,
+      "value": "BIZTRUST-GUIDE-WP-024"
+    },
+    "documentation_authority": {
+      "effective_at": "2026-09-03T00:00:00+07:00",
+      "evidence": "user request 2026-09-03",
+      "issuer": "operator",
+      "revoked_at": null,
+      "valid_until": null,
+      "value": "GRANTED"
+    }
+  },
+  "computed": {
+    "freshness": "CURRENT",
+    "next_action": null,
+    "resume_decision": "COMPLETE",
+    "stop_conditions": []
+  },
+  "declared_non_coverage": [
+    "This artifact does not establish that the derivation is correct.",
+    "It makes no claim about work not represented in observed or asserted."
+  ],
+  "derived_at": "2026-09-04T09:00:00+07:00",
+  "observed": {
+    "ci_conclusion": {
+      "freshness": "CURRENT",
+      "observed_at": "2026-09-04T09:00:00+07:00",
+      "source": "GET /repos/:o/:r/commits/:sha/check-runs",
+      "value": "success"
+    },
+    "issue_2_labels": {
+      "freshness": "CURRENT",
+      "observed_at": "2026-09-04T09:00:00+07:00",
+      "source": "GET /repos/:o/:r/issues/2",
+      "value": []
+    },
+    "issue_2_state": {
+      "freshness": "CURRENT",
+      "observed_at": "2026-09-04T09:00:00+07:00",
+      "source": "GET /repos/:o/:r/issues/2",
+      "value": "closed"
+    },
+    "main_sha": {
+      "freshness": "CURRENT",
+      "observed_at": "2026-09-04T09:00:00+07:00",
+      "source": "git rev-parse HEAD",
+      "value": "e23143ef91dcf0fd03e1686a1b2880c0696b798d"
+    },
+    "open_pull_requests": {
+      "freshness": "CURRENT",
+      "observed_at": "2026-09-04T09:00:00+07:00",
+      "source": "GET /repos/:o/:r/pulls?state=open",
+      "value": 0
+    },
+    "pages_status": {
+      "freshness": "CURRENT",
+      "observed_at": "2026-09-04T09:00:00+07:00",
+      "source": "GET /repos/:o/:r/pages",
+      "value": "serving"
+    }
+  },
+  "schema_version": "1.0.0",
+  "source_sha": "e23143ef91dcf0fd03e1686a1b2880c0696b798d",
+  "static": {
+    "deriver_policy_version": "0.1.0-fixture",
+    "project_id": "BIZTRUST-GUIDE"
+  }
+}
+</script>

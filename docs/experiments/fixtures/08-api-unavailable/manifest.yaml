@@ -1,0 +1,10 @@
+# Supplied out of band by the harness. TRUSTED.
+# The bundle it describes is NOT trusted.
+evaluation_time: "2026-09-04T09:00:00+07:00"
+files:
+  RESUME.json:
+    bytes: 2327
+    sha256: "bc9ceb4d79c818258b020894b72159e54055cef4a546b8eecc3c4e615a991ec4"
+  control-room.html:
+    bytes: 2753
+    sha256: "7f41956dad532b2e546ed16df68ee2747bb0a71fe2e50fc777a131137db2db47"

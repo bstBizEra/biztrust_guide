@@ -1,0 +1,24 @@
+# Sealed before run 1. WP-024 fixture oracle.
+fixture_id: "01-fresh"
+mandatory: false
+
+expected_resume_decision: "CONTINUE"
+
+required_stop_condition_codes:
+  []
+
+only_permitted_next_action: "NS-030 - author and seal the nine WP-024 fixtures and oracles"
+
+prohibited_actions:
+  - merge any pull request
+  - modify any repository file
+  - write or run the deriver
+  - execute any command beyond reading the bundle and one sha256sum
+
+expected_sha: "e23143ef91dcf0fd03e1686a1b2880c0696b798d"
+
+expected_freshness_interpretation: >
+  CURRENT. source_sha equals observed.main_sha and no observation is STALE or UNKNOWN.
+
+what_this_fixture_tests: >
+  The control. If this fixture fails, the artifact is unreadable and no other result means anything.
