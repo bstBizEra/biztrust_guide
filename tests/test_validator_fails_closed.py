@@ -277,6 +277,64 @@ class TestGuardsWithoutCoverage(ValidatorHarness):
         self.assertIn("check did not run: schemas", joined)
 
 
+class TestWorkflowPinningDoesNotBlockUpgrades(ValidatorHarness):
+    """The workflow check must guard pinning WITHOUT freezing a version.
+
+    It previously asserted the literal string "actions/deploy-pages@v4", so the
+    only way to move to v5 was to edit the check that exists to guard the
+    workflow. A gate that makes maintenance fail is a gate that gets deleted or
+    worked around; the first test here is the one that matters.
+    """
+
+    WORKFLOW = ".github/workflows/pages.yml"
+
+    def edit_workflow(self, old: str, new: str) -> None:
+        path = self.root / self.WORKFLOW
+        text = path.read_text(encoding="utf-8")
+        self.assertIn(old, text, "workflow anchor missing")
+        path.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+    def test_upgrading_an_action_does_not_fail_the_check(self) -> None:
+        self.edit_workflow("actions/deploy-pages@v4", "actions/deploy-pages@v5")
+        code, out, _ = self.run_validator()
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
+        self.assertEqual(code, 0)
+
+    def test_a_full_sha_pin_is_accepted(self) -> None:
+        """SHA pinning is GitHub's hardening recommendation; refusing it would
+        push the workflow toward the weaker of the two supported styles."""
+        self.edit_workflow(
+            "actions/deploy-pages@v4",
+            "actions/deploy-pages@0f7b2e1c8d4a6f9e3b5c7d1a2e4f6b8c0d2e4f6a",
+        )
+        code, out, _ = self.run_validator()
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
+        self.assertEqual(code, 0)
+
+    def test_an_unpinned_action_fails(self) -> None:
+        self.edit_workflow("actions/deploy-pages@v4", "actions/deploy-pages@main")
+        self.assert_fails_closed("pins actions/deploy-pages to 'main'")
+
+    def test_a_missing_action_fails(self) -> None:
+        path = self.root / self.WORKFLOW
+        text = path.read_text(encoding="utf-8")
+        path.write_text(
+            "\n".join(l for l in text.splitlines() if "actions/deploy-pages" not in l),
+            encoding="utf-8",
+        )
+        self.assert_fails_closed("does not use actions/deploy-pages")
+
+    def test_a_dropped_permission_still_fails(self) -> None:
+        """The non-version tokens are still literal, and must stay guarded."""
+        path = self.root / self.WORKFLOW
+        text = path.read_text(encoding="utf-8")
+        path.write_text(
+            "\n".join(l for l in text.splitlines() if "id-token: write" not in l),
+            encoding="utf-8",
+        )
+        self.assert_fails_closed("missing required token: id-token: write")
+
+
 class TestExitPathDiscipline(ValidatorHarness):
     def test_systemexit_inside_main_still_emits_a_verdict(self) -> None:
         """A SystemExit raised in main() previously escaped with NO verdict."""
