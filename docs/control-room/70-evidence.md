@@ -14,12 +14,12 @@ summary: Reproducible checks, revision binding and declared non-coverage for the
 
 | Evidence | Revision / subject | Result | Durable record |
 |---|---|---|---|
-| Architecture pack CI | PR #28 head `bddc8e9` | `SUCCESS` | Actions run `33728838350` and PR conversation |
+| Architecture pack CI | PR #28 head `d8a83ef` | `SUCCESS` | Actions run `33753511805` and PR conversation |
 | Complete repository suite | Current WP-018 worktree | `43 PASS` | 27 baseline + 16 control-room tests; final CI required |
 | Control-room generation | 10 Markdown sources + fixed template | `PASS` | `python3 scripts/build_control_room.py --check` |
 | HTML safety contract | Raw HTML, unsafe links, malformed tables | `PASS` | Negative-first unit tests reject each mutation |
 | Source/display drift | Hand-edited or stale generated page | `PASS` | Negative control exits non-zero with `CONTROL_ROOM_BUILD=FAIL` |
-| Static-site continuity | 11 HTML pages, 235 IDs, 331 references | `PASS` | `python3 scripts/validate_continuity.py` |
+| Static-site continuity | 11 HTML pages, 235 IDs, 332 references | `PASS` | `python3 scripts/validate_continuity.py` |
 | Local HTTP path | `/stages/control-room.html` on port 8080 | `200 OK` | Python 3.12 `http.server` smoke test |
 | Publication | Final WP-018 head | `PENDING` | At least one GitHub Actions run required |
 

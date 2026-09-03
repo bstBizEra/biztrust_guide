@@ -34,7 +34,7 @@ The raw drafts are not copied into the repository because they substantially dup
 | RBAC matrix | Architecture authorization model | Role/permission/scope/condition/authority concept retained; exact grants deferred to IAM contract |
 | State machines | `FLOWS` §6–13 | Promoted with immutable offer revisions, temporal semantics and policy dimensions |
 | P0–P3 plan | `DELIVERY_PLAN` | Promoted as the near-term planning baseline |
-| Architecture gates | `DELIVERY_PLAN` §7 | Renamed `BT-G0…BT-G6` to avoid lifecycle-gate collision |
+| Architecture gates | `DELIVERY_PLAN` §7 | Renamed `BT-G0…BT-G6` within this pack; the matching guide-side `ENG-G*` rename is proposed only — see §2 and issue #34 |
 | Required ADRs | `BIZTRUST-ARCH-001` §16; `ADR_REGISTER` | Expanded from 12 to 20 after issue #15; none marked accepted |
 
 ## Conflicts resolved
@@ -45,11 +45,25 @@ One source proposed P0–P9 while the other proposed P0–P3. The guide uses P0�
 
 ### 2. Gate identifiers
 
-The existing engineering guide already used `G0…G8` for the delivery lifecycle, while the architecture draft used `G0…G6` for platform milestones. The normalized identifiers are:
+The existing engineering guide already used `G0…G8` for the delivery lifecycle, while the architecture draft used `G0…G6` for platform milestones. The **proposed** normalization — not yet applied to the guide — is:
 
 - `ENG-G0…ENG-G8` — Work Package lifecycle;
 - `BT-G0…BT-G6` — BizTrust platform capability;
 - `P0…P3` — delivery phases.
+
+Only the `BT-G*` half is in force, and only inside this pack. Measured over the 15 published guide files — `index.html`, `README.md`, `AGENTS.md`, the three top-level `docs/*.md`, and the nine `stages/*.html`; `docs/architecture/` and `docs/research/` are this pack and are excluded:
+
+```
+ENG-G       0 occurrences
+BT-G        0 occurrences
+bare G0…G8  11 occurrences  (index.html ×9, docs/AGENT_CONTINUITY.md:222 ×2)
+```
+
+These three counts are about surfaces this file does not itself contribute to, so they stay checkable as this document changes.
+
+So the guide still prints bare `G0`…`G8` and nothing on the published surface signals that two gate namespaces exist. Until that is corrected, read `G0…G8` in the guide as the lifecycle gate and `BT-G0…BT-G6` here as the platform gate; do not treat a bare `G<n>` in this pack's vicinity as normalized.
+
+Performing the rename requires changing the nine lifecycle gate badges in `index.html` and the `Gate | G0–G8` row at `docs/AGENT_CONTINUITY.md:222`. That is a separate change with its own acceptance criteria and guard test, tracked as **[issue #34](https://github.com/bstBizEra/biztrust_guide/issues/34)**. It is not performed here for two reasons: an identifier rename across the published guide is a different change from reconciling this record, and `docs/AGENT_CONTINUITY.md` is currently owned by pull request #19 / issue #18. When #34 lands, this section reverts to the present tense and this note is removed.
 
 ### 3. Domain count
 
@@ -109,6 +123,20 @@ No item in this table is an accepted legal or commercial conclusion. The support
 - production SLO, RTO, RPO and capacity targets;
 - AI-agent functionality;
 - service extraction and dedicated-tenant triggers.
+
+## Published-summary reconciliation record
+
+Maintained under item 4 of the change rule below: every published summary that repeats a reconciled claim is
+either updated in the same change, or listed here with a named owner and an issue number.
+
+| Reconciled claim | Published summary | Status | Owner |
+|---|---|---|---|
+| Required ADR set expanded 12 → 20 (`ADR_REGISTER.md`, after issue #15) | `index.html` — repository tree, required outputs, ADR grid, roadmap freeze item, NS-005 council action (5 sites) | **Updated in this change**; the grid now carries all twenty and links to the register for status | BIZTRUST-GUIDE-WP-003 |
+| Required ADR set expanded 12 → 20 | `docs/NEXT_STEPS.md:89` — `ADR-001…012` | **Deferred**, [issue #35](https://github.com/bstBizEra/biztrust_guide/issues/35) | pull request #19 / issue #18 owns this file |
+| Gate namespaces `ENG-G*` / `BT-G*` (§2) | `index.html` ×9, `docs/AGENT_CONTINUITY.md:222` ×2 — bare `G0…G8` | **Deferred**, [issue #34](https://github.com/bstBizEra/biztrust_guide/issues/34) | unassigned; #19 / #18 owns `AGENT_CONTINUITY.md` |
+
+Beyond the rows above, no tracked file outside `docs/architecture/` asserts an ADR-set size. Verified with
+`grep -rn 'ADR-001…012\|ADR-001 through ADR-012\|twelve ADR'` over tracked `*.html` and `*.md`.
 
 ## Change rule for future agents
 

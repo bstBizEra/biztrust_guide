@@ -8,7 +8,7 @@
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "feat/biztrust-guide-wp-018-control-room",
-    "baseline_commit": "bddc8e9293fa84cd797374b7b41a9b3b13143419"
+    "baseline_commit": "d8a83ef629f2785aa058ccae02c541c197cd26a2"
   },
   "completed": [
     "Registered ten small Markdown control-room views with explicit status, owner, source, update date and deterministic order",
@@ -96,7 +96,7 @@
     "Shared files owned by other open pull requests remain untouched"
   ],
   "assumptions": [
-    "PR #28 remains the correct architecture documentation base until it is merged or explicitly rejected",
+    "PR #28 at head d8a83ef remains the correct architecture documentation base until it is merged or explicitly rejected",
     "PR #30 remains the valid correction for the stale continuity primary action until a newer attributable record supersedes it",
     "GitHub Pages continues to publish every tracked .html file through the existing artifact workflow"
   ],
