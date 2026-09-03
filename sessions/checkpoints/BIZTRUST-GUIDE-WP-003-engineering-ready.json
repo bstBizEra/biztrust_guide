@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-003-001",
+  "created_at": "2026-09-02T15:05:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-003",
+  "state": "ENGINEERING_READY",
+  "objective": "Integrate reconciled architecture details and canonical flows into the guide with durable agent continuity.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-003-architecture-flows",
+    "baseline_commit": "d6a5b2dd0adb1e39a1aaff1d68ff061cecd08b8d"
+  },
+  "completed": [
+    "Read and fingerprinted both supplied architecture drafts",
+    "Verified current OpenAPI, AsyncAPI, Logto organization-token and PostgreSQL RLS primary sources",
+    "Created the draft ARCH-001 architecture contract",
+    "Created canonical brokerage, authorization, state, payment-policy and event flows",
+    "Created the dependency-ordered P0-P3 and BT-G0 through BT-G6 delivery plan",
+    "Expanded the HTML guide with four architecture sections and explicit decision-status labels",
+    "Reconciled roadmap, gate, domain-count and technology-commitment conflicts",
+    "Made next-action identifiers consistent across the HTML, roadmap and machine queue",
+    "Extended continuity validation to require the architecture pack and registered action IDs"
+  ],
+  "remaining": [
+    "Publish the feature commit and pull request",
+    "Obtain independent documentation review",
+    "Repository administrator enables GitHub Pages",
+    "Architecture authority separately opens and accepts BIZTRUST-WP-ARCH-001A"
+  ],
+  "files_changed": [
+    "README.md",
+    "index.html",
+    "styles.css",
+    "docs/NEXT_STEPS.md",
+    "docs/architecture/README.md",
+    "docs/architecture/BIZTRUST-ARCH-001.md",
+    "docs/architecture/FLOWS.md",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/SOURCE_RECONCILIATION.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "scripts/validate_continuity.py",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-003-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m http.server 8080 --bind 127.0.0.1; curl -I http://127.0.0.1:8080/",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The supplied drafts overlap substantially and conflict on roadmap depth, gate identifiers and bounded-context count.",
+    "OpenAPI 3.2.0 and AsyncAPI 3.1.0 are the current published specification versions as of 2026-09-02.",
+    "The repository documents proposed architecture but contains no BizTrust production-platform implementation.",
+    "GitHub Pages remains dependent on a repository administrator selecting GitHub Actions as the Pages source."
+  ],
+  "decisions": ["DEC-004", "DEC-005", "DEC-006", "DEC-007", "DEC-008", "DEC-009"],
+  "assumptions": [
+    "The architecture authority will treat this pack as review input rather than an accepted contract.",
+    "The public repository may contain the supplied architecture recommendations but no confidential business or client data."
+  ],
+  "blockers": [
+    {
+      "code": "PAGES_SOURCE_NOT_CONFIRMED",
+      "owner_role": "repository-administrator",
+      "resolution": "Select GitHub Actions in repository Pages settings and retain the deployment run URL."
+    },
+    {
+      "code": "ARCHITECTURE_NOT_ACCEPTED",
+      "owner_role": "architecture-authority",
+      "resolution": "Authorize BIZTRUST-WP-ARCH-001A and review the draft pack through BT-G0."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED",
+    "remote_commit_and_pull_request": "GRANTED",
+    "architecture_acceptance": "NOT_GRANTED_TO_IMPLEMENTING_AGENT",
+    "production_platform_implementation": "NOT_GRANTED",
+    "pages_activation": "NOT_GRANTED_TO_AGENT"
+  },
+  "next_action_id": "NS-001",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/README.md",
+      "docs/architecture/SOURCE_RECONCILIATION.md"
+    ],
+    "stop_if": [
+      "The active Work Package or authority record has changed",
+      "Remote main no longer descends from the recorded baseline",
+      "Continuity validation fails",
+      "Architecture content is being described as accepted or implemented without authority evidence"
+    ]
+  },
+  "declared_non_coverage": [
+    "Independent architecture, insurance-domain, security, finance and operations acceptance",
+    "GitHub Pages repository setting activation",
+    "Post-deployment browser verification",
+    "Production BizTrust application implementation",
+    "Jurisdiction-specific legal, regulatory and accounting validation",
+    "Live insurer, payment-provider or bank contract testing"
+  ]
+}
