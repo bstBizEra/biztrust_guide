@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-003-002",
-  "created_at": "2026-09-03T07:26:22Z",
+  "created_at": "2026-09-03T07:34:06Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-003",
   "state": "ENGINEERING_READY",
   "objective": "Reconcile the architecture foundation against primary sources and define an evidence-gated, one-slice-at-a-time completion sequence.",
@@ -19,10 +19,11 @@
     "Created the tenant authority and operating-regime profile template for S01",
     "Expanded the architecture contract, conceptual model, state flows, authorization baseline, delivery plan and ADR register to cover the storage-shape findings in issue #15",
     "Kept architecture acceptance and production implementation explicitly outside this documentation Work Package",
-    "Preserved current main versions of shared guide and BADF state files because open pull requests own those changes"
+    "Preserved current main versions of shared guide and BADF state files because open pull requests own those changes",
+    "Published draft pull request #28 and verified that its remote Git tree exactly matched the locally validated tree"
   ],
   "remaining": [
-    "Publish this checkpoint and architecture pack in a reviewable pull request",
+    "Confirm at least one GitHub Actions run reaches a terminal result on the final pull-request head SHA",
     "Obtain independent review of the documentation changes",
     "Have a maintainer add the native GitHub parent/dependency relationship between issues #27 and #15",
     "Complete one S01 authority profile per initial tenant and materially different product arrangement",
@@ -73,6 +74,11 @@
       "command": "verify relative Markdown links under docs",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "GitHub Actions on final pull-request head SHA",
+      "status": "PENDING_FINAL_RUN",
+      "exit_code": null
     }
   ],
   "observations": [
@@ -80,7 +86,8 @@
     "Application authorization and legal or contractual insurance authority are separate decisions and must remain separate in the model.",
     "The current continuity files still select BIZTRUST-GUIDE-WP-010 and NS-026; issue #18 and pull request #19 own that document-drift correction.",
     "Open pull requests modify README.md, index.html, styles.css, docs/NEXT_STEPS.md, badf files or validators; this slice deliberately avoids those shared files.",
-    "The earlier WP-003 checkpoint describes superseded HTML and shared-state edits; this checkpoint records the rebased, conflict-avoiding scope."
+    "The earlier WP-003 checkpoint describes superseded HTML and shared-state edits; this checkpoint records the rebased, conflict-avoiding scope.",
+    "Draft pull request #28 is the review surface; it remains draft for independent review and unresolved state reconciliation, not because local validation failed."
   ],
   "decisions": [
     "PROPOSED-ARCH-SEQUENCE-S01-S11",
