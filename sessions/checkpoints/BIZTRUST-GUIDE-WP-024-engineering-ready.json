@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-024-001",
+  "created_at": "2026-09-03T18:03:42Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-024",
+  "state": "ENGINEERING_READY",
+  "objective": "Seal the WP-024 blind-handoff experiment and re-anchor operational state on it, so the experiment is resumable under the one-Work-Package rule.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-024-seal-and-reanchor",
+    "baseline_commit": "3d8c63be64782731ebd3ed19a9f72ca312dd440b"
+  },
+  "completed": [
+    "Amended the preregistration to v2 before run 1; v1 stays in git history",
+    "Sealed model claude-opus-5 and reasoning configuration in the preregistration, not in the results file",
+    "Required all nine fixtures and oracles to exist before ANY run, closing an adaptive-construction hole",
+    "Replaced the single bundle_sha256 with a per-file manifest carrying byte counts, and granted one read-only sha256sum",
+    "Promoted fixture 8 (external API unavailable) to mandatory",
+    "Retired NS-001 (Pages enabled, serving 200) and NS-029 (all pull requests merged, zero open)"
+  ],
+  "remaining": [
+    "Author and seal nine fixtures and nine oracles - NS-030",
+    "Execute 27 isolated runs",
+    "Publish every result and failure verbatim"
+  ],
+  "files_changed": [
+    "docs/experiments/WP-024-blind-handoff-preregistration.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-024-engineering-ready.json"
+  ],
+  "validation": [
+    "python3 -m unittest discover -s tests - 47 tests",
+    "python3 scripts/validate_continuity.py - exit 0"
+  ],
+  "observations": [
+    "An LLM cannot derive SHA-256 from file contents, so fixture 9 was unrunnable as first specified. The manifest is now per-file and a hashing tool is granted.",
+    "v1 permitted sealing fixture 2 after observing fixture 1, which is adaptive test construction with an aggregate score attached. v2 requires all nine before any run.",
+    "Sampling temperature, top-p and seed are not settable through this harness. They are recorded as uncontrolled rather than asserted as fixed; naming a parameter the harness cannot set would be a false control."
+  ],
+  "decisions": [
+    "Amend rather than void: no run had executed and no fixture or results file existed, which is the only condition under which a preregistration may change.",
+    "Seal the model in the preregistration, not the results file, because deferring it permits post-result selection.",
+    "Promote fixture 8 to mandatory: the proposal's own invariant is UNKNOWN-not-a-guess, so passing while failing that condition would certify the opposite of the hypothesis."
+  ],
+  "assumptions": [
+    "The harness can supply a trusted evaluation_time and per-file digests that the agent under test cannot influence"
+  ],
+  "blockers": [
+    {
+      "code": "FIXTURES_NOT_AUTHORED",
+      "owner_role": "documentation-engineer",
+      "resolution": "Author and commit nine fixtures and nine oracles before any run."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "HUMAN_RESERVED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-030",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "docs/experiments/WP-024-blind-handoff-preregistration.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/44"
+    ],
+    "stop_if": [
+      "A results file exists but the fixtures were sealed after it",
+      "Fewer than nine fixtures or nine oracles exist and a run is being requested",
+      "PRIMARY_NEXT_ACTION names a pull request that already reports state MERGED"
+    ]
+  },
+  "declared_non_coverage": [
+    "This checkpoint does not test whether a deriver can produce these bundles; fixtures are hand-authored",
+    "It proves nothing about the correctness of derivation, only about the consumer contract",
+    "27 runs is a discovery round and supports no reliability claim",
+    "This re-anchor is itself a hand-correction - the third in two days - and is the defect under test, not evidence for the proposal"
+  ]
+}
