@@ -216,14 +216,16 @@ Recommended Project fields:
 
 | Field | Values |
 |---|---|
-| Lifecycle | Draft, Ready, Authorized, In Progress, Validating, Accepted, Closed |
+| Lifecycle | Draft, Ready, Authorized, In Progress, Validating, Engineering Ready, Accepted, Closed |
 | Authority | Not Required, Requested, Granted, Denied, Expired |
 | Risk | Low, Medium, High, Critical |
-| Gate | G0–G8 |
+| Gate | ENG-G0–ENG-G8 |
 | Owner | Human or agent role |
 | Target | Milestone or iteration |
 | Evidence | Missing, Partial, Complete, Rejected |
 | Blocker | None, Internal, External, Authority |
+
+The `Lifecycle` values are the eight states of `AGENTS.md` §8, in order, and match the `state` enum of `schemas/session-checkpoint.schema.json`. The `Gate` values are the Work Package lifecycle gates; `BT-G0`–`BT-G6` are a different namespace (BizTrust platform capability milestones, defined in `docs/architecture/DELIVERY_PLAN.md` §1) and are not valid values for this field. Neither list is redefined here — if one is wrong, fix it at the source and update this row.
 
 ## 11. Minimum repository controls — RECOMMENDED, NONE IN FORCE
 
