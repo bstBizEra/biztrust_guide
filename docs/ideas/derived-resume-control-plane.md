@@ -6,7 +6,7 @@
 
 ## Problem Statement
 
-**How might we give a resuming agent one surface that cannot tell it something false — in a repository where operational state has a measured 24-hour half-life and the existing controls prove shape rather than truth?**
+**How might we give a resuming agent one surface that cannot tell it something false — in a repository where operational state has twice been observed to become false within 24 hours, and the existing controls prove shape rather than truth?**
 
 ## Recommended Direction
 
@@ -15,7 +15,7 @@
 Three measurements on `main` at `36f7c5d`:
 
 1. **The controls pass while the content is false.** The full suite reports 47/47 and the validator prints `CONTINUITY_VALIDATION=PASS`, while `current-state.json` names `WP-017` active (merged), `NS-001 · enable Pages` as next (Pages is live, serving 200), and *"Seven pull requests await human review"* (zero are open). The recorded baseline is **13 commits behind** `main`. Every control is green and every operational claim is wrong.
-2. **Correction does not hold.** PR #30 fixed exactly this on 2026-09-03. It was wrong again within 24 hours, corrected by the same person who wrote the correction.
+2. **Correction did not hold.** PR #30 fixed exactly this on 2026-09-03; it was wrong again within 24 hours, corrected by the same person who wrote the correction. That is **two observations, not a measured rate** — an earlier draft called it a "24-hour half-life", which n=2 does not support. It establishes that correction alone is insufficient, not how fast decay occurs.
 3. **Only about half the file is machine-writable.** At leaf level — 33 leaves, not 14 top-level properties — the split is `STATIC 6% · OBSERVED 33% · ASSERTED 39% · COMPUTED 21%`. **54%** can be derived.
 
 An earlier draft of this page claimed 71% and asserted that "the fields that rot are exactly the fields a machine could write." **Both were wrong**, and an audit caught them. The 71% counted top-level keys, treating `authority` (5 leaves) and `active_work_package.scope` (4 leaves) as single facts. And `active_work_package.id` is an **assertion that went stale** — a human wrote "WP-017 is active" and never retracted it when WP-017 merged. Assertions rot too, whenever the world they reference moves.
@@ -56,3 +56,4 @@ Minimum that tests assumption 1 — nothing more.
 - **Who issues and revokes `authority`?** It is 5 of the 13 asserted leaves and no role owns it. Without an issuer, adding `valid_until` just moves the staleness.
 - **What retracts a stale assertion?** `active_work_package.id` was asserted, then rotted. Expiry helps; automatic revocation on a contradicting observation may be better, and is riskier.
 - **Should `#32` be re-scoped or closed and replaced?** Its title and body describe the Markdown-first design this supersedes. Re-scoping preserves the thread; closing keeps the record honest about what was rejected.
+  **Resolved 2026-09-04:** closed `not_planned`, with the rejected design and its reusable parts preserved in the closing comment. #44 carries the work forward. PR #37 stays unmerged and its branch is retained as the only copy.
