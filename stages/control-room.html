@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BizTrust delivery control room generated from governed Markdown sources.">
+  <meta name="theme-color" content="#071a2c">
+  <meta name="generator" content="scripts/build_control_room.py">
+  <meta name="source-digest" content="20f83b66dd6aa752d0db380cdb2f2036c7be72628b5df1770166690bde9d07df">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Delivery Control Room · BizTrust</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy-950: #061523;
+      --navy-900: #071a2c;
+      --navy-800: #102a43;
+      --blue-700: #0f5ea8;
+      --blue-600: #1673c7;
+      --blue-100: #dceeff;
+      --cyan-500: #17b6c7;
+      --mint-500: #18a879;
+      --amber-500: #ca7a00;
+      --red-600: #bd2c3e;
+      --paper: #f4f7fa;
+      --surface: #ffffff;
+      --surface-2: #edf3f7;
+      --ink: #132536;
+      --muted: #587083;
+      --line: #d7e1e8;
+      --shadow: 0 14px 36px rgba(6, 21, 35, .09);
+      --radius: 14px;
+      --font: Inter, "Noto Sans Lao", "Segoe UI", Arial, sans-serif;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #06121d;
+      --surface: #0b2032;
+      --surface-2: #112b40;
+      --ink: #e8f1f6;
+      --muted: #a6bac8;
+      --line: #234057;
+      --blue-100: #123f64;
+      --shadow: 0 18px 42px rgba(0, 0, 0, .27);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 8.5rem; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 1rem;
+      line-height: 1.62;
+    }
+    a { color: var(--blue-700); text-underline-offset: .18em; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .cr-skip {
+      position: fixed;
+      z-index: 100;
+      top: .75rem;
+      left: .75rem;
+      padding: .65rem 1rem;
+      transform: translateY(-160%);
+      background: var(--surface);
+      border: 2px solid var(--blue-600);
+      border-radius: .5rem;
+    }
+    .cr-skip:focus { transform: none; }
+    .cr-topbar {
+      position: sticky;
+      z-index: 30;
+      top: 0;
+      min-height: 4.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .7rem clamp(1rem, 3vw, 2rem);
+      color: #fff;
+      background: rgba(7, 26, 44, .98);
+      border-bottom: 1px solid rgba(255, 255, 255, .13);
+    }
+    .cr-brand {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      color: #fff;
+      text-decoration: none;
+    }
+    .cr-brand img {
+      width: 8.3rem;
+      max-height: 2.65rem;
+      object-fit: contain;
+      object-position: left center;
+      filter: brightness(0) invert(1);
+    }
+    .cr-brand-copy { display: grid; line-height: 1.22; }
+    .cr-brand-copy strong { font-size: .95rem; letter-spacing: .02em; }
+    .cr-brand-copy small { color: #a9c5da; font-size: .76rem; }
+    .cr-actions { display: flex; align-items: center; gap: .55rem; }
+    .cr-actions a, .cr-actions button {
+      min-height: 2.6rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .55rem .85rem;
+      color: #e9f5ff;
+      background: transparent;
+      border: 1px solid #38536a;
+      border-radius: .55rem;
+      text-decoration: none;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .cr-actions a:hover, .cr-actions button:hover,
+    .cr-actions a:focus-visible, .cr-actions button:focus-visible {
+      background: #16374f;
+      border-color: #69b9f5;
+      outline: none;
+    }
+    .cr-shell {
+      display: grid;
+      grid-template-columns: 17rem minmax(0, 1fr);
+      min-height: calc(100vh - 4.75rem);
+    }
+    .cr-sidebar {
+      position: sticky;
+      top: 4.75rem;
+      align-self: start;
+      height: calc(100vh - 4.75rem);
+      overflow-y: auto;
+      padding: 1.2rem .85rem 1.6rem;
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+    }
+    .cr-nav-label {
+      padding: .35rem .75rem .65rem;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .cr-sidebar nav { display: grid; gap: .22rem; }
+    .cr-sidebar nav a {
+      display: grid;
+      grid-template-columns: 1.8rem minmax(0, 1fr);
+      align-items: center;
+      gap: 0 .42rem;
+      padding: .58rem .66rem;
+      color: var(--ink);
+      border: 1px solid transparent;
+      border-radius: .58rem;
+      text-decoration: none;
+    }
+    .cr-sidebar nav a > span {
+      grid-row: 1 / span 2;
+      color: var(--blue-600);
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .cr-sidebar nav strong { overflow: hidden; text-overflow: ellipsis; font-size: .86rem; white-space: nowrap; }
+    .cr-sidebar nav small { color: var(--muted); font-size: .68rem; }
+    .cr-sidebar nav a:hover, .cr-sidebar nav a:focus-visible, .cr-sidebar nav a.is-active {
+      background: var(--surface-2);
+      border-color: var(--line);
+      outline: none;
+    }
+    .cr-source-card {
+      margin: 1rem .15rem 0;
+      padding: .85rem;
+      background: var(--navy-900);
+      color: #e9f5ff;
+      border-radius: .7rem;
+    }
+    .cr-source-card strong { display: block; font-size: .82rem; }
+    .cr-source-card p { margin: .25rem 0 0; color: #a9c5da; font-size: .75rem; line-height: 1.45; }
+    .cr-main { width: 100%; max-width: 100rem; min-width: 0; padding: clamp(1rem, 3vw, 2.2rem); }
+    .cr-overview {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      padding: clamp(1.1rem, 3vw, 1.8rem);
+      background: var(--navy-900);
+      color: #f3f8fb;
+      border: 1px solid #183950;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .cr-overview::after {
+      content: "";
+      position: absolute;
+      width: 24rem;
+      height: 24rem;
+      right: -11rem;
+      top: -15rem;
+      background: radial-gradient(circle, rgba(23, 182, 199, .2), transparent 66%);
+      pointer-events: none;
+    }
+    .cr-overview-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .cr-overview h1 { margin: .05rem 0 .35rem; font-size: clamp(1.55rem, 3vw, 2.35rem); line-height: 1.12; }
+    .cr-overview-copy { max-width: 50rem; margin: 0; color: #afc6d6; }
+    .cr-eyebrow {
+      margin: 0 0 .35rem;
+      color: var(--cyan-500);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .cr-freshness {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: .42rem;
+      padding: .5rem .7rem;
+      color: #d9f8ef;
+      background: rgba(24, 168, 121, .14);
+      border: 1px solid rgba(58, 216, 166, .4);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+    .cr-freshness::before { content: ""; width: .48rem; height: .48rem; background: #3ad8a6; border-radius: 50%; }
+    .cr-freshness.is-stale { color: #ffe0ac; background: rgba(202, 122, 0, .14); border-color: rgba(244, 173, 61, .55); }
+    .cr-freshness.is-stale::before { background: #f4ad3d; }
+    .cr-stat-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(8rem, 1fr));
+      gap: .65rem;
+      margin-top: 1.2rem;
+    }
+    .cr-stat {
+      min-width: 0;
+      padding: .78rem;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: .68rem;
+    }
+    .cr-stat span { display: block; color: #9fb9ca; font-size: .71rem; font-weight: 700; text-transform: uppercase; }
+    .cr-stat strong { display: block; margin-top: .24rem; overflow-wrap: anywhere; color: #fff; font-size: .88rem; line-height: 1.35; }
+    .cr-primary-action {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: .8rem;
+      margin-top: .75rem;
+      padding: .8rem .9rem;
+      background: #0e3652;
+      border-left: 4px solid var(--cyan-500);
+      border-radius: .52rem;
+    }
+    .cr-primary-action span { color: #7ee6ed; font-size: .72rem; font-weight: 800; letter-spacing: .08em; }
+    .cr-primary-action strong { min-width: 0; font-size: .92rem; }
+    .cr-primary-action button { padding: .44rem .7rem; color: #fff; background: transparent; border: 1px solid #4e7187; border-radius: .45rem; font-size: .76rem; }
+    .cr-toolbar {
+      position: sticky;
+      z-index: 20;
+      top: 4.75rem;
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1rem;
+      padding: .72rem;
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
+      border: 1px solid var(--line);
+      border-radius: .72rem;
+      backdrop-filter: blur(12px);
+    }
+    .cr-search { position: relative; flex: 1 1 17rem; }
+    .cr-search label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .cr-search input {
+      width: 100%;
+      min-height: 2.7rem;
+      padding: .55rem .8rem .55rem 2.35rem;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: .56rem;
+    }
+    .cr-search::before { content: "⌕"; position: absolute; top: .42rem; left: .78rem; color: var(--muted); font-size: 1.2rem; }
+    .cr-search input:focus { outline: 3px solid color-mix(in srgb, var(--blue-600) 24%, transparent); border-color: var(--blue-600); }
+    .cr-filters { display: flex; gap: .35rem; overflow-x: auto; scrollbar-width: thin; }
+    .cr-filter {
+      flex: 0 0 auto;
+      min-height: 2.45rem;
+      padding: .45rem .7rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: .76rem;
+      font-weight: 800;
+    }
+    .cr-filter[aria-pressed="true"] { color: #fff; background: var(--blue-700); border-color: var(--blue-700); }
+    .cr-count { flex: 0 0 auto; min-width: 5rem; color: var(--muted); font-size: .76rem; text-align: right; }
+    .cr-panel {
+      margin-bottom: 1rem;
+      padding: clamp(1rem, 2.5vw, 1.55rem);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 16px rgba(6, 21, 35, .035);
+    }
+    .cr-panel[hidden] { display: none; }
+    .cr-panel.is-stale { border-color: color-mix(in srgb, var(--amber-500) 65%, var(--line)); }
+    .cr-panel.is-stale .cr-panel-head::after {
+      content: "Snapshot stale — update Markdown";
+      display: inline-flex;
+      align-items: center;
+      align-self: start;
+      padding: .32rem .52rem;
+      color: #7a4700;
+      background: #fff1d6;
+      border-radius: .4rem;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    [data-theme="dark"] .cr-panel.is-stale .cr-panel-head::after { color: #ffcf80; background: #513409; }
+    .cr-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .cr-panel h2 { margin: 0; font-size: clamp(1.32rem, 2vw, 1.7rem); line-height: 1.2; }
+    .cr-summary-copy { max-width: 58rem; margin: .38rem 0 0; color: var(--muted); }
+    .cr-source-links { flex: 0 0 auto; display: flex; gap: .42rem; }
+    .cr-source-links a {
+      padding: .38rem .55rem;
+      border: 1px solid var(--line);
+      border-radius: .45rem;
+      text-decoration: none;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .cr-meta { display: flex; flex-wrap: wrap; gap: .45rem; margin: .85rem 0 1rem; padding-bottom: .85rem; border-bottom: 1px solid var(--line); }
+    .cr-meta > span { padding: .28rem .48rem; color: var(--muted); background: var(--surface-2); border-radius: .38rem; font-size: .73rem; font-weight: 700; }
+    .cr-status { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .cr-status.is-positive { color: #08714e; background: #dcf7ec; }
+    .cr-status.is-active { color: #0d5795; background: #dceeff; }
+    .cr-status.is-warning { color: #865000; background: #fff0d1; }
+    .cr-status.is-negative { color: #9b2032; background: #ffe4e8; }
+    [data-theme="dark"] .cr-status.is-positive { color: #8ee8c9; background: #123f34; }
+    [data-theme="dark"] .cr-status.is-active { color: #a8d8ff; background: #123f64; }
+    [data-theme="dark"] .cr-status.is-warning { color: #ffd58d; background: #503509; }
+    [data-theme="dark"] .cr-status.is-negative { color: #ffb7c0; background: #57232a; }
+    .cr-markdown { max-width: 80rem; }
+    .cr-markdown h3, .cr-markdown h4, .cr-markdown h5 { margin: 1.45rem 0 .55rem; line-height: 1.3; }
+    .cr-markdown h3 { font-size: 1.1rem; }
+    .cr-markdown h4 { color: var(--navy-800); font-size: .98rem; }
+    [data-theme="dark"] .cr-markdown h4 { color: #c5dce9; }
+    .cr-markdown p { margin: .55rem 0 .95rem; }
+    .cr-markdown ul, .cr-markdown ol { margin: .55rem 0 1rem; padding-left: 1.35rem; }
+    .cr-markdown li { margin: .34rem 0; }
+    .cr-markdown code { padding: .12rem .3rem; color: #124f7d; background: var(--blue-100); border-radius: .3rem; font-size: .88em; }
+    [data-theme="dark"] .cr-markdown code { color: #bfe3ff; }
+    .cr-markdown pre { overflow-x: auto; padding: 1rem; color: #dceaf3; background: var(--navy-950); border-radius: .65rem; }
+    .cr-markdown pre code { padding: 0; color: inherit; background: transparent; }
+    .cr-markdown blockquote { margin: 1rem 0; padding: .75rem 1rem; background: var(--surface-2); border-left: 4px solid var(--cyan-500); border-radius: 0 .55rem .55rem 0; }
+    .cr-markdown blockquote p { margin: 0; font-weight: 650; }
+    .cr-task { display: flex; align-items: flex-start; gap: .42rem; list-style: none; margin-left: -1.35rem !important; }
+    .cr-task input { width: 1rem; height: 1rem; margin-top: .25rem; accent-color: var(--mint-500); }
+    .cr-table-wrap { overflow-x: auto; margin: .85rem 0 1.1rem; border: 1px solid var(--line); border-radius: .65rem; }
+    .cr-table-wrap table { width: 100%; min-width: 42rem; border-collapse: collapse; font-size: .86rem; }
+    .cr-table-wrap th, .cr-table-wrap td { padding: .68rem .75rem; vertical-align: top; border-bottom: 1px solid var(--line); text-align: left; }
+    .cr-table-wrap th { color: var(--muted); background: var(--surface-2); font-size: .73rem; letter-spacing: .045em; text-transform: uppercase; }
+    .cr-table-wrap tbody tr:last-child td { border-bottom: 0; }
+    .cr-empty { padding: 2rem; color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); text-align: center; }
+    .cr-empty[hidden] { display: none; }
+    .cr-footer { padding: 1.2rem 0 .2rem; color: var(--muted); font-size: .76rem; }
+    .cr-footer code { overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid color-mix(in srgb, var(--blue-600) 55%, transparent); outline-offset: 2px; }
+    @media (max-width: 76rem) {
+      .cr-shell { grid-template-columns: 14.5rem minmax(0, 1fr); }
+      .cr-stat-grid { grid-template-columns: repeat(3, 1fr); }
+      .cr-toolbar { align-items: stretch; flex-wrap: wrap; }
+      .cr-search { flex-basis: 100%; }
+      .cr-filters { flex: 1; }
+    }
+    @media (max-width: 52rem) {
+      html { scroll-padding-top: 9rem; }
+      .cr-topbar { align-items: center; min-height: 4.2rem; }
+      .cr-brand img { width: 6.7rem; }
+      .cr-brand-copy small, .cr-actions .cr-print { display: none; }
+      .cr-actions a, .cr-actions button { min-height: 2.45rem; padding: .45rem .6rem; font-size: .75rem; }
+      .cr-shell { display: block; }
+      .cr-sidebar {
+        position: sticky;
+        z-index: 25;
+        top: 4.2rem;
+        width: 100%;
+        height: auto;
+        padding: .45rem .75rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .cr-nav-label, .cr-source-card { display: none; }
+      .cr-sidebar nav { display: flex; width: max-content; }
+      .cr-sidebar nav a { display: flex; gap: .38rem; padding: .5rem .65rem; }
+      .cr-sidebar nav a > span { grid-row: auto; }
+      .cr-sidebar nav small { display: none; }
+      .cr-main { padding: .8rem; }
+      .cr-overview-head { display: block; }
+      .cr-freshness { margin-top: .8rem; }
+      .cr-stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .cr-primary-action { grid-template-columns: 1fr auto; }
+      .cr-primary-action span { grid-column: 1 / -1; }
+      .cr-toolbar { top: 7.55rem; }
+      .cr-count { display: none; }
+      .cr-panel-head { display: block; }
+      .cr-source-links { margin-top: .75rem; }
+    }
+    @media (max-width: 32rem) {
+      .cr-brand-copy { display: none; }
+      .cr-actions a { display: none; }
+      .cr-stat-grid { grid-template-columns: 1fr; }
+      .cr-primary-action { display: block; }
+      .cr-primary-action strong { display: block; margin: .3rem 0 .65rem; }
+      .cr-panel { padding: 1rem; }
+      .cr-source-links { flex-wrap: wrap; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      :root { --paper: #fff; --surface: #fff; --ink: #111; --muted: #444; --line: #bbb; }
+      .cr-topbar, .cr-sidebar, .cr-toolbar, .cr-primary-action button, .cr-source-links { display: none !important; }
+      .cr-shell { display: block; }
+      .cr-main { max-width: none; padding: 0; }
+      .cr-overview { color: #111; background: #fff; box-shadow: none; border: 2px solid #111; }
+      .cr-overview-copy, .cr-stat span, .cr-stat strong { color: #111; }
+      .cr-stat { border-color: #aaa; }
+      .cr-panel { break-inside: avoid; box-shadow: none; }
+      .cr-panel[hidden] { display: block; }
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <a class="cr-skip" href="#control-room-main">Skip to control room</a>
+  <header class="cr-topbar">
+    <a class="cr-brand" href="../index.html" aria-label="Return to BizTrust guide">
+      <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+      <span class="cr-brand-copy"><strong>BizTrust Control Room</strong><small>Markdown-governed delivery status</small></span>
+    </a>
+    <div class="cr-actions">
+      <a href="../index.html">Guide</a>
+      <a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Work Package ↗</a>
+      <button id="themeToggle" type="button" aria-label="Toggle light and dark theme">Theme</button>
+      <button class="cr-print" id="printControlRoom" type="button">Print</button>
+    </div>
+  </header>
+
+  <div class="cr-shell">
+    <aside class="cr-sidebar" aria-label="Control-room sections">
+      <div class="cr-nav-label">Operational views</div>
+      <nav id="controlRoomNav"><a href="#session" data-nav-kind="execution"><span>10</span><strong>Design Session</strong><small>In Review</small></a>
+<a href="#today" data-nav-kind="execution"><span>20</span><strong>Today</strong><small>Wait For Authority</small></a>
+<a href="#plan" data-nav-kind="planning"><span>30</span><strong>Plan and Milestones</strong><small>Current</small></a>
+<a href="#backlog" data-nav-kind="planning"><span>40</span><strong>Dependency Backlog</strong><small>Current</small></a>
+<a href="#decisions" data-nav-kind="governance"><span>50</span><strong>Decisions and Authority</strong><small>Current</small></a>
+<a href="#risks" data-nav-kind="governance"><span>60</span><strong>Blockers, Risks and Assumptions</strong><small>Blocked</small></a>
+<a href="#evidence" data-nav-kind="assurance"><span>70</span><strong>Evidence and Assurance</strong><small>Validating</small></a>
+<a href="#handoff" data-nav-kind="continuity"><span>80</span><strong>Handoff and Recovery</strong><small>Ready</small></a>
+<a href="#scorecard" data-nav-kind="assurance"><span>90</span><strong>Delivery Scorecard</strong><small>Current</small></a>
+<a href="#research" data-nav-kind="research"><span>100</span><strong>Research and Open Questions</strong><small>Wait For Authority</small></a></nav>
+      <div class="cr-source-card">
+        <strong>Markdown is authoritative</strong>
+        <p>10 governed sections. HTML is reproducible display output, not a second ledger.</p>
+      </div>
+    </aside>
+
+    <main class="cr-main" id="control-room-main">
+      <section class="cr-overview" aria-labelledby="control-room-title" data-refresh-by="2026-09-04T00:00:00+07:00">
+        <div class="cr-overview-head">
+          <div>
+            <p class="cr-eyebrow">Delivery intelligence · source-controlled</p>
+            <h1 id="control-room-title">Delivery Control Room</h1>
+            <p class="cr-overview-copy">The current execution picture, generated from governed Markdown. Change the source, regenerate, review the diff, and bind evidence to the resulting revision.</p>
+          </div>
+          <div class="cr-freshness" id="freshnessBadge">
+            <span>Snapshot current</span>
+          </div>
+        </div>
+
+        <div class="cr-stat-grid" aria-label="Executive delivery snapshot">
+          <article class="cr-stat"><span>Work Package</span><strong>BIZTRUST-GUIDE-WP-018</strong></article>
+          <article class="cr-stat"><span>Delivery state</span><strong class="is-active">IN_REVIEW</strong></article>
+          <article class="cr-stat"><span>Architecture gate</span><strong>WAIT_FOR_AUTHORITY</strong></article>
+          <article class="cr-stat"><span>Active slice</span><strong>ARCH-001A-S01</strong></article>
+          <article class="cr-stat"><span>Evidence</span><strong>43 TESTS PASS · CI REQUIRED</strong></article>
+        </div>
+
+        <div class="cr-primary-action">
+          <span>ONE PRIMARY NEXT ACTION</span>
+          <strong id="primaryAction">NS-001 — Enable GitHub Pages using GitHub Actions and retain the successful deployment evidence.</strong>
+          <button id="copyPrimaryAction" type="button">Copy action</button>
+        </div>
+      </section>
+
+      <div class="cr-toolbar" aria-label="Control-room filters">
+        <div class="cr-search">
+          <label for="controlRoomSearch">Search control-room sections</label>
+          <input id="controlRoomSearch" type="search" placeholder="Search action, owner, risk, evidence…" autocomplete="off">
+        </div>
+        <div class="cr-filters" role="group" aria-label="Filter sections by function">
+          <button class="cr-filter" type="button" data-kind="all" aria-pressed="true">All</button>
+          <button class="cr-filter" type="button" data-kind="execution" aria-pressed="false">Execution</button>
+          <button class="cr-filter" type="button" data-kind="planning" aria-pressed="false">Planning</button>
+          <button class="cr-filter" type="button" data-kind="governance" aria-pressed="false">Governance</button>
+          <button class="cr-filter" type="button" data-kind="assurance" aria-pressed="false">Assurance</button>
+          <button class="cr-filter" type="button" data-kind="continuity" aria-pressed="false">Handoff</button>
+          <button class="cr-filter" type="button" data-kind="research" aria-pressed="false">Research</button>
+        </div>
+        <output class="cr-count" id="visibleCount" aria-live="polite">10 sections</output>
+      </div>
+
+      <div id="controlRoomPanels"><section class="cr-panel" id="session" data-kind="execution" data-status="IN_REVIEW" data-refresh-by="2026-09-04T00:00:00+07:00"><header class="cr-panel-head"><div><p class="cr-eyebrow">10 · EXECUTION</p><h2>Design Session</h2><p class="cr-summary-copy">The current delivery state plus a decision-led agenda for the next architecture design session.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/10-session.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-active">IN_REVIEW</span><span>Owner · documentation-engineer</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="session-session-contract">Session contract</h4>
+<p>This session implements the Markdown-first Delivery Control Room under <a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Issue #32</a>. It is stacked on the architecture documentation in <a href="https://github.com/bstBizEra/biztrust_guide/pull/28" target="_blank" rel="noopener noreferrer">PR #28</a>; it must not be merged before that base is accepted or the branch is safely retargeted.</p>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Field</th><th scope="col">Observed state</th><th scope="col">Consequence</th></tr></thead><tbody><tr><td>Repository baseline</td><td><code>b1a3fa455b758cc6e27404e9b84ee1dce3acf385</code></td><td>Current public <code>main</code> before the stacked architecture pack</td></tr><tr><td>Architecture pack</td><td>PR #28 · <code>IN_REVIEW</code></td><td>Architecture documentation exists but is not accepted</td></tr><tr><td>Continuity correction</td><td>PR #30 · <code>IN_REVIEW</code></td><td><code>NS-001</code> is the proposed current action; the branch baseline still emits stale <code>NS-026</code></td></tr><tr><td>Architecture program</td><td>Issue #27 · <code>WAIT_FOR_AUTHORITY</code></td><td>No architecture freeze or P0 implementation authority</td></tr><tr><td>Active architecture slice</td><td>Issue #15 · <code>ARCH-001A-S01</code></td><td>Human authority, legal, domain and finance inputs required</td></tr><tr><td>Delivery slice</td><td>Issue #32 · <code>IN_REVIEW</code></td><td>Control-room implementation awaits independent review and CI</td></tr><tr><td>Production authority</td><td><code>NOT_GRANTED</code></td><td>This repository remains documentation and governance only</td></tr></tbody></table></div>
+<h4 id="session-authority-boundary">Authority boundary</h4>
+<ul><li>The user authorized this documentation and HTML-display slice.</li><li>The implementing agent may prepare, validate and publish a pull request.</li><li>Architecture acceptance, legal conclusions, merge, production implementation and GitHub Pages administration remain human-reserved.</li><li>Unknown or conflicting authority remains <code>WAIT_FOR_AUTHORITY</code>; the interface cannot convert silence into approval.</li></ul>
+<blockquote><p>Observation, decision, authority and evidence remain separate records.</p></blockquote>
+<h4 id="session-next-architecture-design-session-s01-authority-profile">Next architecture design session — S01 authority profile</h4>
+<p><strong>Decision question:</strong> for each initial tenant and product arrangement, can UniTrust make cover effective, or can it only request an insurer decision?</p>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Seat</th><th scope="col">Required contribution</th><th scope="col">May accept</th></tr></thead><tbody><tr><td>Accountable business owner</td><td>Actual entities, channels, products and intended responsibilities</td><td>Operating-model facts</td></tr><tr><td>Insurance domain lead</td><td>Placement, bind, policy, servicing and claims practice</td><td>Domain semantics</td></tr><tr><td>Lao-qualified legal/regulatory reviewer</td><td>Licence, delegated authority, disclosures, client-money and jurisdiction</td><td>Legal/regulatory conclusions</td></tr><tr><td>Finance/client-money owner</td><td>Collection, trust/segregation, remittance, commission and reconciliation</td><td>Accounting-operating facts</td></tr><tr><td>Architecture authority</td><td>Alternatives, invariants, consequences and unresolved assumptions</td><td>Architecture slice after other inputs exist</td></tr><tr><td>Recorder/red-team</td><td>Evidence links, dissent, contradictions, actions and stop conditions</td><td>Nothing on behalf of another seat</td></tr></tbody></table></div>
+<h5 id="session-ninety-minute-agenda">Ninety-minute agenda</h5>
+<ol><li><code>00–10</code> Confirm scope, participants, decision rights and evidence handling.</li><li><code>10–25</code> Map legal entities, jurisdictions, tenants, channels and product arrangements.</li><li><code>25–45</code> Walk quote → acceptance → bind request → insurer confirmation → cover evidence.</li><li><code>45–60</code> Walk premium receipt → risk transfer → insurer payable → commission → reconciliation.</li><li><code>60–75</code> Test exceptions: delegated authority, master policy, certificate, cancellation, refund and claim.</li><li><code>75–85</code> Classify every conclusion as observed, proposed, accepted, disputed or unknown.</li><li><code>85–90</code> Assign one next action per unresolved blocker and name the evidence required.</li></ol>
+<p><strong>Required outputs:</strong> authority matrix v0.1, evidence index, unresolved-question register, dissent record, named owners, refresh date and an attributable S01 gate decision. Meeting attendance alone does not convert an unknown into an accepted conclusion.</p>
+<h4 id="session-known-source-divergence">Known source divergence</h4>
+<p>The current branch is stacked on PR #28, while the independent continuity correction in <a href="https://github.com/bstBizEra/biztrust_guide/pull/30" target="_blank" rel="noopener noreferrer">PR #30</a> is based on <code>main</code>. Until PR #30 merges or is composed into this branch, <code>scripts/validate_continuity.py</code> still emits the obsolete <code>NS-026</code>. The control room records <code>NS-001</code> because Issue #29 and PR #30 document why it is the current human-owned action. A receiving agent must inspect both records and must not interpret structural validator success as proof of factual currency.</p></div></section>
+<section class="cr-panel" id="today" data-kind="execution" data-status="WAIT_FOR_AUTHORITY" data-refresh-by="2026-09-04T00:00:00+07:00"><header class="cr-panel-head"><div><p class="cr-eyebrow">20 · EXECUTION</p><h2>Today</h2><p class="cr-summary-copy">The time-bounded agenda and single primary action; it expires visibly at the next business day.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/29" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/20-today.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-warning">WAIT_FOR_AUTHORITY</span><span>Owner · repository-administrator</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="today-primary-outcome">Primary outcome</h4>
+<p>Enable GitHub Pages from <code>Settings → Pages → GitHub Actions</code>, then retain the successful push-triggered run and published URL. This action requires repository administrator authority and cannot be completed by an engineering agent.</p>
+<h4 id="today-today-queue">Today queue</h4>
+<ul><li class="cr-task"><input type="checkbox" disabled aria-label="Task status"> <span><strong>NS-001:</strong> Repository administrator enables GitHub Pages.</span></li><li class="cr-task"><input type="checkbox" disabled aria-label="Task status"> <span><strong>NS-029:</strong> Human reviewers assess the open pull requests against their final head SHAs.</span></li><li class="cr-task"><input type="checkbox" disabled aria-label="Task status"> <span><strong>NS-024:</strong> Business, insurance, legal, finance and architecture reviewers begin the S01 authority profile.</span></li><li class="cr-task"><input type="checkbox" disabled checked aria-label="Task status"> <span><strong>WP-018:</strong> Markdown source contract and deterministic HTML approach defined.</span></li><li class="cr-task"><input type="checkbox" disabled checked aria-label="Task status"> <span><strong>WP-018:</strong> Shared files owned by other pull requests excluded from scope.</span></li></ul>
+<h4 id="today-end-of-day-refresh-rule">End-of-day refresh rule</h4>
+<p>Before carrying this page into another day, verify open pull requests, merged work, the active Work Package, primary action and all dated evidence. If that verification does not happen, the HTML must display the snapshot as stale.</p></div></section>
+<section class="cr-panel" id="plan" data-kind="planning" data-status="CURRENT" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">30 · PLANNING</p><h2>Plan and Milestones</h2><p class="cr-summary-copy">Now, next and later outcomes connected by explicit evidence and authority gates.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/27" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/30-plan.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-positive">CURRENT</span><span>Owner · chief-orchestrator</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="plan-now-make-the-control-plane-trustworthy">Now — make the control plane trustworthy</h4>
+<ol><li>Review and merge independent guide corrections without overwriting their owners.</li><li>Enable GitHub Pages and prove the public delivery path.</li><li>Land PR #28 and this stacked control-room slice only after final-SHA review.</li><li>Keep one global primary action and one active architecture slice.</li></ol>
+<p><strong>Exit:</strong> published guide, current continuity ledger, green final-SHA CI and no unresolved shared-file collision.</p>
+<h4 id="plan-next-complete-the-architecture-contract-one-slice-at-a-time">Next — complete the architecture contract one slice at a time</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Order</th><th scope="col">Slice</th><th scope="col">Outcome</th><th scope="col">Entry gate</th></tr></thead><tbody><tr><td>01</td><td><code>S01</code></td><td>Tenant authority, jurisdiction and client-money inputs</td><td>Five review seats and secure evidence access</td></tr><tr><td>02–03</td><td><code>S02–S03</code></td><td>Canonical language, authority and systems of record</td><td>S01 accepted</td></tr><tr><td>04–06</td><td><code>S04–S06</code></td><td>Coverage/time, placement topology and financial model</td><td>Prior slices accepted</td></tr><tr><td>07–10</td><td><code>S07–S10</code></td><td>Tenant security, data, interfaces and operations</td><td>Domain foundation accepted</td></tr><tr><td>11</td><td><code>S11</code></td><td>Conformance review and <code>BT-G0</code> decision</td><td>S01–S10 accepted</td></tr></tbody></table></div>
+<p><strong>Exit:</strong> architecture authority records <code>ACCEPT</code>, <code>CONDITIONAL_ACCEPT</code>, <code>REVISE</code> or <code>REJECT</code>. Document length does not constitute acceptance.</p>
+<h4 id="plan-later-authorize-implementation-by-capability-gate">Later — authorize implementation by capability gate</h4>
+<ul><li><code>P0 / BT-G1</code>: prove Logto → tenant context → PostgreSQL RLS → audit evidence.</li><li><code>P1 / BT-G2</code>: deliver the broker core from client and risk to authoritative cover evidence.</li><li><code>P2 / BT-G3</code>: add placement, servicing, claims and renewal depth.</li><li><code>P3 / BT-G4–BT-G6</code>: add money, ledger, commission, settlement, adapters and independent tenant provisioning.</li></ul>
+<p>No later phase may borrow authority from an approved earlier phase.</p>
+<h4 id="plan-operating-cadence">Operating cadence</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Cadence</th><th scope="col">Review</th><th scope="col">Output</th></tr></thead><tbody><tr><td>Start of session</td><td>State, issue, branch, authority, dependencies</td><td>Resume decision and one next action</td></tr><tr><td>Daily</td><td>Today, blockers, pull requests, snapshot freshness</td><td>Refreshed operational view</td></tr><tr><td>Per slice</td><td>Decision alternatives, evidence, dissent</td><td>Accepted or revised slice</td></tr><tr><td>Weekly</td><td>Backlog ageing, risks, evidence durability</td><td>Portfolio review and escalations</td></tr><tr><td>At gate</td><td>Independent conformance and authority</td><td>Recorded transition or stop</td></tr></tbody></table></div></div></section>
+<section class="cr-panel" id="backlog" data-kind="planning" data-status="CURRENT" data-refresh-by="2026-09-04T00:00:00+07:00"><header class="cr-panel-head"><div><p class="cr-eyebrow">40 · PLANNING</p><h2>Dependency Backlog</h2><p class="cr-summary-copy">An ordered queue that separates ready work from blocked and intentionally deferred work.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/40-backlog.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-positive">CURRENT</span><span>Owner · chief-orchestrator</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="backlog-portfolio-queue">Portfolio queue</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Priority</th><th scope="col">Work</th><th scope="col">State</th><th scope="col">Owner</th><th scope="col">Dependency / blocker</th></tr></thead><tbody><tr><td>1</td><td><code>NS-001</code> Enable GitHub Pages</td><td><code>WAIT_FOR_AUTHORITY</code></td><td>Repository administrator</td><td>Admin access and public-content approval</td></tr><tr><td>2</td><td><code>NS-029</code> Review open PRs</td><td><code>READY</code></td><td>Human reviewers</td><td>CI success on each final head SHA</td></tr><tr><td>3</td><td><code>WP-018</code> Delivery Control Room</td><td><code>IN_REVIEW</code></td><td>Documentation engineering</td><td>PR #28 base and independent review</td></tr><tr><td>4</td><td><code>NS-024 / S01</code> Authority profile</td><td><code>WAIT_FOR_AUTHORITY</code></td><td>Business + domain + legal + finance + architecture</td><td>Operative agreements and qualified reviewers</td></tr><tr><td>5</td><td><code>S02</code> Glossary and authority taxonomy</td><td><code>QUEUED</code></td><td>Domain + architecture</td><td>S01 accepted</td></tr><tr><td>6</td><td><code>S03–S11</code> Remaining architecture</td><td><code>QUEUED</code></td><td>Architecture authority</td><td>Each predecessor accepted in order</td></tr><tr><td>7</td><td><code>WP-P0-001</code> Tenant isolation proof</td><td><code>QUEUED</code></td><td>Platform + security</td><td><code>BT-G0</code> accepted and implementation authority granted</td></tr></tbody></table></div>
+<h4 id="backlog-intake-rule">Intake rule</h4>
+<p>A backlog row may move to <code>READY</code> only when its outcome, owner, dependencies, acceptance criteria, authority and evidence requirements are explicit. Priority does not override a blocker.</p>
+<h4 id="backlog-ageing-and-escalation">Ageing and escalation</h4>
+<ul><li>A blocked item must name a human owner and resolution condition.</li><li>A time-sensitive dependency must carry an explicit date, not “soon”.</li><li>A queued architecture slice is not opened merely to show activity.</li><li>A stale snapshot is an observation gap; it must not be treated as zero backlog.</li></ul></div></section>
+<section class="cr-panel" id="decisions" data-kind="governance" data-status="CURRENT" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">50 · GOVERNANCE</p><h2>Decisions and Authority</h2><p class="cr-summary-copy">Proposed decisions, their decision rights and the evidence still required for acceptance.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/50-decisions.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-positive">CURRENT</span><span>Owner · architecture-authority</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="decisions-control-room-decisions">Control-room decisions</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">ID</th><th scope="col">Decision</th><th scope="col">Status</th><th scope="col">Accepting authority</th><th scope="col">Evidence</th></tr></thead><tbody><tr><td><code>CR-D001</code></td><td>Markdown files are the control-room content source of truth</td><td><code>PROPOSED</code></td><td>Guide owner</td><td>Drift test and review</td></tr><tr><td><code>CR-D002</code></td><td>Generate escaped static HTML at build time; no runtime Markdown library</td><td><code>PROPOSED</code></td><td>Guide owner + security</td><td>Generator tests and final-SHA CI</td></tr><tr><td><code>CR-D003</code></td><td>Exactly one section declares the primary action</td><td><code>PROPOSED</code></td><td>Orchestrator authority</td><td>Negative test for a second primary</td></tr><tr><td><code>CR-D004</code></td><td>Dated operational snapshots visibly expire</td><td><code>PROPOSED</code></td><td>Operations owner</td><td>Timezone validation and browser behavior</td></tr><tr><td><code>CR-D005</code></td><td>GitHub Issues remain the human ledger; the page is a governed projection</td><td><code>PROPOSED</code></td><td>Repository owner</td><td>Trace links and ownership review</td></tr><tr><td><code>CR-D006</code></td><td>Live GitHub synchronization is deferred</td><td><code>PROPOSED</code></td><td>Repository owner</td><td>Risk/complexity review</td></tr></tbody></table></div>
+<h4 id="decisions-decision-right-rule">Decision-right rule</h4>
+<p>An implementing agent may recommend and produce evidence. It cannot change a row to <code>ACCEPTED</code> unless the named authority records that decision against the final source revision.</p>
+<h4 id="decisions-architecture-decisions">Architecture decisions</h4>
+<p>ADR-001 through ADR-020 remain draft or blocked as recorded in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md" target="_blank" rel="noopener noreferrer">ADR register</a>. This control room summarizes status; it does not replace or accept an ADR.</p></div></section>
+<section class="cr-panel" id="risks" data-kind="governance" data-status="BLOCKED" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">60 · GOVERNANCE</p><h2>Blockers, Risks and Assumptions</h2><p class="cr-summary-copy">Conditions that can invalidate delivery, architecture or evidence if left implicit.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/15" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/60-risks.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-negative">BLOCKED</span><span>Owner · risk-owner</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="risks-active-blockers">Active blockers</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">ID</th><th scope="col">Condition</th><th scope="col">Impact</th><th scope="col">Owner</th><th scope="col">Resolution</th></tr></thead><tbody><tr><td><code>R-001</code></td><td>GitHub Pages is not enabled</td><td>Public guide cannot be verified live</td><td>Repository administrator</td><td>Complete NS-001 and retain deployment evidence</td></tr><tr><td><code>R-002</code></td><td>Tenant binding/delegated authority is unknown</td><td>State machine, ERD and ledger may encode the wrong legal model</td><td>Business + insurance + legal</td><td>Complete S01 profile with operative evidence</td></tr><tr><td><code>R-003</code></td><td>Client-money/risk-transfer regime is unknown</td><td>Chart of accounts and reconciliation may be wrong</td><td>Legal + finance</td><td>Qualified, tenant-specific conclusion</td></tr><tr><td><code>R-004</code></td><td>Concurrent PRs own shared files</td><td>Uncoordinated edits can erase reviewed work</td><td>Orchestrator</td><td>Compose after owners merge; stop on overlap</td></tr><tr><td><code>R-005</code></td><td>Actions evidence retention changes from October 2026</td><td>Run URLs may cease to prove historical outcomes</td><td>Governance owner</td><td>Resolve Issue #26 with durable evidence content</td></tr></tbody></table></div>
+<h4 id="risks-operating-risks">Operating risks</h4>
+<ul><li><strong>Snapshot drift:</strong> a visually polished dashboard can make old data look current.</li><li><strong>Dual-ledger drift:</strong> hand-edited HTML can contradict Markdown or GitHub Issues.</li><li><strong>Authority laundering:</strong> displaying a proposed decision can make it appear approved.</li><li><strong>Sensitive disclosure:</strong> public Markdown must never contain private agreements or client data.</li><li><strong>Dependency bypass:</strong> backlog priority can be mistaken for authorization to start.</li></ul>
+<h4 id="risks-assumptions-requiring-revalidation">Assumptions requiring revalidation</h4>
+<ul><li>GitHub Issues remain available as the human coordination ledger.</li><li>The static Pages artifact continues to include every tracked HTML page.</li><li>PR #28 remains the accepted base for this stacked documentation slice.</li><li>Initial tenant arrangements may differ materially and cannot share assumed authority rules.</li></ul></div></section>
+<section class="cr-panel" id="evidence" data-kind="assurance" data-status="VALIDATING" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">70 · ASSURANCE</p><h2>Evidence and Assurance</h2><p class="cr-summary-copy">Reproducible checks, revision binding and declared non-coverage for the current control surface.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/pull/28" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/70-evidence.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-active">VALIDATING</span><span>Owner · independent-verifier</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="evidence-evidence-register">Evidence register</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Evidence</th><th scope="col">Revision / subject</th><th scope="col">Result</th><th scope="col">Durable record</th></tr></thead><tbody><tr><td>Architecture pack CI</td><td>PR #28 head <code>bddc8e9</code></td><td><code>SUCCESS</code></td><td>Actions run <code>33728838350</code> and PR conversation</td></tr><tr><td>Complete repository suite</td><td>Current WP-018 worktree</td><td><code>43 PASS</code></td><td>27 baseline + 16 control-room tests; final CI required</td></tr><tr><td>Control-room generation</td><td>10 Markdown sources + fixed template</td><td><code>PASS</code></td><td><code>python3 scripts/build_control_room.py --check</code></td></tr><tr><td>HTML safety contract</td><td>Raw HTML, unsafe links, malformed tables</td><td><code>PASS</code></td><td>Negative-first unit tests reject each mutation</td></tr><tr><td>Source/display drift</td><td>Hand-edited or stale generated page</td><td><code>PASS</code></td><td>Negative control exits non-zero with <code>CONTROL_ROOM_BUILD=FAIL</code></td></tr><tr><td>Static-site continuity</td><td>11 HTML pages, 235 IDs, 331 references</td><td><code>PASS</code></td><td><code>python3 scripts/validate_continuity.py</code></td></tr><tr><td>Local HTTP path</td><td><code>/stages/control-room.html</code> on port 8080</td><td><code>200 OK</code></td><td>Python 3.12 <code>http.server</code> smoke test</td></tr><tr><td>Publication</td><td>Final WP-018 head</td><td><code>PENDING</code></td><td>At least one GitHub Actions run required</td></tr></tbody></table></div>
+<h4 id="evidence-required-final-checks">Required final checks</h4>
+<pre><code class="language-text">python3 scripts/build_control_room.py --check
+python3 -m unittest discover -s tests -v
+python3 scripts/validate_continuity.py
+node --check script.js
+sed -n &#x27;/^  &lt;script&gt;$/,/^  &lt;\\/script&gt;$/p&#x27; stages/control-room.html | sed &#x27;1d;$d&#x27; | node --check -
+git diff --check</code></pre>
+<h4 id="evidence-evidence-quality-rule">Evidence quality rule</h4>
+<p>“Passed” is not sufficient. Record the exact source revision, command or workflow identity, environment, terminal outcome, verifier, coverage and known non-coverage.</p>
+<h4 id="evidence-declared-non-coverage">Declared non-coverage</h4>
+<ul><li>No architecture or ADR is accepted by control-room validation.</li><li>No Lao PDR legal, regulatory or accounting conclusion is proved.</li><li>No production BizTrust application, database or tenant isolation control exists here.</li><li>No live GitHub synchronization or mutable workflow is tested.</li><li>Browser rendering remains a presentation check, not proof that source facts are current.</li></ul></div></section>
+<section class="cr-panel" id="handoff" data-kind="continuity" data-status="READY" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">80 · CONTINUITY</p><h2>Handoff and Recovery</h2><p class="cr-summary-copy">The exact recovery path a new agent follows without access to earlier conversation history.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/80-handoff.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-active">READY</span><span>Owner · receiving-agent</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="handoff-read-in-this-order">Read in this order</h4>
+<ol><li>Repository <code>AGENTS.md</code>.</li><li>Continuity correction <a href="https://github.com/bstBizEra/biztrust_guide/pull/30" target="_blank" rel="noopener noreferrer">PR #30</a>; until composed or merged, it explains why baseline <code>NS-026</code> is stale and <code>NS-001</code> is current.</li><li><code>badf/current-state.json</code> and <code>badf/next-actions.json</code> at the checked-out revision, reconciled against PR #30.</li><li>Work Package <a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Issue #32</a>.</li><li>Base architecture <a href="https://github.com/bstBizEra/biztrust_guide/pull/28" target="_blank" rel="noopener noreferrer">PR #28</a> and its final head.</li><li><code>docs/control-room/README.md</code> and these Markdown sources.</li><li>The latest checkpoint for the active Work Package.</li><li>Current branch, HEAD, worktree, remote divergence and overlapping PR files.</li></ol>
+<h4 id="handoff-first-safe-commands">First safe commands</h4>
+<pre><code class="language-text">git status --short --branch
+python3 -m unittest discover -s tests -v
+python3 scripts/validate_continuity.py
+python3 scripts/build_control_room.py --check</code></pre>
+<h4 id="handoff-resume-decision">Resume decision</h4>
+<p>Return exactly one of <code>CONTINUE</code>, <code>BLOCKED</code>, <code>WAIT_FOR_AUTHORITY</code>, <code>RECOVERY_REQUIRED</code> or <code>COMPLETE</code> before editing.</p>
+<h4 id="handoff-stop-conditions">Stop conditions</h4>
+<ul><li>More than one source declares <code>primary: true</code>.</li><li>Generated HTML differs from the Markdown build.</li><li>The active issue, branch or authority cannot be identified.</li><li>Another PR owns a file this slice must modify and no coordination record exists.</li><li>A source link or evidence points to a different revision than the reviewed result.</li><li>The baseline still emits <code>NS-026</code> and PR #30 is missing, closed without replacement or materially changed.</li><li>A confidential document would need to enter the public repository.</li></ul>
+<blockquote><p>Chat history may explain intent, but it is never the recovery source of truth.</p></blockquote></div></section>
+<section class="cr-panel" id="scorecard" data-kind="assurance" data-status="CURRENT" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">90 · ASSURANCE</p><h2>Delivery Scorecard</h2><p class="cr-summary-copy">Decision-oriented indicators with definitions, owners and escalation triggers.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/32" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/90-scorecard.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-positive">CURRENT</span><span>Owner · portfolio-owner</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="scorecard-current-indicators">Current indicators</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Indicator</th><th scope="col">Current</th><th scope="col">Target</th><th scope="col">Owner</th><th scope="col">Escalation trigger</th></tr></thead><tbody><tr><td>Primary actions</td><td><code>1</code></td><td>Exactly <code>1</code></td><td>Orchestrator</td><td>Zero or more than one</td></tr><tr><td>Active architecture slices</td><td><code>1</code></td><td>At most <code>1</code></td><td>Architecture owner</td><td>Parallel unaccepted slices</td></tr><tr><td>Control-room Markdown views</td><td><code>10</code></td><td><code>10</code> registered</td><td>Guide owner</td><td>Missing or duplicate ID/order</td></tr><tr><td>Repository tests</td><td><code>43 PASS</code></td><td>All pass on final SHA</td><td>Quality owner</td><td>Any failure or skipped protected check</td></tr><tr><td>GitHub Pages availability</td><td><code>BLOCKED</code></td><td>Published and verified</td><td>Repository administrator</td><td>NS-001 remains open</td></tr><tr><td>Architecture gate</td><td><code>WAIT_FOR_AUTHORITY</code></td><td>Evidence-backed <code>BT-G0</code> decision</td><td>Architecture authority</td><td>Design proceeds without S01</td></tr><tr><td>Critical architecture inputs</td><td><code>UNKNOWN</code></td><td>Zero unowned critical unknowns</td><td>Business/legal/finance</td><td>Unknown encoded as default</td></tr></tbody></table></div>
+<h4 id="scorecard-kpi-design-rules">KPI design rules</h4>
+<ul><li>Every metric has a business or control decision attached to it.</li><li>A count without a target and escalation threshold is information, not a KPI.</li><li>Green presentation never overrides failed evidence or missing authority.</li><li>Snapshot metrics carry an observed date and visibly expire.</li></ul>
+<h4 id="scorecard-recommended-next-metrics">Recommended next metrics</h4>
+<ul><li>Backlog age by owner and blocker class.</li><li>Decision lead time from proposal to attributable acceptance.</li><li>Evidence durability: percentage retained independently of expiring run URLs.</li><li>Rework from late architecture decisions.</li><li>Gate escape rate and severity.</li><li>Tenant-isolation negative-test coverage after P0 begins.</li></ul></div></section>
+<section class="cr-panel" id="research" data-kind="research" data-status="WAIT_FOR_AUTHORITY" data-refresh-by=""><header class="cr-panel-head"><div><p class="cr-eyebrow">100 · RESEARCH</p><h2>Research and Open Questions</h2><p class="cr-summary-copy">Questions that require primary evidence or qualified human judgment before architecture can advance.</p></div><div class="cr-source-links"><a href="https://github.com/bstBizEra/biztrust_guide/issues/15" target="_blank" rel="noopener noreferrer">Record ↗</a><a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/control-room/100-research.md" target="_blank" rel="noopener noreferrer">Markdown ↗</a></div></header><div class="cr-meta"><span class="cr-status is-warning">WAIT_FOR_AUTHORITY</span><span>Owner · research-lead</span><span>Updated · <time datetime="2026-09-03">2026-09-03</time></span></div><div class="cr-markdown"><h4 id="research-critical-s01-research">Critical S01 research</h4>
+<ol><li>Which legal entity acts for each initial tenant and product arrangement?</li><li>Can it make cover effective, issue certificates under a master policy, or only request insurer confirmation?</li><li>Who owns product, wording, rating, indication and quote/offer authority?</li><li>Who bears risk while premium, refund or claims money is held or in transit?</li><li>Which client-money, bank, commission, remittance and reconciliation rules apply?</li><li>Which effective-time, timezone, correction and supersession rules apply?</li><li>Are shares, layers, facilities, certificates, bordereaux or account-current required?</li><li>Which residency, retention, legal-hold and disclosure obligations apply by data class?</li></ol>
+<h4 id="research-evidence-standard">Evidence standard</h4>
+<p>Use current primary law and regulation, operative agreements, approved business records and attributable qualified review. A third-party summary can identify a question; it cannot settle a jurisdiction-specific legal or accounting answer.</p>
+<h4 id="research-research-queue-after-s01">Research queue after S01</h4>
+<div class="cr-table-wrap"><table><thead><tr><th scope="col">Sequence</th><th scope="col">Research subject</th><th scope="col">Why it waits</th></tr></thead><tbody><tr><td>S02</td><td>Domain vocabulary and authority taxonomy</td><td>Depends on the actual operating model</td></tr><tr><td>S03</td><td>Systems of record and evidence hierarchy</td><td>Depends on actors and authority</td></tr><tr><td>S04</td><td>Bitemporal coverage and servicing semantics</td><td>Depends on effective-cover authority</td></tr><tr><td>S05</td><td>Placement and contract topology scenarios</td><td>Depends on products and market arrangements</td></tr><tr><td>S06</td><td>Client-money and accounting model</td><td>Depends on legal risk transfer and agreements</td></tr></tbody></table></div>
+<p>The detailed primary-source ledger remains in <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/research/architecture-foundation/report-source.md" target="_blank" rel="noopener noreferrer">`report-source.md`</a>.</p></div></section></div>
+      <p class="cr-empty" id="controlRoomEmpty" hidden>No sections match this filter. Clear the search or select All.</p>
+
+      <footer class="cr-footer">
+        <p>Generated from 10 Markdown sources · updated 2026-09-03 · snapshot <time id="snapshotTime" datetime="2026-09-03T19:00:00+07:00">2026-09-03T19:00:00+07:00</time></p>
+        <p>Source digest <code>20f83b66dd6aa752d0db380cdb2f2036c7be72628b5df1770166690bde9d07df</code></p>
+      </footer>
+    </main>
+  </div>
+
+  <script id="controlRoomData" type="application/json">[{"id": "session", "title": "Design Session", "kind": "execution", "status": "IN_REVIEW", "refresh_by": "2026-09-04T00:00:00+07:00"}, {"id": "today", "title": "Today", "kind": "execution", "status": "WAIT_FOR_AUTHORITY", "refresh_by": "2026-09-04T00:00:00+07:00"}, {"id": "plan", "title": "Plan and Milestones", "kind": "planning", "status": "CURRENT", "refresh_by": null}, {"id": "backlog", "title": "Dependency Backlog", "kind": "planning", "status": "CURRENT", "refresh_by": "2026-09-04T00:00:00+07:00"}, {"id": "decisions", "title": "Decisions and Authority", "kind": "governance", "status": "CURRENT", "refresh_by": null}, {"id": "risks", "title": "Blockers, Risks and Assumptions", "kind": "governance", "status": "BLOCKED", "refresh_by": null}, {"id": "evidence", "title": "Evidence and Assurance", "kind": "assurance", "status": "VALIDATING", "refresh_by": null}, {"id": "handoff", "title": "Handoff and Recovery", "kind": "continuity", "status": "READY", "refresh_by": null}, {"id": "scorecard", "title": "Delivery Scorecard", "kind": "assurance", "status": "CURRENT", "refresh_by": null}, {"id": "research", "title": "Research and Open Questions", "kind": "research", "status": "WAIT_FOR_AUTHORITY", "refresh_by": null}]</script>
+  <script>
+    (() => {
+      'use strict';
+      const root = document.documentElement;
+      const body = document.body;
+      const panels = [...document.querySelectorAll('.cr-panel')];
+      const filters = [...document.querySelectorAll('.cr-filter')];
+      const search = document.getElementById('controlRoomSearch');
+      const count = document.getElementById('visibleCount');
+      const empty = document.getElementById('controlRoomEmpty');
+      const freshness = document.getElementById('freshnessBadge');
+      const theme = document.getElementById('themeToggle');
+      const printButton = document.getElementById('printControlRoom');
+      const copyButton = document.getElementById('copyPrimaryAction');
+      const primaryAction = document.getElementById('primaryAction');
+      let activeKind = 'all';
+
+      try {
+        const savedTheme = localStorage.getItem('biztrust-control-room-theme');
+        const darkPreferred = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        body.dataset.theme = savedTheme || (darkPreferred ? 'dark' : 'light');
+      } catch (_) {
+        body.dataset.theme = 'light';
+      }
+
+      function applyFilters() {
+        const query = (search.value || '').trim().toLocaleLowerCase();
+        let visible = 0;
+        panels.forEach((panel) => {
+          const matchesKind = activeKind === 'all' || panel.dataset.kind === activeKind;
+          const matchesQuery = !query || panel.textContent.toLocaleLowerCase().includes(query);
+          panel.hidden = !(matchesKind && matchesQuery);
+          if (!panel.hidden) visible += 1;
+        });
+        count.textContent = visible + (visible === 1 ? ' section' : ' sections');
+        empty.hidden = visible !== 0;
+      }
+
+      filters.forEach((button) => button.addEventListener('click', () => {
+        activeKind = button.dataset.kind;
+        filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        applyFilters();
+      }));
+      search.addEventListener('input', applyFilters);
+      window.addEventListener('keydown', (event) => {
+        if (event.key === '/' && document.activeElement !== search) {
+          event.preventDefault();
+          search.focus();
+        }
+      });
+
+      function markFreshness(element) {
+        const value = element.dataset.refreshBy;
+        if (!value) return false;
+        const stale = Date.now() >= Date.parse(value);
+        element.classList.toggle('is-stale', stale);
+        return stale;
+      }
+      const overview = document.querySelector('.cr-overview');
+      const overviewStale = markFreshness(overview);
+      panels.forEach(markFreshness);
+      const refreshBy = overview.dataset.refreshBy;
+      freshness.classList.toggle('is-stale', overviewStale);
+      freshness.querySelector('span').textContent = overviewStale
+        ? 'Snapshot stale — refresh source'
+        : 'Current until ' + new Intl.DateTimeFormat(undefined, {dateStyle: 'medium', timeStyle: 'short'}).format(new Date(refreshBy));
+
+      theme.addEventListener('click', () => {
+        const next = body.dataset.theme === 'dark' ? 'light' : 'dark';
+        body.dataset.theme = next;
+        try { localStorage.setItem('biztrust-control-room-theme', next); } catch (_) {}
+      });
+      printButton.addEventListener('click', () => window.print());
+      copyButton.addEventListener('click', async () => {
+        const original = copyButton.textContent;
+        try {
+          await navigator.clipboard.writeText(primaryAction.textContent.trim());
+          copyButton.textContent = 'Copied';
+        } catch (_) {
+          copyButton.textContent = 'Copy unavailable';
+        }
+        window.setTimeout(() => { copyButton.textContent = original; }, 1500);
+      });
+
+      if ('IntersectionObserver' in window) {
+        const navLinks = [...document.querySelectorAll('#controlRoomNav a')];
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            navLinks.forEach((link) => link.classList.toggle('is-active', link.hash === '#' + entry.target.id));
+          });
+        }, {rootMargin: '-22% 0px -68% 0px'});
+        panels.forEach((panel) => observer.observe(panel));
+      }
+
+      root.dataset.controlRoomReady = 'true';
+    })();
+  </script>
+</body>
+</html>

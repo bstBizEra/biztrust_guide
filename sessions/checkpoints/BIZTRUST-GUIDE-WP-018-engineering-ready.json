@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-018-001",
+  "created_at": "2026-09-03T12:12:25Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-018",
+  "state": "ENGINEERING_READY",
+  "objective": "Provide a Markdown-first Delivery Control Room that keeps session, daily action, plan, backlog, decisions, risks, evidence, handoff, scorecard and research state recoverable without chat history.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-018-control-room",
+    "baseline_commit": "bddc8e9293fa84cd797374b7b41a9b3b13143419"
+  },
+  "completed": [
+    "Registered ten small Markdown control-room views with explicit status, owner, source, update date and deterministic order",
+    "Enforced exactly one primary action and timezone-aware freshness for dated operational snapshots",
+    "Built a standard-library generator that escapes raw HTML, rejects unsafe links and produces a committed static HTML projection",
+    "Added navigation, search, view filters, freshness warnings, print support, responsive layout, accessible labels and light/dark themes",
+    "Linked the control room from the guide home page without changing the shared stylesheet, script, workflow or continuity validator",
+    "Added sixteen control-room tests covering source contracts, unsafe input, local references, semantics, checkpoint shape and source/display drift",
+    "Declared the PR #30 continuity divergence so a receiving agent does not mistake baseline NS-026 for current work"
+  ],
+  "remaining": [
+    "Publish the branch and open a draft pull request stacked on PR #28",
+    "Obtain a successful GitHub Actions validation run on the final head SHA",
+    "Independent human review and merge after PR #28 is accepted or the branch is safely retargeted",
+    "Compose or merge PR #30 so badf/current-state.json emits NS-001 rather than obsolete NS-026",
+    "Repository administrator enables GitHub Pages and retains deployment evidence"
+  ],
+  "files_changed": [
+    "index.html",
+    "docs/control-room/README.md",
+    "docs/control-room/10-session.md",
+    "docs/control-room/20-today.md",
+    "docs/control-room/30-plan.md",
+    "docs/control-room/40-backlog.md",
+    "docs/control-room/50-decisions.md",
+    "docs/control-room/60-risks.md",
+    "docs/control-room/70-evidence.md",
+    "docs/control-room/80-handoff.md",
+    "docs/control-room/90-scorecard.md",
+    "docs/control-room/100-research.md",
+    "scripts/build_control_room.py",
+    "templates/control-room-shell.tpl",
+    "stages/control-room.html",
+    "tests/test_control_room.py",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-018-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -B scripts/build_control_room.py --check",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -B -m unittest discover -s tests -v",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -B scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js and generated control-room inline JavaScript",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m http.server 8080 plus HEAD /stages/control-room.html",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "GitHub Actions validation on final WP-018 head SHA",
+      "status": "PENDING_FINAL_RUN",
+      "exit_code": null
+    }
+  ],
+  "observations": [
+    "The baseline continuity validator passes structurally but emits stale NS-026; PR #30 documents and corrects that factual drift independently on main",
+    "Naming the shell template with an .html extension made the site validator treat it as a deployable page; the .tpl boundary fixes that without weakening or modifying the validator",
+    "Placing the generated page under stages keeps the existing all-pages negative control meaningful: its gutted-site fixture removes every secondary page before asserting that no references remain",
+    "The control room is an evidence-linked projection, not a second mutable issue tracker and not proof that the underlying facts remain current"
+  ],
+  "decisions": [
+    "Markdown is the authoritative control-room content and the HTML page is reproducible committed output",
+    "No runtime Markdown library or live GitHub API is required for the static page",
+    "Exactly one section may declare primary true; conflicting source state fails the build",
+    "Expired snapshots remain visible but are marked stale instead of being presented as current",
+    "Shared files owned by other open pull requests remain untouched"
+  ],
+  "assumptions": [
+    "PR #28 remains the correct architecture documentation base until it is merged or explicitly rejected",
+    "PR #30 remains the valid correction for the stale continuity primary action until a newer attributable record supersedes it",
+    "GitHub Pages continues to publish every tracked .html file through the existing artifact workflow"
+  ],
+  "blockers": [
+    {
+      "code": "PAGES_ADMIN_REQUIRED",
+      "owner_role": "repository-administrator",
+      "resolution": "Select GitHub Actions as the Pages source, run the push workflow and retain the successful deployment URL."
+    },
+    {
+      "code": "ARCHITECTURE_AUTHORITY_REQUIRED",
+      "owner_role": "business-domain-legal-finance-architecture-reviewers",
+      "resolution": "Complete and accept the S01 tenant authority profile before advancing architecture slices."
+    },
+    {
+      "code": "MERGE_REQUIRES_HUMAN",
+      "owner_role": "human-reviewer",
+      "resolution": "Review the final head SHA and merge only after its stacked base is accepted or safely retargeted."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "HUMAN_RESERVED",
+    "github_pages_activation": "REPOSITORY_ADMIN_REQUIRED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-001",
+  "recovery": {
+    "first_safe_command": "python3 -B scripts/build_control_room.py --check && python3 -B -m unittest discover -s tests -v",
+    "read_first": [
+      "AGENTS.md",
+      "docs/control-room/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/32",
+      "https://github.com/bstBizEra/biztrust_guide/pull/28",
+      "https://github.com/bstBizEra/biztrust_guide/pull/30",
+      "sessions/checkpoints/BIZTRUST-GUIDE-WP-018-engineering-ready.json"
+    ],
+    "stop_if": [
+      "The generated HTML differs from the Markdown build",
+      "More than one section declares primary true",
+      "PR #28 or PR #30 materially changed and the control-room sources have not been reconciled",
+      "A shared file is now owned by another uncomposed pull request",
+      "A requested action requires merge, repository administration, architecture acceptance or production authority"
+    ]
+  },
+  "declared_non_coverage": [
+    "No architecture decision or ADR is accepted by this Work Package",
+    "No Lao PDR legal, regulatory, client-money or accounting conclusion is established",
+    "No production application, database, identity provider, APISIX gateway or tenant-isolation control is implemented",
+    "No live GitHub synchronization, authenticated issue mutation or browser-rendering proof is included",
+    "A green build proves deterministic safe rendering and repository consistency, not the factual currency of external work state"
+  ]
+}
