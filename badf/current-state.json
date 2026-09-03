@@ -2,34 +2,32 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-02T21:31:14Z",
+  "updated_at": "2026-09-03T11:44:08Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-010",
-    "title": "Complete the nine stages, and make the two preconditions mechanical",
+    "id": "BIZTRUST-GUIDE-WP-017",
+    "title": "Re-anchor the continuity state on work that is actually outstanding",
     "state": "ENGINEERING_READY",
-    "objective": "Finish the nine-stage manual and convert two declared rules into checks that fail.",
-    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/16",
+    "objective": "The resume protocol emitted PRIMARY_NEXT_ACTION=NS-026, which instructed the next agent to merge #11, #12 and #14 - all merged on 2026-09-02. Re-anchor state, actions and checkpoint on the seven pull requests that are genuinely open.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/29",
     "owner_role": "documentation-engineer",
     "scope": [
-      "cross-page duplicate detector",
-      "retroactive exit-gate audit",
-      "discover.html",
-      "define.html",
-      "learn.html",
-      "index.html links all nine"
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "badf/decision-log.jsonl",
+      "sessions/checkpoints/"
     ]
   },
   "source": {
-    "branch": "feat/biztrust-guide-wp-010-complete-nine-stages",
-    "baseline_commit": "7946d0229de7b54f7cf2042d1c5bcc3108a9080c",
-    "baseline_kind": "stacked-on-wp-009-branch",
+    "branch": "fix/biztrust-guide-wp-017-stale-continuity-state",
+    "baseline_commit": "b1a3fa455b758cc6e27404e9b84ee1dce3acf385",
+    "baseline_kind": "main",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
   "gates": {
-    "content": "REVIEWED_BY_INDEPENDENT_AGENTS_DEFECTS_BEING_FIXED",
+    "content": "NINE_STAGES_MERGED_SEVEN_PULL_REQUESTS_OPEN",
     "continuity": "PASS",
     "security": "PASS_WITH_LOCAL_PREVIEW_LIMITATION",
-    "deployment": "FAILING_AT_CONFIGURE_PAGES"
+    "deployment": "FAILING_AT_CONFIGURE_PAGES_PAGES_NOT_ENABLED"
   },
   "authority": {
     "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
@@ -38,10 +36,10 @@
     "production_platform_implementation": "NOT_GRANTED",
     "architecture_acceptance": "NOT_GRANTED"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-010-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-017-engineering-ready.json",
   "latest_handoff": null,
-  "primary_next_action_id": "NS-026",
+  "primary_next_action_id": "NS-001",
   "resume_decision": "WAIT_FOR_AUTHORITY",
-  "stop_reason": "Four pull requests await human review: #11, #12, #14 and WP-010. Agents must not merge.",
+  "stop_reason": "GitHub Pages is not enabled, so every push to main fails at Configure Pages. Seven pull requests await human review. Agents must not merge.",
   "known_divergence": "Issue #2 (BIZTRUST-GUIDE-WP-003) remains open and labelled state:in-progress; NS-015 resequences or closes it."
 }

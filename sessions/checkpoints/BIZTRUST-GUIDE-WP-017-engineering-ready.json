@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-017-001",
+  "created_at": "2026-09-03T11:44:49Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-017",
+  "state": "ENGINEERING_READY",
+  "objective": "Re-anchor continuity state on outstanding work. The resume protocol emitted PRIMARY_NEXT_ACTION=NS-026, instructing the next agent to merge #11, #12 and #14 - all merged on 2026-09-02.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-017-stale-continuity-state",
+    "baseline_commit": "b1a3fa455b758cc6e27404e9b84ee1dce3acf385"
+  },
+  "completed": [
+    "Confirmed NS-026 named three merged pull requests: #11, #12 and #14 all report state MERGED",
+    "Confirmed current-state named BIZTRUST-GUIDE-WP-010 active; it merged as #17",
+    "Confirmed source.branch named feat/biztrust-guide-wp-010-complete-nine-stages, deleted at merge",
+    "Retired NS-026; promoted NS-001 (enable Pages) from priority 5 to primary",
+    "Added NS-029 for the seven open pull requests, replacing NS-026's four-merged list"
+  ],
+  "remaining": [
+    "Enable GitHub Pages - repository admin only, NS-001",
+    "Human review and merge of the seven open pull requests - NS-029"
+  ],
+  "files_changed": [
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-017-engineering-ready.json"
+  ],
+  "validation": [
+    "python3 scripts/validate_continuity.py - exit 0",
+    "python3 -m unittest discover -s tests - 41 tests",
+    "All seven open pull requests merge onto main with zero conflicts; composed tree passes both"
+  ],
+  "observations": [
+    "The validator checks presence and shape, not currency. NS-026 satisfied every structural constraint while naming work finished the day before, so CONTINUITY_VALIDATION=PASS was true of the form and false of the content.",
+    "Only gates.deployment was accurate before this change: Configure Pages fails because GET /repos/bstBizEra/biztrust_guide/pages returns 404. Steps 1-8 of the validate job pass.",
+    "NS-001 means the same thing in badf/next-actions.json and docs/NEXT_STEPS.md; the namespaces diverge only above NS-003, so promoting it carries no cross-register ambiguity."
+  ],
+  "decisions": [
+    "Retire NS-026 rather than mark it complete: next-actions.json is a queue of open work, and the retirement is recorded in the extend-only decision log.",
+    "Promote the existing NS-001 rather than allocate a new id, because NS-001 already states the action and lies in the range both registers agree on.",
+    "Scope this Work Package to the four continuity files. The stage-content gaps found in the same review are filed separately rather than fixed here."
+  ],
+  "assumptions": [
+    "The seven open pull requests remain open and green at merge time; NS-029 names CI per head SHA as its evidence precisely because a rebase would void that reading."
+  ],
+  "blockers": [
+    "GitHub Pages activation requires repository admin and cannot be performed by an agent"
+  ],
+  "authority": {
+    "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "github_pages_activation": "REQUIRES_REPOSITORY_ADMIN",
+    "merge": "HUMAN_RESERVED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-001",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "AGENTS.md"
+    ],
+    "stop_if": [
+      "PRIMARY_NEXT_ACTION names a pull request that already reports state MERGED",
+      "The validator exits non-zero",
+      "An action's owner_role is human-reviewer or repository-administrator - stop and ask"
+    ]
+  },
+  "declared_non_coverage": [
+    "This checkpoint does not verify the content of the nine stage pages",
+    "It does not verify that the guide is complete, correct, or fit to follow",
+    "It makes no claim about the BizTrust production platform, which remains unauthorized"
+  ]
+}
