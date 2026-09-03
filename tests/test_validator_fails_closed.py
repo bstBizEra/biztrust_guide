@@ -15,6 +15,7 @@ Nothing here writes to the working tree. Stdlib only; no pytest required:
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -287,6 +288,19 @@ class TestWorkflowPinningDoesNotBlockUpgrades(ValidatorHarness):
     """
 
     WORKFLOW = ".github/workflows/pages.yml"
+    ACTION = "actions/deploy-pages"
+
+    def current_pin(self) -> str:
+        """Read the version actually pinned, rather than naming one here.
+
+        The first version of these tests hard-coded "actions/deploy-pages@v4"
+        and broke the moment the pin moved to v5 - rebuilding, inside the test
+        suite, the exact trap the check under test exists to remove.
+        """
+        text = (self.root / self.WORKFLOW).read_text(encoding="utf-8")
+        match = re.search(rf"uses:\s*{re.escape(self.ACTION)}@(\S+)", text)
+        self.assertIsNotNone(match, f"{self.ACTION} is not used by the workflow")
+        return match.group(1)
 
     def edit_workflow(self, old: str, new: str) -> None:
         path = self.root / self.WORKFLOW
@@ -294,8 +308,12 @@ class TestWorkflowPinningDoesNotBlockUpgrades(ValidatorHarness):
         self.assertIn(old, text, "workflow anchor missing")
         path.write_text(text.replace(old, new, 1), encoding="utf-8")
 
+    def repin(self, new_ref: str) -> None:
+        self.edit_workflow(f"{self.ACTION}@{self.current_pin()}", f"{self.ACTION}@{new_ref}")
+
     def test_upgrading_an_action_does_not_fail_the_check(self) -> None:
-        self.edit_workflow("actions/deploy-pages@v4", "actions/deploy-pages@v5")
+        bumped = "v" + str(int(self.current_pin().lstrip("v").split(".")[0]) + 1)
+        self.repin(bumped)
         code, out, _ = self.run_validator()
         self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
         self.assertEqual(code, 0)
@@ -303,16 +321,13 @@ class TestWorkflowPinningDoesNotBlockUpgrades(ValidatorHarness):
     def test_a_full_sha_pin_is_accepted(self) -> None:
         """SHA pinning is GitHub's hardening recommendation; refusing it would
         push the workflow toward the weaker of the two supported styles."""
-        self.edit_workflow(
-            "actions/deploy-pages@v4",
-            "actions/deploy-pages@0f7b2e1c8d4a6f9e3b5c7d1a2e4f6b8c0d2e4f6a",
-        )
+        self.repin("0f7b2e1c8d4a6f9e3b5c7d1a2e4f6b8c0d2e4f6a")
         code, out, _ = self.run_validator()
         self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
         self.assertEqual(code, 0)
 
     def test_an_unpinned_action_fails(self) -> None:
-        self.edit_workflow("actions/deploy-pages@v4", "actions/deploy-pages@main")
+        self.repin("main")
         self.assert_fails_closed("pins actions/deploy-pages to 'main'")
 
     def test_a_missing_action_fails(self) -> None:
