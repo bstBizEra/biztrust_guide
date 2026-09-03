@@ -1,51 +1,70 @@
 {
   "schema_version": "1.0.0",
-  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-003-001",
-  "created_at": "2026-09-02T15:05:00Z",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-003-003",
+  "created_at": "2026-09-03T12:05:14Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-003",
   "state": "ENGINEERING_READY",
-  "objective": "Integrate reconciled architecture details and canonical flows into the guide with durable agent continuity.",
+  "objective": "Reconcile the architecture foundation against primary sources, define an evidence-gated completion sequence, and close the three blocking review findings on pull request #28.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "feat/biztrust-guide-wp-003-architecture-flows",
-    "baseline_commit": "d6a5b2dd0adb1e39a1aaff1d68ff061cecd08b8d"
+    "baseline_commit": "b1a3fa455b758cc6e27404e9b84ee1dce3acf385"
   },
   "completed": [
-    "Read and fingerprinted both supplied architecture drafts",
-    "Verified current OpenAPI, AsyncAPI, Logto organization-token and PostgreSQL RLS primary sources",
-    "Created the draft ARCH-001 architecture contract",
-    "Created canonical brokerage, authorization, state, payment-policy and event flows",
-    "Created the dependency-ordered P0-P3 and BT-G0 through BT-G6 delivery plan",
-    "Expanded the HTML guide with four architecture sections and explicit decision-status labels",
-    "Reconciled roadmap, gate, domain-count and technology-commitment conflicts",
-    "Made next-action identifiers consistent across the HTML, roadmap and machine queue",
-    "Extended continuity validation to require the architecture pack and registered action IDs"
+    "Reviewed the current repository, open issues and overlapping pull requests against issue #2 scope",
+    "Researched intermediary authority, client-money, tenant isolation, API, event, workflow and issue-control foundations from primary or official sources",
+    "Created a claim-to-source ledger with explicit limitations and unresolved evidence",
+    "Created BIZTRUST-WP-ARCH-001A as GitHub issue #27 and made issue #15 its first blocking decision slice",
+    "Defined the dependency-ordered S01 through S11 architecture sequence and one-active-slice control rule",
+    "Created the tenant authority and operating-regime profile template for S01",
+    "Expanded the architecture contract, conceptual model, state flows, authorization baseline, delivery plan and ADR register to cover the storage-shape findings in issue #15",
+    "Kept architecture acceptance and production implementation explicitly outside this documentation Work Package",
+    "Preserved current main versions of shared guide and BADF state files because open pull requests own those changes",
+    "Published draft pull request #28 and verified that its remote Git tree exactly matched the locally validated tree",
+    "Reconciled the ADR-set claim on index.html: the repository tree, required outputs, ADR grid, roadmap freeze item and NS-005 council action now name twenty ADRs, and the grid carries ADR-013 through ADR-020",
+    "Recorded the published-summary reconciliation in SOURCE_RECONCILIATION.md under item 4 of its own change rule, with a named owner and issue number for each deferral",
+    "Restated SOURCE_RECONCILIATION.md section 2 as a proposed normalization, with the guide-side measurement that shows it is unapplied, and filed issue #34 to perform the rename",
+    "Filed issue #35 for the one remaining twelve-ADR site, docs/NEXT_STEPS.md:89, which pull request #19 owns",
+    "Withdrew the superseded WP-003 checkpoint, whose files_changed, baseline_commit and continuity-validation claim were all false, and moved this accurate record onto the canonical filename so a glob of the checkpoint convention resolves to it"
   ],
   "remaining": [
-    "Publish the feature commit and pull request",
-    "Obtain independent documentation review",
-    "Repository administrator enables GitHub Pages",
-    "Architecture authority separately opens and accepts BIZTRUST-WP-ARCH-001A"
+    "Obtain independent re-review of the three closed findings on pull request #28",
+    "Confirm at least one GitHub Actions run reaches a terminal result on the final pull-request head SHA",
+    "Have a maintainer add the native GitHub parent/dependency relationship between issues #27 and #15",
+    "Complete one S01 authority profile per initial tenant and materially different product arrangement",
+    "Perform the ENG-G* lifecycle-gate rename tracked as issue #34",
+    "Correct docs/NEXT_STEPS.md:89 under issue #35, after pull request #19 merges",
+    "Reconcile current-state and next-action metadata after the owning document-drift pull request is merged",
+    "Accept, revise or reject each architecture slice and ADR through the recorded human authority process"
   ],
   "files_changed": [
-    "README.md",
-    "index.html",
-    "styles.css",
-    "docs/NEXT_STEPS.md",
-    "docs/architecture/README.md",
+    "docs/architecture/ADR_REGISTER.md",
+    "docs/architecture/AUTHORIZATION_BASELINE.md",
     "docs/architecture/BIZTRUST-ARCH-001.md",
-    "docs/architecture/FLOWS.md",
     "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/DOMAIN_MODEL.md",
+    "docs/architecture/FLOWS.md",
+    "docs/architecture/FOUNDATION_SEQUENCE.md",
+    "docs/architecture/README.md",
     "docs/architecture/SOURCE_RECONCILIATION.md",
-    "badf/current-state.json",
-    "badf/next-actions.json",
-    "badf/decision-log.jsonl",
-    "scripts/validate_continuity.py",
+    "docs/architecture/TENANT_AUTHORITY_PROFILE_TEMPLATE.md",
+    "docs/research/architecture-foundation/report-source.md",
+    "index.html",
     "sessions/checkpoints/BIZTRUST-GUIDE-WP-003-engineering-ready.json"
   ],
   "validation": [
     {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
       "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator over sessions/checkpoints/*.json against schemas/session-checkpoint.schema.json (8 files, 0 errors)",
       "status": "PASS",
       "exit_code": 0
     },
@@ -55,64 +74,109 @@
       "exit_code": 0
     },
     {
-      "command": "python3 -m http.server 8080 --bind 127.0.0.1; curl -I http://127.0.0.1:8080/",
+      "command": "git diff --check",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "relative Markdown link check over docs/**/*.md (16 links, 0 missing)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests AND python3 scripts/validate_continuity.py on the simulated squash of this branch onto main",
+      "status": "PENDING_FINAL_RUN",
+      "exit_code": null
+    },
+    {
+      "command": "GitHub Actions on final pull-request head SHA",
+      "status": "PENDING_FINAL_RUN",
+      "exit_code": null
     }
   ],
   "observations": [
-    "The supplied drafts overlap substantially and conflict on roadmap depth, gate identifiers and bounded-context count.",
-    "OpenAPI 3.2.0 and AsyncAPI 3.1.0 are the current published specification versions as of 2026-09-02.",
-    "The repository documents proposed architecture but contains no BizTrust production-platform implementation.",
-    "GitHub Pages remains dependent on a repository administrator selecting GitHub Actions as the Pages source."
+    "Architecture is designable but not freezable until tenant-specific authority, jurisdiction and client-money inputs are reviewed and accepted.",
+    "Application authorization and legal or contractual insurance authority are separate decisions and must remain separate in the model.",
+    "The current continuity files still select BIZTRUST-GUIDE-WP-010 and NS-026; issue #18 and pull request #19 own that document-drift correction.",
+    "index.html is modified by NO open pull request - measured from the file lists of #19, #20, #21, #22, #24, #25 and #30 - so this Work Package can and does reconcile it. The earlier claim that concurrent pull requests owned index.html was wrong, and it is what left the front door asserting twelve ADRs against a register of twenty.",
+    "Open pull requests do own README.md, styles.css, docs/NEXT_STEPS.md, docs/AGENT_CONTINUITY.md, AGENTS.md, badf/ files, stages/ pages, scripts/validate_continuity.py and tests/; this slice still avoids every one of those.",
+    "The superseded WP-003 checkpoint was withdrawn rather than corrected. Its validation block recorded PASS outcomes for a session at baseline d6a5b2dd0adb, 25 commits behind this branch's merge-base, and three of its completed entries described HTML, machine-queue and validator work that this branch does not contain. Repairing three fields would have left an evidence record no present agent can attest to; schemas/session-checkpoint.schema.json sets additionalProperties:false and has no supersession field, so the falsity could not be marked in place either.",
+    "This checkpoint now carries the canonical filename that the other seven committed checkpoints follow, so an agent globbing that convention for BIZTRUST-GUIDE-WP-003 resolves to the accurate record rather than to the withdrawn one.",
+    "Draft pull request #28 is the review surface; it remains draft for independent review and unresolved state reconciliation, not because local validation failed."
   ],
-  "decisions": ["DEC-004", "DEC-005", "DEC-006", "DEC-007", "DEC-008", "DEC-009"],
+  "decisions": [
+    "PROPOSED-ARCH-SEQUENCE-S01-S11",
+    "PROPOSED-ONE-ACTIVE-ARCHITECTURE-SLICE",
+    "PROPOSED-ADR-013-THROUGH-ADR-020",
+    "ISSUE-27-PARENT-WORK-PACKAGE",
+    "ISSUE-15-FIRST-BLOCKING-SLICE",
+    "WITHDRAW-SUPERSEDED-WP-003-CHECKPOINT",
+    "DEFER-ENG-G-RENAME-TO-ISSUE-34"
+  ],
   "assumptions": [
-    "The architecture authority will treat this pack as review input rather than an accepted contract.",
-    "The public repository may contain the supplied architecture recommendations but no confidential business or client data."
+    "At least two materially different tenant contexts are expected, but each operating arrangement still requires its own evidence-backed profile.",
+    "Restricted licences, agreements, bank details, client data and legal advice will be stored outside the public repository.",
+    "The document-drift owner will reconcile BADF state after the relevant pull request merges rather than this branch overwriting concurrent work."
   ],
   "blockers": [
     {
-      "code": "PAGES_SOURCE_NOT_CONFIRMED",
-      "owner_role": "repository-administrator",
-      "resolution": "Select GitHub Actions in repository Pages settings and retain the deployment run URL."
+      "code": "S01_AUTHORITY_AND_MONEY_INPUTS_REQUIRED",
+      "owner_role": "business-legal-domain-finance-reviewers",
+      "resolution": "Complete and accept one tenant authority and operating-regime profile for each initial tenant and materially different product arrangement."
     },
     {
-      "code": "ARCHITECTURE_NOT_ACCEPTED",
-      "owner_role": "architecture-authority",
-      "resolution": "Authorize BIZTRUST-WP-ARCH-001A and review the draft pack through BT-G0."
+      "code": "CURRENT_STATE_SYNC_OWNED_BY_PR19",
+      "owner_role": "document-drift-work-package-owner",
+      "resolution": "Merge or otherwise resolve pull request #19, then reconcile badf/current-state.json and badf/next-actions.json without overwriting concurrent work."
+    },
+    {
+      "code": "NATIVE_ISSUE_RELATIONSHIP_REQUIRES_MAINTAINER",
+      "owner_role": "repository-maintainer",
+      "resolution": "Set issue #15 as the S01 sub-issue and blocking dependency for issue #27 in GitHub's Relationships UI."
     }
   ],
   "authority": {
-    "documentation_implementation": "GRANTED",
-    "remote_commit_and_pull_request": "GRANTED",
+    "architecture_research_and_documentation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "github_issue_coordination": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "remote_commit_and_pull_request": "GRANTED_BY_BIZTRUST-GUIDE-WP-003",
     "architecture_acceptance": "NOT_GRANTED_TO_IMPLEMENTING_AGENT",
     "production_platform_implementation": "NOT_GRANTED",
-    "pages_activation": "NOT_GRANTED_TO_AGENT"
+    "confidential_evidence_access": "NOT_GRANTED"
   },
-  "next_action_id": "NS-001",
+  "next_action_id": "NS-024",
   "recovery": {
     "first_safe_command": "python3 scripts/validate_continuity.py",
     "read_first": [
       "AGENTS.md",
       "badf/current-state.json",
       "badf/next-actions.json",
-      "docs/architecture/README.md",
-      "docs/architecture/SOURCE_RECONCILIATION.md"
+      "https://github.com/bstBizEra/biztrust_guide/pull/28",
+      "https://github.com/bstBizEra/biztrust_guide/issues/27",
+      "https://github.com/bstBizEra/biztrust_guide/issues/15",
+      "docs/architecture/SOURCE_RECONCILIATION.md",
+      "docs/architecture/FOUNDATION_SEQUENCE.md",
+      "docs/architecture/TENANT_AUTHORITY_PROFILE_TEMPLATE.md",
+      "docs/research/architecture-foundation/report-source.md"
     ],
     "stop_if": [
-      "The active Work Package or authority record has changed",
-      "Remote main no longer descends from the recorded baseline",
-      "Continuity validation fails",
-      "Architecture content is being described as accepted or implemented without authority evidence"
+      "Issue #27 or #15 records a conflicting authority or sequence decision",
+      "More than one architecture slice is state:in-progress",
+      "A requested answer depends on restricted evidence that has not been supplied through an approved channel",
+      "An overlapping pull request changes the same architecture artifact without a coordination record",
+      "The branch no longer cleanly descends from or rebases onto the reviewed main baseline",
+      "Deterministic validation fails"
     ]
   },
   "declared_non_coverage": [
-    "Independent architecture, insurance-domain, security, finance and operations acceptance",
-    "GitHub Pages repository setting activation",
-    "Post-deployment browser verification",
-    "Production BizTrust application implementation",
-    "Jurisdiction-specific legal, regulatory and accounting validation",
-    "Live insurer, payment-provider or bank contract testing"
+    "Architecture acceptance or BT-G0 approval",
+    "Jurisdiction-specific legal, regulatory, privacy or accounting conclusions",
+    "Review of private licences, delegated-authority agreements, master policies, client-money arrangements or bank details",
+    "Physical database schema and production migrations",
+    "Production vendor selection, procurement, deployment or infrastructure",
+    "BizTrust application implementation",
+    "Native GitHub sub-issue or dependency relationship creation",
+    "BADF current-state and next-action changes owned by concurrent pull requests",
+    "The ENG-G* lifecycle-gate rename (issue #34) and the docs/NEXT_STEPS.md ADR-count correction (issue #35)",
+    "Any change to styles.css, stages/ pages, scripts/validate_continuity.py or tests/, all owned by concurrent pull requests"
   ]
 }
