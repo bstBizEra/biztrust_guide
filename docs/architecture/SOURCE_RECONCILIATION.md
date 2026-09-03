@@ -34,7 +34,7 @@ The raw drafts are not copied into the repository because they substantially dup
 | RBAC matrix | Architecture authorization model | Role/permission/scope/condition/authority concept retained; exact grants deferred to IAM contract |
 | State machines | `FLOWS` §6–13 | Promoted with immutable offer revisions, temporal semantics and policy dimensions |
 | P0–P3 plan | `DELIVERY_PLAN` | Promoted as the near-term planning baseline |
-| Architecture gates | `DELIVERY_PLAN` §7 | Renamed `BT-G0…BT-G6` within this pack; the matching guide-side `ENG-G*` rename is proposed only — see §2 and issue #34 |
+| Architecture gates | `DELIVERY_PLAN` §7 | Renamed `BT-G0…BT-G6` within this pack; the matching guide-side `ENG-G*` rename is applied — see §2 |
 | Required ADRs | `BIZTRUST-ARCH-001` §16; `ADR_REGISTER` | Expanded from 12 to 20 after issue #15; none marked accepted |
 
 ## Conflicts resolved
@@ -45,25 +45,27 @@ One source proposed P0–P9 while the other proposed P0–P3. The guide uses P0�
 
 ### 2. Gate identifiers
 
-The existing engineering guide already used `G0…G8` for the delivery lifecycle, while the architecture draft used `G0…G6` for platform milestones. The **proposed** normalization — not yet applied to the guide — is:
+The existing engineering guide already used `G0…G8` for the delivery lifecycle, while the architecture draft used `G0…G6` for platform milestones. The normalized identifiers **are**:
 
 - `ENG-G0…ENG-G8` — Work Package lifecycle;
 - `BT-G0…BT-G6` — BizTrust platform capability;
 - `P0…P3` — delivery phases.
 
-Only the `BT-G*` half is in force, and only inside this pack. Measured over the 15 published guide files — `index.html`, `README.md`, `AGENTS.md`, the three top-level `docs/*.md`, and the nine `stages/*.html`; `docs/architecture/` and `docs/research/` are this pack and are excluded:
+Both halves are now in force. Measured over the 15 published guide files — `index.html`, `README.md`, `AGENTS.md`, the three top-level `docs/*.md`, and the nine `stages/*.html`; `docs/architecture/` and `docs/research/` are this pack and are excluded, so this document cannot move its own numbers:
 
 ```
-ENG-G       0 occurrences
-BT-G        0 occurrences
-bare G0…G8  11 occurrences  (index.html ×9, docs/AGENT_CONTINUITY.md:222 ×2)
+bare G0…G8  0 occurrences
+ENG-G      15 occurrences  (index.html ×13, docs/AGENT_CONTINUITY.md ×2)
+BT-G        5 occurrences  (index.html ×3, docs/AGENT_CONTINUITY.md ×2)
 ```
 
-These three counts are about surfaces this file does not itself contribute to, so they stay checkable as this document changes.
+Read the `BT-G` count as cross-reference, not leakage: every one of the five occurs in a sentence telling the reader that `BT-G*` is a *different* namespace belonging to this pack. No lifecycle gate anywhere in the guide is labelled `BT-G*`, and no platform milestone is labelled `ENG-G*`.
 
-So the guide still prints bare `G0`…`G8` and nothing on the published surface signals that two gate namespaces exist. Until that is corrected, read `G0…G8` in the guide as the lifecycle gate and `BT-G0…BT-G6` here as the platform gate; do not treat a bare `G<n>` in this pack's vicinity as normalized.
+The `ENG-G` count is 15 rather than 11 because string occurrences and renamed identifiers are not the same measurement. The 11 identifiers are the nine gate badges in `index.html` and the two ends of the `Gate | ENG-G0–ENG-G8` row in `docs/AGENT_CONTINUITY.md` — exactly the 11 bare occurrences that existed before. The remaining four are all in `index.html`: three in the namespace note that `DELIVERY_PLAN.md` §1 requires the guide to carry, and one in that section's `data-search` attribute.
 
-Performing the rename requires changing the nine lifecycle gate badges in `index.html` and the `Gate | G0–G8` row at `docs/AGENT_CONTINUITY.md:222`. That is a separate change with its own acceptance criteria and guard test, tracked as **[issue #34](https://github.com/bstBizEra/biztrust_guide/issues/34)**. It is not performed here for two reasons: an identifier rename across the published guide is a different change from reconciling this record, and `docs/AGENT_CONTINUITY.md` is currently owned by pull request #19 / issue #18. When #34 lands, this section reverts to the present tense and this note is removed.
+A reader who now meets a gate identifier on the published surface can tell which namespace it belongs to from the identifier alone, which is what `DELIVERY_PLAN.md` §1 requires. An unprefixed `G<n>` is no longer produced by this repository; if one appears, it is a regression, not a legacy spelling.
+
+Applied by [issue #34](https://github.com/bstBizEra/biztrust_guide/issues/34). This normalization is **not** guarded by a test — no check fails if a future edit reintroduces a bare `G<n>`, and `tests/` was owned by another change when this landed. The guard is filed as follow-up work, so treat the counts above as a measurement taken at one revision rather than an invariant held by machinery.
 
 ### 3. Domain count
 
