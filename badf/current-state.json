@@ -2,23 +2,23 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-03T18:03:11Z",
+  "updated_at": "2026-09-03T18:43:39Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-024",
-    "title": "Blind handoff experiment: can an agent resume from a derived artifact?",
+    "id": "BIZTRUST-GUIDE-WP-026",
+    "title": "Post-experiment disposition of the derived resume control plane",
     "state": "ENGINEERING_READY",
-    "objective": "Test whether an agent handed one derived bundle and nothing else reaches the correct resume decision without inventing facts. If it fails, no deriver is written.",
-    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/44",
-    "owner_role": "documentation-engineer",
+    "objective": "WP-024 failed on its own sealed criteria. Record the outcome, file the three schema repairs it found, and hold the proposal at PROPOSED until a human rules on the taxonomy question.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/52",
+    "owner_role": "human-reviewer",
     "scope": [
       "docs/experiments/",
-      "fixtures and oracles",
-      "the 27-run discovery round"
+      "docs/ideas/derived-resume-control-plane.md",
+      "badf/"
     ]
   },
   "source": {
-    "branch": "fix/biztrust-guide-wp-024-seal-and-reanchor",
-    "baseline_commit": "3d8c63be64782731ebd3ed19a9f72ca312dd440b",
+    "branch": "fix/biztrust-guide-wp-026-post-experiment-state",
+    "baseline_commit": "cfa0dbaba20a05fd64a4b9cbd1b221a0c1652344",
     "baseline_kind": "main",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
@@ -35,10 +35,10 @@
     "production_platform_implementation": "NOT_GRANTED",
     "architecture_acceptance": "NOT_GRANTED"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-024-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-026-engineering-ready.json",
   "latest_handoff": null,
-  "primary_next_action_id": "NS-030",
-  "resume_decision": "CONTINUE",
-  "stop_reason": "No pull requests are open. The next governed action is sealing the WP-024 fixtures and oracles; no run may execute before they exist.",
-  "known_divergence": "This re-anchor is the third hand-correction of operational state in two days (NS-026 -> #30, WP-017 -> here). It is the defect WP-024 exists to test, not evidence for the proposal. A fourth instance surfaced in that same commit: resume_decision is a computed field and was carried forward unrecomputed, so it read WAIT_FOR_AUTHORITY while the primary action was granted. Corrected here, and the validator now refuses the contradiction."
+  "primary_next_action_id": "NS-031",
+  "resume_decision": "WAIT_FOR_AUTHORITY",
+  "stop_reason": "WP-024 failed. The next decision - whether to define the resume_decision taxonomy or drop it from scoring - is issue #52 item 1 and belongs to a human. No re-run until the oracles have an independent author.",
+  "known_divergence": "NS-030 stayed the primary action after it was completed and after the experiment it authorised had already run and failed. That is the FIFTH instance of stale operational state in three days, and it occurred inside the workflow testing whether hand-maintenance can be retired. It is evidence for the proposal's premise and against its own author's ability to maintain state by hand."
 }

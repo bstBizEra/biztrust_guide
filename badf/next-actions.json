@@ -1,28 +1,25 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-024",
-  "updated_at": "2026-09-03T18:03:11Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-026",
+  "updated_at": "2026-09-03T18:43:39Z",
   "actions": [
     {
-      "id": "NS-030",
+      "id": "NS-031",
       "primary": true,
       "priority": 1,
-      "owner_role": "documentation-engineer",
-      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "action": "Author and seal all nine WP-024 fixtures and all nine oracles before run 1, per docs/experiments/WP-024-blind-handoff-preregistration.md v2.",
+      "owner_role": "human-reviewer",
+      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "action": "Decide issue #52 item 1: either define when each resume_decision value applies, or drop resume_decision from WP-024 scoring and score on stop conditions and next action alone.",
       "prerequisites": [
-        "The v2 preregistration is merged on main",
-        "No results file and no fixture directory exist yet"
+        "docs/experiments/WP-024-results.md is on main"
       ],
       "evidence_required": [
-        "Nine fixture bundles with per-file manifests",
-        "Nine sealed oracles",
-        "The commit SHA that sealed them, cited in the results file"
+        "A recorded decision with reasoning on issue #52"
       ],
       "stop_conditions": [
-        "Any run has already executed - sealing after a run voids the experiment",
-        "A fixture cannot be authored without inventing repository facts"
+        "An agent attempts to choose the taxonomy itself - that is the defect the experiment already found",
+        "A re-run is proposed before the oracles have an independent author"
       ],
       "fallback": "Withdraw the proposal. It is marked PROPOSED so that it can be."
     },
