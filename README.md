@@ -72,7 +72,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | `scripts/` | Deterministic continuity validation |
 | `docs/` | Preview, continuity and next-step runbooks |
 | `.github/` | Pages deployment and governed work templates |
-| `.nojekyll` | Required by the validator and copied into `_site/`, but **it does not reach the published artifact** — `actions/upload-pages-artifact` defaults `include-hidden-files` to `false`, so dotfiles are excluded. GitHub's own static-Pages starter workflow never creates one, because a custom Actions workflow uploads a prebuilt artifact and Jekyll never runs over it. |
+| `.nojekyll` | Required by the validator and copied into `_site/`, but **it does not reach the published artifact** — `actions/upload-pages-artifact` defaults `include-hidden-files` to `false` ("Include hidden files and directories (those starting with a dot) in the artifact" — [action README](https://github.com/actions/upload-pages-artifact)), so dotfiles are excluded. GitHub's own static-Pages starter workflow ([`pages/static.yml`](https://github.com/actions/starter-workflows/blob/main/pages/static.yml)) never creates one. *Unverified:* that Jekyll is skipped for an uploaded artifact is inferred from those two facts and the site serving; neither the [custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) nor the [publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) page states it. |
 
 ## Validate before every handoff
 
@@ -106,7 +106,7 @@ The guide is nine stage manuals, five phase manuals and two reference pages, plu
 Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph, true when written on 2026-09-02, was merged five minutes after the first deployment had succeeded and then stood for a day. Read deployment state from the two places it actually lives:
 
 - the [Pages workflow runs](https://github.com/bstBizEra/biztrust_guide/actions/workflows/pages.yml) — the run bound to the current `main` head is the evidence that the head was built, validated and uploaded;
-- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the entry whose latest status (`/deployments/{id}/statuses`, newest first) is `success` is the commit the site is serving; superseded deployments read `inactive`, and a failed newer deployment leaves the previous one live. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
+- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the entry whose latest status by `created_at` (`/deployments/{id}/statuses` — the [REST reference](https://docs.github.com/en/rest/deployments/statuses) lists the states and promises no ordering, so sort rather than take the first) is `success` is the commit the site is serving; superseded deployments read `inactive`, and a failed newer deployment leaves the previous one live. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
 
 The workflow stages every tracked `*.html` — including the `stages/`, `phases/` and `reference/` subtrees — not only the repository root.
 
@@ -114,6 +114,10 @@ The workflow stages every tracked `*.html` — including the `stages/`, `phases/
 
 - [GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 - [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+- [`actions/upload-pages-artifact` README](https://github.com/actions/upload-pages-artifact) — the `include-hidden-files` default
+- [GitHub Actions concurrency](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs) — why a queued run in the deploy group is cancelled and replaced
+- [REST: deployment statuses](https://docs.github.com/en/rest/deployments/statuses)
+- [JSON Schema 2020-12 validation vocabulary](https://json-schema.org/draft/2020-12/json-schema-validation) and [RFC 3339 §5.6](https://www.rfc-editor.org/rfc/rfc3339#section-5.6) — what `tests/test_checkpoints_match_schema.py` enforces, and where it is stricter
 - [Python `http.server`](https://docs.python.org/3/library/http.server.html)
 - [GitHub Issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues)
 - [GitHub Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects)

@@ -22,6 +22,14 @@ schema edit that reaches for `oneOf`, `$ref`, `dependentRequired`,
 unenforced.
 
 WHERE IT IS STRICTER THAN THE SPECIFICATION, ON PURPOSE
+(Sources: https://json-schema.org/draft/2020-12/json-schema-validation - `format` is
+annotation-only unless an implementation opts in, "MUST be disabled by default";
+`integer` "matches any number with a zero fractional part"; `pattern` regular
+expressions "are not implicitly anchored"; `uniqueItems` is document equality.
+https://www.rfc-editor.org/rfc/rfc3339#section-5.6 - the date-time ABNF, with
+lowercase t/z permitted, time-second 00-60, secfrac "." 1*DIGIT, day "based on
+month/year". This checker opts in to `format` as an assertion, and its `integer`
+refuses 1.0 where the specification admits it: both are deliberate and stricter.)
 `integer` rejects `1.0` (the specification accepts it); `date-time` is the
 RFC 3339 grammar with a calendar day check, so `2026-09-04T16:00Z` (no
 seconds) and `2026-13-01T00:00:00Z` are refused. Both directions fail closed.
