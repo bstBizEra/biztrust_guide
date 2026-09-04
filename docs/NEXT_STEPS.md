@@ -17,6 +17,7 @@
 - **Action:** Select `GitHub Actions` under `Settings → Pages → Build and deployment → Source`.
 - **Evidence:** Successful `Deploy BizTrust Guide to GitHub Pages` run and reachable production URL.
 - **Stop if:** The repository contains sensitive or unapproved information.
+- **Done, dated 2026-09-04:** `GET /repos/bstBizEra/biztrust_guide/pages` reports `build_type: workflow`, and the `github-pages` environment's first successful deployment (6244308440, of `ba46e1f7`) is timestamped 2026-09-03T12:51:36Z. This entry records that the action happened; it does not say what the site serves now — read that from the deployments API.
 
 ### NS-002: Verify production
 
