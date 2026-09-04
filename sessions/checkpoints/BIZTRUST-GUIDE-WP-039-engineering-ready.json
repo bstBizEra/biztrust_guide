@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-039-001",
+  "created_at": "2026-09-04T18:26:51Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-039",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #77: the catalogue checked against the stage pages by test - citations resolve, outputs tables match.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-039-catalogue-agreement",
+    "baseline_commit": "0bbcda96ce015c7a46d85fd137d22eda1d488d26"
+  },
+  "completed": [
+    "tests/test_catalogue_agrees_with_pages.py: citations (explicit 'Stage section NN' anywhere, bare 'section NN' inside a stage's block) resolve to displayed section numbers; outputs sections match catalogue blocks as name sets under a declared per-page shape; negative controls for both; a test that the shape declaration is load-bearing",
+    "reference/artifact-catalogue.html: the method-note bullet says what is checked and what is not",
+    "README.md: the enforcement table gains the row",
+    "NS-039 retired; NS-040 (issue #78, a human's four decisions) primary; no agent-executable action remains"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "NS-040 - issue #78 - waits on a human",
+    "PR #74 - held on issue #52"
+  ],
+  "files_changed": [
+    "tests/test_catalogue_agrees_with_pages.py",
+    "reference/artifact-catalogue.html",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-039-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "first run of the outputs check against main (before WP-038 merged) -> architect: only in catalogue ['Deferred-decision register']; the one known disagreement, found by the test before the rebase",
+      "status": "FAIL",
+      "exit_code": 1
+    }
+  ],
+  "observations": [
+    "The bare-number citation regex excludes 'Stage section NN' preceded by a stage name so that Build's Telemetry row, which cites Operate section 11, is attributed to Operate and not Build.",
+    "Assure's outputs section is one artifact with fielded entries; a name-per-entry reading would have produced eight artifacts the catalogue does not have. The shape is declared, not inferred, for that reason."
+  ],
+  "decisions": [
+    "DEC-041: displayed numbers not ids; declared shapes not inferred; negative controls for both assertions"
+  ],
+  "assumptions": [
+    "That the catalogue's block-of-rows structure (a stage-break row followed by rows whose first cell names the stage) is stable; the corpus test fails if it is not."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "ASSERTED_KEYS_QUESTION_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "PR #74 waits."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUE_78",
+      "owner_role": "human-reviewer",
+      "resolution": "Four decisions or deferrals on issue #78."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_038",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-040",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_catalogue_agrees_with_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/77"
+    ],
+    "stop_if": [
+      "The test is loosened to admit a mismatch instead of the mismatch being fixed",
+      "A SHAPE entry is changed without the page's outputs section having changed shape"
+    ]
+  },
+  "declared_non_coverage": [
+    "A resolving citation is not checked for meaning.",
+    "Row notes, formats, owners and accepters are unchecked prose.",
+    "Gate lines are not tied to catalogue rows; the WP-010 audit rejected that class of check on measured false positives."
+  ]
+}

@@ -1,33 +1,13 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-038",
-  "updated_at": "2026-09-04T18:23:09Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-039",
+  "updated_at": "2026-09-04T18:26:51Z",
   "actions": [
     {
-      "id": "NS-039",
+      "id": "NS-040",
       "primary": true,
       "priority": 1,
-      "owner_role": "documentation-engineer",
-      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "action": "Issue #77: a stdlib test that every '<Stage> section NN' citation in the artifact catalogue names a section whose displayed number is NN on that page, and that each stage's outputs-table artifact names equal the catalogue's names for that stage; negative controls for both; the catalogue's method note rewritten to say what is now checked.",
-      "prerequisites": [
-        "WP-038 merged - badf/ is edited by one package at a time"
-      ],
-      "evidence_required": [
-        "The test is red on a deliberate mismatch before it is green",
-        "The catalogue's 'Nothing is checked mechanically' bullet says what is checked and what is not",
-        "The test is stdlib only and runs inside python3 -m unittest discover -s tests; it reads artifact names by a shape declared per page, since Release uses a definition list and Assure's outputs section is one artifact whose fields are listed"
-      ],
-      "stop_conditions": [
-        "The test is loosened to pass an existing mismatch rather than the mismatch being fixed or allowlisted with a reason"
-      ],
-      "fallback": "Leave the catalogue's method note as it stands."
-    },
-    {
-      "id": "NS-040",
-      "primary": false,
-      "priority": 2,
       "owner_role": "human-reviewer",
       "authority": "HUMAN_DECISION_REQUIRED",
       "action": "Issue #78: record a decision or explicit deferral for each of the four content questions the catalogue records - nine ungated artifacts (Plan's machine-readable package state joined the eight under WP-037), four unowned including that same row, the two charter artifacts no stage names, forty-one without a home.",
@@ -45,7 +25,7 @@
     {
       "id": "NS-033",
       "primary": false,
-      "priority": 3,
+      "priority": 2,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
@@ -71,7 +51,7 @@
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 4,
+      "priority": 3,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -89,7 +69,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 5,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -107,7 +87,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 6,
+      "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",
