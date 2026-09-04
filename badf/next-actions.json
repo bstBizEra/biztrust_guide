@@ -1,48 +1,25 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-030",
-  "updated_at": "2026-09-04T14:14:51Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-031",
+  "updated_at": "2026-09-04T15:26:43Z",
   "actions": [
     {
-      "id": "NS-032",
+      "id": "NS-033",
       "primary": true,
       "priority": 1,
       "owner_role": "documentation-engineer",
       "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "action": "Reapply issue #52 item 2 alone: make repository identity required in resume.schema.json - owner, name and the https remote - so a bundle is self-identifying, and refuse an observation source that still carries an unfilled template.",
-      "prerequisites": [
-        "DEC-026 is on main",
-        "docs/experiments/fixtures are byte-identical to the sealed set at e37fa3b",
-        "DEC-026 UNBLOCKED this item; it granted nothing. The authority above is the standing documentation-implementation grant, the same grant WP-025 and WP-026 ran under - recorded here so the grant is not read as the human's decision"
-      ],
-      "evidence_required": [
-        "static.repository required in resume.schema.json, with owner, name and https remote - AND a test that validates every fixture RESUME.json against resume.schema.json and fails on a fixture lacking static.repository. Nothing in the repository reads the schema today (build.py --check compares bytes; no jsonschema reader exists), so the declaration alone is inert and cannot be evidence",
-        "The source guard refuses :o/, :r and /:sha AND the {owner}/{repo} form the reverted guard let through",
-        "Nine fixtures regenerated and build.py --check green",
-        "A negative test proving the guard fails on an unfilled template, run before the fix and shown red"
-      ],
-      "stop_conditions": [
-        "The diff touches next_action.requires or any other item-3 surface - item 3 is NS-033",
-        "An oracle file appears in the diff - oracle authorship still requires an independent author",
-        "resume_decision acquires a defined meaning anywhere in the diff - DEC-026 removed it from scoring, it did not define it"
-      ],
-      "fallback": "Leave item 2 open and recorded. It is a schema gap, not a regression."
-    },
-    {
-      "id": "NS-033",
-      "primary": false,
-      "priority": 2,
-      "owner_role": "documentation-engineer",
-      "authority": "AFTER_NS_032",
       "action": "Reapply issue #52 item 3: add next_action dependencies PER ACTION with no inherited global default, each referencing an existing observation key, each with fixture-specific positive and negative tests.",
       "prerequisites": [
-        "NS-032 merged"
+        "NS-032 merged - static.repository and resolved sources are on main, enforced by build.py reading the schema",
+        "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing observation key, each fixture carries positive and negative tests for its own edge"
       ],
       "evidence_required": [
         "No dependency value is assigned in build.py's base() or otherwise inherited by a fixture it was not authored for",
         "Every fixture carries a positive and a negative test for its own edge",
-        "A test proving a dependency naming a non-existent observation key fails"
+        "A test proving a dependency naming a non-existent observation key fails",
+        "build.py's schema_rules()/violations() extended to read the requires rule from the schema, so the declaration and the enforcement stay one thing"
       ],
       "stop_conditions": [
         "One constant is assigned to more than one fixture - that is exactly what #57 reverted",
@@ -54,7 +31,7 @@
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 3,
+      "priority": 2,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -72,7 +49,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 4,
+      "priority": 3,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -90,7 +67,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 5,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",

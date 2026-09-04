@@ -15,13 +15,21 @@ the sealed digest is the digest of what the agent reads.
 Usage:  python3 docs/experiments/fixtures/build.py [--check]
 """
 from __future__ import annotations
-import hashlib, json, sys
+import hashlib, json, re, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SEAL_SHA = "e23143ef91dcf0fd03e1686a1b2880c0696b798d"   # main when fixtures were authored
 MOVED_SHA = "aa11bb22cc33dd44ee55ff6600778899aabbccdd"  # a later, different main
 EVAL = "2026-09-04T09:00:00+07:00"
+
+SCHEMA = HERE.parent / "schema" / "resume.schema.json"
+# Repository identity, added under NS-032 (issue #52 item 2). Every observation source below is
+# RESOLVED against it; the schema refuses an unexpanded template, and this script enforces that
+# refusal by reading the rule from the schema - one place, not two.
+REPO = {"owner": "bstBizEra", "name": "biztrust_guide",
+        "remote": "https://github.com/bstBizEra/biztrust_guide"}
+API = "GET https://api.github.com/repos/bstBizEra/biztrust_guide"
 
 
 def obs(value, at=EVAL, freshness="CURRENT", source="git rev-parse HEAD"):
@@ -39,14 +47,15 @@ def base(**over):
         "schema_version": "1.0.0",
         "source_sha": SEAL_SHA,
         "derived_at": EVAL,
-        "static": {"project_id": "BIZTRUST-GUIDE", "deriver_policy_version": "0.1.0-fixture"},
+        "static": {"project_id": "BIZTRUST-GUIDE", "deriver_policy_version": "0.1.0-fixture",
+                   "repository": REPO},
         "observed": {
             "main_sha": obs(SEAL_SHA),
-            "open_pull_requests": obs(0, source="GET /repos/:o/:r/pulls?state=open"),
-            "ci_conclusion": obs("success", source="GET /repos/:o/:r/commits/:sha/check-runs"),
-            "pages_status": obs("serving", source="GET /repos/:o/:r/pages"),
-            "issue_2_state": obs("closed", source="GET /repos/:o/:r/issues/2"),
-            "issue_2_labels": obs([], source="GET /repos/:o/:r/issues/2"),
+            "open_pull_requests": obs(0, source=f"{API}/pulls?state=open"),
+            "ci_conclusion": obs("success", source=f"{API}/commits/{SEAL_SHA}/check-runs"),
+            "pages_status": obs("serving", source=f"{API}/pages"),
+            "issue_2_state": obs("closed", source=f"{API}/issues/2"),
+            "issue_2_labels": obs([], source=f"{API}/issues/2"),
         },
         "asserted": {
             "active_work_package": asrt("BIZTRUST-GUIDE-WP-024", "operator"),
@@ -87,9 +96,9 @@ def f2():
 
 def f3():
     d = base()
-    d["observed"]["issue_2_state"] = obs("open", source="GET /repos/:o/:r/issues/2")
-    d["observed"]["issue_2_labels"] = obs(["state:in-progress"], source="GET /repos/:o/:r/issues/2")
-    d["observed"]["issue_2_linked_pr_merged"] = obs(True, source="GET /repos/:o/:r/pulls/28")
+    d["observed"]["issue_2_state"] = obs("open", source=f"{API}/issues/2")
+    d["observed"]["issue_2_labels"] = obs(["state:in-progress"], source=f"{API}/issues/2")
+    d["observed"]["issue_2_linked_pr_merged"] = obs(True, source=f"{API}/pulls/28")
     return d
 
 
@@ -118,17 +127,17 @@ def f6():
 
 def f7():
     d = base()
-    d["observed"]["open_pull_requests"] = obs(3, source="GET /repos/:o/:r/pulls?state=open")
-    d["observed"]["all_work_merged"] = obs(True, source="GET /repos/:o/:r/pulls?state=open")
+    d["observed"]["open_pull_requests"] = obs(3, source=f"{API}/pulls?state=open")
+    d["observed"]["all_work_merged"] = obs(True, source=f"{API}/pulls?state=open")
     return d
 
 
 def f8():
     d = base()
     d["observed"]["ci_conclusion"] = obs(None, at=None, freshness="UNKNOWN",
-                                         source="GET /repos/:o/:r/commits/:sha/check-runs - 503")
+                                         source=f"{API}/commits/{SEAL_SHA}/check-runs - 503")
     d["observed"]["pages_status"] = obs(None, at=None, freshness="UNKNOWN",
-                                        source="GET /repos/:o/:r/pages - 503")
+                                        source=f"{API}/pages - 503")
     d["computed"]["freshness"] = "UNKNOWN"
     return d
 
@@ -176,12 +185,57 @@ def digest(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 
+# ------------------------------------------------------- schema conformance
+def schema_rules() -> dict:
+    """The item-2 rules, read FROM the schema so the declaration and this enforcement
+    are one thing. A schema nothing reads is a comment; #56 shipped 241 lines of one."""
+    s = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    static = s["properties"]["static"]
+    repo = static["properties"]["repository"]
+    source = s["$defs"]["observation"]["properties"]["source"]
+    return {
+        "static_required": list(static["required"]),
+        "repository_required": list(repo["required"]),
+        "remote_pattern": repo["properties"]["remote"]["pattern"],
+        "unresolved_source": source["not"]["pattern"],
+    }
+
+
+def violations(state: dict, rules: dict) -> list[str]:
+    """Every way a state fails the item-2 rules. Empty means conformant."""
+    out: list[str] = []
+    static = state.get("static") if isinstance(state.get("static"), dict) else {}
+    for key in rules["static_required"]:
+        if key not in static:
+            out.append(f"static.{key} missing")
+    repo = static.get("repository")
+    if isinstance(repo, dict):
+        for key in rules["repository_required"]:
+            if not repo.get(key):
+                out.append(f"static.repository.{key} missing or empty")
+        if not re.search(rules["remote_pattern"], str(repo.get("remote", ""))):
+            out.append(f"static.repository.remote is not an https remote: {repo.get('remote')!r}")
+    elif "repository" in static:
+        out.append("static.repository is not an object")
+    observed = state.get("observed") if isinstance(state.get("observed"), dict) else {}
+    for key, ob in observed.items():
+        src = str((ob or {}).get("source", "")) if isinstance(ob, dict) else ""
+        if not src:
+            out.append(f"observed.{key}.source missing")
+        elif re.search(rules["unresolved_source"], src):
+            out.append(f"observed.{key}.source is an unresolved template: {src!r}")
+    return out
+
+
 def build(check: bool) -> int:
     problems = []
+    rules = schema_rules()
+    bad: list[str] = []
     for slug, fn, honest in FIXTURES:
         d = HERE / slug
         d.mkdir(exist_ok=True)
         state = fn()
+        bad.extend(f"{slug}: {v}" for v in violations(state, rules))
         rj = (json.dumps(state, indent=2, sort_keys=True) + "\n").encode()
         html = render(slug, state).encode()
 
@@ -201,6 +255,8 @@ def build(check: bool) -> int:
                     "".join(f'  {k}:\n    bytes: {v["bytes"]}\n    sha256: "{v["sha256"]}"\n'
                             for k, v in man.items()))
 
+        if bad:
+            continue   # never write a non-conformant fixture; the verdict is printed below
         targets = {d / "RESUME.json": rj,
                    d / "control-room.html.frozen": html,
                    d / "manifest.yaml": manifest.encode()}
@@ -211,6 +267,12 @@ def build(check: bool) -> int:
             else:
                 path.write_bytes(content)
 
+    if bad:
+        # Reported before the byte comparison and in BOTH modes: a generator that writes
+        # what the schema refuses is the defect, not a warning about one.
+        print("SCHEMA=VIOLATION\n  " + "\n  ".join(bad))
+        return 1
+    print(f"SCHEMA=CONFORMANT count={len(FIXTURES)}")
     if check:
         if problems:
             print("FIXTURES=STALE\n  " + "\n  ".join(problems))

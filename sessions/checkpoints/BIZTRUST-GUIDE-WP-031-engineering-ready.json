@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-031-001",
+  "created_at": "2026-09-04T15:26:43Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-031",
+  "state": "ENGINEERING_READY",
+  "objective": "Enforce repository identity and resolved sources in RESUME.json by having build.py read the rules from resume.schema.json; item 2 alone.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-031-repository-identity",
+    "baseline_commit": "79167d47c16ec4de694b867af6969eb1e9856309"
+  },
+  "completed": [
+    "resume.schema.json: static.repository required (owner, name, https remote); observation.source refuses unresolved templates and no longer recommends one in its description",
+    "build.py: REPO and API constants; every source resolved; schema_rules() reads the rules from the schema; violations() applies them; SCHEMA=VIOLATION exit 1 before the byte comparison, in both modes; never writes a non-conformant fixture",
+    "Nine fixtures, frozen HTML and manifests regenerated; build.py --check certifies SCHEMA=CONFORMANT and FIXTURES=CURRENT",
+    "tests/test_resume_schema_identity.py: twelve tests - declaration, rules-read-from-schema, both escapees refused, resolved forms accepted, CLI exits 1 and writes nothing, no fixture carries requires",
+    "WP-024-results.md: dated pointer to the sealed set at e37fa3b; no reinterpretation",
+    "NS-032 retired; NS-033 primary under the standing grant"
+  ],
+  "remaining": [
+    "Human merge of this package's pull request",
+    "NS-033 - item 3, separately, per disposition 4 and 5",
+    "Independent oracle authorship before any re-run - unchanged",
+    "Issue #55 - unchanged"
+  ],
+  "files_changed": [
+    "docs/experiments/schema/resume.schema.json",
+    "docs/experiments/fixtures/build.py",
+    "docs/experiments/fixtures/01-fresh/RESUME.json",
+    "docs/experiments/fixtures/01-fresh/control-room.html.frozen",
+    "docs/experiments/fixtures/01-fresh/manifest.yaml",
+    "docs/experiments/fixtures/02-main-moved/RESUME.json",
+    "docs/experiments/fixtures/02-main-moved/control-room.html.frozen",
+    "docs/experiments/fixtures/02-main-moved/manifest.yaml",
+    "docs/experiments/fixtures/03-label-contradicts-merge/RESUME.json",
+    "docs/experiments/fixtures/03-label-contradicts-merge/control-room.html.frozen",
+    "docs/experiments/fixtures/03-label-contradicts-merge/manifest.yaml",
+    "docs/experiments/fixtures/04-authority-expired/RESUME.json",
+    "docs/experiments/fixtures/04-authority-expired/control-room.html.frozen",
+    "docs/experiments/fixtures/04-authority-expired/manifest.yaml",
+    "docs/experiments/fixtures/05-zero-candidates/RESUME.json",
+    "docs/experiments/fixtures/05-zero-candidates/control-room.html.frozen",
+    "docs/experiments/fixtures/05-zero-candidates/manifest.yaml",
+    "docs/experiments/fixtures/06-multiple-candidates/RESUME.json",
+    "docs/experiments/fixtures/06-multiple-candidates/control-room.html.frozen",
+    "docs/experiments/fixtures/06-multiple-candidates/manifest.yaml",
+    "docs/experiments/fixtures/07-conflicting-inputs/RESUME.json",
+    "docs/experiments/fixtures/07-conflicting-inputs/control-room.html.frozen",
+    "docs/experiments/fixtures/07-conflicting-inputs/manifest.yaml",
+    "docs/experiments/fixtures/08-api-unavailable/RESUME.json",
+    "docs/experiments/fixtures/08-api-unavailable/control-room.html.frozen",
+    "docs/experiments/fixtures/08-api-unavailable/manifest.yaml",
+    "docs/experiments/fixtures/09-tampered-bundle/RESUME.json",
+    "docs/experiments/fixtures/09-tampered-bundle/control-room.html.frozen",
+    "docs/experiments/fixtures/09-tampered-bundle/manifest.yaml",
+    "docs/experiments/WP-024-results.md",
+    "tests/test_resume_schema_identity.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-031-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 docs/experiments/fixtures/build.py --check",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -c 'break REPO; build(check=True)' - must exit 1 with SCHEMA=VIOLATION (negative control, also a test)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git status --porcelain | grep -c oracle.yaml  -> 0",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator over this checkpoint",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "Nothing on main read resume.schema.json before this change; the 241 schema lines PR #56 added were unenforced, and its guard passed {owner}/{repo} and :owner/:repo. Enforcement now reads the rule from the schema, so there is one place to edit.",
+    "Importing build.py from the new test wrote __pycache__ beside it - a tenth directory under fixtures/ - and the count-of-nine guard failed on the first full-suite run. The loader now suppresses bytecode. The guard was right and was not loosened.",
+    "The regenerated fixtures differ from the sealed set at e37fa3b in exactly two ways: static.repository is present, and every source is resolved. resume_decision, oracles and next_action are byte-for-byte what they were."
+  ],
+  "decisions": [
+    "Read the rules from the schema rather than restating them in code or adding a JSON Schema dependency: one source, enforced, stdlib-only.",
+    "Refuse in write mode too. A generator that writes what the schema refuses is the defect.",
+    "Land item 2 without item 3, per disposition 4; NS-033 carries item 3 and its stop conditions."
+  ],
+  "assumptions": [
+    "That the standing documentation-implementation grant of 2026-09-03 covers this change, as it covered WP-025 and WP-026; the decision of 2026-09-04 unblocked it and granted nothing."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged. Assign oracle authorship to someone who did not author the fixtures before any re-run."
+    },
+    {
+      "code": "OPERATE_OUTPUTS_CONTENT_DECISION",
+      "owner_role": "human-reviewer",
+      "resolution": "Issue #55. Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "resume_decision_taxonomy": "DECIDED_2026_09_04_OPTION_B_NOT_SCORED",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "HUMAN_RESERVED",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-033",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/52",
+      "docs/experiments/schema/resume.schema.json"
+    ],
+    "stop_if": [
+      "An oracle file appears in a diff",
+      "next_action.requires appears in a fixture before NS-033 is authorized and designed per action",
+      "resume_decision acquires a defined meaning anywhere",
+      "A re-run is proposed before the oracles have an independent author"
+    ]
+  },
+  "declared_non_coverage": [
+    "Only the two item-2 rules are enforced; the rest of resume.schema.json is still a declaration nothing reads (NS-006 in NEXT_STEPS.md is the planned full validation)",
+    "The regenerated fixtures have not been run against any agent; WP-024's result stands unchanged",
+    "The remote pattern checks shape, not reachability"
+  ]
+}

@@ -146,3 +146,7 @@ be scored on substance rather than on codes only the author knows.
 
 **A failed experiment that finds three design defects in a day is cheaper than a deriver built
 on an untested contract.** That was the point of running it first.
+
+---
+
+> **2026-09-04 · NS-032, issue #52 item 2.** The fixtures on `main` were regenerated: `static.repository` added and every observation source resolved, with `build.py` now refusing an unresolved template by reading the rule from the schema. Every result above was produced against the set sealed at `e37fa3b`, recoverable from history. The regenerated set has never been run, and no re-run is authorized until the oracles have an author who did not write the fixtures. Nothing above is reinterpreted by this note.
