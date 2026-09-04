@@ -12,7 +12,7 @@
   },
   "completed": [
     "stages/operate.html: section 02 'What this stage produces' (id produces, eyebrow Outputs) - thirteen rows, each naming the section that requires it and whether a gate line does, two marked as reaching Learn; a callout stating what is not handed over and why; sections 02-11 renumbered 03-12 in nav and headings",
-    "stages/learn.html: the 'Inputs assembled beforehand' criterion names where the escape list and decision records come from, and links Operate's outputs section",
+    "stages/learn.html: the 'Inputs assembled beforehand' criterion names where the escape ledger entries and decision records come from, and links Operate's outputs section",
     "reference/artifact-catalogue.html: ten 'Operate section 10' citations now section 11; five 'Named in' citations moved by one; the Operate block note and the 'no outputs section' finding rewritten in the past tense",
     "tests/test_stage_page_spine.py: Operate exemption deleted from KNOWN_GAPS; docstring updated; the ratchet test that demanded the deletion passes",
     "NS-034 retired; NS-033 is primary and WAIT_FOR_AUTHORITY on the asserted.* question recorded on issue #52",
