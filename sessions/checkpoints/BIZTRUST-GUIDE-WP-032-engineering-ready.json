@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-032-001",
+  "created_at": "2026-09-04T16:05:10Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-032",
+  "state": "ENGINEERING_READY",
+  "objective": "Close the three documentation findings WP-030 filed: #61 README deployment claim, #62 README repository table, #63 Build page branch types.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-032-readme-build-findings",
+    "baseline_commit": "28898879bef6e3df427bc6cf1a6d1f99004a8485"
+  },
+  "completed": [
+    "README.md: the 'Current delivery state' deployment paragraph and the 'Live website' lead-in replaced by pointers to the Pages workflow runs and the github-pages environment; no sentence in the file asserts whether Pages is enabled or what the site returns (verified by reading the whole file)",
+    "README.md: reference/ row added in the shape of the stages/ and phases/ rows; index.html row describes the hub as linking the stage and phase manuals - measured, the hub links no reference page - with no count",
+    "stages/build.html: branch type defined by reference to the commit-type list; revert added to the commit-type list with its one permitted use; examples include a docs/ branch",
+    "NS-033 demoted with the two forms recorded on issue #52 (DEC-033); NS-034 for issue #55 is primary"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of this branch, fixes on the branch, merge of the fixed head",
+    "NS-034 - issue #55 - in its own package after this one merges",
+    "NS-033 - awaiting the human choice recorded on issue #52",
+    "Two findings noticed and not fixed, filed as an issue: reference/artifact-catalogue.html's Build row still says the branch convention is unstated (issue #31 item 5), and docs/LIVE_PREVIEW.md line 5 says Pages has never been activated"
+  ],
+  "files_changed": [
+    "README.md",
+    "stages/build.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-032-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 docs/experiments/fixtures/build.py --check",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/bstBizEra/biztrust_guide/deployments?environment=github-pages -> 28898879bef6 at 2026-09-04T15:46:21Z; curl -o /dev/null -w %{http_code} https://bstbizera.github.io/biztrust_guide/ -> 200",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh pr list --state all --json headRefName | branch-type histogram -> fix 19, feat 9, docs 7, test 2, revert 1",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "On a Windows checkout with core.autocrlf=true, two tests fail and build.py --check reports all 27 fixture files STALE because the working tree is CRLF and the byte comparison is exact. CI is Linux and green. Worked in a worktree with autocrlf=false; nothing in the repository was changed for it. Recorded because the next Windows agent will see the same two red tests on a clean tree.",
+    "Issue #62's premise that index.html links the reference pages is false on the current tree; the row was written from grep, not from the issue.",
+    "Issue #63's count of docs/ branches was six on 2026-09-04 morning and is seven now (#64 added one); the page no longer carries a list that a count can invalidate."
+  ],
+  "decisions": [
+    "DEC-032: pointers not sentences for deployment state; one branch-type list by reference; revert admitted",
+    "DEC-033: NS-033 stopped at design time and returned to the human"
+  ],
+  "assumptions": [
+    "That the standing documentation-implementation grant of 2026-09-03 covers three documentation corrections whose acceptance criteria were written by the filing package."
+  ],
+  "blockers": [
+    {
+      "code": "ITEM_3_FORM_REQUIRES_HUMAN_CHOICE",
+      "owner_role": "human-reviewer",
+      "resolution": "Choose form (i) or (ii) on issue #52, or defer item 3 until an independent oracle author exists."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_030_031",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-034",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/61"
+    ],
+    "stop_if": [
+      "README.md gains a sentence asserting whether Pages is enabled or what the site returns",
+      "stages/build.html carries two type lists that can disagree",
+      "next_action.requires appears in a fixture before the choice on issue #52 is recorded"
+    ]
+  },
+  "declared_non_coverage": [
+    "The README's two links are not fetched by any test. Both answered 200 to an anonymous request on 2026-09-04; the environment's HTML page (/deployments/github-pages) answered 404 anonymously, which is why the API address is linked instead.",
+    "The catalogue's stale Build-row note and LIVE_PREVIEW.md line 5 are filed, not fixed.",
+    "This checkpoint is not validated against schemas/session-checkpoint.schema.json by any test in the repository."
+  ]
+}
