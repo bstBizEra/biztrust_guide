@@ -25,11 +25,17 @@ WHERE IT IS STRICTER THAN THE SPECIFICATION, ON PURPOSE
 (Sources: https://json-schema.org/draft/2020-12/json-schema-validation - `format` is
 annotation-only unless an implementation opts in, "MUST be disabled by default";
 `integer` "matches any number with a zero fractional part"; `pattern` regular
-expressions "are not implicitly anchored"; `uniqueItems` is document equality.
-https://www.rfc-editor.org/rfc/rfc3339#section-5.6 - the date-time ABNF, with
-lowercase t/z permitted, time-second 00-60, secfrac "." 1*DIGIT, day "based on
-month/year". This checker opts in to `format` as an assertion, and its `integer`
-refuses 1.0 where the specification admits it: both are deliberate and stricter.)
+expressions "are not implicitly anchored". Equality for `uniqueItems`, `enum` and
+`const` is JSON Schema Core section 4.2.2 "Instance Equality",
+https://json-schema.org/draft/2020-12/json-schema-core: numbers equal by
+"the same mathematical value", object properties unordered, booleans distinct -
+which is what _canon implements. https://www.rfc-editor.org/rfc/rfc3339#section-5.6
+- the date-time ABNF, with lowercase t/z permitted, time-second 00-60, secfrac
+"." 1*DIGIT, day "based on month/year", DIGIT being ASCII. This checker opts in to
+`format` as an assertion, and its `integer` refuses 1.0 where the specification
+admits it: both are deliberate and stricter. It admits second 60 at any time of
+day and year 0000, which the section 5.6 grammar admits and section 5.7's
+leap-second note restricts; that restriction is not enforced.)
 `integer` rejects `1.0` (the specification accepts it); `date-time` is the
 RFC 3339 grammar with a calendar day check, so `2026-09-04T16:00Z` (no
 seconds) and `2026-13-01T00:00:00Z` are refused. Both directions fail closed.
@@ -122,9 +128,13 @@ def _is_type(value, name: str) -> bool:
     return isinstance(value, _TYPES[name])
 
 
+# re.ASCII: ABNF DIGIT is %x30-39, and a bare \d in a str pattern admits every Unicode
+# decimal digit, which int() then accepts. \Z, not $: $ matches before a trailing newline.
+# Both found by review; both have controls below.
 _RFC3339 = re.compile(
     r"^(\d{4})-(0[1-9]|1[0-2])-(\d{2})[Tt]([01]\d|2[0-3]):[0-5]\d:([0-5]\d|60)"
-    r"(\.\d+)?([Zz]|[+-]([01]\d|2[0-3]):[0-5]\d)$"
+    r"(\.\d+)?([Zz]|[+-]([01]\d|2[0-3]):[0-5]\d)\Z",
+    re.ASCII,
 )
 
 
@@ -276,6 +286,8 @@ class TestCheckerCoversTheSchemas(unittest.TestCase):
             "short baseline sha": lambda d: d["source"].__setitem__("baseline_commit", "abc123"),
             "unknown state": lambda d: d.__setitem__("state", "DONE"),
             "created_at without offset": lambda d: d.__setitem__("created_at", "2026-09-04T16:00:00"),
+            "created_at with fullwidth digits": lambda d: d.__setitem__("created_at", "\uff12\uff10\uff12\uff16-09-04T00:00:00Z"),
+            "created_at with a trailing newline": lambda d: d.__setitem__("created_at", "2026-09-04T00:00:00Z\n"),
             "created_at without seconds": lambda d: d.__setitem__("created_at", "2026-09-04T16:00Z"),
             "created_at with a space separator": lambda d: d.__setitem__("created_at", "2026-09-04 16:00:00Z"),
             "created_at with a comma fraction": lambda d: d.__setitem__("created_at", "2026-09-04T16:00:00,123Z"),
