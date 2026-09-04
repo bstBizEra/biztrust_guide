@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-04T17:22:14Z",
+  "updated_at": "2026-09-04T17:29:39Z",
   "active_work_package": {
     "id": "BIZTRUST-GUIDE-WP-035",
     "title": "Checkpoints validated against their schema by a stdlib test; LF pinned by .gitattributes - issue #68 (NS-036)",

@@ -11,7 +11,7 @@
     "baseline_commit": "a8624e145aedb2d4027f623a102eb214a1248e0c"
   },
   "completed": [
-    "tests/test_checkpoints_match_schema.py: stdlib checker for the subset both schemas use, RFC 3339 date-time with a calendar check, JSON Schema equality for enum/const/uniqueItems; coverage test fails on any unimplemented keyword or format value; nineteen negative controls; every unregistered checkpoint validates; LEGACY registry of three, each pinned to its failing paths, membership pinned by number (< 35) and by name; handoffs validated if sessions/handoffs/ ever exists",
+    "tests/test_checkpoints_match_schema.py: stdlib checker for the subset both schemas use, RFC 3339 date-time with a calendar check, JSON Schema equality for enum/const/uniqueItems; coverage test fails on any unimplemented keyword or format value; eighteen negative controls; every unregistered checkpoint validates; LEGACY registry of three, each pinned to its failing paths, membership pinned by number (< 35) and by name; handoffs validated if sessions/handoffs/ ever exists",
     ".gitattributes: text=auto eol=lf, *.png binary; git add --renormalize changed no tracked file",
     "AGENTS.md section 6 note and README enforcement table say what is now checked and what still is not",
     "NS-036 retired; NS-033 primary and WAIT_FOR_AUTHORITY - the last executable action is done",
@@ -67,7 +67,8 @@
     "Before this package the same fresh clone with core.autocrlf=true failed test_the_committed_tree_is_certified and test_committed_fixtures_match_their_source and listed all 27 fixture files STALE (checkpoint WP-032, observation 0).",
     "WP-017's blocker is also a string, not only its validation entries; #68 named only the validation shape. Registered with its four failing paths.",
     "templates/session-checkpoint.json is not validated: its placeholders fail the patterns by design. templates/handoff.json likewise.",
-    "The first draft's checkpoint claimed a date-time calibration against jsonschema that this machine cannot perform. The review caught it by listing the installed format checkers. Recorded because the same claim in DEC-036 would otherwise have stood as evidence."
+    "The first draft's checkpoint claimed a date-time calibration against jsonschema that this machine cannot perform. The review caught it by listing the installed format checkers. Recorded because the same claim in DEC-036 would otherwise have stood as evidence.",
+    "Corrected after merge (DEC-037): the negative-control count was recorded as nineteen; the cases dict has eighteen entries. The reviewer named this residual before merge; the fix script failed an assertion before editing and the merge proceeded on the reviewed head with the count wrong."
   ],
   "decisions": [
     "DEC-036: hand-rolled checker that refuses unknown keywords; registry not repair; LF pinned"
