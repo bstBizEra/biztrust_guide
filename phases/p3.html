@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P3 · Financial and integration · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Phase P3 of the BizTrust delivery plan: eleven epics closing the insurance-to-money-to-insurer loop with attributable, reconcilable records, and proving a second tenant onboards without a fork — what the agent builds, and what a human must see before recording BT-G4, BT-G5 and BT-G6.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}
+.dod-grid h3{grid-column:1/-1;margin:.75rem 0 .1rem;font-size:.8rem}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery phases</strong><small>P3 · Financial and integration platform</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="overview.html">← Phase track</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">P3 · Financial and integration</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#epics"><span>02</span> Epics to Work Packages</a>
+    <a href="#order"><span>03</span> Execution order</a>
+    <a href="#code"><span>04</span> What the agent codes</a>
+    <a href="#monitor"><span>05</span> What the human monitors</a>
+    <a href="#gate"><span>06</span> Exit gates · BT-G4 to BT-G6</a>
+    <a href="#horizon"><span>07</span> After P3</a>
+    <a href="#stop"><span>08</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>P3 of P0–P3</strong><small>Enters at BT-G3 · exits at BT-G4, BT-G5, BT-G6</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="p3-intro" data-search="P3 financial integration payment ledger commission settlement reconciliation adapters partner API tenant packs">
+  <div class="section-heading"><span>P3</span><div><p>Delivery phases · P3</p><h2>Financial and integration platform</h2></div></div>
+  <p class="lede">P3 closes the loop from insurance to money to insurer with records that are attributable and reconcilable, and ends by proving that a second independent tenant provisions without a core-code fork. It is the phase where a wrong model is most expensive, because the records it creates are the ones an auditor reads.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DELIVERY_PLAN.md">DELIVERY_PLAN.md §6</a>, with the payment, client-money, payment-to-policy and journal flows from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §12–§14</a> and the financial and integration boundaries from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">ARCH-001 §13–§14</a>.</p>
+  <div class="invariant">
+    <span>THE RULE THIS PHASE EXISTS TO ENFORCE</span>
+    <p>Payment state cannot invent coverage state — INV-020. Posted ledger records are immutable; corrections are reversals or compensating entries — INV-008. Client-money and office-money balances, movements and reconciliations stay distinguishable under the approved regime — INV-021. And the examples in the architecture are conceptual until jurisdiction and accounting review approve a chart of accounts: nothing here is accounting advice.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria BT-G3 ADR-014 client money regime ADR-008 ADR-009 ADR-012 ADR-018 chart of accounts provider selection">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>BT-G3 is recorded</h3>
+      <p>The lifecycle passed its failure scenarios. P3 posts money against workflows that have already been shown to survive duplicates and conflicts; it does not add durability to them.</p>
+    </article>
+    <article>
+      <h3>The money regime is decided, by qualified people</h3>
+      <p>ADR-014 answers, per tenant arrangement, whose money the intermediary holds, when premium counts as received by the insurer, who bears transit risk, which accounts are segregated and when commission may be withdrawn. The contract marks it <code>JURISDICTION_DEPENDENT</code>. Read its row in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a>; until that row reads <code>ACCEPTED</code> with the legal and finance seats recorded, a generic premium journal is not evidence.</p>
+    </article>
+    <article>
+      <h3>The ledger, adapter and idempotency ADRs are accepted</h3>
+      <p>ADR-008 (immutable double-entry subledger), ADR-009 (adapters), ADR-012 (idempotent financial and binding mutations) and ADR-018 (premium conditions and non-payment without payment systems inventing cover). Provider selections — insurer, payment provider, bank — are on the deliberately-deferred list and each arrives as its own ADR.</p>
+    </article>
+  </div>
+</section>
+
+<section id="epics" data-search="epics P3.1 P3.11 invoice payment intent adapter webhook refund chargeback subledger commission settlement reconciliation SDK partner API tenant pack">
+  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Eleven epics, three gates</h2></div></div>
+  <div class="table-wrap">
+    <table>
+      <caption>P3 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P3.1</strong><small>Invoice and premium due</small></td><td>Invoices derived from the policy representation and pinned versions; premium due as a fact with an effective date</td><td><code>modules/billing/</code></td><td>An invoice reproduces from its sources; a version change does not alter a posted invoice</td><td>INV-006; ADR-020</td></tr>
+        <tr><td><strong>P3.2</strong><small>Payment intent, attempt and allocation</small></td><td>The payment state machine; provider state, operational state, allocation state and ledger state as separately attributable dimensions</td><td><code>modules/payment/</code></td><td>Every transition tested; allocation never exceeds cleared funds</td><td>FLOWS §12, §12A; ADR-012</td></tr>
+        <tr><td><strong>P3.3</strong><small>Payment adapter and signed webhook handling</small></td><td>The first adapter behind the boundary: signature verification, deduplication by provider event identity, retries, timeouts, error translation — and the source payload retained as evidence</td><td><code>modules/integration/payment/</code></td><td>A replayed, tampered or out-of-order webhook cannot repeat or invent a mutation</td><td>ADR-009; FLOWS §13; INV-009, INV-010</td></tr>
+        <tr><td><strong>P3.4</strong><small>Refund, reversal and chargeback</small></td><td>Reversal paths that leave the original fact intact and post compensating entries; the compensation policy that decides hold, void or refund when payment succeeds and binding fails</td><td><code>modules/payment/</code>, <code>modules/ledger/</code></td><td>No refund precedes its authorization under the accepted regime; no original record is edited</td><td>ADR-014, ADR-018; INV-008</td></tr>
+        <tr><td><strong>P3.5</strong><small>Immutable double-entry insurance subledger</small></td><td>Posting-rule versions, balanced journal drafts, atomic rejection on imbalance, append-only posting, client-money and office-money as distinct custody classes</td><td><code>modules/ledger/</code></td><td>Balanced journals; an unbalanced draft is rejected whole; a posted record cannot be updated or deleted at the database level</td><td>ADR-008; FLOWS §14; INV-008, INV-021</td></tr>
+        <tr><td><strong>P3.6</strong><small>Versioned broker and agent commission</small></td><td>Commission calculation retaining agreement and rule version, basis, rate, gross and net, tax and fee components, amount and beneficiary, effective date and calculation time, source references</td><td><code>modules/commission/</code></td><td>A historical commission recomputes to the same figure from its retained inputs</td><td>ARCH-001 §13; ADR-020 for clawback</td></tr>
+        <tr><td><strong>P3.7</strong><small>Insurer settlement and remittance</small></td><td>Settlement items from posted journals; remittance states from not-due through confirmed and disputed, with insurer evidence</td><td><code>modules/settlement/</code></td><td>A settlement cannot complete while a required difference remains unowned</td><td>FLOWS §12A, §14</td></tr>
+        <tr><td><strong>P3.8</strong><small>Bank/provider/ledger reconciliation</small></td><td>Three reconciliation controls, separately: bank versus client-money ledger; client-money ledger versus insurer statement or account-current; commission earned versus received — each with matched, timing-difference, unexplained and resolved states</td><td><code>modules/reconciliation/</code></td><td>Each control detects a planted difference and reports it; drift is a telemetry signal, a breach is a blocked transition</td><td>FLOWS §12A; ADR-014; INV-021</td></tr>
+        <tr><td><strong>P3.9</strong><small>Insurer and payment Adapter SDKs</small></td><td>The adapter contract as a package: mapping to the canonical model, retry and signature policy, contract tests a provider adapter must pass</td><td><code>packages/adapter-sdk/</code></td><td>A second adapter passes the same contract tests without touching the domain core</td><td>ADR-009; INV-010</td></tr>
+        <tr><td><strong>P3.10</strong><small>Partner API and versioned webhooks</small></td><td>The partner contract family under <code>openapi/biztrust-partner-api.yaml</code>; outbound webhooks versioned and signed; a breaking-change policy in CI</td><td><code>openapi/</code>, <code>modules/partner/</code></td><td>Contract lint and compatibility tests; a breaking change fails CI</td><td>ADR-005; INV-012</td></tr>
+        <tr><td><strong>P3.11</strong><small>Tenant Pack validation foundation</small></td><td>Schema, signing and compatibility validation for tenant-specific configuration — extension without forks or unrestricted code</td><td><code>modules/tenancy/packs/</code></td><td>Tenant #2 provisions and isolates through a pack; no core-code branch exists for either tenant</td><td>ADR-011; INV-011</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="order" data-search="execution order P3 ledger first invoice payment adapter refunds commission settlement reconciliation partner API tenant packs">
+  <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>The ledger before anything that posts to it</h2></div></div>
+  <p class="section-intro">The plan lists the eleven epics unordered. This order is the track's proposal: the ledger first, because every later epic posts to it.</p>
+  <ol class="migration-steps">
+    <li><b>P3.5 — the subledger.</b> Posting rules, balanced drafts, atomic rejection, append-only. Every later epic posts here; a ledger designed after the payment code will be shaped by the payment code.</li>
+    <li><b>P3.1 — invoices</b>, the first source transactions the ledger receives.</li>
+    <li><b>P3.2 — payment state</b>, with the four dimensions separate from the first migration.</li>
+    <li><b>P3.3 with P3.9 — the first adapter and the boundary it lives behind.</b> Build the SDK contract from the first adapter, then prove it with a second. The payment-to-policy safety workflow is exercised here: a callback that arrives before authority evidence waits, retries or escalates, and never activates cover.</li>
+    <li><b>P3.4 — refunds, reversals, chargebacks.</b> Compensating entries against a ledger that already refuses edits.</li>
+    <li><b>P3.6 — commission</b>, with its retained inputs, and clawback under ADR-020.</li>
+    <li><b>P3.7 — settlement and remittance.</b></li>
+    <li><b>P3.8 — the three reconciliations</b>, each proven by a planted difference. Then <code>BT-G4</code>.</li>
+    <li><b>P3.10 — the partner API and webhooks</b>, on adapters and contracts that already pass fault injection. With P3.3 and P3.9, <code>BT-G5</code>.</li>
+    <li><b>P3.11 — tenant packs</b>, and the proof that Tenant #2 provisions without a fork. <code>BT-G6</code>.</li>
+  </ol>
+</section>
+
+<section id="code" data-search="payment to policy safety workflow signature deduplicate authority compensation client money dimensions custody allocation remittance commission reconciliation idempotency">
+  <div class="section-heading"><span>04</span><div><p>What the agent codes</p><h2>Money that cannot invent cover</h2></div></div>
+  <p class="section-intro">The safety workflow is the P3 equivalent of P0's bypass test: the single sequence every reviewer walks. It is rendered here as the steps a callback goes through; the modules it asks may refuse at every step.</p>
+  <ol class="migration-steps">
+    <li><b>Verify the provider signature and deduplicate the event</b> by the provider's own identifier before anything else reads it.</li>
+    <li><b>Emit <code>PaymentConfirmed</code></b> as a fact about the payment. It says nothing about cover.</li>
+    <li><b>Query the binding module</b> for authority and coverage-confirmation state.</li>
+    <li><b>If authoritative confirmation is missing: wait, retry or escalate.</b> No coverage transition. The premium is held under the regime ADR-014 accepted, not applied to a cover that does not exist.</li>
+    <li><b>If authority evidence and the effective period are valid:</b> request policy registration or activation from the policy module; on <code>PolicyCoverageChanged</code>, request an approved journal posting from the ledger.</li>
+    <li><b>If payment succeeded and binding failed:</b> the approved compensation policy decides hold, void or refund. The workflow does not invent a financial outcome.</li>
+  </ol>
+  <div class="table-wrap">
+    <table>
+      <caption>Client-money and reconciliation dimensions — rendered from FLOWS.md §12A; each tracked separately under the accepted regime</caption>
+      <thead><tr><th>Dimension</th><th>Examples</th><th>Authority or source</th></tr></thead>
+      <tbody>
+        <tr><td>External movement</td><td>initiated, authorized, captured, cleared, reversed</td><td>Bank or payment provider</td></tr>
+        <tr><td>Custody and risk class</td><td>client risk, insurer risk, office money, other approved class</td><td>Governing law and the operative agreement</td></tr>
+        <tr><td>Allocation</td><td>unallocated, partially allocated, fully allocated, reallocated</td><td>Payment and ledger rules</td></tr>
+        <tr><td>Insurer remittance</td><td>not due, due, submitted, confirmed, disputed</td><td>Settlement plus insurer evidence</td></tr>
+        <tr><td>Commission</td><td>unearned, earned, accrued, received, paid, clawed back</td><td>Commission agreement and rule version</td></tr>
+        <tr><td>Reconciliation</td><td>matched, timing difference, unexplained difference, resolved</td><td>Reconciliation owner and evidence</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="check-list">
+    <li><strong>Provider payloads never become domain schemas.</strong> The adapter maps them to the canonical model and retains the source as immutable evidence under retention policy</li>
+    <li><strong>No hidden offset between client and office money</strong>, no allocation beyond cleared funds, no settlement completion with an unowned difference — each is a database-level constraint or an atomic rejection, not a report</li>
+    <li><strong>Every financial mutation is idempotent under retry and concurrency</strong> — key scope, retention, replay response and race behaviour are ADR-012's evidence, and P3's tests</li>
+    <li><strong>Historical figures recompute from retained inputs.</strong> A commission or a journal that cannot be reproduced from what was stored is a number, not a record</li>
+    <li><strong>A tenant pack is configuration under a schema, signed and version-checked.</strong> It is not a plugin, not a script, and not a branch</li>
+  </ul>
+</section>
+
+<section id="monitor" data-search="human monitors P3 finance accounting reviewer legal ADR-014 provider selection reconciliation drift BT-G4 BT-G5 BT-G6 stop signals">
+  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Between BT-G3 and tenant ready</h2></div></div>
+  <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P3 adds these — and more of them are reserved to qualified reviewers than in any other phase.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Authorizations reserved to a human in P3 — the plan names none of these roles; the Who column is proposed</caption>
+      <thead><tr><th>Authorization</th><th>Who (proposed)</th><th>Must have seen first</th></tr></thead>
+      <tbody>
+        <tr><td>Acceptance of ADR-014 and the chart of accounts</td><td>Qualified legal and finance reviewers for the operating jurisdiction, then the architecture authority</td><td>The tenant's money-regime profile from slice S01; the funds-flow scenarios; the three reconciliation obligations</td></tr>
+        <tr><td>Each provider selection</td><td>Architecture authority, with security and the business sponsor</td><td>Its own ADR: capability, licence, sandbox evidence, exit strategy</td></tr>
+        <tr><td><code>BT-G4</code> Financial Ready</td><td>Finance and accounting reviewer, with release authority</td><td>Balanced journals; each reconciliation detecting a planted difference; a historical commission recomputed</td></tr>
+        <tr><td><code>BT-G5</code> Integration Ready</td><td>Security risk owner, with the integration owner</td><td>Provider sandbox and fault-injection evidence: replayed, tampered and out-of-order webhooks; adapter contract tests passed by two adapters</td></tr>
+        <tr><td><code>BT-G6</code> Tenant Ready</td><td>Architecture authority</td><td>Tenant #2 provisioned through a pack, isolated by the P0 proof re-run against both tenants, with no tenant-specific branch in the repository</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="definition-list">
+    <div><span>Stop signal: a payment callback activated cover</span><p>The exact failure INV-020 names. The fix is not a check in the callback; it is the workflow that should have been between them.</p></div>
+    <div><span>Stop signal: a posted journal was edited</span><p>An <code>UPDATE</code> or <code>DELETE</code> that succeeds against a posted record means the ledger is a table, not a ledger.</p></div>
+    <div><span>Stop signal: client and office money offset each other</span><p>A convenient net figure that hides which money paid for what. Under most regimes it is also the finding an auditor is looking for.</p></div>
+    <div><span>Stop signal: a provider's status value appears in the domain model</span><p>The adapter boundary has been crossed; replacing that provider now means a schema migration.</p></div>
+    <div><span>Stop signal: a branch, directory or flag named after a tenant</span><p>That is the fork <code>BT-G6</code> exists to rule out. Tenant differences live in packs.</p></div>
+    <div><span>Daily, then weekly</span><p>Reconciliation drift as telemetry, read by the reconciliation owner; the state of each of the three controls; provider sandbox test results after any adapter change.</p></div>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gates BT-G4 financial ready BT-G5 integration ready BT-G6 tenant ready checklist">
+  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gates · BT-G4, BT-G5, BT-G6</h2></div></div>
+  <p class="section-intro">Three gates, three record-keepers. Each is recorded separately, and the phase is not complete until all three are.</p>
+  <div class="dod-grid">
+    <h3>BT-G4 · Financial Ready</h3>
+    <label><input type="checkbox" disabled> Every journal balances; an unbalanced draft is rejected whole, and the rejection is recorded</label>
+    <label><input type="checkbox" disabled> A posted record cannot be updated or deleted at the database level</label>
+    <label><input type="checkbox" disabled> All three reconciliations detect a planted difference and report matched, timing, unexplained and resolved states</label>
+    <label><input type="checkbox" disabled> A historical commission recomputes to the same figure from retained inputs</label>
+    <label><input type="checkbox" disabled> Client-money and office-money custody classes are distinct in every balance and movement</label>
+    <h3>BT-G5 · Integration Ready</h3>
+    <label><input type="checkbox" disabled> Replayed, tampered and out-of-order provider events cannot repeat or invent a mutation</label>
+    <label><input type="checkbox" disabled> Two adapters pass the same SDK contract tests without touching the domain core</label>
+    <label><input type="checkbox" disabled> A breaking change to the partner API fails CI</label>
+    <h3>BT-G6 · Tenant Ready</h3>
+    <label><input type="checkbox" disabled> Tenant #2 provisions through a pack, and the P0 proof passes against both tenants</label>
+    <label><input type="checkbox" disabled> No tenant-specific branch, directory or code path exists</label>
+    <label><input type="checkbox" disabled> The end-to-end evidence traces one activity through indication or offer, payment, authority-supported confirmation, policy representation, ledger, commission, settlement and reconciliation</label>
+  </div>
+</section>
+
+<section id="horizon" data-search="after P3 horizon uncommitted P4 claims depth partner scale isolation tiers analytics AI operate learn">
+  <div class="section-heading"><span>07</span><div><p>After P3</p><h2>The horizon is uncommitted, on purpose</h2></div></div>
+  <p class="section-intro">The plan names what may expand after P3 — claims and renewal depth, partner scale, additional isolation tiers, analytics, AI assistance — and says in the same sentence that they are roadmap candidates until business value, risk, dependencies and authority are defined. They must not be labelled P4 through P9, because a number implies a sequencing commitment that has not been reviewed.</p>
+  <div class="callout">
+    <strong>Production is not a phase</strong>
+    <p>After <code>BT-G6</code> the platform is not finished; it is operated. Every package that ships from then on still runs the full lifecycle, and the <a href="../stages/operate.html">Operate</a> and <a href="../stages/learn.html">Learn</a> stages run continuously against the service objectives, the telemetry floor and the promotion bar those pages define. The phase track ends here; the stage track does not end.</p>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt P3 callback cover journal edited offset provider schema tenant fork accounting advice">
+  <div class="section-heading"><span>08</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <ul class="cross-list">
+    <li>ADR-014 is not accepted by qualified legal and finance review for the operating jurisdiction — there is no regime to post under</li>
+    <li>A payment callback, or any payment state, changes coverage state</li>
+    <li>A posted ledger record is edited or deleted, by any path</li>
+    <li>Client money and office money are offset, netted or held in one class</li>
+    <li>A provider's payload or status vocabulary reaches a domain schema</li>
+    <li>Anything tenant-specific appears as code rather than as a validated pack</li>
+    <li>Work after P3 is numbered as a phase</li>
+  </ul>
+  <div class="next-action">
+    <span>AFTER THE PHASES</span>
+    <div>
+      <h3>Operate</h3>
+      <p>Service objectives, the telemetry floor, on-call, incidents, recovery, cost and vulnerability management — per package, continuously, with a continuous exit to Learn.</p>
+    </div>
+    <a class="github-link" href="../stages/operate.html">Operate →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery phases · P3 of P0–P3 · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

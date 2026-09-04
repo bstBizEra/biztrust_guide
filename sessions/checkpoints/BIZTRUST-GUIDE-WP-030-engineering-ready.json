@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-030-001",
+  "created_at": "2026-09-04T14:14:51Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-030",
+  "state": "ENGINEERING_READY",
+  "objective": "Publish the P0-P3 phase track as a second rendering of DELIVERY_PLAN.md, held to the plan by an exact parity test and carrying no current-status facts.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-030-phase-manuals",
+    "baseline_commit": "eeee254f990591577b2f70a09ab8e5c122f2cd0a"
+  },
+  "completed": [
+    "Filed the Work Package as issue #59 before any file was written - no ticket, no work",
+    "Wrote phases/overview.html (two axes, the BT-G0-BT-G6 gate table, where code goes, verified sources, cross-phase monitoring, stop conditions)",
+    "Wrote phases/p0.html, p1.html, p2.html, p3.html - each with entry criteria, the epic-to-package table, execution order, what the agent codes, what the human monitors, an exit gate of checkboxes, stop conditions and the next phase",
+    "Wrote tests/test_phase_pages.py: epic and gate parity with the plan, spine presence by eyebrow, checkboxed gates, links to the track and the hub; five negative controls run by hand",
+    "Extended tests/test_gate_namespaces.py to scan phases/ - it caught two bare identifiers in overview.html before commit",
+    "Linked the track from the hub's #lifecycle, #p0 and #roadmap without renumbering; added the phases/ row to README",
+    "Measured phases x stages similarity with the detector's own functions; moved the one restated stop condition to a single home on overview.html",
+    "Fresh-context adversarial review before merge (2026-09-04): thirteen findings, all fixed on the branch except two recorded as not adopted - DEC-029"
+  ],
+  "remaining": [
+    "Human merge of PR #58 (WP-029), then of this package's pull request - this branch is stacked on #58",
+    "Visual review of the five pages in a browser after deployment; this session could not render them",
+    "NS-032 - issue #52 item 2, unchanged by this package",
+    "Finding to file: README's delivery-state paragraph asserts Pages is not enabled while the site serves",
+    "Finding to file: README's repository table has no row for reference/"
+  ],
+  "files_changed": [
+    "phases/overview.html",
+    "phases/p0.html",
+    "phases/p1.html",
+    "phases/p2.html",
+    "phases/p3.html",
+    "index.html",
+    "README.md",
+    "tests/test_phase_pages.py",
+    "tests/test_gate_namespaces.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-030-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check script.js",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git ls-files '*.html' staged into _site/ and every page verified present (CI step reproduced locally)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator over this checkpoint",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "similarity: phases x stages with tests/test_no_cross_page_duplication.py functions - no pair >= 0.60 at element or sentence level",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh repo view over the eleven upstream repositories cited on overview.html",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "No BizTrust implementation repository exists in the bstBizEra organisation on 2026-09-04. bERP describes a different product. Every path on the phase pages is therefore target layout, and P0.2 is the package that creates the repository.",
+    "The gate-namespace guard, extended to phases/, failed on the author's own overview page twice before commit: 'BT-G4 \u00b7 G5 \u00b7 G6' and a sentence quoting the bare form to explain the rule. A guard that fires on its author in the change that adds it is a guard that works.",
+    "The first run of the 'delete P0.7' negative control PASSED, because the id also appears in the execution-order list and parity is satisfied by presence anywhere on the page. The control was re-run removing every occurrence, failed as required, and the docstring records both runs.",
+    "phases x stages before the fix: four element-level pairs at 0.824, all one line - the 'authority has expired' stop condition restated from build.html on every phase page. After moving it to overview.html alone: no phases x stages pair reaches 0.60 at either level.",
+    "Five within-track element-level pairs remain at 0.727-0.889 and are deliberate: the pointer sentence to overview#monitor, the gate's closing 'recorded BT-G<n> with a date' line, and overview's summary of p0's independence requirement. Recorded here; the CI detector's corpus is stages/ only and was not widened.",
+    "Word counts - overview 2013, p0 2088, p1 1867, p2 1719, p3 2199 - are over the 1700 band. Accepted per DEC-020's reasoning: the epic tables are the parity content.",
+    "README's delivery-state paragraph still says every push to main fails at Configure Pages and the URL returns 404; the site serves. Left as found, reported as a finding.",
+    "Review finding: the gate table's Recorded-by column and the phase pages' Who columns were the track's proposals presented as the plan's, with a citation to a table that assigns decisions, not gates. Labelled proposed. The plan names the evidence for each gate and never the recorder - that gap is a decision-rights row the hub does not yet have.",
+    "Review finding: the parity test held identifier SETS only. Deleting the whole epics table, swapping two row labels, or leaving a gate only in the page title all passed. It now requires the epics section, holds each row's label to the plan's deliverable text, strips the head, and asserts gate-set equality; the new negative controls are in its docstring.",
+    "Review finding: the stacked branch conflicts on badf/ under git merge once WP-029 is squash-merged (cherry-pick applies cleanly). The stacking deferred the conflict rather than avoiding it. Disposition: rebase onto main after WP-029 lands and re-measure on the new head."
+  ],
+  "decisions": [
+    "A second rendering with a parity test, not a generator with a drift guard: the generator is the lean answer only once the plan changes often enough to make hand-rendering the bottleneck, and the parity test already fails on the drift a generator would prevent.",
+    "Stack on WP-029's branch rather than base on main, so the two packages' badf/ edits cannot conflict at merge.",
+    "Do not widen the CI duplication detector to phases/: its element-level headroom is 0.008 and re-calibration is its own package. Measure by hand, report, and record the deliberate parallels.",
+    "Leave the README's false deployment paragraph and the missing reference/ row alone: findings become packages, not in-place fixes.",
+    "Merge only a head that has been reviewed and re-verified after its fixes, never the head the review read. The evidence table is re-measured on every new SHA."
+  ],
+  "assumptions": [
+    "That the documentation implementation authority of 2026-09-03 extends to a new published surface that renders an existing document. It does not extend to any claim that a capability is implemented, and no page makes one."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged by this package. Assign oracle authorship to someone who did not author the fixtures before any re-run."
+    },
+    {
+      "code": "OPERATE_OUTPUTS_CONTENT_DECISION",
+      "owner_role": "human-reviewer",
+      "resolution": "Issue #55. Unchanged by this package."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "phase_track_publication": "OPERATOR_INSTRUCTION_2026_09_04",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "HUMAN_RESERVED",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-032",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/59",
+      "docs/architecture/DELIVERY_PLAN.md"
+    ],
+    "stop_if": [
+      "A phase page states a current status instead of pointing at the ledger",
+      "tests/test_phase_pages.py is edited to accept an id the plan does not have",
+      "Anything is numbered P4 or higher",
+      "PRIMARY_NEXT_ACTION names work that has already been completed"
+    ]
+  },
+  "declared_non_coverage": [
+    "The five pages were not rendered in a browser by this session; layout and theme are unverified beyond the shared stylesheet and the theme-token test",
+    "Whether any sentence on the pages is status-shaped was judged by review, not by a test",
+    "Cross-page similarity for phases/ is a hand measurement recorded here, not a CI check",
+    "Nothing here verifies the delivery plan itself; the pages inherit its errors exactly"
+  ]
+}

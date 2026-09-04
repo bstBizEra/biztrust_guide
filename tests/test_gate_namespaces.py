@@ -39,6 +39,7 @@ GUIDE = (
     [ROOT / "index.html", ROOT / "README.md", ROOT / "AGENTS.md"]
     + sorted((ROOT / "stages").glob("*.html"))
     + sorted((ROOT / "reference").glob("*.html"))
+    + sorted((ROOT / "phases").glob("*.html"))
     + sorted(p for p in (ROOT / "docs").glob("*.md"))
 )
 
