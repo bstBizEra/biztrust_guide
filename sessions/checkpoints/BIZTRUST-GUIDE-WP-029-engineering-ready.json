@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-029-001",
+  "created_at": "2026-09-04T06:50:57Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-029",
+  "state": "ENGINEERING_READY",
+  "objective": "Reconcile operational state with the human decision on issue #52 item 1, and queue the two schema repairs as separate actions under the constraints that decision imposes.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-029-decision-state-reconciliation",
+    "baseline_commit": "3dd01370f42acec2c633d0a0f15e78768812f662"
+  },
+  "completed": [
+    "Recorded the human decision on issue #52 item 1 as DEC-026: option (b), resume_decision is removed from experimental scoring",
+    "Recorded the reconciliation itself as DEC-027, separately and under IMPLEMENTATION_SCOPE rather than under the human's authority",
+    "Retired NS-031, whose evidence_required - a recorded decision with reasoning on issue #52 - the decision comment met",
+    "Set resume_decision to CONTINUE and re-anchored current-state on WP-029",
+    "Split issue #52 items 2 and 3 into NS-032 and NS-033, per disposition item 4, rather than one bundled action",
+    "Carried the constraint that killed PR #56 into NS-033 as an explicit stop condition"
+  ],
+  "remaining": [
+    "NS-032 - reapply item 2, repository identity, on its own",
+    "NS-033 - reapply item 3, per-action dependencies with fixture-specific positive and negative tests, after NS-032",
+    "Independent oracle authorship before any re-run - unchanged by this decision",
+    "Issue #55, the Operate outputs section, which the decision explicitly excludes from this repair"
+  ],
+  "files_changed": [
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-029-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --quiet origin/main -- docs/experiments/",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator over this checkpoint",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator over all twelve sessions/checkpoints/*.json - 3 non-conformant (WP-017, WP-024, WP-026), see observations",
+      "status": "FAIL",
+      "exit_code": 1
+    }
+  ],
+  "observations": [
+    "The decision was recorded on issue #52 at 2026-09-04T06:46:45Z while this file's predecessor still read resume_decision WAIT_FOR_AUTHORITY with a stop_reason naming the question it answered. That gap is the seventh opening of the same defect in three days, and it is closed by this commit rather than by a later one.",
+    "Disposition item 4 - reapply repository identity independently - is the operative correction to PR #56. The bundle is how a single inherited dependency value reached four mandatory fixtures; two actions cannot bundle.",
+    "The three most recent checkpoints before this one (WP-017, WP-024, WP-026) do not conform to schemas/session-checkpoint.schema.json. All three record validation as an array of strings where the schema requires objects with command, status and exit_code; WP-017 additionally records blockers as strings. Measured with jsonschema 4.26.0 Draft202012Validator over all 12 checkpoints: 9 conform, 3 do not. AGENTS.md section 6 requires conformance and states in as many words that it is not mechanically checked - and three consecutive checkpoints then drifted. This checkpoint conforms and was verified with a negative control. The three that do not are recorded here rather than retrofitted; that is a separate change.",
+    "Review finding (fresh-context, 2026-09-04): the first version of this checkpoint recorded the all-checkpoints jsonschema run as PASS while its own observation said three fail. A state-accuracy package shipped a false PASS. Corrected to one PASS for this file and one FAIL for the set, which is what was measured.",
+    "Review finding: NS-032's authority was first written GRANTED_BY_HUMAN_DECISION_2026_09_04. The decision unblocked the item and granted nothing; the grant is the standing 2026-09-03 documentation-implementation grant, and it is now cited as such. Attributing an inferred grant to the human is the defect DEC-027's rationale names."
+  ],
+  "decisions": [
+    "Record the human decision and the reconciliation as two log entries, not one: DEC-026 carries OPERATOR_INSTRUCTION authority and DEC-027 carries IMPLEMENTATION_SCOPE. Folding an agent's state edits into a human authority record is how an agent's choices acquire a human's weight.",
+    "Change no file under docs/experiments/. The decision states that WP-024 remains FAILED and is not reinterpreted; a state PR that edited the schema, the fixtures or the results document would be doing exactly that.",
+    "Do not mark item 3 as merely unblocked. Its SHAPE changed: a per-action edge is authoring, and the positive and negative tests are the guard proving it was authored rather than defaulted."
+  ],
+  "assumptions": [
+    "That the authority granted on 2026-09-03 for documentation implementation extends to the two schema repairs the decision unblocks. It does not extend to an experiment re-run, which stays NOT_GRANTED."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Assign oracle authorship to someone who did not author the fixtures. Unchanged by DEC-026 and still blocking any re-run."
+    },
+    {
+      "code": "OPERATE_OUTPUTS_CONTENT_DECISION",
+      "owner_role": "human-reviewer",
+      "resolution": "Decide what the Operate to Learn handover is - issue #55. Explicitly excluded from this repair."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "resume_decision_taxonomy": "DECIDED_2026_09_04_OPTION_B_NOT_SCORED",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "HUMAN_RESERVED",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-032",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/52#issuecomment-5536809353",
+      "docs/experiments/WP-024-results.md"
+    ],
+    "stop_if": [
+      "An agent attempts to define the resume_decision taxonomy - DEC-026 removed it from scoring, it did not specify it",
+      "Items 2 and 3 are attempted in one change",
+      "A re-run is proposed before the oracles have an independent author",
+      "PRIMARY_NEXT_ACTION names work that has already been completed"
+    ]
+  },
+  "declared_non_coverage": [
+    "This change verifies nothing about WP-024's result, which stands as FAILED and unreinterpreted",
+    "No schema, fixture or oracle was inspected for correctness here; the only claim made about docs/experiments/ is that it is untouched",
+    "The underlying defect is unaddressed: operational state still reconciles by hand, and this is the seventh hand-reconciliation in three days",
+    "Issue #55 is not covered, by explicit instruction"
+  ]
+}
