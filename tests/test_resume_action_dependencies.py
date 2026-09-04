@@ -160,7 +160,7 @@ class TestNoInheritedDefault(unittest.TestCase):
         f1 = src[f1_start:f1_end]
         self.assertIn(assignment, f1)
         mutant = src[:f1_start] + f1.replace(assignment, "") + src[f1_end:]
-        mutant = mutant.replace("    for k, v in over.items():", assignment.replace("d[", "d[", 1) + "    for k, v in over.items():", 1)
+        mutant = mutant.replace("    for k, v in over.items():", assignment + "    for k, v in over.items():", 1)
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "build.py"; path.write_text(mutant, encoding="utf-8")
             spec = importlib.util.spec_from_file_location("wp024_build_mutant", path)

@@ -111,7 +111,7 @@
       "docs/experiments/schema/resume.schema.json"
     ],
     "stop_if": [
-      "PR #74 is merged without an operator comment on issue #52 answering the asserted.* question",
+      "PR #74 is merged without an operator comment on issue #52 answering the asserted.* question, or without a decision-log entry that cites that comment's id (the entry after whatever DEC number main holds at merge time; WP-037 uses DEC-039)",
       "An oracle file appears in a diff",
       "A requires value is assigned in base()",
       "resume_decision, computed.freshness or stop_conditions differ from the 2.0.0 set on any fixture",

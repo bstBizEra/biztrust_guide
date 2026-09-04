@@ -15,7 +15,7 @@
         "A human writes the answer on issue #52; an agent's paraphrase of a session instruction does not count (DEC-002, DEC-038)"
       ],
       "evidence_required": [
-        "An issue #52 comment by the operator, cited by DEC-038's successor entry"
+        "An issue #52 comment by the operator, cited by a decision-log entry appended before merge (its number is whatever follows main's last entry at that time; WP-037 takes DEC-039)"
       ],
       "stop_conditions": [
         "An agent supplies the answer",
