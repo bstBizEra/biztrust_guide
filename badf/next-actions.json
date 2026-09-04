@@ -1,28 +1,53 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-031",
-  "updated_at": "2026-09-04T15:43:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-032",
+  "updated_at": "2026-09-04T16:25:04Z",
   "actions": [
     {
-      "id": "NS-033",
+      "id": "NS-034",
       "primary": true,
       "priority": 1,
       "owner_role": "documentation-engineer",
       "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "action": "Reapply issue #52 item 3: add next_action dependencies PER ACTION with no inherited global default, each referencing an existing observation key, each with fixture-specific positive and negative tests.",
+      "action": "Issue #55: give operate.html an outputs section naming what the stage hands to Learn, add the catalogue rows it needs, retire the KNOWN_GAPS entry, and either renumber nothing or update every Operate section citation in the catalogue in the same change.",
       "prerequisites": [
-        "NS-032 merged - static.repository and resolved sources are on main, enforced by build.py reading the schema",
-        "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing observation key, each fixture carries positive and negative tests for its own edge"
+        "WP-032 merged - badf/ is edited by one package at a time (DEC-029: stack nothing on a branch that will be deleted)"
       ],
       "evidence_required": [
-        "No dependency value is assigned in build.py's base() or otherwise inherited by a fixture it was not authored for",
-        "Every fixture carries a positive and a negative test for its own edge",
-        "A test proving a dependency naming a non-existent observation key fails"
+        "operate.html has a section whose heading eyebrow is Outputs and tests/test_stage_page_spine.py no longer excuses it",
+        "learn.html's entry criterion names inputs Operate actually produces, or Operate's outputs cover all three it names",
+        "grep -c 'Operate §' reference/artifact-catalogue.html accounts for every citation after any renumbering",
+        "python3 -m unittest discover -s tests OK; the duplication detector reports no new pair above 0.70"
       ],
       "stop_conditions": [
-        "One constant is assigned to more than one fixture - that is exactly what #57 reverted",
-        "The edge changes which resume_decision is defensible on any fixture - it is not scored, and the edge must not smuggle it back",
+        "An outputs row names an artifact no section of operate.html describes - that is manufacturing procedure, the failure discover.html warns about",
+        "A near-miss register is created: learn.html states no stage owns one, and creating one is a content decision with consequences for control retirement that this package is not authorised to take"
+      ],
+      "fallback": "Leave #55 open with the outputs the page already implies listed on the issue for a human to confirm."
+    },
+    {
+      "id": "NS-033",
+      "primary": false,
+      "priority": 2,
+      "owner_role": "documentation-engineer",
+      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
+      "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
+      "prerequisites": [
+        "NS-034 merged - badf/ is edited by one package at a time",
+        "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing key, each fixture carries positive and negative tests for its own edge",
+        "DEC-033: requires may name asserted.* as well as observed.* keys - a recorded departure from the letter of DEC-026 disposition 5 ('an existing observation'), which the operator is asked to confirm or refuse on issue #52 before this action starts; freshness is not rescoped to requires",
+        "Schema amendment to 3.0.0: computed.next_action is additionalProperties false, so requires is a backward-incompatible addition that regenerates all nine fixtures, frozen HTML and manifests"
+      ],
+      "evidence_required": [
+        "No requires value is assigned in build.py's base() or otherwise inherited; a test reads each fixture function's source and requires an explicit assignment in every function whose next_action is not null",
+        "Every fixture carries a positive test naming its own expected edge and a negative test proving build.py --check refuses an edge naming a key that does not exist, and refuses an empty edge",
+        "A test diffs every fixture's resume_decision, computed.freshness, stop_conditions and every oracle.yaml against the pre-change tree and requires them byte-identical - the additive-only guard",
+        "Eight identical edges on the eight fixtures that share NS-030 are expected and recorded as such: the same action consumes the same inputs; what is forbidden is inheritance, not agreement"
+      ],
+      "stop_conditions": [
+        "One value is assigned in base() or reaches a fixture whose function did not assign it - that is exactly what #57 reverted",
+        "Any sealed field - resume_decision, computed.freshness, stop_conditions, any oracle - differs byte-for-byte from the pre-change tree",
         "Oracles are edited by the author who wrote the fixtures"
       ],
       "fallback": "Leave item 3 open and record that the artifact still cannot say what an action consumes."
@@ -30,7 +55,7 @@
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 2,
+      "priority": 3,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -48,7 +73,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 3,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -66,7 +91,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 4,
+      "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",

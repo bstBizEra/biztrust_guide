@@ -6,9 +6,11 @@ Enterprise-grade implementation guide for a governed AI engineering team deliver
 
 ## Live website
 
-After GitHub Pages is enabled, the public site is available at:
+The Pages workflow (`.github/workflows/pages.yml`) targets:
 
 **https://bstbizera.github.io/biztrust_guide/**
+
+Whether that address currently serves the `main` head is not recorded in this file — see *Current delivery state* below for where to read it.
 
 See [Live Preview & Publishing](docs/LIVE_PREVIEW.md) for the exact GitHub and local-preview procedures.
 
@@ -54,9 +56,10 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 
 | Path | Purpose |
 |---|---|
-| `index.html` | The guide's hub — overview, lifecycle map and links to the nine stages |
+| `index.html` | The guide's hub — overview, lifecycle map and links to the stage and phase manuals |
 | `stages/` | Nine stage manuals — the bulk of the guide |
 | `phases/` | Five phase manuals — P0 to production: what agents code and humans monitor per delivery phase. A rendering of `docs/architecture/DELIVERY_PLAN.md`; `tests/test_phase_pages.py` holds its epic and gate identifiers to the plan |
+| `reference/` | Two reference pages — the artifact catalogue and the risk-tier schedule: cross-stage lookups that the stage manuals cite rather than restate |
 | `tests/` | Validator fail-closed suite and cross-page duplicate detector |
 | `sessions/` | Session checkpoints, the recovery procedure's primary input |
 | `assets/` | Brand images referenced by every page |
@@ -97,7 +100,12 @@ The validator's exit codes carry meaning: **0** pass · **1** a data defect, the
 
 The guide is nine stage manuals, five phase manuals and two reference pages, plus the `index.html` hub. Documentation actions remain open — see `badf/next-actions.json`.
 
-Deployment is blocked on one repository-administrator action: select **GitHub Actions** under `Settings → Pages → Build and deployment → Source`. Until that is done, **every push to `main` fails CI at the `Configure Pages` step**, and `https://bstbizera.github.io/biztrust_guide/` returns 404. The workflow stages every tracked `*.html` — including the `stages/` subtree — not only the repository root.
+Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph asserted a 404 five minutes after the first deployment had succeeded, then stood for a day. Read deployment state from the two places it actually lives:
+
+- the [Pages workflow runs](https://github.com/bstBizEra/biztrust_guide/actions/workflows/pages.yml) — the run bound to the current `main` head is the evidence that the head was built, validated and uploaded;
+- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the entry whose latest status (`/deployments/{id}/statuses`, newest first) is `success` is the commit the site is serving; superseded deployments read `inactive`, and a failed newer deployment leaves the previous one live. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
+
+The workflow stages every tracked `*.html` — including the `stages/`, `phases/` and `reference/` subtrees — not only the repository root.
 
 ## Authoritative references
 
