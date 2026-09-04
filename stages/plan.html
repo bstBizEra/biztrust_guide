@@ -31,14 +31,15 @@
   <p class="nav-label">Stage 04 · Plan</p>
   <nav id="sectionNav">
     <a href="#entry"><span>01</span> Entry criteria</a>
-    <a href="#anatomy"><span>02</span> Work Package anatomy</a>
-    <a href="#criteria"><span>03</span> Measurable criteria</a>
-    <a href="#authority"><span>04</span> Authority records</a>
-    <a href="#decompose"><span>05</span> Decomposition</a>
-    <a href="#states"><span>06</span> Package states</a>
-    <a href="#roles"><span>07</span> Roles</a>
-    <a href="#gate"><span>08</span> Exit gate</a>
-    <a href="#stop"><span>09</span> Stop conditions</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#anatomy"><span>03</span> Work Package anatomy</a>
+    <a href="#criteria"><span>04</span> Measurable criteria</a>
+    <a href="#authority"><span>05</span> Authority records</a>
+    <a href="#decompose"><span>06</span> Decomposition</a>
+    <a href="#states"><span>07</span> Package states</a>
+    <a href="#roles"><span>08</span> Roles</a>
+    <a href="#gate"><span>09</span> Exit gate</a>
+    <a href="#stop"><span>10</span> Stop conditions</a>
   </nav>
   <div class="sidebar-card">
     <span class="status-dot"></span>
@@ -81,8 +82,29 @@
   </div>
 </section>
 
+<section id="produces" data-search="artifacts produces outputs work package authority record package state next actions badf">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <p class="section-intro">Four artifacts. The first two are what the lifecycle prescribes and every section below describes; the last two are how this repository keeps the state that <a href="#states">Package states</a> requires, named here because a reader working only from this page would otherwise never produce them. This table adds nothing the <a href="../reference/artifact-catalogue.html">artifact catalogue</a> had not already attributed to Plan.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Plan artifacts, where each is described, and what requires it</caption>
+      <thead><tr><th>Artifact</th><th>What it records</th><th>Described in</th><th>Required by</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Work Package</strong></td><td>The eleven fields of one authorized unit of work &mdash; identifier, outcome, scope both ways, risk class, authority, criteria, evidence, rollback, dependencies, primary next action</td><td><a href="#anatomy">§03</a>, <a href="#criteria">§04</a>, <a href="#decompose">§06</a></td><td>Every line of the <a href="#gate">exit gate</a>; <a href="build.html#entry">Build</a> enters on one</td></tr>
+        <tr><td><strong>Authority record</strong></td><td>Granted actions, withheld actions, expiry, and the acts reserved to a human whatever the grant says</td><td><a href="#authority">§05</a></td><td>Gate: authority recorded with permitted actions, prohibitions and expiry; a human has authorized execution</td></tr>
+        <tr><td><strong>Machine-readable package state</strong></td><td>The declared state of the active package, reconciled against the issue tracker; in this repository, <code>badf/current-state.json</code></td><td><a href="#states">§07</a></td><td><small>not gated</small> &mdash; the page requires the state, no gate line requires the file</td></tr>
+        <tr><td><strong>Ordered next actions</strong></td><td>Exactly one action marked primary, so a resuming reader has no choice to make; in this repository, <code>badf/next-actions.json</code></td><td><a href="#anatomy">§03</a>, <a href="#states">§07</a></td><td>Gate: exactly one next action is identified as primary</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>What this table does not decide</strong>
+    <p>Who accepts the two state files. The catalogue records that no stage names an accepter for either, and assigning one is a content decision; this section names the artifacts and stops there.</p>
+  </div>
+</section>
+
 <section id="anatomy" data-search="work package anatomy fields scope authority evidence rollback">
-  <div class="section-heading"><span>02</span><div><p>The unit</p><h2>Work Package anatomy</h2></div></div>
+  <div class="section-heading"><span>03</span><div><p>The unit</p><h2>Work Package anatomy</h2></div></div>
   <p class="section-intro">Every field below is required. A Work Package missing any of them is a draft, whatever its state label says.</p>
   <p class="section-intro">Nine of the eleven have a corresponding field on the work-package form; the <a href="../reference/artifact-catalogue.html">artifact catalogue</a> says which two do not.</p>
   <div class="table-wrap">
@@ -106,7 +128,7 @@
 </section>
 
 <section id="criteria" data-search="acceptance criteria measurable falsifiable command evidence">
-  <div class="section-heading"><span>03</span><div><p>The hard part</p><h2>Writing criteria that can fail</h2></div></div>
+  <div class="section-heading"><span>04</span><div><p>The hard part</p><h2>Writing criteria that can fail</h2></div></div>
   <p class="section-intro">A criterion is measurable when two people running the same command would agree on whether it passed. Test each one by asking what its failure would look like.</p>
   <div class="split">
     <div>
@@ -136,7 +158,7 @@
 </section>
 
 <section id="authority" data-search="authority granted withheld expiry approval prohibited">
-  <div class="section-heading"><span>04</span><div><p>Permission</p><h2>Authority records</h2></div></div>
+  <div class="section-heading"><span>05</span><div><p>Permission</p><h2>Authority records</h2></div></div>
   <p class="section-intro">Authority is granted explicitly, bounded, and expires. Unknown or conflicting authority is not permission.</p>
   <div class="definition-list">
     <div><span>Granted</span><p>The specific actions permitted, by whom, and for what scope.</p></div>
@@ -151,7 +173,7 @@
 </section>
 
 <section id="decompose" data-search="decomposition sizing dependency order reviewable one objective">
-  <div class="section-heading"><span>05</span><div><p>Sizing</p><h2>Decomposition</h2></div></div>
+  <div class="section-heading"><span>06</span><div><p>Sizing</p><h2>Decomposition</h2></div></div>
   <ul class="check-list">
     <li><strong>One objective per package.</strong> If the outcome needs the word "and", it is two packages</li>
     <li><strong>Sized to be reviewable.</strong> A change nobody can hold in their head is accepted on trust, which is not acceptance</li>
@@ -166,7 +188,7 @@
 </section>
 
 <section id="states" data-search="states draft ready authorized in progress validating engineering ready accepted closed blocked transitions">
-  <div class="section-heading"><span>06</span><div><p>Lifecycle</p><h2>Package states</h2></div></div>
+  <div class="section-heading"><span>07</span><div><p>Lifecycle</p><h2>Package states</h2></div></div>
   <p class="section-intro">A Work Package moves through declared states. Only an authorized transition advances delivery, and validation success is never itself a transition — passing tests does not authorize deployment any more than a green build authorizes a merge.</p>
   <p class="section-intro">The eight states below are the whole machine, declared by <code>AGENTS.md</code> §8 and listed as the <code>state</code> enum of <code>schemas/session-checkpoint.schema.json</code> — a declaration, not a gate: no checkpoint is validated against that schema, so a wrong state is caught by a reader or not at all. The home page restates the same eight; neither page defines its own. Only <strong>ENGINEERING_READY</strong> has ever been written by the running system — it is the recorded value in <code>badf/current-state.json</code> and in every session checkpoint — so treat the two states after it as declared but not yet exercised.</p>
   <div class="table-wrap">
@@ -192,7 +214,7 @@
 </section>
 
 <section id="roles" data-search="roles planner authority engineer reviewer">
-  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="section-heading"><span>08</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
@@ -206,7 +228,7 @@
 </section>
 
 <section id="gate" data-search="exit gate execution authorized build">
-  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <div class="section-heading"><span>09</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Every acceptance criterion names a command that could settle it</label>
     <label><input type="checkbox" disabled> Out-of-scope exclusions are written, including the tempting ones</label>
@@ -220,7 +242,7 @@
 </section>
 
 <section id="stop" data-search="stop conditions halt uncheckable criteria authority missing">
-  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <div class="section-heading"><span>10</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
   <ul class="cross-list">
     <li>An acceptance criterion has no command that could falsify it, and is still being called a criterion</li>
     <li>Authority is absent, ambiguous, expired, or inferred from an unrelated approval</li>

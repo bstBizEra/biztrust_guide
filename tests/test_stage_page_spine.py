@@ -89,10 +89,11 @@ been gutted, and that is the finding.
 KNOWN GAPS
 ==========
 
-plan.html has NO outputs section. That is real, it is recorded in
-KNOWN_GAPS with a reason, and it is the largest structural gap left in the
-guide. operate.html had the same gap until WP-033 (issue #55) gave it one; its
-entry was deleted then, as the ratchet below demands. It is registered rather than left red because this suite
+The registry is EMPTY. operate.html had no outputs section until WP-033
+(issue #55) and plan.html until WP-037 (issue #73); each entry was deleted
+when the page gained the element, as the ratchet below demands. The registry
+stays, empty, so that a future gap has somewhere to be recorded with a reason
+rather than being left red or silently excused. It is registered rather than left red because this suite
 shares one `unittest discover` run with two others, and a member that is red
 on a clean tree takes their signal down with it.
 
@@ -130,14 +131,7 @@ SPINE: tuple[tuple[str, tuple[str, ...], str], ...] = (
 
 # (page, spine key) -> why it is absent. Delete an entry the moment the page
 # gains the element; test_known_gaps_are_still_gaps will insist on it.
-KNOWN_GAPS: dict[tuple[str, str], str] = {
-    ("plan.html", "outputs"): (
-        "Plan's artifact is the Work Package, described field-by-field under "
-        "'Work Package anatomy' (#anatomy) instead of an outputs section. "
-        "The content exists; the spine element does not, so nothing on the "
-        "page distinguishes a produced artifact from a described concept."
-    ),
-}
+KNOWN_GAPS: dict[tuple[str, str], str] = {}
 
 _SECTION = re.compile(r"<section\b([^>]*)>(.*?)</section>", re.S)
 _HEADING = re.compile(

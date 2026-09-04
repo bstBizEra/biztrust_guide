@@ -1,13 +1,33 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-035",
-  "updated_at": "2026-09-04T17:29:39Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-037",
+  "updated_at": "2026-09-04T17:59:33Z",
   "actions": [
     {
-      "id": "NS-033",
+      "id": "NS-038",
       "primary": true,
       "priority": 1,
+      "owner_role": "documentation-engineer",
+      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
+      "action": "Scope the next content package from reference/artifact-catalogue.html section 03 ('what the table makes visible'): eight artifacts named and never gated, one gate condition with no artifact, four artifacts with no named author, 41 with no stated home. File one issue per finding that has a documenting fix, and stop where the fix would be a content decision.",
+      "prerequisites": [
+        "WP-037 merged - badf/ is edited by one package at a time",
+        "An issue exists for whichever finding is taken first - no ticket, no work"
+      ],
+      "evidence_required": [
+        "Issues filed with acceptance criteria that distinguish documenting from authoring",
+        "For each finding taken: the page and the catalogue agree after the change, verified by grep"
+      ],
+      "stop_conditions": [
+        "A change adds a gate line, an owner or an artifact home that no page or repository file already establishes"
+      ],
+      "fallback": "Leave the catalogue's findings recorded, as they are now."
+    },
+    {
+      "id": "NS-033",
+      "primary": false,
+      "priority": 2,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
@@ -33,7 +53,7 @@
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 2,
+      "priority": 3,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -51,7 +71,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 3,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -69,7 +89,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 4,
+      "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",
