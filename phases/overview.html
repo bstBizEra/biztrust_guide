@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From P0 to production · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="The phase track: what the Work Packages are between architecture freeze and production, the BT-G0 to BT-G6 capability gates, where the code lands, what it is built against, and what a human monitors between authorizations.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}
+.cand{font-size:.62rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery phases</strong><small>Overview · From P0 to production</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="../index.html">← Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Delivery phases · Overview</p>
+  <nav id="sectionNav">
+    <a href="#axes"><span>01</span> Two axes</a>
+    <a href="#gates"><span>02</span> The capability gates</a>
+    <a href="#where"><span>03</span> Where the code goes</a>
+    <a href="#sources"><span>04</span> What it is built against</a>
+    <a href="#monitor"><span>05</span> What the human monitors</a>
+    <a href="#stop"><span>06</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Phase track</strong><small>P0 → P1 → P2 → P3</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="phases-intro" data-search="phases overview P0 P1 P2 P3 production delivery plan gates">
+  <div class="section-heading"><span>PH</span><div><p>Delivery phases · Overview</p><h2>From P0 to production</h2></div></div>
+  <p class="lede">The nine <a href="../index.html#lifecycle">stage manuals</a> say how one Work Package moves from ENG-G0 to ENG-G8. This track says what the Work Packages <em>are</em> between architecture freeze and production — in what order, landing where, proven how — and what a human has to watch between one authorization and the next.</p>
+  <p class="section-intro">Every page on this track is a rendering of <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DELIVERY_PLAN.md">docs/architecture/DELIVERY_PLAN.md</a> and the architecture pack behind it. It is a second rendering, never a second source: where a page and the plan disagree, the plan is right and the page is a defect. No page here states a current status. A page that restated status went false within hours of merging (<a href="https://github.com/bstBizEra/biztrust_guide/issues/32">#32</a>); the ledger it duplicated did not.</p>
+  <div class="invariant">
+    <span>THE RULE THIS TRACK EXISTS TO ENFORCE</span>
+    <p>A phase is a queue of Work Packages, never an approval state. Authority is granted per package, expires, and is recorded. Passing a capability gate authorizes only the next bounded planning step — not the phase, not production.</p>
+  </div>
+</section>
+
+<section id="axes" data-search="two axes stages phases ENG-G BT-G namespace work package">
+  <div class="section-heading"><span>01</span><div><p>Two axes</p><h2>Stages are how; phases are what</h2></div></div>
+  <p class="section-intro">Every Work Package in every phase runs the full stage lifecycle. The phase adds three things the stages cannot know: the gate that must already be passed before its packages may be authorized, the epics its packages are decomposed from, and the proof its exit gate demands.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Two namespaces that gate different things</caption>
+      <thead><tr><th>Axis</th><th>Unit</th><th>Gate namespace</th><th>Manual</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lifecycle</strong></td><td>One Work Package, Discover to Learn</td><td><code>ENG-G0…ENG-G8</code></td><td>The nine <a href="../stages/discover.html">stage pages</a></td></tr>
+        <tr><td><strong>Delivery</strong></td><td>One phase: a dependency-ordered queue of packages</td><td><code>BT-G0…BT-G6</code></td><td>This track: <a href="p0.html">P0</a>, <a href="p1.html">P1</a>, <a href="p2.html">P2</a>, <a href="p3.html">P3</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="flow" aria-label="Controlled execution chain"><div><b>Freeze</b><span>WP-ARCH-001A</span></div><i>→</i><div><b>BT-G0</b><span>Architecture ready</span></div><i>→</i><div><b>P0</b><span>Foundation</span></div><i>→</i><div><b>BT-G1</b><span>Security ready</span></div><i>→</i><div><b>P1</b><span>Broker core</span></div><i>→</i><div><b>BT-G2</b><span>Broker core ready</span></div><i>→</i><div><b>P2</b><span>Lifecycle</span></div><i>→</i><div><b>BT-G3</b><span>Lifecycle ready</span></div><i>→</i><div><b>P3</b><span>Financial · integration</span></div><i>→</i><div><b>BT-G4 · BT-G5 · BT-G6</b><span>Financial · integration · tenant ready</span></div></div>
+  <div class="callout">
+    <strong>An unprefixed gate number belongs to neither namespace</strong>
+    <p>Before the rename, the same unprefixed number meant Discover in the guide and Architecture Ready in the plan. A test now fails on any bare gate identifier across the published surface, this directory included. Write the prefix.</p>
+  </div>
+</section>
+
+<section id="gates" data-search="capability gates BT-G0 BT-G1 BT-G2 BT-G3 BT-G4 BT-G5 BT-G6 waiver risk owner">
+  <div class="section-heading"><span>02</span><div><p>The capability gates</p><h2>BT-G0 to BT-G6</h2></div></div>
+  <p class="section-intro">Each gate names the evidence that blocks it and the human who records the result. Test success does not self-approve a gate; the <a href="../index.html#governance">decision-rights table</a> says who does.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Seven capability gates, rendered from DELIVERY_PLAN.md §7</caption>
+      <thead><tr><th>Gate</th><th>Requirement</th><th>Blocking evidence</th><th>Recorded by</th></tr></thead>
+      <tbody>
+        <tr><td><strong>BT-G0</strong><small>Architecture Ready</small></td><td>Domain, tenancy, API, event, workflow, data and financial contracts accepted</td><td>ARCH-001, the ADR set and the review record — the output of <a href="https://github.com/bstBizEra/biztrust_guide/issues/27">WP-ARCH-001A</a> slice S11</td><td>Architecture authority</td></tr>
+        <tr><td><strong>BT-G1</strong><small>Security Ready</small></td><td>Tenant isolation mechanically proven</td><td>The <a href="p0.html#gate">P0 negative-test evidence</a>, executed independently of the implementer</td><td>Security risk owner</td></tr>
+        <tr><td><strong>BT-G2</strong><small>Broker Core Ready</small></td><td>Offer → recommendation → acceptance → authority-supported coverage → policy representation passes</td><td>The <a href="p1.html#gate">P1 trace</a> and domain UAT</td><td>Release authority, with a domain practitioner</td></tr>
+        <tr><td><strong>BT-G3</strong><small>Lifecycle Ready</small></td><td>Placement, endorsement, claim and renewal pass failure scenarios</td><td><a href="p2.html#gate">P2 workflow and recovery evidence</a></td><td>Release authority, with SRE</td></tr>
+        <tr><td><strong>BT-G4</strong><small>Financial Ready</small></td><td>Payment, ledger, commission and settlement reconcile</td><td><a href="p3.html#gate">Balanced journals and reconciliation evidence</a></td><td>Finance and accounting reviewer, with release authority</td></tr>
+        <tr><td><strong>BT-G5</strong><small>Integration Ready</small></td><td>External adapters pass contract, retry and security tests</td><td>Provider sandbox and fault-injection evidence</td><td>Security risk owner, with the integration owner</td></tr>
+        <tr><td><strong>BT-G6</strong><small>Tenant Ready</small></td><td>A second independent tenant provisions without a core-code fork</td><td>Tenant #2 provisioning and isolation proof</td><td>Architecture authority</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="definition-list">
+    <div><span>Failure at any gate blocks dependent authorization</span><p>A red gate does not slow the next phase; it stops it. There is no partial pass.</p></div>
+    <div><span>A waiver is a decision, not a shortcut</span><p>It requires a named human risk owner, an expiry, compensating controls and recorded dissent. A waiver with no expiry is a permanent exemption nobody decided to grant.</p></div>
+    <div><span>The plan's day counts are estimates; the gates are the control</span><p>The hub's <a href="../index.html#roadmap">90-day plan</a> puts P0 in days 16–35. If BT-G0 has not been recorded on day 16, P0 has not started, whatever the calendar says.</p></div>
+  </div>
+</section>
+
+<section id="where" data-search="repository target layout modules services openapi events db evidence naming convention branch commit">
+  <div class="section-heading"><span>03</span><div><p>Where the code goes</p><h2>One repository, a target layout, and what this guide is not</h2></div></div>
+  <p class="section-intro">The platform lands in one repository laid out as the hub's <a href="../index.html#repository">repository design</a> shows. That repository is created by the first P0 package. Until that package is accepted, every path on this track is a <em>target layout</em> in the sense the <a href="../reference/artifact-catalogue.html#read">artifact catalogue</a> defines — a directory the design assigns, not a location that exists.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>The directories the phases write to</caption>
+      <thead><tr><th>Target directory</th><th>Receives</th><th>First written in</th></tr></thead>
+      <tbody>
+        <tr><td><code>modules/</code></td><td>Domain-owned modular-monolith contexts; modules exchange contracts, never tables</td><td>P0, boundary tests first</td></tr>
+        <tr><td><code>services/</code></td><td>API and worker entry points</td><td>P0</td></tr>
+        <tr><td><code>db/</code></td><td>Migrations, RLS policies, seeds and the isolation test suite</td><td>P0</td></tr>
+        <tr><td><code>openapi/</code> · <code>events/</code></td><td>Contract-first HTTP and versioned event contracts, linted in CI</td><td>P0 conventions; every later interface</td></tr>
+        <tr><td><code>tests/</code></td><td>Unit, contract, security and end-to-end; the negative suites live here</td><td>P0</td></tr>
+        <tr><td><code>evidence/</code></td><td>Manifests only; the immutable evidence is the CI run bound to a commit</td><td>Every package</td></tr>
+        <tr><td><code>docs/adr/</code> · <code>work-packages/</code></td><td>ADR-001…020 and the authorized delivery units</td><td>Freeze; then every package</td></tr>
+        <tr><td><code>badf/</code></td><td>Lifecycle, authority, gate, agent and skill registries — machine-readable governance</td><td>P0, with <code>AGENTS.md</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="definition-list">
+    <div><span>This repository is not the platform</span><p><code>biztrust_guide</code> is documentation and the governance ledger. Nothing here executes a policy, holds a tenant or moves money. A capability described on this site is not thereby implemented (<code>AGENTS.md</code> §12).</p></div>
+    <div><span>One identity follows the work end to end</span><p>Issue <code>BIZTRUST-WP-&lt;DOMAIN&gt;-&lt;NNN&gt;</code> · branch <code>feat/&lt;work-package-id&gt;-&lt;slug&gt;</code> · commit <code>&lt;type&gt;(&lt;scope&gt;): &lt;summary&gt; [&lt;work-package-id&gt;]</code> · pull request <code>[&lt;work-package-id&gt;] &lt;outcome&gt;</code>. The <a href="../stages/build.html#discipline">Build discipline</a> shows worked examples.</p></div>
+    <div><span>Sibling repositories are not BizTrust</span><p>The organisation holds other products. A repository whose description names another product is that product, however similar its shape. The phase manuals name no sibling as a source.</p></div>
+  </div>
+</section>
+
+<section id="sources" data-search="sources upstream repositories standards implementation candidate licence spike ADR OpenAPI AsyncAPI CloudEvents Logto APISIX PostgreSQL Temporal NATS OpenFGA OpenTelemetry">
+  <div class="section-heading"><span>04</span><div><p>Sources</p><h2>What the code is built against, and what that does not mean</h2></div></div>
+  <p class="section-intro">Two kinds of source. Standards set wire formats and are adopted by contract. Products are <code>IMPLEMENTATION_CANDIDATE</code>: they appear in the architecture diagrams, and <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/SOURCE_RECONCILIATION.md">no dependency is described as adopted merely because it appeared in one</a>. Each product needs a bounded spike and its ADR before a package may build on it.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Standards the contracts are written to</caption>
+      <thead><tr><th>Standard</th><th>Governs</th><th>Bound by</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://spec.openapis.org/oas/latest.html">OpenAPI 3.2.0</a> · <a href="https://github.com/OAI/OpenAPI-Specification">OAI/OpenAPI-Specification</a></td><td>Contract-first HTTP APIs under <code>/api/v1</code></td><td>ADR-005</td></tr>
+        <tr><td><a href="https://www.asyncapi.com/docs/reference/specification/latest">AsyncAPI 3.1.0</a> · <a href="https://github.com/asyncapi/spec">asyncapi/spec</a></td><td>Versioned event contracts</td><td>ADR-005, ARCH-001 §11</td></tr>
+        <tr><td><a href="https://github.com/cloudevents/spec">CloudEvents</a></td><td>The event envelope; the profile is frozen in ARCH-001 §12</td><td>ARCH-001 §12</td></tr>
+        <tr><td><a href="https://www.rfc-editor.org/rfc/rfc9457.html">RFC 9457</a> · <a href="https://www.rfc-editor.org/rfc/rfc9562.html">RFC 9562</a> · <a href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a></td><td>Problem details, UUIDv7 identifiers, <code>traceparent</code></td><td>ARCH-001 §11</td></tr>
+        <tr><td><a href="https://owasp.org/API-Security/editions/2023/en/0x11-t10/">OWASP API Security Top 10</a> · <a href="https://csrc.nist.gov/pubs/sp/800/207/final">NIST SP 800-207</a></td><td>Object-level authorization; no implicit trust by location</td><td>P0 threat model</td></tr>
+        <tr><td><a href="https://www.iaisweb.org/icp-online-tool/">IAIS Insurance Core Principles</a></td><td>Intermediary authority and client-money safeguards — the reason S01 exists</td><td>ADR-013, ADR-014</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <caption>Implementation candidates — repositories resolved on 2026-09-04, licence as published there</caption>
+      <thead><tr><th>Candidate</th><th>Proposed for</th><th>Licence</th><th>Decided by</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://github.com/logto-io/logto">logto-io/logto</a> · <a href="https://github.com/logto-io/js">logto-io/js</a><small>Docs: <a href="https://docs.logto.io/authorization/organization-level-api-resources">organization-level API resources</a></small></td><td>Identity; organization context mapped to tenant authority</td><td>MPL-2.0 · MIT</td><td>ADR-002, ADR-003</td></tr>
+        <tr><td><a href="https://github.com/apache/apisix">apache/apisix</a></td><td>Edge validation, OIDC and mTLS policy before the application</td><td>Apache-2.0</td><td>P0 spike; ARCH-001 §8</td></tr>
+        <tr><td><a href="https://github.com/postgres/postgres">postgres/postgres</a> (mirror)<small>Docs: <a href="https://www.postgresql.org/docs/current/ddl-rowsecurity.html">row security policies</a></small></td><td>Shared database, mandatory <code>tenant_id</code>, Row-Level Security as the second isolation barrier</td><td>PostgreSQL License</td><td>ADR-004</td></tr>
+        <tr><td><a href="https://github.com/temporalio/temporal">temporalio/temporal</a> · <a href="https://github.com/temporalio/sdk-typescript">sdk-typescript</a> · <a href="https://github.com/temporalio/sdk-python">sdk-python</a><small>Docs: <a href="https://docs.temporal.io/activity-definition">activities are retried and must be idempotent</a></small></td><td>Durable binding, servicing and payment-to-policy workflows</td><td>MIT</td><td>ADR-010</td></tr>
+        <tr><td><a href="https://github.com/nats-io/nats-server">nats-io/nats-server</a></td><td>Event transport with an outbox; at-least-once delivery</td><td>Apache-2.0</td><td>ADR-010, ARCH-001 §12</td></tr>
+        <tr><td><a href="https://github.com/openfga/openfga">openfga/openfga</a></td><td>Fine-grained authorization engine — a candidate, not a layer in the baseline</td><td>Apache-2.0</td><td>Authorization ADR after P0</td></tr>
+        <tr><td><a href="https://github.com/open-telemetry/opentelemetry-specification">open-telemetry/opentelemetry-specification</a></td><td>Logs, metrics and traces linked by propagated context</td><td>Apache-2.0</td><td>P0 observability baseline</td></tr>
+        <tr><td><a href="https://github.com/bstBizEra/badf">bstBizEra/badf</a></td><td>The governance control plane the target <code>badf/</code> directory is shaped by</td><td>See repository</td><td>P0 repository package</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="check-list">
+    <li><strong>A spike verifies against the upstream's own documentation at a pinned version</strong>, not against recollection. The claim "Logto issues organization-scoped tokens" is checked by reading the page linked above and running the flow, and the evidence names the version</li>
+    <li><strong>The licence is read before the spike starts.</strong> A candidate whose licence the business cannot accept is rejected at the ADR, not discovered at release</li>
+    <li><strong>An exit strategy is part of the ADR.</strong> ADR-002's minimum evidence includes one; a candidate that cannot be replaced behind its <a href="../stages/build.html#contracts">adapter boundary</a> was never a candidate</li>
+    <li><strong>Provider selections stay deferred.</strong> Insurer, payment-provider and bank selections are on the reconciliation's deliberately-deferred list; no phase page names one</li>
+  </ul>
+</section>
+
+<section id="monitor" data-search="human monitor ledger authorization decision rights cadence health indicators scorecard stop">
+  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Across every phase</h2></div></div>
+  <p class="section-intro">Agents code; humans authorize, accept and merge. The monitoring job is to see the evidence before granting the next authority, and to notice when the recorded state and the observed state disagree. Each phase page adds the authorizations that phase reserves; this section is what does not change.</p>
+  <div class="three-col">
+    <article>
+      <h3>Read the ledger, not a rendering of it</h3>
+      <p>Current state lives in <code>badf/current-state.json</code>, the active issue, and the CI run bound to a commit. A dashboard that restates them is a third source that no validator checks. The one built here drifted on eight facts within hours.</p>
+    </article>
+    <article>
+      <h3>Authority is never inferred</h3>
+      <p>Not from green CI, not from a merged pull request, not from an agent's report that the work is done. It is a record with a grantor, a scope and an expiry, and the human is the only actor who writes it.</p>
+    </article>
+    <article>
+      <h3>One active slice, one next action</h3>
+      <p>If two packages in a phase are in progress, or two phases are, the answer is <code>RECOVERY_REQUIRED</code> until someone reconciles them. Parallel drafts on different assumptions are how rework is manufactured.</p>
+    </article>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <caption>The authorizations a human records, by phase</caption>
+      <thead><tr><th>Before</th><th>A human records</th><th>Having seen</th></tr></thead>
+      <tbody>
+        <tr><td>Any P0 package</td><td><code>BT-G0</code>, and implementation authority for that package</td><td>ARCH-001 accepted, the ADR review record, S01–S11 accepted in order</td></tr>
+        <tr><td>Any P1 package</td><td><code>BT-G1</code>, and authority for that package</td><td>The negative-proof evidence, run by someone who did not implement it</td></tr>
+        <tr><td>Any P2 package</td><td><code>BT-G2</code></td><td>The end-to-end P1 trace and a domain practitioner's UAT signature</td></tr>
+        <tr><td>Any P3 package</td><td><code>BT-G3</code>, and the client-money regime decision (ADR-014)</td><td>Failure-scenario evidence; the qualified finance and legal review</td></tr>
+        <tr><td>A second tenant</td><td><code>BT-G6</code></td><td>Tenant #2 provisioned and isolated with no core-code fork</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <caption>Cadence — rendered from docs/NEXT_STEPS.md</caption>
+      <thead><tr><th>When</th><th>The human checks</th></tr></thead>
+      <tbody>
+        <tr><td>Every session</td><td>The resume protocol ran and the recorded state matches the observed branch, head and remote</td></tr>
+        <tr><td>Every coherent slice</td><td>A checkpoint exists and deterministic validation passed on the committed tree</td></tr>
+        <tr><td>Every handoff</td><td>The sender's record and the receiver's independent acknowledgement both exist</td></tr>
+        <tr><td>Every pull request</td><td>The evidence table quotes command output bound to the pushed head; an independent reviewer read it; findings became issues, not in-place fixes</td></tr>
+        <tr><td>Weekly</td><td>Stale state, expired leases, blockers, orphan branches; exactly one package per phase in progress</td></tr>
+        <tr><td>Monthly</td><td>The <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/AGENT_CONTINUITY.md">continuity health indicators</a> and one recovery exercise</td></tr>
+        <tr><td>Quarterly</td><td>Architecture, authority and risk-policy review; every waiver against its expiry</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>The scorecard shape that survived review</strong>
+    <p>Every indicator carries a target, an owner and an escalation trigger, and reports <code>BLOCKED</code> and <code>UNKNOWN</code> beside the greens. Keep it in the GitHub Project with the fields the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/AGENT_CONTINUITY.md">tracking model</a> lists — lifecycle, authority, risk, gate, evidence, blocker — where the row is edited by the person who owns it, not copied into a page that cannot expire.</p>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt phases gate waiver P4 status">
+  <div class="section-heading"><span>06</span><div><p>Halt</p><h2>Stop conditions across phases</h2></div></div>
+  <ul class="cross-list">
+    <li>A capability gate is reported passed and the blocking evidence in the table above is not attached to the record</li>
+    <li>Two phases, or two packages in one phase, are in progress at once with no coordination record</li>
+    <li>A page on this track states a current status instead of pointing at the ledger — treat it as a defect in the page</li>
+    <li>Anyone labels work after P3 as P4 or higher; the plan reserves that numbering until it is reviewed</li>
+    <li>A candidate technology is written as adopted, in code or in prose, without its ADR accepted</li>
+    <li>A waiver appears without a named risk owner, an expiry, compensating controls and recorded dissent</li>
+    <li>The authority for the active package has expired, or its scope no longer matches the work — this condition applies in every phase and is written only here</li>
+  </ul>
+  <div class="next-action">
+    <span>FIRST PHASE</span>
+    <div>
+      <h3>P0 · Architecture and platform foundation</h3>
+      <p>Freeze the contract and mechanically prove the tenant-security substrate before placing any insurance-domain data on it.</p>
+    </div>
+    <a class="github-link" href="p0.html">P0 →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery phases · Overview · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

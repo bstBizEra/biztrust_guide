@@ -151,7 +151,7 @@
       <div class="rule-grid"><article><b>Root charter</b><p>`AGENTS.md` defines non-negotiable behavior, authority boundaries, evidence rules and escalation paths.</p></article><article><b>Machine-readable controls</b><p>Human policy is paired with schemas and validators so enforcement does not depend on prompt interpretation.</p></article><article><b>Evidence binding</b><p>Every manifest records source commit, workflow run, environment, tool versions and artifact digests.</p></article></div>
     </section>
 
-    <section id="lifecycle" data-search="lifecycle PRD production discovery architecture build validate deploy operate learn gates ENG-G namespace BT-G">
+    <section id="lifecycle" data-search="lifecycle PRD production discovery architecture build validate deploy operate learn gates ENG-G namespace BT-G phases P0 P1 P2 P3 phase manuals">
       <div class="section-heading"><span>06</span><div><p>Value stream</p><h2>PRD-to-production lifecycle</h2></div></div>
       <div class="lifecycle">
         <article><span>ENG-G0</span><h3><a href="stages/discover.html">Discover →</a></h3><p>Problem, stakeholder, baseline, constraints, KPI and evidence sources.</p><small>Exit: problem validated</small></article>
@@ -169,6 +169,10 @@
         <strong>Stage manuals</strong>
         <p>Each stage expands into an executable manual page — entry criteria, artifacts produced, roles, evidence required and the exit gate. All nine stages are written. Each carries entry criteria, the artifacts it produces, roles, evidence, an exit gate and stop conditions — and a stage links another stage's guidance rather than restating it, which a cross-page duplicate detector enforces in CI rather than leaving to good intentions.</p>
       </div>
+      <div class="callout">
+        <strong>Phase manuals</strong>
+        <p>The stages say how one Work Package moves; the phases say what the Work Packages are between architecture freeze and production — in what order, landing where, proven how — and what a human watches between authorizations. <a href="phases/overview.html">From P0 to production</a> · <a href="phases/p0.html">P0 Foundation</a> · <a href="phases/p1.html">P1 Broker core</a> · <a href="phases/p2.html">P2 Lifecycle</a> · <a href="phases/p3.html">P3 Financial and integration</a>. Each is a rendering of <code>docs/architecture/DELIVERY_PLAN.md</code>, never a second source, and carries no current-status facts; a test holds the epic and gate identifiers to the plan.</p>
+      </div>
     </section>
 
     <section id="work-package" data-search="BIZTRUST WP ARCH 001A contract freeze deliverables ADR glossary ERD RBAC">
@@ -184,6 +188,7 @@
       <div class="flow" aria-label="P0 security architecture"><div><b>Identity</b><span>Logto organization token</span></div><i>→</i><div><b>Edge</b><span>APISIX validation</span></div><i>→</i><div><b>Application</b><span>Tenant context + policy</span></div><i>→</i><div><b>Data</b><span>PostgreSQL RLS</span></div><i>→</i><div><b>Evidence</b><span>Immutable audit trail</span></div></div>
       <div class="invariant"><span>SECURITY INVARIANT</span><p>No valid or manipulated Tenant A request can access protected Tenant B business data through supported application or database paths.</p></div>
       <div class="test-matrix"><article><h3>Authentication</h3><ul><li>Valid token accepted</li><li>Expired token denied</li><li>Wrong audience denied</li><li>Malformed token denied</li></ul></article><article><h3>Tenant context</h3><ul><li>Missing organization denied</li><li>Unknown tenant denied</li><li>Mismatched tenant denied</li><li>Disabled tenant denied</li></ul></article><article><h3>Database isolation</h3><ul><li>Cross-tenant read denied</li><li>Cross-tenant write denied</li><li>Cross-tenant delete denied</li><li>App bypass blocked by RLS</li></ul></article><article><h3>Audit evidence</h3><ul><li>Actor and tenant recorded</li><li>Decision and outcome recorded</li><li>Trace and request IDs linked</li><li>Evidence digest verifiable</li></ul></article></div>
+      <p class="section-intro" style="margin-top:1.25rem">This card is the summary. The twelve P0 epics, their execution order, the eight-row negative-proof matrix with its database and audit expectations, and what a human must have seen before recording <code>BT-G1</code> are on the <a href="phases/p0.html">P0 phase manual</a>.</p>
     </section>
 
     <section id="architecture" data-search="architecture domain product quote policy claim payment ledger states tenancy API">
@@ -216,6 +221,7 @@
       <div class="section-heading"><span>13</span><div><p>Mobilization plan</p><h2>First 90 days</h2></div></div>
       <div class="roadmap"><article><span>Days 1–15</span><h3>Mobilize & freeze</h3><ul><li>Approve team charter and decision rights</li><li>Complete WP-ARCH-001A</li><li>Freeze ADR-001…020</li><li>Establish branch and evidence controls</li></ul></article><article><span>Days 16–35</span><h3>Prove the platform</h3><ul><li>Implement P0 security slice</li><li>Prove cross-tenant denial</li><li>Stand up CI/CD and observability</li><li>Run independent security review</li></ul></article><article><span>Days 36–65</span><h3>Deliver broker core</h3><ul><li>Build P1 vertical slice</li><li>Validate quote-to-policy lifecycle</li><li>Complete domain and UAT evidence</li><li>Exercise rollback and recovery</li></ul></article><article><span>Days 66–90</span><h3>Pilot & learn</h3><ul><li>Onboard controlled pilot tenant</li><li>Progressively release workflows</li><li>Measure SLO and business KPI baseline</li><li>Authorize P2 based on evidence</li></ul></article></div>
       <div class="kpi-band"><span><b>Flow</b>Lead time · Deployment frequency</span><span><b>Quality</b>Escaped defects · Rework</span><span><b>Safety</b>Change failure · MTTR</span><span><b>Governance</b>Gate failures · Exceptions</span><span><b>Value</b>Activation · Cycle completion</span></div>
+      <p class="section-intro" style="margin-top:1.25rem">The day ranges are a mobilization estimate; the gates are the control. What each phase must prove before the next may be authorized, and who records it, is on <a href="phases/overview.html">the phase track</a>.</p>
     </section>
 
     <section id="checklists" data-search="checklist go live readiness launch production">
