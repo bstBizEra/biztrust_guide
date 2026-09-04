@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-039",
-  "updated_at": "2026-09-04T18:35:12Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-040",
+  "updated_at": "2026-09-04T19:10:14Z",
   "actions": [
     {
       "id": "NS-040",
@@ -10,15 +10,15 @@
       "priority": 1,
       "owner_role": "human-reviewer",
       "authority": "HUMAN_DECISION_REQUIRED",
-      "action": "Issue #78: record a decision or explicit deferral for each of the four content questions the catalogue records - nine ungated artifacts (Plan's machine-readable package state joined the eight under WP-037), four unowned including that same row, the two charter artifacts no stage names, forty-one without a home.",
+      "action": "Issue #78, items 2 and 4: record a decision or explicit deferral for the four artifacts with no named producer and for the forty-one with no stated home. Items 1 and 3 were documented under WP-040 without deciding anything.",
       "prerequisites": [
         "A human reads issue #78"
       ],
       "evidence_required": [
-        "An issue #78 comment per item"
+        "An issue #78 comment per remaining item"
       ],
       "stop_conditions": [
-        "An agent supplies any of the four answers"
+        "An agent supplies either answer"
       ],
       "fallback": "Leave the catalogue's findings recorded, as they are now."
     },
@@ -65,40 +65,6 @@
         "The answer is assumed rather than obtained"
       ],
       "fallback": "Freeze nothing that depends on it, and record the dependency."
-    },
-    {
-      "id": "NS-027",
-      "primary": false,
-      "priority": 4,
-      "owner_role": "documentation-engineer",
-      "authority": "AFTER_NS_026",
-      "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
-      "prerequisites": [
-        "WP-010 merged"
-      ],
-      "evidence_required": [
-        "Four checks implemented, each proven able to fail"
-      ],
-      "stop_conditions": [
-        "The naive single rule is adopted instead"
-      ],
-      "fallback": "Leave the audit findings recorded and unenforced."
-    },
-    {
-      "id": "NS-028",
-      "primary": false,
-      "priority": 5,
-      "owner_role": "documentation-engineer",
-      "authority": "AFTER_NS_026",
-      "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",
-      "prerequisites": [
-        "WP-010 merged"
-      ],
-      "evidence_required": [
-        "Follow-up work package with acceptance criteria"
-      ],
-      "stop_conditions": [],
-      "fallback": "Leave recorded as known gaps."
     }
   ]
 }

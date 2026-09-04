@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-040-001",
+  "created_at": "2026-09-04T19:10:14Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-040",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #78 items 1 and 3 documented without deciding; two stale schema-validation sentences corrected; NS-027 and NS-028 retired and the live half filed.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-040-advisory-and-charter-records",
+    "baseline_commit": "0eab782ef593e310747b9a6ccf9a25a839b7e52e"
+  },
+  "completed": [
+    "stages/architect.html: the three ungated rows are marked 'not gated' in the stage-page idiom plan.html uses; the gate is untouched",
+    "reference/artifact-catalogue.html: the nine-ungated paragraph says all nine are marked on their pages; the charter-artifacts sentence names the hub's two practice cards and its governance-card citation, and Plan's; the checkpoint row no longer says the continuity script validates it",
+    "index.html and stages/plan.html: 'nothing validates a checkpoint against that schema' corrected to name WP-035's test, with the three pre-enforcement records noted; the hub's count of nine checkpoints removed",
+    "badf/next-actions.json: NS-027 and NS-028 retired with reasons in DEC-042; NS-040 narrowed to items 2 and 4; issue #81 filed for Work Package traceability on Release and Operate",
+    "Fresh-context adversarial review (2026-09-05): six should-fix findings adopted - the italic note rendered run-together on a stage page; the hub names the handoff too; the catalogue's checkpoint row credited the continuity script; three provenance claims in DEC-042 named the wrong packages; 'a day' was under two hours; 'the tooling refused' was unattributed and the #52 relay comment still read as consent - withdrawn there"
+  ],
+  "remaining": [
+    "Re-verification of the fixed head by the same reviewer, then merge",
+    "NS-040 - issue #78 items 2 and 4 - waits on a human",
+    "PR #74 - waits on the operator's own line on issue #52",
+    "Issue #81 - a content decision, filed"
+  ],
+  "files_changed": [
+    "stages/architect.html",
+    "stages/plan.html",
+    "index.html",
+    "reference/artifact-catalogue.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-040-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "grep -c -i 'work package' stages/release.html stages/operate.html -> 0, 0 (the fact behind issue #81)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "ls sessions/checkpoints | wc -l -> 22 on this head, 21 on main (the hub said nine)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The hub's 'nothing validates a checkpoint' sentence and Plan's twin were true when written and false since WP-035; neither was in WP-035's scope and nothing flagged them. A sentence about a mechanism goes stale exactly like a sentence about status.",
+    "The Claude Code permission classifier - the harness, not any repository mechanism - denied the command that would have written state treating the agent's relay of a session instruction as merge authority for PR #74. Recorded as agreement with the review, and the relay comment on issue #52 is withdrawn as authority."
+  ],
+  "decisions": [
+    "DEC-042: document the non-deciding halves of #78; correct the two sentences; retire NS-027/NS-028; PR #74 stays held"
+  ],
+  "assumptions": [
+    "That adding 'named here and required by no exit-gate line' to three Architect rows records the page's existing state rather than deciding anything; the gate is untouched and the catalogue said the same of those rows since WP-018."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "One comment by the operator on issue #52 answering the asserted.* question; PR #74 then merges after re-verification."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUE_78",
+      "owner_role": "human-reviewer",
+      "resolution": "Items 2 and 4."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_039",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-040",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/78"
+    ],
+    "stop_if": [
+      "A gate line, owner or artifact home is added that no page already establishes",
+      "PR #74 is merged on an agent-relayed instruction"
+    ]
+  },
+  "declared_non_coverage": [
+    "Every checkpoint on main records ENGINEERING_READY (measured by the reviewer: 22 of 22); the sentence kept says 'every session checkpoint'.",
+    "No test catches a sentence about a mechanism going stale; this class is found by reading."
+  ]
+}
