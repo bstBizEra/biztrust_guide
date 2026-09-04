@@ -66,7 +66,7 @@
     </article>
     <article>
       <h3>The workflow runtime has an accepted ADR</h3>
-      <p>ADR-010 decides which long-running operations need durable workflows and which runtime is suitable. Temporal is an <code>IMPLEMENTATION_CANDIDATE</code> with a replay and versioning spike still owed; until the ADR is accepted, P2.4 has no runtime to be built on.</p>
+      <p>ADR-010 decides which long-running operations need durable workflows and which runtime is suitable; its minimum acceptance evidence in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a> is a replay and versioning spike. Until its row reads <code>ACCEPTED</code>, P2.4 has no runtime to be built on.</p>
     </article>
     <article>
       <h3>The servicing transactions are modelled</h3>
@@ -80,13 +80,13 @@
   <div class="table-wrap">
     <table>
       <caption>P2 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
-      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
       <tbody>
         <tr><td><strong>P2.1</strong><small>Placement workspace and insurer panel</small></td><td>The placement state machine; insurer-specific state on each market request, a broker summary on the placement</td><td><code>modules/placement/</code></td><td>Every transition and prohibited transition tested; a multi-request placement summarises correctly</td><td>FLOWS §7; ADR-016 where shares or layers apply</td></tr>
         <tr><td><strong>P2.2</strong><small>Market requests and communication evidence</small></td><td>Each request to market as a record with its communications retained as evidence</td><td><code>modules/placement/</code></td><td>Any request reconstructed from evidence; insurer replies are sourced, not typed</td><td>ARCH-001 §15</td></tr>
         <tr><td><strong>P2.3</strong><small>Quote revision and coverage matrix</small></td><td>Revisions as new versions with the prior retained; comparison across revisions and wordings</td><td><code>modules/quote/</code></td><td>A superseded revision is retrievable and marked superseded</td><td>FLOWS §8; INV-006</td></tr>
         <tr><td><strong>P2.4</strong><small>Durable binding workflow</small></td><td>The P1 binding machine driven by a durable workflow: retries with bounded policy, idempotent activities, versioned workflow code, compensation on partial failure</td><td><code>modules/binding/</code>, <code>services/worker/</code></td><td>Fault injection: delayed, duplicate and conflicting confirmations leave state correct</td><td>ADR-010; FLOWS §9, §16; INV-013</td></tr>
-        <tr><td><strong>P2.5</strong><small>Policy endorsement and cancellation</small></td><td>Mid-term adjustment and cancellation as historical transactions with effective and recorded time, supersession, and the refund basis and clawback rules the ADR fixes</td><td><code>modules/policy/</code></td><td>Backdated, future-dated and corrected scenarios represented without overwriting history</td><td>ADR-015, ADR-020; INV-017; DOMAIN_MODEL §6</td></tr>
+        <tr><td><strong>P2.5</strong><small>Policy endorsement and cancellation workflow</small></td><td>Mid-term adjustment and cancellation as historical transactions with effective and recorded time, supersession, and the refund basis and clawback rules the ADR fixes</td><td><code>modules/policy/</code></td><td>Backdated, future-dated and corrected scenarios represented without overwriting history</td><td>ADR-015, ADR-020; INV-017; DOMAIN_MODEL §6</td></tr>
         <tr><td><strong>P2.6</strong><small>Claims notification and broker advocacy</small></td><td>The claims flow with <code>broker_claim_status</code> and a sourced <code>insurer_claim_status</code> as separate fields</td><td><code>modules/claims/</code></td><td>Broker status never rewrites or simulates insurer adjudication</td><td>FLOWS §11; INV-005</td></tr>
         <tr><td><strong>P2.7</strong><small>Renewal case and market re-engagement</small></td><td>Renewal as a case that re-enters placement, pinned to the versions that will apply</td><td><code>modules/renewal/</code></td><td>Renewal reproduces the expiring transaction's basis and records the new one</td><td>ADR-020; FLOWS §1</td></tr>
         <tr><td><strong>P2.8</strong><small>Tasks, diary and SLA controls</small></td><td>Tasks and diary entries with owners and due dates; SLA breach as a signal, never as a state mutation</td><td><code>modules/tasks/</code></td><td>A breached SLA raises a signal and changes no business state</td><td>The hub's production operations track</td></tr>
@@ -99,6 +99,7 @@
 
 <section id="order" data-search="execution order P2 events first durable binding placement endorsement renewal claims tasks compliance">
   <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Infrastructure first, the hard workflow second</h2></div></div>
+  <p class="section-intro">The plan lists the ten epics unordered. This order is the track's proposal, derived from what each epic consumes from the ones before it.</p>
   <ol class="migration-steps">
     <li><b>P2.10 — the event infrastructure.</b> Every other epic emits and consumes. Building features on a transport that has not been made to fail is how a completed fact gets dropped in production for the first time.</li>
     <li><b>P2.4 — the durable binding workflow.</b> The hardest epic, done early, because it is the one that exercises the runtime and decides whether ADR-010's choice holds. Take the P1 machine as it is; add durability, not features.</li>
@@ -146,8 +147,8 @@
   <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P2 adds these.</p>
   <div class="table-wrap">
     <table>
-      <caption>Authorizations reserved to a human in P2</caption>
-      <thead><tr><th>Authorization</th><th>Who</th><th>Must have seen first</th></tr></thead>
+      <caption>Authorizations reserved to a human in P2 — the plan names none of these roles; the Who column is proposed</caption>
+      <thead><tr><th>Authorization</th><th>Who (proposed)</th><th>Must have seen first</th></tr></thead>
       <tbody>
         <tr><td>Acceptance of ADR-010</td><td>Architecture authority, with operations</td><td>The replay and versioning spike at a pinned runtime version; the operational and exit-cost evidence</td></tr>
         <tr><td>Each P2 package's implementation grant</td><td>Sponsor</td><td>Which failure rows the package must survive, named in its acceptance criteria</td></tr>

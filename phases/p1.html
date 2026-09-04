@@ -66,7 +66,7 @@
     </article>
     <article>
       <h3>The authority ADRs are accepted, not blocked</h3>
-      <p>ADR-013 (who may create authoritative cover), ADR-017 (product, wording, rating and quote authority), ADR-006 (product versions), ADR-007 (broker versus insurer facts) and ADR-015 (effective and record time). Several are <code>BLOCKED_BY_S01</code> in the register until the tenant authority profile is accepted; a blocked ADR is not an accepted one.</p>
+      <p>ADR-013 (who may create authoritative cover), ADR-017 (product, wording, rating and quote authority), ADR-006 (product versions), ADR-007 (broker versus insurer facts) and ADR-015 (effective and record time). Read each one's current row in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a>; a row that reads <code>BLOCKED_BY_S01</code> or <code>DRAFT_REQUIRED</code> is not an accepted one, and the binding code cannot be written to it.</p>
     </article>
     <article>
       <h3>The pilot tenant's authority profile is accepted</h3>
@@ -80,14 +80,14 @@
   <div class="table-wrap">
     <table>
       <caption>P1 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
-      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
       <tbody>
         <tr><td><strong>P1.1</strong><small>Party and client account</small></td><td>Party, client and the tenant-owned record baseline on every aggregate</td><td><code>modules/party/</code>, <code>modules/client/</code></td><td>Ownership and isolation tests on real business records</td><td>DOMAIN_MODEL §6; INV-001</td></tr>
         <tr><td><strong>P1.2</strong><small>Client 360 and relationship view</small></td><td>A read model over client, risks, submissions and policies — a query, never a second store of truth</td><td><code>modules/client/</code></td><td>Read model reconciles to its sources</td><td>ARCH-001 §9</td></tr>
         <tr><td><strong>P1.3</strong><small>Risk profile and submission snapshot</small></td><td>The risk, and the immutable snapshot a submission is made from</td><td><code>modules/risk/</code>, <code>modules/submission/</code></td><td>A later risk edit does not alter a prior submission</td><td>DOMAIN_MODEL §5; INV-006</td></tr>
-        <tr><td><strong>P1.4</strong><small>Insurer-product provenance and distribution product version</small></td><td>Insurer product, wording version and rating version as insurer-owned; the tenant's distribution product version as a sourced, immutable representation</td><td><code>modules/distribution/</code></td><td>Historical reproduction: the version a transaction used is retrievable unchanged</td><td>ADR-006, ADR-017; DOMAIN_MODEL §2.1</td></tr>
+        <tr><td><strong>P1.4</strong><small>Insurer-product provenance and immutable distribution product version</small></td><td>Insurer product, wording version and rating version as insurer-owned; the tenant's distribution product version as a sourced, immutable representation</td><td><code>modules/distribution/</code></td><td>Historical reproduction: the version a transaction used is retrievable unchanged</td><td>ADR-006, ADR-017; DOMAIN_MODEL §2.1</td></tr>
         <tr><td><strong>P1.5</strong><small>Submission lifecycle</small></td><td>The submission state machine with a transition table, preconditions and emitted events</td><td><code>modules/submission/</code></td><td>Every transition in the table, and every prohibited one, tested</td><td>FLOWS §5, §6</td></tr>
-        <tr><td><strong>P1.6</strong><small>Manual insurer or delegated offer; broker indication kept distinct</small></td><td>Three concepts with provenance: a broker indication, an insurer quote, an offer under delegated authority — never one record with a type flag</td><td><code>modules/quote/</code></td><td>An indication cannot be presented as a quote; provenance is on every one</td><td>ADR-017; INV-018; FLOWS §8</td></tr>
+        <tr><td><strong>P1.6</strong><small>Manual insurer/delegated offer and revisions; broker indication kept distinct</small></td><td>Three concepts with provenance: a broker indication, an insurer quote, an offer under delegated authority — never one record with a type flag</td><td><code>modules/quote/</code></td><td>An indication cannot be presented as a quote; provenance is on every one</td><td>ADR-017; INV-018; FLOWS §8</td></tr>
         <tr><td><strong>P1.7</strong><small>Coverage comparison</small></td><td>Comparison across offers on sourced wording versions</td><td><code>modules/quote/</code></td><td>Comparison cites the version it compared</td><td>ADR-006</td></tr>
         <tr><td><strong>P1.8</strong><small>Broker recommendation and disclosures</small></td><td>The recommendation record and the disclosures it must carry — including whether the intermediary may conclude contracts, which supervisory principles require disclosed</td><td><code>modules/recommendation/</code></td><td>A recommendation without its disclosures cannot be issued</td><td>IAIS ICP 18; ADR-013</td></tr>
         <tr><td><strong>P1.9</strong><small>Client acceptance evidence</small></td><td>Acceptance as retained evidence with actor, time and what was accepted</td><td><code>modules/recommendation/</code></td><td>Acceptance references the exact recommendation and version</td><td>INV-007</td></tr>
@@ -143,8 +143,8 @@
   <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P1 adds these.</p>
   <div class="table-wrap">
     <table>
-      <caption>Authorizations reserved to a human in P1</caption>
-      <thead><tr><th>Authorization</th><th>Who</th><th>Must have seen first</th></tr></thead>
+      <caption>Authorizations reserved to a human in P1 — the plan names none of these roles; the Who column is proposed</caption>
+      <thead><tr><th>Authorization</th><th>Who (proposed)</th><th>Must have seen first</th></tr></thead>
       <tbody>
         <tr><td>Each P1 package's implementation grant</td><td>Sponsor</td><td>The step of the vertical slice it delivers, and that the previous step runs</td></tr>
         <tr><td>Acceptance of the tenant authority profile the binding code is written to</td><td>Business authority, with the insurance, legal, finance and architecture seats of slice S01</td><td>Every S01 unknown answered or marked <code>UNKNOWN_BLOCKING</code></td></tr>

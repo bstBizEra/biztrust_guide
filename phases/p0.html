@@ -75,7 +75,7 @@
   </div>
   <div class="callout">
     <strong>The first package has nowhere to land</strong>
-    <p>The platform repository does not exist until P0.2 creates it. That package's Work Package is unusual: its deliverable is the repository, its <code>AGENTS.md</code>, its <code>badf/</code> registries, the CI skeleton and the boundary tests — and a human repository administrator is a named role in it, because protecting <code>main</code> is not something an agent can do.</p>
+    <p>The platform repository is P0.2's deliverable; before that package is accepted there is nowhere for a second package to land. Its Work Package is unusual: its deliverable is the repository, its <code>AGENTS.md</code>, its <code>badf/</code> registries, the CI skeleton and the boundary tests — and a human repository administrator is a named role in it, because protecting <code>main</code> is not something an agent can do.</p>
   </div>
 </section>
 
@@ -85,9 +85,9 @@
   <div class="table-wrap">
     <table>
       <caption>P0 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
-      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
       <tbody>
-        <tr><td><strong>P0.1</strong><small>ARCH-001 and ADR-001…020</small></td><td>Nothing — this epic is the freeze itself, produced by WP-ARCH-001A</td><td><code>docs/adr/</code>, <code>docs/architecture/</code></td><td>Authority record and resolved findings</td><td>ADR register, foundation sequence</td></tr>
+        <tr><td><strong>P0.1</strong><small>BIZTRUST-ARCH-001 and ADR-001…020</small></td><td>Nothing — this epic is the freeze itself, produced by WP-ARCH-001A</td><td><code>docs/adr/</code>, <code>docs/architecture/</code></td><td>Authority record and resolved findings</td><td>ADR register, foundation sequence</td></tr>
         <tr><td><strong>P0.2</strong><small>Repository and module boundaries</small></td><td>The repository, <code>AGENTS.md</code>, <code>badf/</code> registries, CI skeleton, a dependency test that fails when one module imports another's internals</td><td>Repository root, <code>modules/</code>, <code>.github/workflows/</code></td><td>Build, dependency and boundary tests</td><td>ADR-001; the hub's repository design</td></tr>
         <tr><td><strong>P0.3</strong><small>Logto integration spike</small></td><td>Token validation: signature, issuer, audience, expiry, <code>organization_id</code>, scopes — and the negative cases for each</td><td><code>modules/identity/</code>, <code>tests/security/</code></td><td>Token-validation evidence, positive and negative</td><td>ADR-002; Logto organization-level API resources</td></tr>
         <tr><td><strong>P0.4</strong><small>Organization-to-tenant mapping</small></td><td>The mapping, its lifecycle, and the mismatch path: organization known, tenant unknown or disabled</td><td><code>modules/tenancy/</code></td><td>Mapping and mismatch tests</td><td>ADR-003; ARCH-001 §8</td></tr>
@@ -98,7 +98,7 @@
         <tr><td><strong>P0.9</strong><small>Event conventions</small></td><td>The AsyncAPI baseline and the CloudEvents envelope with the minimum metadata — event, tenant, subject, correlation, causation, <code>traceparent</code>, producer, authority reference</td><td><code>events/</code></td><td>Linted AsyncAPI and envelope</td><td>ARCH-001 §12; AsyncAPI; CloudEvents</td></tr>
         <tr><td><strong>P0.10</strong><small>Audit framework</small></td><td>The decision record with every field of the authorization evidence contract; separate retention, access and mutation controls</td><td><code>modules/audit/</code></td><td>Attributable denial and success evidence for every matrix row</td><td>ARCH-001 §15; AUTHORIZATION_BASELINE §7</td></tr>
         <tr><td><strong>P0.11</strong><small>Observability baseline</small></td><td>Structured logs with tenant-safe fields, metrics and traces, all linked by request and trace identifiers</td><td><code>packages/observability/</code></td><td>One request reconstructable across all three signals</td><td>OpenTelemetry context propagation; the hub's minimum telemetry</td></tr>
-        <tr><td><strong>P0.12</strong><small>Secrets and configuration</small></td><td>Externalized secrets, a rotation procedure that has been run, least-privilege credentials per environment</td><td><code>.github/workflows/</code>, environment configuration</td><td>Rotation and least-privilege evidence</td><td>The hub's security engineering track</td></tr>
+        <tr><td><strong>P0.12</strong><small>Secrets/configuration management</small></td><td>Externalized secrets, a rotation procedure that has been run, least-privilege credentials per environment</td><td><code>.github/workflows/</code>, environment configuration</td><td>Rotation and least-privilege evidence</td><td>The hub's security engineering track</td></tr>
       </tbody>
     </table>
   </div>
@@ -106,7 +106,7 @@
 
 <section id="order" data-search="execution order dependency sequence P0 one primary next action">
   <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Why this order and not another</h2></div></div>
-  <p class="section-intro">The plan forbids opening all epics as simultaneously active. This is the dependency order; each step names what it needs from the one before it. One primary next action at a time.</p>
+  <p class="section-intro">The plan lists the twelve epics and forbids opening all of them at once; it does not order them. This order is the track's proposal, derived from the dependency each step names. The plan's own rule is one primary next action, with the rest queued behind it in dependency order.</p>
   <ol class="migration-steps">
     <li><b>P0.1 is the entry gate</b>, not the first package. If it is not recorded, nothing below starts.</li>
     <li><b>P0.2 — the repository.</b> Everything else needs somewhere to land, a CI that runs, and a boundary test that already fails on the first cross-module import. Protect <code>main</code> before the second package opens a branch.</li>
@@ -116,7 +116,7 @@
     <li><b>P0.7 — RLS.</b> Write the bypass test first and watch it fail against a table with no policy. Then add the policy. A denial that was never observed to pass proves nothing about the policy.</li>
     <li><b>P0.5 — two tenants, repeatably.</b> The negative matrix needs a Tenant B to be denied from, and a proof run on hand-made tenants cannot be re-run by the independent verifier.</li>
     <li><b>P0.10 — audit</b>, before the proof rather than after it, because the proof <em>is</em> audit evidence: every denial in the matrix must produce an attributable record, or the matrix passed silently.</li>
-    <li><b>P0.8 and P0.9 — contract conventions.</b> Independent of the security chain; may run beside it once the repository exists. Their proof is a broken contract failing CI.</li>
+    <li><b>P0.8 and P0.9 — contract conventions.</b> Independent of the security chain; queued beside it once the repository exists, and taken as the primary action whenever the chain is blocked. Their proof is a broken contract failing CI.</li>
     <li><b>P0.11 — observability</b>, so the proof run can be reconstructed from its own trace.</li>
     <li><b>P0.12 — secrets and configuration</b>, last of the substrate, first thing the independent verifier checks.</li>
     <li><b>The mandatory proof</b>, executed by someone who did not implement it, bound to a source revision — then <code>BT-G1</code>.</li>
@@ -157,10 +157,10 @@
   <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P0 adds these.</p>
   <div class="table-wrap">
     <table>
-      <caption>Authorizations reserved to a human in P0</caption>
-      <thead><tr><th>Authorization</th><th>Who</th><th>Must have seen first</th></tr></thead>
+      <caption>Authorizations reserved to a human in P0 — the plan names none of these roles; the Who column is proposed</caption>
+      <thead><tr><th>Authorization</th><th>Who (proposed)</th><th>Must have seen first</th></tr></thead>
       <tbody>
-        <tr><td>Each P0 package's implementation grant</td><td>Sponsor, per the decision-rights table</td><td>The package's acceptance criteria, each settled by a named command; its rollback; its independent verifier</td></tr>
+        <tr><td>Each P0 package's implementation grant</td><td>Sponsor</td><td>The package's acceptance criteria, each settled by a named command; its rollback; its independent verifier</td></tr>
         <tr><td>Acceptance of ADR-002, ADR-003, ADR-004</td><td>Architecture authority, after the security lens</td><td>The spike evidence at a pinned version, the exit strategy, the owner and <code>BYPASSRLS</code> design</td></tr>
         <tr><td>Protection of <code>main</code> in the new repository</td><td>Repository administrator</td><td>Required checks named; force-push and deletion blocked; one independent approval required</td></tr>
         <tr><td><code>BT-G1</code> Security Ready</td><td>Security risk owner</td><td>The full matrix executed by someone other than the implementer, bound to a source revision, with an audit record for every row</td></tr>
@@ -172,7 +172,7 @@
     <div><span>Stop signal: the bypass test is absent, skipped or cannot be made to fail</span><p>The row that proves RLS is independent of the application is the row the whole gate rests on. If it was never seen red, the policy has not been demonstrated.</p></div>
     <div><span>Stop signal: insurance-domain data on the substrate</span><p>A P0 package that creates a policy, a client or a premium has left the phase. Send it back to Plan; do not accept it as an early P1.</p></div>
     <div><span>Stop signal: the proof was run by the implementer</span><p>The plan says the proof passes <em>independently</em>. A self-run proof is a claim, and the gate is not recorded on claims.</p></div>
-    <div><span>Weekly</span><p>Exactly one P0 package in progress; the repository's protection still in force; no secret in the tree; every candidate still marked <code>IMPLEMENTATION_CANDIDATE</code> until its ADR is accepted.</p></div>
+    <div><span>Weekly</span><p>One primary next action, the rest queued; the repository's protection still in force; no secret in the tree; every candidate still marked <code>IMPLEMENTATION_CANDIDATE</code> until its ADR is accepted.</p></div>
   </div>
 </section>
 
