@@ -31,16 +31,17 @@
   <p class="nav-label">Stage 08 · Operate</p>
   <nav id="sectionNav">
     <a href="#entry"><span>01</span> Entry criteria</a>
-    <a href="#objectives"><span>02</span> Service objectives</a>
-    <a href="#telemetry"><span>03</span> Minimum telemetry</a>
-    <a href="#oncall"><span>04</span> On-call</a>
-    <a href="#incident"><span>05</span> Incident response</a>
-    <a href="#recovery"><span>06</span> Recovery</a>
-    <a href="#cost"><span>07</span> Cost and capacity</a>
-    <a href="#vuln"><span>08</span> Vulnerability management</a>
-    <a href="#roles"><span>09</span> Roles</a>
-    <a href="#gate"><span>10</span> Continuous exit</a>
-    <a href="#stop"><span>11</span> Stop conditions</a>
+    <a href="#produces"><span>02</span> What it produces</a>
+    <a href="#objectives"><span>03</span> Service objectives</a>
+    <a href="#telemetry"><span>04</span> Minimum telemetry</a>
+    <a href="#oncall"><span>05</span> On-call</a>
+    <a href="#incident"><span>06</span> Incident response</a>
+    <a href="#recovery"><span>07</span> Recovery</a>
+    <a href="#cost"><span>08</span> Cost and capacity</a>
+    <a href="#vuln"><span>09</span> Vulnerability management</a>
+    <a href="#roles"><span>10</span> Roles</a>
+    <a href="#gate"><span>11</span> Continuous exit</a>
+    <a href="#stop"><span>12</span> Stop conditions</a>
   </nav>
   <div class="sidebar-card">
     <span class="status-dot"></span>
@@ -89,8 +90,39 @@
   </div>
 </section>
 
+<section id="produces" data-search="artifacts produces outputs objective alert rota incident record restore drill recovery objectives cost attribution capacity forecast dependency inventory patching timeline access review secret rotation disclosure route learn handover">
+  <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
+  <p class="section-intro">Thirteen artifacts, every one already read off a section below by the artifact catalogue; this table adds none, it names them in one place so the gate and <a href="learn.html#entry">Learn&rsquo;s entry criteria</a> have something to point at. Where a section names an activity rather than a record &mdash; rotating a secret, reviewing access, attributing cost &mdash; the record is the catalogue&rsquo;s reading of it, kept here so the two agree. Operate runs continuously, so none is produced once: each is a record that is kept current, and the gate checks the current state of it.</p>
+  <p class="section-intro">The <a href="../reference/artifact-catalogue.html">artifact catalogue</a> holds the home and the accepter of each row, where a stage has named one. One row, and conditionally a second, is all Operate hands to Learn; the rest stay here.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Operate artifacts, the section that requires each, and which reach Learn</caption>
+      <thead><tr><th>Artifact</th><th>What it records</th><th>Required by</th><th>Reaches Learn as</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Service objective definition</strong></td><td>Indicator, objective, error budget, agreed consequence and review cadence</td><td><a href="#objectives">§03</a>; gate</td><td>The review&rsquo;s revise-or-defend outcome, where its expectation was written first &mdash; a decision <a href="learn.html#decision">Learn §03</a> can grade; this page does not require that record</td></tr>
+        <tr><td><strong>Alert definitions</strong></td><td>One per symptom, each actionable</td><td><a href="#oncall">§05</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Escalation rota</strong></td><td>Who is called second, and after how long</td><td><a href="#oncall">§05</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Incident record</strong></td><td>Detect, declare, mitigate, communicate, learn &mdash; and the control change it produced</td><td><a href="#incident">§06</a>; gate</td><td>The production entries of the escape ledger <a href="learn.html#entry">Learn §01</a> asks for; the control change lands in Learn&rsquo;s control change set</td></tr>
+        <tr><td><strong>Restore drill record</strong></td><td>The result of a performed restore, including the parts that went badly</td><td><a href="#recovery">§07</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Recovery objectives</strong></td><td>How much time may pass before service returns, and how much data may be lost</td><td><a href="#recovery">§07</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Cost attribution record</strong></td><td>Cost per tenant and per capability</td><td><a href="#cost">§08</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Capacity forecast</strong></td><td>Forecast against measured growth, with rate limits and quotas in place</td><td><a href="#cost">§08</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Dependency inventory</strong></td><td>Every dependency, monitored</td><td><a href="#vuln">§09</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Patching timeline</strong></td><td>Agreed timeline by severity, set before the urgent case arrives</td><td><a href="#vuln">§09</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Access review record</strong></td><td>Periodic review; accounts nobody has needed for a year first</td><td><a href="#vuln">§09</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Secret rotation record</strong></td><td>Rotation exercised on a schedule, not assumed to work</td><td><a href="#vuln">§09</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Disclosure route</strong></td><td>A published route, and evidence that it is answered</td><td><a href="#vuln">§09</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>What Operate does not hand to Learn</strong>
+    <p>A near-miss register. <a href="learn.html#promotion">Learn</a> says in as many words that no stage owns one and Operate keeps none; this table does not create one, because doing so would decide a control-retirement question that belongs to Learn&rsquo;s control owner. Five rows above are named by a section and required by no gate line &mdash; the <a href="../reference/artifact-catalogue.html#visible">catalogue</a> lists them; this table records the fact rather than repairing it.</p>
+  </div>
+</section>
+
 <section id="objectives" data-search="slo sli error budget availability latency correctness objectives">
-  <div class="section-heading"><span>02</span><div><p>What "working" means</p><h2>Service objectives</h2></div></div>
+  <div class="section-heading"><span>03</span><div><p>What "working" means</p><h2>Service objectives</h2></div></div>
   <p class="section-intro">An objective is useful when it can be missed. "High availability" cannot be missed; it can only be disagreed with. Define what a user experiences, then the threshold, then what happens when the threshold is breached.</p>
   <div class="table-wrap">
     <table>
@@ -111,7 +143,7 @@
 </section>
 
 <section id="telemetry" data-search="minimum telemetry logs metrics traces audit correlation tenant">
-  <div class="section-heading"><span>03</span><div><p>The floor</p><h2>Minimum telemetry</h2></div></div>
+  <div class="section-heading"><span>04</span><div><p>The floor</p><h2>Minimum telemetry</h2></div></div>
   <ul class="check-list">
     <li><strong>Request-level:</strong> outcome, latency, tenant context, correlation and causation identifiers, and the revision serving it</li>
     <li><strong>Domain-level:</strong> every material state transition, emitted as a business fact rather than inferred from logs</li>
@@ -126,7 +158,7 @@
 </section>
 
 <section id="oncall" data-search="oncall rota escalation alert fatigue paging">
-  <div class="section-heading"><span>04</span><div><p>Who answers</p><h2>On-call</h2></div></div>
+  <div class="section-heading"><span>05</span><div><p>Who answers</p><h2>On-call</h2></div></div>
   <ul class="check-list">
     <li><strong>Every alert is actionable.</strong> If the response is to look and do nothing, it is not an alert — it is a dashboard entry, and it should be moved there</li>
     <li><strong>Alert on symptoms, not causes.</strong> Users experience slow and wrong; they do not experience high memory usage</li>
@@ -137,7 +169,7 @@
 </section>
 
 <section id="incident" data-search="incident response detect triage mitigate communicate learn postmortem">
-  <div class="section-heading"><span>05</span><div><p>When it breaks</p><h2>Incident response</h2></div></div>
+  <div class="section-heading"><span>06</span><div><p>When it breaks</p><h2>Incident response</h2></div></div>
   <p class="section-intro">The order matters, and it is not the intuitive one. Stop the harm first; understand it second.</p>
   <div class="definition-list">
     <div><span>Detect</span><p>Ideally from a signal, not from a customer. Time-to-detect is worth measuring on its own, because it bounds everything downstream.</p></div>
@@ -153,7 +185,7 @@
 </section>
 
 <section id="recovery" data-search="recovery disaster rto rpo backup drill restore">
-  <div class="section-heading"><span>06</span><div><p>When it breaks badly</p><h2>Recovery</h2></div></div>
+  <div class="section-heading"><span>07</span><div><p>When it breaks badly</p><h2>Recovery</h2></div></div>
   <ul class="check-list">
     <li><strong>State the objectives:</strong> how much time may pass before service returns, and how much data may be lost. Both are business decisions, not technical ones</li>
     <li><strong>A backup that has never been restored is not a backup.</strong> It is an untested hypothesis with a storage cost</li>
@@ -164,7 +196,7 @@
 </section>
 
 <section id="cost" data-search="cost capacity growth budget efficiency forecast">
-  <div class="section-heading"><span>07</span><div><p>Sustainability</p><h2>Cost and capacity</h2></div></div>
+  <div class="section-heading"><span>08</span><div><p>Sustainability</p><h2>Cost and capacity</h2></div></div>
   <ul class="check-list">
     <li><strong>Attribute cost per tenant and per capability</strong>, so a growing bill can be explained rather than absorbed</li>
     <li><strong>Forecast capacity against measured growth</strong>, not against the hope that whatever headroom exists is permanent</li>
@@ -174,7 +206,7 @@
 </section>
 
 <section id="vuln" data-search="vulnerability patching dependencies secrets rotation disclosure">
-  <div class="section-heading"><span>08</span><div><p>Staying safe over time</p><h2>Vulnerability management</h2></div></div>
+  <div class="section-heading"><span>09</span><div><p>Staying safe over time</p><h2>Vulnerability management</h2></div></div>
   <ul class="check-list">
     <li><strong>Inventory and monitor every dependency.</strong> An unknown dependency cannot be assessed when an advisory lands</li>
     <li><strong>Agree a patching timeline by severity before the urgent case arrives</strong>, not during it</li>
@@ -185,7 +217,7 @@
 </section>
 
 <section id="roles" data-search="roles operations owner responder security finance">
-  <div class="section-heading"><span>09</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="section-heading"><span>10</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
@@ -201,7 +233,7 @@
 </section>
 
 <section id="gate" data-search="continuous exit learn feedback promotion">
-  <div class="section-heading"><span>10</span><div><p>Transition</p><h2>Continuous exit to Learn</h2></div></div>
+  <div class="section-heading"><span>11</span><div><p>Transition</p><h2>Continuous exit to Learn</h2></div></div>
   <p class="section-intro">Operate does not exit once. It feeds <strong>Learn</strong> continuously, and the quality of that feed is what stops the same incident recurring.</p>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Objectives are defined so they can be missed, with an agreed consequence</label>
@@ -216,7 +248,7 @@
 </section>
 
 <section id="stop" data-search="stop conditions halt unobserved no rota untested restore">
-  <div class="section-heading"><span>11</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <div class="section-heading"><span>12</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
   <p class="section-intro">These are conditions to stop <em>shipping</em>, not to stop operating: a service under any of them should keep serving while the condition is fixed, because withdrawing it usually harms more than the condition does.</p>
   <ul class="cross-list">
     <li>Telemetry has stopped arriving and the system is running unobserved</li>

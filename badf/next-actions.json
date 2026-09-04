@@ -1,40 +1,18 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-032",
-  "updated_at": "2026-09-04T16:25:04Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-033",
+  "updated_at": "2026-09-04T16:39:55Z",
   "actions": [
     {
-      "id": "NS-034",
+      "id": "NS-033",
       "primary": true,
       "priority": 1,
       "owner_role": "documentation-engineer",
-      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "action": "Issue #55: give operate.html an outputs section naming what the stage hands to Learn, add the catalogue rows it needs, retire the KNOWN_GAPS entry, and either renumber nothing or update every Operate section citation in the catalogue in the same change.",
-      "prerequisites": [
-        "WP-032 merged - badf/ is edited by one package at a time (DEC-029: stack nothing on a branch that will be deleted)"
-      ],
-      "evidence_required": [
-        "operate.html has a section whose heading eyebrow is Outputs and tests/test_stage_page_spine.py no longer excuses it",
-        "learn.html's entry criterion names inputs Operate actually produces, or Operate's outputs cover all three it names",
-        "grep -c 'Operate §' reference/artifact-catalogue.html accounts for every citation after any renumbering",
-        "python3 -m unittest discover -s tests OK; the duplication detector reports no new pair above 0.70"
-      ],
-      "stop_conditions": [
-        "An outputs row names an artifact no section of operate.html describes - that is manufacturing procedure, the failure discover.html warns about",
-        "A near-miss register is created: learn.html states no stage owns one, and creating one is a content decision with consequences for control retirement that this package is not authorised to take"
-      ],
-      "fallback": "Leave #55 open with the outputs the page already implies listed on the issue for a human to confirm."
-    },
-    {
-      "id": "NS-033",
-      "primary": false,
-      "priority": 2,
-      "owner_role": "documentation-engineer",
-      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
+      "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
       "prerequisites": [
-        "NS-034 merged - badf/ is edited by one package at a time",
+        "NS-034 merged as WP-033 (PR for issue #55)",
         "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing key, each fixture carries positive and negative tests for its own edge",
         "DEC-033: requires may name asserted.* as well as observed.* keys - a recorded departure from the letter of DEC-026 disposition 5 ('an existing observation'), which the operator is asked to confirm or refuse on issue #52 before this action starts; freshness is not rescoped to requires",
         "Schema amendment to 3.0.0: computed.next_action is additionalProperties false, so requires is a backward-incompatible addition that regenerates all nine fixtures, frozen HTML and manifests"
@@ -55,7 +33,7 @@
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 3,
+      "priority": 2,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -73,7 +51,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 4,
+      "priority": 3,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -91,7 +69,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 5,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",
