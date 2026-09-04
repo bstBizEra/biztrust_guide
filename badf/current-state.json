@@ -11,6 +11,7 @@
     "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/66",
     "owner_role": "documentation-engineer",
     "scope": [
+      "README.md",
       "reference/artifact-catalogue.html",
       "docs/LIVE_PREVIEW.md",
       "docs/NEXT_STEPS.md",
