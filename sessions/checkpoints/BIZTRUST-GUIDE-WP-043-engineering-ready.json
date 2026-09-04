@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-043-001",
+  "created_at": "2026-09-04T20:20:27Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-043",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #87: the callout sums to 63; NS-003 marked half done with evidence; the README sweep recorded.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-043-callout-and-ns003",
+    "baseline_commit": "00e11c552b2cdeb820305a5d5bfcbc5199e4d2fb"
+  },
+  "completed": [
+    "reference/artifact-catalogue.html: the location callout names the sixty-third row (Build's telemetry, inside the implementation); 7 + 14 + 41 + 1 = 63",
+    "docs/NEXT_STEPS.md: NS-003 carries a dated half-done line - the form in use since issue #2, no Project link on any issue",
+    "README.md swept for count words and status phrasing on 2026-09-05: nothing stale; recorded here, not edited"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Everything else waits on the operator, the repository owner, a broker or a lawyer, as stop_reason lists"
+  ],
+  "files_changed": [
+    "reference/artifact-catalogue.html",
+    "docs/NEXT_STEPS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-043-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "row count by location class over the catalogue's 63 rows -> none 41, target layout 14, issue form 4, PR template 1, badf 2, inside implementation 1",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh issue view 2 --json projectItems -> 0; gh issue view 27 --json projectItems -> 0; .github/ISSUE_TEMPLATE/work-package.yml present",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The callout's missing row was the one whose location is not a place: 'ships inside the implementation'. Counting by class found it where counting by eye had not."
+  ],
+  "decisions": [
+    "DEC-045: arithmetic and status corrected from measurement; the remainder named as owner or operator actions"
+  ],
+  "assumptions": [
+    "None; every sentence added is a count or a dated observation."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Project link, branch protection, documentation ownership."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_042",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-040",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/87"
+    ],
+    "stop_if": [
+      "A count in the catalogue or the roadmap is changed without the measurement recorded beside it"
+    ]
+  },
+  "declared_non_coverage": [
+    "The README sweep is a grep for count words and status phrasing; a stale claim phrased otherwise would not be found by it."
+  ]
+}

@@ -57,6 +57,8 @@
 
 Use the included Work Package issue form. Link the issue to a GitHub Project and assign lifecycle, authority, risk, gate and evidence fields.
 
+- **Half done, dated 2026-09-05:** the form (`.github/ISSUE_TEMPLATE/work-package.yml`) exists and has been used since issue #2 (`BIZTRUST-GUIDE-WP-003`, 2026-09-02T14:44:18Z); every `work-package`-labelled issue since carries its lifecycle, authority, risk, gate and evidence fields. **Not done:** no issue is linked to a GitHub Project (`projectItems` is empty on #2 and on #27). Linking is a repository-owner action.
+
 ### NS-004: Protect `main`
 
 Recommended rules:
