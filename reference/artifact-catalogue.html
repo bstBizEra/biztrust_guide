@@ -219,7 +219,7 @@ td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-
     <li>This page does not decide any of the ambiguities it records &mdash; an unnamed accepter stays unnamed here, because filling it in would be an invented rule wearing a table&rsquo;s clothes.</li>
     <li>It does not reconcile the two role vocabularies, and nothing here should be read as evidence that they correspond.</li>
     <li>A <em>target layout</em> directory is not a promise that anything writes there. Nothing in this repository creates any of the fourteen.</li>
-    <li>Nothing is checked mechanically. No test asserts that a stage page and this table still agree, so a stage that gains an artifact will silently fall out of step.</li>
+    <li>Two things are checked mechanically since WP-039 (issue #77), by <code>tests/test_catalogue_agrees_with_pages.py</code>: every section-number citation here names a section the page displays under that number, and every stage&rsquo;s outputs section names the same artifacts as its block of rows here. Nothing else is: a citation that resolves may still point at the wrong section, and row notes, formats, owners and accepters are prose no test reads.</li>
   </ul>
   <div class="next-action">
     <span>THE OTHER HALF</span>
