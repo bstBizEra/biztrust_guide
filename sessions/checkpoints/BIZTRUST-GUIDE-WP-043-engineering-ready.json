@@ -14,7 +14,7 @@
     "reference/artifact-catalogue.html: the location callout names the sixty-third row (Build's telemetry, inside the implementation); 7 + 14 + 41 + 1 = 63",
     "docs/NEXT_STEPS.md: NS-003 carries a dated measurement - the form exists, no issue was created through it (no rendered form headings, no state:draft), no GitHub Project exists and no issue has a project item - with the token-scope caveat",
     "README.md swept 2026-09-04T20:20Z with grep -n -i -E for count words (nine..twenty), '<n> tests|pages|stage|checkpoints|artifacts', 'never|not yet|no test|nothing (checks|validates)|currently|blocked': nothing stale; the duplication row's 0.692 element and 0.615 sentence re-measured as the current maxima over the nine stage pages",
-    "Fresh-context adversarial review (2026-09-04T20:2xZ): two blocking findings - the NS-003 line said the form had been used and every issue carried five fields, both false - and three should-fix (owner-action wording, scope-blind projectItems evidence, 'nothing an agent can do' overstated) plus notes; all adopted; dispositions in DEC-045"
+    "Fresh-context adversarial review (2026-09-04T20:26Z): two blocking findings - the NS-003 line said the form had been used and every issue carried five fields, both false - and three should-fix (owner-action wording, scope-blind projectItems evidence, 'nothing an agent can do' overstated) plus notes; all adopted; dispositions in DEC-045"
   ],
   "remaining": [
     "Re-verification of the fixed head by the same reviewer, then merge",
@@ -46,6 +46,11 @@
       "exit_code": 0
     },
     {
+      "command": "gh api graphql per issue: repository(owner,name){issue(number:N){projectItems{totalCount}}} for the fourteen work-package issues -> 0 each",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
       "command": "python3 -m unittest discover -s tests",
       "status": "PASS",
       "exit_code": 0
@@ -62,7 +67,7 @@
     "gh issue view --json projectItems returns [] under a token without the project scope and says nothing; the GraphQL totalCount query is the evidence."
   ],
   "decisions": [
-    "DEC-045: arithmetic and status corrected from measurement; the remainder named as owner or operator actions"
+    "DEC-045: arithmetic and status corrected from measurement; the remainder named as owner, operator or unticketed engineering items"
   ],
   "assumptions": [
     "None; every sentence added is a count or a dated observation."
