@@ -70,12 +70,19 @@ def text(fragment: str) -> str:
 
 
 def page_sections(page_html: str) -> list[dict]:
+    """Numbered sections only. The page intro carries the STAGE number in the same
+    markup (`<span>04</span>` above "Delivery lifecycle · Plan"), and on every page it
+    coincides with a real section number, which is how the first version of this file
+    let `Assure §06` resolve against the banner alone. Review found it; excluded here."""
     out = []
     for attrs, body in _SECTION.findall(page_html):
         m = _HEADING.search(body)
         if not m:
             continue
-        out.append({"number": m.group(1), "eyebrow": text(m.group(2)).lower(), "h2": text(m.group(3)), "body": body})
+        eyebrow = text(m.group(2)).lower()
+        if eyebrow.startswith("delivery lifecycle"):
+            continue
+        out.append({"number": m.group(1), "eyebrow": eyebrow, "h2": text(m.group(3)), "body": body})
     return out
 
 
@@ -126,7 +133,12 @@ def citations(cat_html: str) -> set[tuple[str, str]]:
     """(Stage, NN) pairs: explicit `Stage §NN` anywhere, and bare `§NN` inside a stage's block."""
     found = set(re.findall(r"([A-Z][a-z]+) §(\d\d)", cat_html))
     for stage, body in catalogue_blocks(cat_html).items():
-        for n in re.findall(r"(?<![A-Za-z] )§(\d\d)", body):
+        # Strip the explicit form first, then every remaining §NN belongs to this block's
+        # stage. The first version used a lookbehind that rejected ANY letter-and-space
+        # before §, which silently skipped "Named in §07" - the very form the docstring
+        # said it handled. Review found it with a mutant; the control below keeps it found.
+        stripped = re.sub(r"[A-Z][a-z]+ §\d\d", "", body)
+        for n in re.findall(r"§(\d\d)", stripped):
             found.add((stage, n))
     return found
 
@@ -168,8 +180,10 @@ class TestCorpusIsPresent(Corpus, unittest.TestCase):
     def test_corpus_is_present(self) -> None:
         """Without this, an emptied catalogue or a renamed stages/ passes everything below."""
         self.assertEqual(sorted(SHAPE), sorted(self.pages), "SHAPE must name every stage page and nothing else")
-        # Distinct (stage, number) pairs; the catalogue cites ten or more distinct sections.
-        self.assertGreaterEqual(len(citations(self.cat)), 10, "fewer distinct citations than the catalogue is known to carry; the parser broke")
+        # Distinct (stage, number) pairs; the catalogue cites fifteen or more distinct sections,
+        # explicit and bare forms together.
+        self.assertGreaterEqual(len(citations(self.cat)), 15, "fewer distinct citations than the catalogue is known to carry; the parser broke")
+        self.assertIn(("Operate", "07"), citations(self.cat), "the bare 'Named in §07' form must be attributed to Operate")
         self.assertEqual(sorted(catalogue_blocks(self.cat)), sorted(s.capitalize() for s in SHAPE))
 
 
@@ -187,6 +201,16 @@ class TestCitationsResolve(Corpus, unittest.TestCase):
         self.assertTrue(any(p.startswith("Operate §11") for p in resolve(self.cat, mutated)))
         # And a citation the catalogue invents must break too.
         self.assertTrue(any("Plan §42" in p for p in resolve(self.cat + " Plan §42", self.pages)))
+        # The bare form inside a block: "Named in §07" is Operate's. Break it, and it must be reported.
+        self.assertIn("Named in §07", self.cat)
+        self.assertTrue(any(p.startswith("Operate §77") for p in resolve(self.cat.replace("Named in §07", "Named in §77", 1), self.pages)))
+        # The intro banner must not satisfy a citation: Assure's stage number is 06 and so is its
+        # exit gate; renumber the gate and Assure §06 must fail even though the banner still says 06.
+        heading = '<div class="section-heading"><span>06</span><div><p>Transition</p>'
+        self.assertIn(heading, self.pages["assure"])
+        mutated = dict(self.pages)
+        mutated["assure"] = mutated["assure"].replace(heading, '<div class="section-heading"><span>99</span><div><p>Transition</p>', 1)
+        self.assertTrue(any(p.startswith("Assure §06") for p in resolve(self.cat, mutated)))
 
 
 class TestOutputsAgree(Corpus, unittest.TestCase):

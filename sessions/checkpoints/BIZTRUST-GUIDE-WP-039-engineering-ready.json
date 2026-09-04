@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-039-001",
-  "created_at": "2026-09-04T18:26:51Z",
+  "created_at": "2026-09-04T18:35:12Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-039",
   "state": "ENGINEERING_READY",
   "objective": "Issue #77: the catalogue checked against the stage pages by test - citations resolve, outputs tables match.",
@@ -14,10 +14,11 @@
     "tests/test_catalogue_agrees_with_pages.py: citations (explicit 'Stage section NN' anywhere, bare 'section NN' inside a stage's block) resolve to displayed section numbers; outputs sections match catalogue blocks as name sets under a declared per-page shape; negative controls for both; a test that the shape declaration is load-bearing",
     "reference/artifact-catalogue.html: the method-note bullet says what is checked and what is not",
     "README.md: the enforcement table gains the row",
-    "NS-039 retired; NS-040 (issue #78, a human's four decisions) primary; no agent-executable action remains"
+    "NS-039 retired; NS-040 (issue #78, a human's four decisions) primary; no agent-executable action remains",
+    "Fresh-context adversarial review (2026-09-05): two should-fix findings in the test (bare citations skipped; intro banner counted) and one in the ledger, all adopted with controls; dispositions in DEC-041"
   ],
   "remaining": [
-    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge",
     "NS-040 - issue #78 - waits on a human",
     "PR #74 - held on issue #52"
   ],
@@ -42,14 +43,15 @@
       "exit_code": 0
     },
     {
-      "command": "first run of the outputs check against main (before WP-038 merged) -> architect: only in catalogue ['Deferred-decision register']; the one known disagreement, found by the test before the rebase",
+      "command": "git worktree add <scratch> 7df92b6 && cp tests/test_catalogue_agrees_with_pages.py <scratch>/tests/ && python3 -m unittest tests.test_catalogue_agrees_with_pages -> FAIL: architect: only in catalogue ['Deferred-decision register']; only on page [] (the one known disagreement, before WP-038 merged)",
       "status": "FAIL",
       "exit_code": 1
     }
   ],
   "observations": [
-    "The bare-number citation regex excludes 'Stage section NN' preceded by a stage name so that Build's Telemetry row, which cites Operate section 11, is attributed to Operate and not Build.",
-    "Assure's outputs section is one artifact with fielded entries; a name-per-entry reading would have produced eight artifacts the catalogue does not have. The shape is declared, not inferred, for that reason."
+    "The bare-number citation rule strips the explicit 'Stage section NN' form from a block and attributes every remaining section sign to that block's stage, so Build's Telemetry row, which cites Operate section 11, goes to Operate and 'Named in section 07' goes to Operate. The first version used a lookbehind that skipped the bare form entirely; the review's mutant found it.",
+    "Assure's outputs section is one artifact with fielded entries; a name-per-entry reading would have produced eight artifacts the catalogue does not have. The shape is declared, not inferred, for that reason.",
+    "The page intro carries the stage number in section-heading markup; on every page it coincides with a real section number, so the first version let Assure section 06 resolve against the banner. Excluded by eyebrow, with a control."
   ],
   "decisions": [
     "DEC-041: displayed numbers not ids; declared shapes not inferred; negative controls for both assertions"
