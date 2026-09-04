@@ -30,7 +30,12 @@
     "next_action": {
       "action": "Author and seal the nine WP-024 fixtures and oracles.",
       "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "id": "NS-030"
+      "id": "NS-030",
+      "requires": [
+        "observed.main_sha",
+        "asserted.documentation_authority",
+        "asserted.active_work_package"
+      ]
     },
     "resume_decision": "CONTINUE",
     "stop_conditions": []
@@ -78,7 +83,7 @@
       "value": null
     }
   },
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "source_sha": "e23143ef91dcf0fd03e1686a1b2880c0696b798d",
   "static": {
     "deriver_policy_version": "0.1.0-fixture",

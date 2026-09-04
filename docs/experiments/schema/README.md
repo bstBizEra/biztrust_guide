@@ -4,6 +4,15 @@
 > it has more influence on the experiment's outcome than any individual fixture. Committing
 > it alone, ahead of the fixtures, means no fixture could be written to flatter it.
 
+> **Amended again under `NS-033` (issue #52 item 3), to `3.0.0`.** `computed.next_action.requires` names the
+> `observed.*` and `asserted.*` keys the *action* consumes, so "critical input" has a referent; `computed.freshness`
+> is explicitly the *derivation's* worst input and is not rescoped by it. Every fixture function assigns its own edge
+> and a test reads the source to prove no default is inherited; the eight fixtures that share one action carry one
+> edge, by design. `resume_decision`, `freshness`, `stop_conditions` and every oracle are held byte-identical to the
+> `2.0.0` set by `tests/test_resume_action_dependencies.py`. The `asserted.*` admission departs from the letter of
+> DEC-026 disposition 5 ("an existing observation") and is recorded as the operator's decision by instruction on
+> 2026-09-05 (DEC-038).
+
 > **Amended after WP-024 ran, under `NS-032` (issue #52 item 2), to `2.0.0`.** `static.repository` became
 > required and an observation source may no longer be an unresolved template; the nine fixtures were
 > regenerated against the amendment. The sealed `1.0.0` form is at `e37fa3b`. The amendment touches

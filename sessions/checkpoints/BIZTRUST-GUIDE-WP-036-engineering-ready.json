@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-036-001",
+  "created_at": "2026-09-04T17:45:20Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-036",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #52 item 3 as DEC-033 form (iii): the action's edge, per fixture, enforced from the schema, with nothing sealed moved.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-036-action-dependencies",
+    "baseline_commit": "83f0d5aa0b88a2cee1673bb331f58600d325346e"
+  },
+  "completed": [
+    "resume.schema.json 3.0.0: computed.next_action.requires required on an action, minItems 1, uniqueItems, observed.*|asserted.* pattern; freshness described as the derivation's, not rescoped",
+    "build.py: AUTHORING_CONSUMES named once as a constant and assigned in each of eight fixture functions with a comment; base() carries no edge; schema_rules() reads the four shape rules; violations() applies them plus the code-only resolution rule",
+    "Nine fixtures, frozen HTML and manifests regenerated; build.py --check certifies; all nine validate against the full schema under jsonschema 4.26.0 with zero errors",
+    "tests/test_resume_action_dependencies.py: declaration, no-inherited-default by source inspection, rules read from the schema and followed when changed, shape and resolution refusals, nine positive and nine negative per-fixture tests, byte-identical guard on sealed fields and oracle digests, CLI refusal in both modes",
+    "tests/test_resume_schema_identity.py: the item-2-lands-alone guard retired; the resolved-sources control uses f1() because base() has no edge by design",
+    "schema README, fixtures README and WP-024-results.md carry dated notes; nothing reinterpreted",
+    "NS-033 retired; NS-037 (issue #73, Plan outputs) primary"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Independent oracle authorship before any re-run - unchanged; fixture 08's sealed BLOCKED is now visibly at odds with its edge",
+    "NS-037 - issue #73 - in its own package after this one merges"
+  ],
+  "files_changed": [
+    "docs/experiments/schema/resume.schema.json",
+    "docs/experiments/schema/README.md",
+    "docs/experiments/fixtures/build.py",
+    "docs/experiments/fixtures/README.md",
+    "docs/experiments/fixtures/*/RESUME.json",
+    "docs/experiments/fixtures/*/control-room.html.frozen",
+    "docs/experiments/fixtures/*/manifest.yaml",
+    "docs/experiments/WP-024-results.md",
+    "tests/test_resume_action_dependencies.py",
+    "tests/test_resume_schema_identity.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-036-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 docs/experiments/fixtures/build.py --check -> SCHEMA=CONFORMANT count=9, FIXTURES=CURRENT count=9",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema 4.26.0 Draft202012Validator: all nine RESUME.json against resume.schema.json 3.0.0 -> 0 errors each",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --quiet main -- docs/experiments/fixtures/*/oracle.yaml -> no oracle changed",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "first run of the oracle-digest guard FAILED on all nine: pins had been computed on a CRLF working copy; re-pinned from git cat-file blobs",
+      "status": "PASS",
+      "exit_code": 1
+    }
+  ],
+  "observations": [
+    "The eight edges are identical because the action is identical; the source-inspection test is the guard against inheritance, and identical values are not evidence of it.",
+    "Fixture 08 after this package: ci_conclusion and pages_status UNKNOWN, computed.freshness UNKNOWN, edge naming neither. The sealed oracle says BLOCKED on the strength of those two; the artifact now says the action does not need them. Left for the independent oracle author.",
+    "Digests pinned from a working copy are digests of that copy's line endings. The first pins matched nothing committed; the second were taken from the blobs."
+  ],
+  "decisions": [
+    "DEC-038: the operator's instruction of 2026-09-05 read as the answer on asserted.* keys; form (iii) implemented; reversible by one revert"
+  ],
+  "assumptions": [
+    "That 'proceed the rest of issue' answers the asserted.* question in the affirmative. Recorded in DEC-038 with the alternative reading, so the operator can reverse it by reverting this package."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; more pressing now that fixture 08's oracle and artifact visibly disagree."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "asserted_keys_in_requires": "GRANTED_BY_OPERATOR_INSTRUCTION_2026_09_05_SEE_DEC_038",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_035",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-037",
+  "recovery": {
+    "first_safe_command": "python3 docs/experiments/fixtures/build.py --check",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/52",
+      "docs/experiments/schema/resume.schema.json"
+    ],
+    "stop_if": [
+      "An oracle file appears in a diff",
+      "A requires value is assigned in base()",
+      "resume_decision, computed.freshness or stop_conditions differ from the 2.0.0 set on any fixture",
+      "A re-run is proposed before the oracles have an independent author"
+    ]
+  },
+  "declared_non_coverage": [
+    "The regenerated fixtures have not been run against any agent; WP-024's result stands.",
+    "The edge's content - what the authoring action consumes - is the fixture author's judgement, recorded in each function's comment; a test checks that it was authored there, not that it is right.",
+    "jsonschema validation of the nine fixtures was run by hand, not in CI; build.py enforces only the rules it reads."
+  ]
+}

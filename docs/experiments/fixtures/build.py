@@ -24,6 +24,13 @@ MOVED_SHA = "aa11bb22cc33dd44ee55ff6600778899aabbccdd"  # a later, different mai
 EVAL = "2026-09-04T09:00:00+07:00"
 
 SCHEMA = HERE.parent / "schema" / "resume.schema.json"
+# Action dependencies, added under NS-033 (issue #52 item 3, DEC-033 form iii). NOT set in base():
+# each fixture function assigns its own edge, and a test reads the source to prove it. The value
+# the eight NS-030 fixtures assign is the same because the action is the same - authoring against
+# a baseline, under a grant, inside a package - and one action consumes one set of inputs.
+# Agreement is expected; inheritance is what #57 reverted and what the source test forbids.
+AUTHORING_CONSUMES = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
+
 # Repository identity, added under NS-032 (issue #52 item 2). Every observation source below is
 # RESOLVED against it; the schema refuses an unexpanded template, and this script enforces that
 # refusal by reading the rule from the schema - one place, not two.
@@ -44,7 +51,7 @@ def asrt(value, issuer, effective="2026-09-03T00:00:00+07:00",
 
 def base(**over):
     d = {
-        "schema_version": "2.0.0",
+        "schema_version": "3.0.0",
         "source_sha": SEAL_SHA,
         "derived_at": EVAL,
         "static": {"project_id": "BIZTRUST-GUIDE", "deriver_policy_version": "0.1.0-fixture",
@@ -85,12 +92,17 @@ def base(**over):
 
 # ---------------------------------------------------------------- fixtures
 def f1():
-    return base()
+    d = base()
+    # Control. Local authoring reads the baseline, the grant and the package; nothing else.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    return d
 
 
 def f2():
     d = base()
     d["observed"]["main_sha"] = obs(MOVED_SHA)
+    # The baseline this action authors against is exactly the input that moved.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
     return d   # computed still says CONTINUE - true at derivation, false now
 
 
@@ -99,6 +111,9 @@ def f3():
     d["observed"]["issue_2_state"] = obs("open", source=f"{API}/issues/2")
     d["observed"]["issue_2_labels"] = obs(["state:in-progress"], source=f"{API}/issues/2")
     d["observed"]["issue_2_linked_pr_merged"] = obs(True, source=f"{API}/pulls/28")
+    # Issue 2's label and its merged PR contradict each other; authoring fixtures reads neither.
+    # The contradiction is a stop condition for the reader, not an input to this action.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
     return d
 
 
@@ -107,12 +122,14 @@ def f4():
     d["asserted"]["documentation_authority"] = asrt(
         "GRANTED", "operator", until="2026-09-03T23:59:59+07:00",
         evidence="user request 2026-09-03, expiring")
+    # The grant this action needs is the assertion that expires - named, so the reader need not infer it.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
     return d
 
 
 def f5():
     d = base()
-    d["computed"]["next_action"] = None
+    d["computed"]["next_action"] = None      # no action, so no edge: requires lives on the action
     d["computed"]["resume_decision"] = "COMPLETE"
     return d
 
@@ -122,6 +139,8 @@ def f6():
     d["asserted"]["active_work_package"] = asrt(
         ["BIZTRUST-GUIDE-WP-024", "BIZTRUST-GUIDE-WP-025"], "operator",
         evidence="two work packages asserted active; the repository permits one")
+    # The package this action belongs to is the assertion that names two.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
     return d
 
 
@@ -129,6 +148,8 @@ def f7():
     d = base()
     d["observed"]["open_pull_requests"] = obs(3, source=f"{API}/pulls?state=open")
     d["observed"]["all_work_merged"] = obs(True, source=f"{API}/pulls?state=open")
+    # Open-PR count and 'all merged' conflict; authoring on a branch consumes neither.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
     return d
 
 
@@ -138,12 +159,17 @@ def f8():
                                          source=f"{API}/commits/{SEAL_SHA}/check-runs - 503")
     d["observed"]["pages_status"] = obs(None, at=None, freshness="UNKNOWN",
                                         source=f"{API}/pages - 503")
-    d["computed"]["freshness"] = "UNKNOWN"
+    d["computed"]["freshness"] = "UNKNOWN"   # the DERIVATION consumed ci and pages; the action does not
+    # ci_conclusion and pages_status are UNKNOWN and are not in this edge: local authoring
+    # needs neither. freshness stays UNKNOWN because it is the derivation's, not the action's.
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
     return d
 
 
 def f9():
-    return base()   # content is fine; the MANIFEST will disagree with it
+    d = base()   # content is fine; the MANIFEST will disagree with it
+    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    return d
 
 
 FIXTURES = [
@@ -199,7 +225,13 @@ def schema_rules() -> dict:
     repo = static["properties"]["repository"]
     rp = repo["properties"]
     source = s["$defs"]["observation"]["properties"]["source"]
+    action = next(o for o in s["properties"]["computed"]["properties"]["next_action"]["oneOf"] if o.get("type") == "object")
+    requires = action["properties"]["requires"]
     return {
+        "action_required": list(action["required"]),
+        "requires_min_items": int(requires.get("minItems", 0)),
+        "requires_unique": bool(requires.get("uniqueItems", False)),
+        "requires_item_pattern": requires["items"]["pattern"],
         "schema_version": s["properties"]["schema_version"]["const"],
         "static_required": list(static["required"]),
         "repository_required": list(repo["required"]),
@@ -260,6 +292,31 @@ def violations(state: dict, rules: dict) -> list[str]:
             # Cross-field, code-only: a lexical pattern cannot see $OWNER, OWNER/REPO or a
             # different repository. A URL-shaped source must name THIS repository.
             out.append(f"observed.{key}.source is a URL that does not reference /{owner}/{name}: {src!r}")
+    # Item 3: the action's edge. Shape rules are read from the schema; resolution is code-only.
+    computed = state.get("computed") if isinstance(state.get("computed"), dict) else {}
+    action = computed.get("next_action")
+    if isinstance(action, dict):
+        for key in rules["action_required"]:
+            if key not in action:
+                out.append(f"computed.next_action.{key} missing")
+        req = action.get("requires")
+        if "requires" in action:
+            if not isinstance(req, list):
+                out.append("computed.next_action.requires is not an array")
+            else:
+                if len(req) < rules["requires_min_items"]:
+                    out.append(f"computed.next_action.requires has fewer than {rules['requires_min_items']} entries")
+                if rules["requires_unique"] and len(set(map(str, req))) != len(req):
+                    out.append("computed.next_action.requires repeats an entry")
+                asserted = state.get("asserted") if isinstance(state.get("asserted"), dict) else {}
+                for entry in req:
+                    if not isinstance(entry, str) or not re.search(rules["requires_item_pattern"], entry):
+                        out.append(f"computed.next_action.requires entry {entry!r} does not match the schema pattern")
+                        continue
+                    category, _, name = entry.partition(".")
+                    # Cross-field, code-only: JSON Schema cannot say "names an existing key".
+                    if name not in (observed if category == "observed" else asserted):
+                        out.append(f"computed.next_action.requires names {entry!r}, which is not a key of {category}")
     return out
 
 

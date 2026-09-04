@@ -2,12 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bstbizera.github.io/biztrust_guide/schema/resume.schema.json",
   "title": "RESUME.json",
-  "description": "The artifact a resuming agent reads. Sealed for WP-024 at e37fa3b before any fixture existed; amended under NS-032 (issue #52 item 2) to 2.0.0 after WP-024 ran, with the nine fixtures regenerated against the amendment. The amendment adds static.repository and refuses unresolved observation sources; it does not touch resume_decision, next_action or any oracle. Every leaf declares which of the four categories it belongs to, because the categories carry different invalidation rules: observations expire on observation age, assertions on their own terms, computations on their inputs, and constants never.",
+  "description": "The artifact a resuming agent reads. Sealed for WP-024 at e37fa3b before any fixture existed; amended under NS-032 (issue #52 item 2) to 2.0.0 after WP-024 ran, with the nine fixtures regenerated against the amendment - it adds static.repository and refuses unresolved observation sources - and again under NS-033 (issue #52 item 3) to 3.0.0, adding next_action.requires: the observed.* and asserted.* keys the ACTION consumes, so that 'critical input' has a referent. Neither amendment touches resume_decision, computed.freshness, stop_conditions or any oracle; build.py reads every rule it can enforce from this file, and a test holds those sealed fields byte-identical across the amendment. Every leaf declares which of the four categories it belongs to, because the categories carry different invalidation rules: observations expire on observation age, assertions on their own terms, computations on their inputs, and constants never.",
   "type": "object",
   "required": ["schema_version", "source_sha", "derived_at", "static", "observed", "asserted", "computed", "declared_non_coverage"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "const": "2.0.0" },
+    "schema_version": { "const": "3.0.0" },
     "source_sha": {
       "type": "string", "pattern": "^[0-9a-f]{40}$",
       "description": "The commit this state was derived from. An agent compares it against observed.main_sha; a mismatch makes the whole artifact stale regardless of any other field."
@@ -55,11 +55,16 @@
         "next_action": {
           "oneOf": [
             { "type": "null", "description": "null means NONE_SAFE. There is no safe action." },
-            { "type": "object", "required": ["id", "action", "authority"], "additionalProperties": false,
+            { "type": "object", "required": ["id", "action", "authority", "requires"], "additionalProperties": false,
               "properties": {
                 "id": { "type": "string" },
                 "action": { "type": "string" },
-                "authority": { "type": "string" }
+                "authority": { "type": "string" },
+                "requires": {
+                  "type": "array", "minItems": 1, "uniqueItems": true,
+                  "items": { "type": "string", "pattern": "^(observed|asserted)\\.[A-Za-z_][A-Za-z0-9_]*$" },
+                  "description": "The keys in observed and asserted that THIS ACTION consumes - what must be current and valid for the action to be safe to take. Required since NS-033 (issue #52 item 3): WP-024's fixture-08 agent had to infer from the action's wording which UNKNOWN observations mattered to it, and the artifact could not say. It names what the action consumes, not what the derivation consumed: computed.freshness is the derivation's worst input and is not rescoped by this list, so an action that needs none of the UNKNOWN inputs can be read as such without the derivation's verdict moving. Both categories are admitted because a grant and a work package live in asserted, and an edge that covered only observed would read as complete while naming one of four categories. One rule JSON Schema cannot express is enforced by build.py beside these: every entry resolves to an existing key of the named category."
+                }
               } }
           ],
           "description": "Exactly one, or null. A list would let a reader choose, which is the failure this artifact exists to prevent."
@@ -72,7 +77,7 @@
         },
         "freshness": {
           "enum": ["CURRENT", "STALE", "UNKNOWN"],
-          "description": "The WORST freshness among critical inputs, never an average. One UNKNOWN critical observation makes the artifact UNKNOWN."
+          "description": "The WORST freshness among the inputs the DERIVATION consumed to compute resume_decision and stop_conditions, never an average. One UNKNOWN such observation makes the artifact UNKNOWN. This is deliberately not scoped to next_action.requires: the derivation may have consumed an input the action does not need, and a reader is expected to notice when the two disagree."
         }
       }
     },

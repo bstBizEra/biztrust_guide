@@ -1,34 +1,30 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-035",
-  "updated_at": "2026-09-04T17:29:39Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-036",
+  "updated_at": "2026-09-04T17:45:20Z",
   "actions": [
     {
-      "id": "NS-033",
+      "id": "NS-037",
       "primary": true,
       "priority": 1,
       "owner_role": "documentation-engineer",
-      "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
-      "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
+      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
+      "action": "Issue #73: give plan.html an outputs section (id produces, eyebrow Outputs, nav 02) naming the four artifacts the catalogue already attributes to Plan, each linked to the section that describes it; retire the last KNOWN_GAPS entry; update every Plan section citation in the catalogue if sections renumber.",
       "prerequisites": [
-        "NS-034 merged as WP-033 (PR for issue #55)",
-        "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing key, each fixture carries positive and negative tests for its own edge",
-        "DEC-033: requires may name asserted.* as well as observed.* keys - a recorded departure from the letter of DEC-026 disposition 5 ('an existing observation'), which the operator is asked to confirm or refuse on issue #52 before this action starts; freshness is not rescoped to requires",
-        "Schema amendment to 3.0.0: computed.next_action is additionalProperties false, so requires is a backward-incompatible addition that regenerates all nine fixtures, frozen HTML and manifests"
+        "WP-036 merged - badf/ is edited by one package at a time"
       ],
       "evidence_required": [
-        "No requires value is assigned in build.py's base() or otherwise inherited; a test reads each fixture function's source and requires an explicit assignment in every function whose next_action is not null",
-        "Every fixture carries a positive test naming its own expected edge and a negative test proving build.py --check refuses an edge naming a key that does not exist, and refuses an empty edge",
-        "A test diffs every fixture's resume_decision, computed.freshness, stop_conditions and every oracle.yaml against the pre-change tree and requires them byte-identical - the additive-only guard",
-        "Eight identical edges on the eight fixtures that share NS-030 are expected and recorded as such: the same action consumes the same inputs; what is forbidden is inheritance, not agreement"
+        "plan.html has a section whose heading eyebrow is Outputs and KNOWN_GAPS is empty",
+        "every row corresponds to an existing catalogue row and to a section of plan.html, linked",
+        "grep of 'Plan §' in reference/artifact-catalogue.html accounts for every citation after any renumbering",
+        "python3 -m unittest discover -s tests OK; no new duplication pair above 0.70"
       ],
       "stop_conditions": [
-        "One value is assigned in base() or reaches a fixture whose function did not assign it - that is exactly what #57 reverted",
-        "Any sealed field - resume_decision, computed.freshness, stop_conditions, any oracle - differs byte-for-byte from the pre-change tree",
-        "Oracles are edited by the author who wrote the fixtures"
+        "A row names an artifact no section of plan.html and no catalogue row describes",
+        "An owner or gate line is added"
       ],
-      "fallback": "Leave item 3 open and record that the artifact still cannot say what an action consumes."
+      "fallback": "Leave #73 open with the four rows listed on the issue for a human to confirm."
     },
     {
       "id": "NS-024",

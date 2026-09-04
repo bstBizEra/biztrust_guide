@@ -56,6 +56,18 @@ design: a self-identifying bundle need not be currently true. The set WP-024 was
 `e37fa3b`; `build.py --check` now also prints `SCHEMA=CONFORMANT` before `FIXTURES=CURRENT`, and
 refuses to write or certify a fixture that lacks its repository or carries an unresolved source.
 
+## Regenerated again under NS-033 — the action's edge
+
+Issue #52 item 3: `computed.next_action.requires` names what the action consumes. The eight fixtures
+that share `NS-030` carry the same three entries — `observed.main_sha`, `asserted.documentation_authority`,
+`asserted.active_work_package` — assigned in each fixture's own function, never in `base()`; fixture 05 has
+no action and so no edge. Fixture 08 is the one to read: `ci_conclusion` and `pages_status` are `UNKNOWN`,
+`computed.freshness` is still `UNKNOWN` because that is the derivation's verdict, and the edge says the action
+needs neither — which is what the best WP-024 agent inferred from wording and can now read. **No sealed field
+moved:** `resume_decision`, `freshness`, `stop_conditions` and all nine `oracle.yaml` files are byte-identical
+to the `2.0.0` set, and a test pins them. The oracles have still not been re-authored; the `BLOCKED` on
+fixture 08 is now more doubtful on the artifact's face, and that is for the independent oracle author.
+
 ## Regenerating
 
 ```bash
