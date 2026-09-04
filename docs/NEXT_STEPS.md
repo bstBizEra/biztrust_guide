@@ -57,6 +57,8 @@
 
 Use the included Work Package issue form. Link the issue to a GitHub Project and assign lifecycle, authority, risk, gate and evidence fields.
 
+- **Measured 2026-09-04T20:20Z, mostly not done.** The form (`.github/ISSUE_TEMPLATE/work-package.yml`) exists. **No issue was created through it:** none of the fourteen `work-package`-labelled issues carries the form's rendered headings (`### Work Package ID`, `### Required evidence`, `### Readiness declaration`) or its `state:draft` label; their bodies reproduce the form's sections by hand, unevenly, since issue #2 (`BIZTRUST-GUIDE-WP-003`, 2026-09-02T14:44:18Z). The lifecycle, authority, risk, gate and evidence *fields* this entry names are GitHub Project fields (`docs/AGENT_CONTINUITY.md` §10), and **no GitHub Project exists** on the owner account (`viewer.projectsV2.totalCount` = 0); no issue has a project item (`issue(number).projectItems.totalCount` = 0 across all fourteen). Creating a Project and granting write access to it is the owner's; this agent's token has no `project` scope.
+
 ### NS-004: Protect `main`
 
 Recommended rules:
