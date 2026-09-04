@@ -50,6 +50,8 @@ An agent must not continue from chat recollection alone.
 
 If sources disagree, the agent records the conflict and stops the affected transition.
 
+Since WP-044, `badf/current-state.json`, `badf/next-actions.json` and every entry of `badf/decision-log.jsonl` are validated against `schemas/*.schema.json` by `tests/test_badf_match_schemas.py`, and the one-primary, same-package and ascending-id rules the schemas cannot express are checked there too.
+
 ## 5. Work constraints
 
 - No ticket, no work.

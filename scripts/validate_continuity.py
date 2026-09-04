@@ -106,6 +106,9 @@ def main() -> int:
         "badf/decision-log.jsonl",
         "schemas/session-checkpoint.schema.json",
         "schemas/handoff.schema.json",
+        "schemas/current-state.schema.json",
+        "schemas/next-actions.schema.json",
+        "schemas/decision-record.schema.json",
         "templates/session-checkpoint.json",
         "templates/handoff.json",
         "docs/LIVE_PREVIEW.md",
@@ -264,7 +267,9 @@ def main() -> int:
         checks.append(f"decisions:{len(decision_ids)}")
 
     schemas_ok = True
-    for schema in ("schemas/session-checkpoint.schema.json", "schemas/handoff.schema.json"):
+    for schema in ("schemas/session-checkpoint.schema.json", "schemas/handoff.schema.json",
+                   "schemas/current-state.schema.json", "schemas/next-actions.schema.json",
+                   "schemas/decision-record.schema.json"):
         data = load_json(schema, errors)
         if not data:
             schemas_ok = False
