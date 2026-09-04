@@ -4,7 +4,7 @@ evaluation_time: "2026-09-04T09:00:00+07:00"
 files:
   RESUME.json:
     bytes: 2987
-    sha256: "c72a10a4a71492e5aceb4a09bde6bc77db2fdfdb6bd0d7ddd92841786d4a4c20"
+    sha256: "12179f2e3ee31bce9ef7f9af4d1231be90fc54d987da1c02bf7126b9535391f0"
   control-room.html:
     bytes: 3416
-    sha256: "08d7059fad19a554a8487a90ef32df14738252b8f61ef45f7b53009f8c27e5d8"
+    sha256: "0be13d7dbf969a1710280f1b39a6cdc8dfc23d94181cac5fa426a8c5f625df0b"

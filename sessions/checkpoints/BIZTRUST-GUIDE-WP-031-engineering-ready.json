@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-031-001",
-  "created_at": "2026-09-04T15:26:43Z",
+  "created_at": "2026-09-04T15:43:00Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-031",
   "state": "ENGINEERING_READY",
   "objective": "Enforce repository identity and resolved sources in RESUME.json by having build.py read the rules from resume.schema.json; item 2 alone.",
@@ -16,7 +16,8 @@
     "Nine fixtures, frozen HTML and manifests regenerated; build.py --check certifies SCHEMA=CONFORMANT and FIXTURES=CURRENT",
     "tests/test_resume_schema_identity.py: twelve tests - declaration, rules-read-from-schema, both escapees refused, resolved forms accepted, CLI exits 1 and writes nothing, no fixture carries requires",
     "WP-024-results.md: dated pointer to the sealed set at e37fa3b; no reinterpretation",
-    "NS-032 retired; NS-033 primary under the standing grant"
+    "NS-032 retired; NS-033 primary under the standing grant",
+    "Fresh-context adversarial review before merge (2026-09-04): one blocking and six should-fix findings, all fixed on the branch; dispositions in DEC-031"
   ],
   "remaining": [
     "Human merge of this package's pull request",
@@ -78,9 +79,9 @@
       "exit_code": 0
     },
     {
-      "command": "python3 -c 'break REPO; build(check=True)' - must exit 1 with SCHEMA=VIOLATION (negative control, also a test)",
+      "command": "python3 -c 'break fixture 08; build(check=False)' - must exit 1 and write nothing; it exited 1 (recorded as such) and wrote nothing",
       "status": "PASS",
-      "exit_code": 0
+      "exit_code": 1
     },
     {
       "command": "git status --porcelain | grep -c oracle.yaml  -> 0",
@@ -91,12 +92,28 @@
       "command": "jsonschema Draft202012Validator over this checkpoint",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest tests.test_resume_schema_identity against three build.py mutants - schema ignored, per-fixture judging, containment removed - each FAILED as required, then restored",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator: all nine RESUME.json against the full resume.schema.json",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
     "Nothing on main read resume.schema.json before this change; the 241 schema lines PR #56 added were unenforced, and its guard passed {owner}/{repo} and :owner/:repo. Enforcement now reads the rule from the schema, so there is one place to edit.",
     "Importing build.py from the new test wrote __pycache__ beside it - a tenth directory under fixtures/ - and the count-of-nine guard failed on the first full-suite run. The loader now suppresses bytecode. The guard was right and was not loosened.",
-    "The regenerated fixtures differ from the sealed set at e37fa3b in exactly two ways: static.repository is present, and every source is resolved. resume_decision, oracles and next_action are byte-for-byte what they were."
+    "The regenerated fixtures differ from the sealed set at e37fa3b in exactly two ways: static.repository is present, and every source is resolved. resume_decision, oracles and next_action are byte-for-byte what they were.",
+    "Review finding G1: the schema and its README still said 'sealed before any fixture existed' after this change amended the schema and regenerated fixtures against it - the surface DEC-025 recorded as a #56 defect. Both now carry a dated amendment sentence; the schema constant is 2.0.0 because a document valid under 1.0.0 is invalid under it.",
+    "Review finding B1/B2: the refusal pattern was lexical and accepted $OWNER, OWNER/REPO, [owner] and a different repository entirely, and nothing tied owner/name to remote. Two cross-field rules now live in build.py - remote ends in /owner/name; a URL-shaped source references /owner/name - because JSON Schema cannot express them; the schema's description names both so a reader of either file sees the whole rule set.",
+    "Review finding B3: the schema declared owner/name patterns, a closed key set and a source minLength that build.py did not read. schema_rules() now reads every identity rule the schema can express; the only duplication left is the two cross-field rules, which have no schema form.",
+    "Review finding C1: the 'rules are read from the schema' test compared the file to a read of the same file and passed with the pattern hard-coded. A new test points build.py at an altered schema copy and requires the verdict to move both ways; the hard-coded mutant now fails it.",
+    "Review finding C2: build() judged per fixture inside the write loop, so a violation in fixture 08 was preceded by writing fixture 01. It is now two passes - judge all, then write - and the write-refusal test breaks one fixture while changing another benignly. The per-fixture mutant fails it.",
+    "The schema diff is now 19 insertions and 5 deletions on the original hand-formatted text instead of a 236-line reformat, so a reviewer can see the five semantic nodes (G3)."
   ],
   "decisions": [
     "Read the rules from the schema rather than restating them in code or adding a JSON Schema dependency: one source, enforced, stdlib-only.",
@@ -144,8 +161,9 @@
     ]
   },
   "declared_non_coverage": [
-    "Only the two item-2 rules are enforced; the rest of resume.schema.json is still a declaration nothing reads (NS-006 in NEXT_STEPS.md is the planned full validation)",
-    "The regenerated fixtures have not been run against any agent; WP-024's result stands unchanged",
-    "The remote pattern checks shape, not reachability"
+    "Only the identity rules are enforced by build.py; the rest of resume.schema.json is still a declaration nothing in CI reads (NS-006 in NEXT_STEPS.md is the planned full validation). The nine fixtures were validated against the full schema by hand with jsonschema 4.26.0, 0 errors each.",
+    "The refusal pattern has known false positives on shell sources that contain <, > or {} (a pipeline, a jsonpath, a gh command that resolves {owner} from cwd); no committed fixture uses one, and a source that resolves only from a working directory is refused on purpose.",
+    "The regenerated fixtures have not been run against any agent; WP-024's result stands unchanged.",
+    "The remote pattern checks shape, not reachability; it refuses credentials in the authority but cannot see a token elsewhere."
   ]
 }

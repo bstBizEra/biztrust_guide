@@ -2,255 +2,115 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bstbizera.github.io/biztrust_guide/schema/resume.schema.json",
   "title": "RESUME.json",
-  "description": "The artifact a resuming agent reads. Sealed for WP-024 before any fixture existed. Every leaf declares which of the four categories it belongs to, because the categories carry different invalidation rules: observations expire on observation age, assertions on their own terms, computations on their inputs, and constants never.",
+  "description": "The artifact a resuming agent reads. Sealed for WP-024 at e37fa3b before any fixture existed; amended under NS-032 (issue #52 item 2) to 2.0.0 after WP-024 ran, with the nine fixtures regenerated against the amendment. The amendment adds static.repository and refuses unresolved observation sources; it does not touch resume_decision, next_action or any oracle. Every leaf declares which of the four categories it belongs to, because the categories carry different invalidation rules: observations expire on observation age, assertions on their own terms, computations on their inputs, and constants never.",
   "type": "object",
-  "required": [
-    "schema_version",
-    "source_sha",
-    "derived_at",
-    "static",
-    "observed",
-    "asserted",
-    "computed",
-    "declared_non_coverage"
-  ],
+  "required": ["schema_version", "source_sha", "derived_at", "static", "observed", "asserted", "computed", "declared_non_coverage"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {
-      "const": "1.0.0"
-    },
+    "schema_version": { "const": "2.0.0" },
     "source_sha": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{40}$",
+      "type": "string", "pattern": "^[0-9a-f]{40}$",
       "description": "The commit this state was derived from. An agent compares it against observed.main_sha; a mismatch makes the whole artifact stale regardless of any other field."
     },
-    "derived_at": {
-      "type": "string",
-      "format": "date-time"
-    },
+    "derived_at": { "type": "string", "format": "date-time" },
+
     "static": {
-      "type": "object",
-      "required": [
-        "project_id",
-        "deriver_policy_version",
-        "repository"
-      ],
+      "type": "object", "required": ["project_id", "deriver_policy_version", "repository"],
       "additionalProperties": false,
       "properties": {
-        "project_id": {
-          "type": "string"
-        },
-        "deriver_policy_version": {
-          "type": "string"
-        },
+        "project_id": { "type": "string" },
+        "deriver_policy_version": { "type": "string" },
         "repository": {
-          "type": "object",
+          "type": "object", "required": ["owner", "name", "remote"],
           "additionalProperties": false,
-          "required": [
-            "owner",
-            "name",
-            "remote"
-          ],
           "properties": {
-            "owner": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$"
-            },
-            "name": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[A-Za-z0-9._-]+$"
-            },
-            "remote": {
-              "type": "string",
-              "pattern": "^https://[^/\\s]+/[^/\\s]+/[^/\\s]+$"
-            }
+            "owner":  { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$" },
+            "name":   { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9._-]+$" },
+            "remote": { "type": "string", "pattern": "^https://[^/\\s@]+/[^/\\s]+/[^/\\s]+$" }
           },
-          "description": "Required since NS-032 (issue #52 item 2). Nine of nine WP-024 agents refused a bundle whose observation sources read GET /repos/:o/:r/... because it could not say which repository it described. A state artifact that cannot identify its subject is correctly refused."
+          "description": "Required since NS-032 (issue #52 item 2). Nine of nine WP-024 agents refused a bundle whose sources read GET /repos/:o/:r/... because it could not say which repository it described. Two rules JSON Schema cannot express are enforced by build.py beside these: remote ends in /owner/name, and every URL-shaped observation source references /owner/name."
         }
       },
       "description": "Never expires. Constants do not need an invalidation rule."
     },
+
     "observed": {
-      "type": "object",
-      "minProperties": 1,
-      "additionalProperties": {
-        "$ref": "#/$defs/observation"
-      },
+      "type": "object", "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/observation" },
       "description": "Facts read from git, the API or the filesystem. Each carries its own observation time and freshness, because one unavailable API call must not silently downgrade the rest."
     },
+
     "asserted": {
       "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/assertion"
-      },
+      "additionalProperties": { "$ref": "#/$defs/assertion" },
       "description": "Human judgement. Not derivable, and it rots differently: an assertion goes stale when the world it references moves, not when a clock runs out - which is why revoked_at exists alongside valid_until."
     },
+
     "computed": {
       "type": "object",
-      "required": [
-        "resume_decision",
-        "next_action",
-        "stop_conditions",
-        "freshness"
-      ],
+      "required": ["resume_decision", "next_action", "stop_conditions", "freshness"],
       "additionalProperties": false,
       "properties": {
-        "resume_decision": {
-          "enum": [
-            "CONTINUE",
-            "BLOCKED",
-            "WAIT_FOR_AUTHORITY",
-            "RECOVERY_REQUIRED",
-            "COMPLETE"
-          ]
-        },
+        "resume_decision": { "enum": ["CONTINUE", "BLOCKED", "WAIT_FOR_AUTHORITY", "RECOVERY_REQUIRED", "COMPLETE"] },
         "next_action": {
           "oneOf": [
-            {
-              "type": "null",
-              "description": "null means NONE_SAFE. There is no safe action."
-            },
-            {
-              "type": "object",
-              "required": [
-                "id",
-                "action",
-                "authority"
-              ],
-              "additionalProperties": false,
+            { "type": "null", "description": "null means NONE_SAFE. There is no safe action." },
+            { "type": "object", "required": ["id", "action", "authority"], "additionalProperties": false,
               "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "action": {
-                  "type": "string"
-                },
-                "authority": {
-                  "type": "string"
-                }
-              }
-            }
+                "id": { "type": "string" },
+                "action": { "type": "string" },
+                "authority": { "type": "string" }
+              } }
           ],
           "description": "Exactly one, or null. A list would let a reader choose, which is the failure this artifact exists to prevent."
         },
         "stop_conditions": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "code",
-              "detail"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "code": {
-                "type": "string",
-                "pattern": "^[A-Z][A-Z0-9_]{2,47}$"
-              },
-              "detail": {
-                "type": "string"
-              }
-            }
-          }
+          "items": { "type": "object", "required": ["code", "detail"], "additionalProperties": false,
+            "properties": { "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,47}$" },
+                            "detail": { "type": "string" } } }
         },
         "freshness": {
-          "enum": [
-            "CURRENT",
-            "STALE",
-            "UNKNOWN"
-          ],
+          "enum": ["CURRENT", "STALE", "UNKNOWN"],
           "description": "The WORST freshness among critical inputs, never an average. One UNKNOWN critical observation makes the artifact UNKNOWN."
         }
       }
     },
+
     "declared_non_coverage": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "string"
-      },
+      "type": "array", "minItems": 1, "items": { "type": "string" },
       "description": "What this artifact does not establish. Present so that absence of a stop condition is not read as absence of risk."
     }
   },
+
   "$defs": {
     "observation": {
       "type": "object",
-      "required": [
-        "value",
-        "observed_at",
-        "freshness",
-        "source"
-      ],
+      "required": ["value", "observed_at", "freshness", "source"],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "description": "null is permitted and means the observation could not be made. It must be paired with freshness UNKNOWN."
-        },
-        "observed_at": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date-time"
-        },
-        "freshness": {
-          "enum": [
-            "CURRENT",
-            "STALE",
-            "UNKNOWN"
-          ]
-        },
+        "value": { "description": "null is permitted and means the observation could not be made. It must be paired with freshness UNKNOWN." },
+        "observed_at": { "type": ["string", "null"], "format": "date-time" },
+        "freshness": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
         "source": {
-          "type": "string",
-          "description": "How it was obtained, fully RESOLVED: a command as run ('git rev-parse HEAD'), or a request with every path parameter filled ('GET https://api.github.com/repos/<owner>/<name>/pulls?state=open' with the placeholders replaced). An unexpanded template names no repository and no commit, so the observation cannot be re-run or checked - the defect that failed WP-024's control fixture. The pattern below is the rule build.py enforces; it reads it from here.",
-          "minLength": 1,
-          "not": {
-            "pattern": "(/:[A-Za-z_]|\\{[^}]*\\}|<[^>]*>)"
-          }
+          "type": "string", "minLength": 1,
+          "not": { "pattern": "(/:[A-Za-z_]|\\{[^}]*\\}|<[^>]*>)" },
+          "description": "How it was obtained, fully RESOLVED: a command as run ('git rev-parse HEAD'), or a request with every path parameter filled and naming the repository in static.repository. An unexpanded template names no repository and no commit, so the observation cannot be re-run or checked - the defect that failed WP-024's control fixture. A source that resolves only from a working directory (gh api repos/{owner}/{repo}) is not resolved. build.py reads this pattern from here and enforces it."
         }
       }
     },
     "assertion": {
       "type": "object",
-      "required": [
-        "value",
-        "issuer",
-        "effective_at",
-        "valid_until",
-        "revoked_at",
-        "evidence"
-      ],
+      "required": ["value", "issuer", "effective_at", "valid_until", "revoked_at", "evidence"],
       "additionalProperties": false,
       "properties": {
         "value": {},
-        "issuer": {
-          "type": "string",
-          "description": "Who made this claim. An assertion with no issuer cannot be revoked by anyone."
-        },
-        "effective_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "valid_until": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date-time",
-          "description": "null means it does not expire on a clock. It can still be revoked."
-        },
-        "revoked_at": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date-time"
-        },
-        "evidence": {
-          "type": "string"
-        }
+        "issuer": { "type": "string", "description": "Who made this claim. An assertion with no issuer cannot be revoked by anyone." },
+        "effective_at": { "type": "string", "format": "date-time" },
+        "valid_until": { "type": ["string", "null"], "format": "date-time",
+                         "description": "null means it does not expire on a clock. It can still be revoked." },
+        "revoked_at": { "type": ["string", "null"], "format": "date-time" },
+        "evidence": { "type": "string" }
       }
     }
   }

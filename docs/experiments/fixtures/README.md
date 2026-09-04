@@ -46,6 +46,16 @@ The decision spread — `RECOVERY_REQUIRED` ×4, `CONTINUE` ×2, and one each of
 Mandatory fixtures are **02, 04, 07, 08, 09**, matching the protocol. Failing any one fails
 the experiment regardless of the aggregate.
 
+## Regenerated under NS-032, after WP-024 ran
+
+Issue #52 item 2: `static.repository` was added and every observation source resolved against the
+real repository, so a bundle says what it describes. **The values are the sealed scenario's, not the
+live repository's.** The protocol grants the agent under test no network, and a checker with network
+would find fixture 01's issue state and fixture 03's labels contradicted by the real issue #2 — by
+design: a self-identifying bundle need not be currently true. The set WP-024 was scored against is at
+`e37fa3b`; `build.py --check` now also prints `SCHEMA=CONFORMANT` before `FIXTURES=CURRENT`, and
+refuses to write or certify a fixture that lacks its repository or carries an unresolved source.
+
 ## Regenerating
 
 ```bash

@@ -44,7 +44,7 @@ def asrt(value, issuer, effective="2026-09-03T00:00:00+07:00",
 
 def base(**over):
     d = {
-        "schema_version": "1.0.0",
+        "schema_version": "2.0.0",
         "source_sha": SEAL_SHA,
         "derived_at": EVAL,
         "static": {"project_id": "BIZTRUST-GUIDE", "deriver_policy_version": "0.1.0-fixture",
@@ -188,15 +188,27 @@ def digest(b: bytes) -> str:
 # ------------------------------------------------------- schema conformance
 def schema_rules() -> dict:
     """The item-2 rules, read FROM the schema so the declaration and this enforcement
-    are one thing. A schema nothing reads is a comment; #56 shipped 241 lines of one."""
+    are one thing. A schema nothing reads is a comment; #56 shipped 241 lines of one.
+
+    Everything the schema can say about identity is read here: the version constant,
+    the required keys, the closed key set, the three patterns, the source minimum.
+    Two rules JSON Schema cannot express are in violations() as code, and the schema's
+    own description names them so a reader of either file sees both."""
     s = json.loads(SCHEMA.read_text(encoding="utf-8"))
     static = s["properties"]["static"]
     repo = static["properties"]["repository"]
+    rp = repo["properties"]
     source = s["$defs"]["observation"]["properties"]["source"]
     return {
+        "schema_version": s["properties"]["schema_version"]["const"],
         "static_required": list(static["required"]),
         "repository_required": list(repo["required"]),
-        "remote_pattern": repo["properties"]["remote"]["pattern"],
+        "repository_keys": list(rp.keys()),
+        "repository_closed": repo.get("additionalProperties") is False,
+        "owner_pattern": rp["owner"]["pattern"],
+        "name_pattern": rp["name"]["pattern"],
+        "remote_pattern": rp["remote"]["pattern"],
+        "source_min_length": int(source.get("minLength", 0)),
         "unresolved_source": source["not"]["pattern"],
     }
 
@@ -204,38 +216,69 @@ def schema_rules() -> dict:
 def violations(state: dict, rules: dict) -> list[str]:
     """Every way a state fails the item-2 rules. Empty means conformant."""
     out: list[str] = []
+    if state.get("schema_version") != rules["schema_version"]:
+        out.append(f"schema_version {state.get('schema_version')!r} is not the schema's {rules['schema_version']!r}")
     static = state.get("static") if isinstance(state.get("static"), dict) else {}
     for key in rules["static_required"]:
         if key not in static:
             out.append(f"static.{key} missing")
     repo = static.get("repository")
+    owner = name = None
     if isinstance(repo, dict):
+        if rules["repository_closed"]:
+            for key in repo:
+                if key not in rules["repository_keys"]:
+                    out.append(f"static.repository.{key} is not a declared key")
         for key in rules["repository_required"]:
-            if not repo.get(key):
-                out.append(f"static.repository.{key} missing or empty")
-        if not re.search(rules["remote_pattern"], str(repo.get("remote", ""))):
-            out.append(f"static.repository.remote is not an https remote: {repo.get('remote')!r}")
+            if not isinstance(repo.get(key), str) or not repo.get(key):
+                out.append(f"static.repository.{key} missing or not a non-empty string")
+        owner, name, remote = repo.get("owner"), repo.get("name"), repo.get("remote")
+        if isinstance(owner, str) and not re.search(rules["owner_pattern"], owner):
+            out.append(f"static.repository.owner {owner!r} does not match the schema pattern")
+        if isinstance(name, str) and not re.search(rules["name_pattern"], name):
+            out.append(f"static.repository.name {name!r} does not match the schema pattern")
+        if isinstance(remote, str):
+            if not re.search(rules["remote_pattern"], remote):
+                out.append(f"static.repository.remote {remote!r} is not a plain https remote")
+            elif isinstance(owner, str) and isinstance(name, str) \
+                    and not remote.rstrip("/").endswith(f"/{owner}/{name}"):
+                # Cross-field, code-only: JSON Schema cannot say "ends in /owner/name".
+                out.append(f"static.repository.remote {remote!r} does not end in /{owner}/{name}")
     elif "repository" in static:
         out.append("static.repository is not an object")
     observed = state.get("observed") if isinstance(state.get("observed"), dict) else {}
     for key, ob in observed.items():
-        src = str((ob or {}).get("source", "")) if isinstance(ob, dict) else ""
-        if not src:
-            out.append(f"observed.{key}.source missing")
+        src = ob.get("source") if isinstance(ob, dict) else None
+        if not isinstance(src, str):
+            out.append(f"observed.{key}.source missing or not a string")
+        elif len(src) < rules["source_min_length"]:
+            out.append(f"observed.{key}.source is shorter than minLength {rules['source_min_length']}")
         elif re.search(rules["unresolved_source"], src):
             out.append(f"observed.{key}.source is an unresolved template: {src!r}")
+        elif "://" in src and isinstance(owner, str) and isinstance(name, str) \
+                and f"/{owner}/{name}" not in src:
+            # Cross-field, code-only: a lexical pattern cannot see $OWNER, OWNER/REPO or a
+            # different repository. A URL-shaped source must name THIS repository.
+            out.append(f"observed.{key}.source is a URL that does not reference /{owner}/{name}: {src!r}")
     return out
 
 
 def build(check: bool) -> int:
-    problems = []
     rules = schema_rules()
-    bad: list[str] = []
-    for slug, fn, honest in FIXTURES:
+    states = [(slug, fn(), honest) for slug, fn, honest in FIXTURES]
+    # Pass 1: every fixture is judged before any is written or certified. A single
+    # non-conformant fixture stops the run with nothing written. Judging per fixture
+    # inside the write loop wrote eight good fixtures before refusing the ninth and
+    # left the tree half-regenerated; a review found it, and this is the fix.
+    bad = [f"{slug}: {v}" for slug, state, _honest in states for v in violations(state, rules)]
+    if bad:
+        print("SCHEMA=VIOLATION\n  " + "\n  ".join(bad))
+        return 1
+    print(f"SCHEMA=CONFORMANT count={len(states)}")
+
+    problems = []
+    for slug, state, honest in states:
         d = HERE / slug
-        d.mkdir(exist_ok=True)
-        state = fn()
-        bad.extend(f"{slug}: {v}" for v in violations(state, rules))
         rj = (json.dumps(state, indent=2, sort_keys=True) + "\n").encode()
         html = render(slug, state).encode()
 
@@ -255,11 +298,11 @@ def build(check: bool) -> int:
                     "".join(f'  {k}:\n    bytes: {v["bytes"]}\n    sha256: "{v["sha256"]}"\n'
                             for k, v in man.items()))
 
-        if bad:
-            continue   # never write a non-conformant fixture; the verdict is printed below
         targets = {d / "RESUME.json": rj,
                    d / "control-room.html.frozen": html,
                    d / "manifest.yaml": manifest.encode()}
+        if not check:
+            d.mkdir(exist_ok=True)
         for path, content in targets.items():
             if check:
                 if not path.is_file() or path.read_bytes() != content:
@@ -267,12 +310,6 @@ def build(check: bool) -> int:
             else:
                 path.write_bytes(content)
 
-    if bad:
-        # Reported before the byte comparison and in BOTH modes: a generator that writes
-        # what the schema refuses is the defect, not a warning about one.
-        print("SCHEMA=VIOLATION\n  " + "\n  ".join(bad))
-        return 1
-    print(f"SCHEMA=CONFORMANT count={len(FIXTURES)}")
     if check:
         if problems:
             print("FIXTURES=STALE\n  " + "\n  ".join(problems))
@@ -281,7 +318,6 @@ def build(check: bool) -> int:
         return 0
     print(f"FIXTURES=WRITTEN count={len(FIXTURES)}")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(build("--check" in sys.argv))

@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "work_package_id": "BIZTRUST-GUIDE-WP-031",
-  "updated_at": "2026-09-04T15:26:43Z",
+  "updated_at": "2026-09-04T15:43:00Z",
   "actions": [
     {
       "id": "NS-033",
@@ -18,8 +18,7 @@
       "evidence_required": [
         "No dependency value is assigned in build.py's base() or otherwise inherited by a fixture it was not authored for",
         "Every fixture carries a positive and a negative test for its own edge",
-        "A test proving a dependency naming a non-existent observation key fails",
-        "build.py's schema_rules()/violations() extended to read the requires rule from the schema, so the declaration and the enforcement stay one thing"
+        "A test proving a dependency naming a non-existent observation key fails"
       ],
       "stop_conditions": [
         "One constant is assigned to more than one fixture - that is exactly what #57 reverted",

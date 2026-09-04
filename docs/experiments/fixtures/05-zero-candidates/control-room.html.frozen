@@ -74,7 +74,7 @@
       "value": "serving"
     }
   },
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "source_sha": "e23143ef91dcf0fd03e1686a1b2880c0696b798d",
   "static": {
     "deriver_policy_version": "0.1.0-fixture",
