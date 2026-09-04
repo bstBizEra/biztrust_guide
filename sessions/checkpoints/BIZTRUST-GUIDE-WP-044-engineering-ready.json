@@ -32,8 +32,7 @@
     "badf/current-state.json",
     "badf/next-actions.json",
     "badf/decision-log.jsonl",
-    "sessions/checkpoints/BIZTRUST-GUIDE-WP-044-engineering-ready.json",
-    "docs/superpowers/plans/2026-09-05-badf-schemas.md"
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-044-engineering-ready.json"
   ],
   "validation": [
     {
@@ -52,7 +51,7 @@
       "exit_code": 0
     },
     {
-      "command": "python .superpowers/sdd/2026-09-05-badf-schemas/scratch/test_badf_match_schemas_broken.py (errors() forced to return []; Task 2 Step 4 negative control)",
+      "command": "scratch copy of tests/test_checkpoints_match_schema.py with errors() returning []; a copy of tests/test_badf_match_schemas.py pointed at it; python -m unittest on that copy -> the 18 schema-control subtests fail; both copies deleted",
       "status": "FAIL",
       "exit_code": 1
     }
@@ -113,7 +112,7 @@
   },
   "declared_non_coverage": [
     "Evidence manifests (NS-008) and Work Package issues are not covered by these schemas or this checker.",
-    "The checker's semantics are calibrated against jsonschema 4.26.0, not proven equivalent to the JSON Schema 2020-12 specification.",
-    "This checkpoint is validated against schemas/session-checkpoint.schema.json; no test validates docs/superpowers/plans/2026-09-05-badf-schemas.md, the plan document itself."
+    "The checker's semantics are calibrated against jsonschema 4.26.0, not proven equivalent to the JSON Schema 2020-12 specification, and the jsonschema calibration did not assert format: date-time, since that install has no date-time checker.",
+    "The implementation plan this package was executed from is not in the tree; PR #90 and DEC-046 record the design and its two review-driven deviations."
   ]
 }

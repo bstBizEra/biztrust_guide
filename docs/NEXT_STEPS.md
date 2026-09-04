@@ -89,7 +89,7 @@ Assign accountable human owners for:
 
 The included validator covers the continuity baseline without external dependencies. The next controlled improvement should validate every checkpoint, handoff, Work Package, decision and evidence record against versioned JSON Schemas.
 
-- **Covered, dated 2026-09-05:** five record types now have a versioned 2020-12 schema and a stdlib check — session checkpoints and handoffs (`tests/test_checkpoints_match_schema.py`, WP-035), and `badf/current-state.json`, `badf/next-actions.json` and every decision-log entry (`tests/test_badf_match_schemas.py`, WP-044). The schemas describe the records as they stood; enums are closed only where `AGENTS.md` closes them. **Not covered:** evidence *manifests* (NS-008), and Work Package issues, which live on GitHub and not in this tree.
+- **Covered, dated 2026-09-04T21:18Z:** five record types now have a versioned 2020-12 schema and a stdlib check — session checkpoints and handoffs (`tests/test_checkpoints_match_schema.py`, WP-035), and `badf/current-state.json`, `badf/next-actions.json` and every decision-log entry (`tests/test_badf_match_schemas.py`, WP-044). The schemas describe the records as they stood; enums are closed only where `AGENTS.md` closes them. **Not covered:** evidence *manifests* (NS-008), and Work Package issues, which live on GitHub and not in this tree.
 
 ### NS-007: Bind Issues, branches and pull requests
 

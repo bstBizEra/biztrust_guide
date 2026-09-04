@@ -19,7 +19,10 @@
       "docs/NEXT_STEPS.md",
       "AGENTS.md",
       "README.md",
-      "badf/current-state.json, badf/next-actions.json, badf/decision-log.jsonl, sessions/checkpoints/BIZTRUST-GUIDE-WP-044-engineering-ready.json"
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "badf/decision-log.jsonl",
+      "sessions/checkpoints/BIZTRUST-GUIDE-WP-044-engineering-ready.json"
     ]
   },
   "source": {

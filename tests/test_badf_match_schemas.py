@@ -13,6 +13,7 @@ demands: a second hand-rolled validator would be a second thing to calibrate.
 
 CROSS-RECORD RULES the schemas cannot express, live in cross_record_problems():
   * exactly one action is primary, and current-state's primary_next_action_id names it;
+  * priorities run 1 to n, with no gap and no repeat;
   * next-actions' work_package_id equals current-state's active package id;
   * current-state's latest_checkpoint names a file that exists;
   * decision ids are unique and ascend line by line (the validator checks uniqueness;
@@ -187,51 +188,76 @@ class TestCrossRecordRules(Base):
         self.assertEqual([], cross_record_problems(self.state, self.actions, self.decisions))
 
     def test_cross_record_rules_can_fail(self) -> None:
-        """Each rule is exercised by a mutation that violates it."""
+        """Each rule is exercised by a mutation that violates it.
+
+        The two actions-list cases build a synthetic three-element actions list
+        (deep copies of the ledger's own actions[0], ids NS-001..NS-003, priorities
+        1..3, primary True/False/False) rather than indexing into the live ledger's
+        actions[1] and actions[2] - the live ledger's length is not this test's to
+        assume, and a legitimately shorter ledger would raise IndexError here.
+        """
+
+        def synthetic_actions(actions: dict) -> list[dict]:
+            template = actions["actions"][0]
+            out = []
+            for aid, priority, primary in (("NS-001", 1, True), ("NS-002", 2, False), ("NS-003", 3, False)):
+                item = json.loads(json.dumps(template))
+                item["id"] = aid
+                item["priority"] = priority
+                item["primary"] = primary
+                out.append(item)
+            return out
+
+        def two_primaries(state: dict, actions: dict, decisions: list) -> None:
+            actions["actions"] = synthetic_actions(actions)
+            actions["actions"][1] = {**actions["actions"][1], "primary": True}
+
+        def primary_id_mismatch(state: dict, actions: dict, decisions: list) -> None:
+            state["primary_next_action_id"] = "NS-999"
+
+        def priorities_out_of_order(state: dict, actions: dict, decisions: list) -> None:
+            actions["actions"] = synthetic_actions(actions)
+            actions["actions"][1] = {**actions["actions"][1], "priority": 3}
+            actions["actions"][2] = {**actions["actions"][2], "priority": 2}
+
+        def work_package_id_mismatch(state: dict, actions: dict, decisions: list) -> None:
+            actions["work_package_id"] = "WP-999"
+
+        def latest_checkpoint_missing(state: dict, actions: dict, decisions: list) -> None:
+            state["latest_checkpoint"] = "sessions/checkpoints/MISSING.json"
+
+        def duplicate_decision_id(state: dict, actions: dict, decisions: list) -> None:
+            if len(decisions) > 1:
+                decisions[-1] = (decisions[-1][0], {**decisions[-1][1], "id": decisions[-2][1]["id"]})
+
+        def decision_ids_reordered(state: dict, actions: dict, decisions: list) -> None:
+            if len(decisions) > 1:
+                last_id = decisions[-1][1]["id"]
+                second_last_id = decisions[-2][1]["id"]
+                decisions[-1] = (decisions[-1][0], {**decisions[-1][1], "id": second_last_id})
+                decisions[-2] = (decisions[-2][0], {**decisions[-2][1], "id": last_id})
+
         cases = {
-            "two primaries": lambda s, a: a["actions"].__setitem__(1, {**a["actions"][1], "primary": True}),
-            "primary id mismatch": lambda s, a: s.__setitem__("primary_next_action_id", "NS-999"),
-            "priorities [1, 3, 2]": lambda s, a: a["actions"].__setitem__(1, {**a["actions"][1], "priority": 3}) or a["actions"].__setitem__(2, {**a["actions"][2], "priority": 2}),
-            "work_package_id mismatch": lambda s, a: a.__setitem__("work_package_id", "WP-999"),
-            "latest_checkpoint missing": lambda s, a: s.__setitem__("latest_checkpoint", "sessions/checkpoints/MISSING.json"),
-            "duplicate decision id": lambda s, a: None,  # handled via decisions list
-            "decision ids reordered": lambda s, a: None,  # handled via decisions list
+            "two primaries": (two_primaries, "expected exactly one primary action"),
+            "primary id mismatch": (primary_id_mismatch, "is not the primary action"),
+            "priorities [1, 3, 2]": (priorities_out_of_order, "priorities are not 1..n"),
+            "work_package_id mismatch": (work_package_id_mismatch, "current-state names"),
+            "latest_checkpoint missing": (latest_checkpoint_missing, "does not exist"),
+            "duplicate decision id": (duplicate_decision_id, "duplicate decision id"),
+            "decision ids reordered": (decision_ids_reordered, "do not ascend line by line"),
         }
-        for name, mutate in cases.items():
+        for name, (mutate, key_phrase) in cases.items():
             with self.subTest(case=name):
                 state_copy = json.loads(json.dumps(self.state))
                 actions_copy = json.loads(json.dumps(self.actions))
-                decisions_copy = self.decisions[:]
+                decisions_copy = [(n, e) for n, e in self.decisions]
 
-                if name == "duplicate decision id":
-                    # Add a duplicate by modifying a copy
-                    decisions_copy = [(n, e) for n, e in self.decisions]
-                    if len(decisions_copy) > 1:
-                        decisions_copy[-1] = (decisions_copy[-1][0], {**decisions_copy[-1][1], "id": decisions_copy[-2][1]["id"]})
-                elif name == "decision ids reordered":
-                    # Reverse the last two decision ids
-                    decisions_copy = [(n, e) for n, e in self.decisions]
-                    if len(decisions_copy) > 1:
-                        last = decisions_copy[-1][1]["id"]
-                        second_last = decisions_copy[-2][1]["id"]
-                        decisions_copy[-1] = (decisions_copy[-1][0], {**decisions_copy[-1][1], "id": second_last})
-                        decisions_copy[-2] = (decisions_copy[-2][0], {**decisions_copy[-2][1], "id": last})
-                else:
-                    mutate(state_copy, actions_copy)
+                mutate(state_copy, actions_copy, decisions_copy)
 
                 problems = cross_record_problems(state_copy, actions_copy, decisions_copy)
-                key_phrases = {
-                    "two primaries": "expected exactly one primary action",
-                    "primary id mismatch": "is not the primary action",
-                    "priorities [1, 3, 2]": "priorities are not 1..n",
-                    "work_package_id mismatch": "current-state names",
-                    "latest_checkpoint missing": "does not exist",
-                    "duplicate decision id": "duplicate decision id",
-                    "decision ids reordered": "do not ascend line by line",
-                }
                 self.assertTrue(
-                    any(key_phrases[name] in p for p in problems),
-                    f"{name}: expected '{key_phrases[name]}' in {problems}"
+                    any(key_phrase in p for p in problems),
+                    f"{name}: expected '{key_phrase}' in {problems}"
                 )
 
 
