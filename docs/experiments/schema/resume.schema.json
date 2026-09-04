@@ -63,7 +63,7 @@
                 "requires": {
                   "type": "array", "minItems": 1, "uniqueItems": true,
                   "items": { "type": "string", "pattern": "^(observed|asserted)\\.[A-Za-z_][A-Za-z0-9_]*$" },
-                  "description": "The keys in observed and asserted that THIS ACTION consumes - what must be current and valid for the action to be safe to take. Required since NS-033 (issue #52 item 3): WP-024's fixture-08 agent had to infer from the action's wording which UNKNOWN observations mattered to it, and the artifact could not say. It names what the action consumes, not what the derivation consumed: computed.freshness is the derivation's worst input and is not rescoped by this list, so an action that needs none of the UNKNOWN inputs can be read as such without the derivation's verdict moving. Both categories are admitted because a grant and a work package live in asserted, and an edge that covered only observed would read as complete while naming one of four categories. One rule JSON Schema cannot express is enforced by build.py beside these: every entry resolves to an existing key of the named category."
+                  "description": "The keys in observed and asserted that THIS ACTION consumes - what must be current and valid for the action to be safe to take. Required since NS-033 (issue #52 item 3): WP-024's fixture-08 agent had to infer from the action's wording which UNKNOWN observations mattered to it, and the artifact could not say. It names what the action consumes, not what the derivation consumed: computed.freshness is the derivation's worst input and is not rescoped by this list, so an action that needs none of the UNKNOWN inputs can be read as such without the derivation's verdict moving. Both categories are admitted because a grant and a work package live in asserted, and an edge that covered only observed would read as complete while naming one of four categories. One rule JSON Schema cannot express is enforced by build.py beside these: every entry resolves to an existing key of the named category - which also refuses an entry with a trailing newline, since a Python regular expression's $ accepts one where an ECMA-262 engine would not."
                 }
               } }
           ],
@@ -77,7 +77,7 @@
         },
         "freshness": {
           "enum": ["CURRENT", "STALE", "UNKNOWN"],
-          "description": "The WORST freshness among the inputs the DERIVATION consumed to compute resume_decision and stop_conditions, never an average. One UNKNOWN such observation makes the artifact UNKNOWN. This is deliberately not scoped to next_action.requires: the derivation may have consumed an input the action does not need, and a reader is expected to notice when the two disagree."
+          "description": "The WORST freshness among the inputs the DERIVATION consumed to compute resume_decision and stop_conditions, never an average. One UNKNOWN such observation makes the artifact UNKNOWN. This is deliberately not scoped to next_action.requires: the derivation may have consumed an input the action does not need, and the two fields say different things about the same artifact."
         }
       }
     },

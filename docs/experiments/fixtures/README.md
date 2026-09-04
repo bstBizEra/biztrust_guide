@@ -65,8 +65,11 @@ no action and so no edge. Fixture 08 is the one to read: `ci_conclusion` and `pa
 `computed.freshness` is still `UNKNOWN` because that is the derivation's verdict, and the edge says the action
 needs neither — which is what the best WP-024 agent inferred from wording and can now read. **No sealed field
 moved:** `resume_decision`, `freshness`, `stop_conditions` and all nine `oracle.yaml` files are byte-identical
-to the `2.0.0` set, and a test pins them. The oracles have still not been re-authored; the `BLOCKED` on
-fixture 08 is now more doubtful on the artifact's face, and that is for the independent oracle author.
+to the `2.0.0` set, and a test pins them. The oracles have still not been re-authored. Read against oracle 08 this edge is not neutral: the oracle seals
+`only_permitted_next_action: NONE_SAFE` and a required stop code `CRITICAL_OBSERVATION_UNKNOWN`, both of which
+**are scored** under DEC-026 disposition 3, and the edge makes *NS-030 is safe to take* articulable from the
+artifact. That is a disagreement between a sealed scoring instrument and a regenerated artifact, on a scored
+axis, and it is for the independent oracle author — recorded here, not resolved.
 
 ## Regenerating
 

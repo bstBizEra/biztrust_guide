@@ -13,15 +13,19 @@ consumes; `computed.freshness` stays what the DERIVATION consumed; nothing seale
 So this module proves four things, each a way the last attempt went wrong:
 
   * no default is inherited     -> base() has no edge, and each fixture function's SOURCE
-                                    assigns one (or has no action). Agreement between
-                                    fixtures is expected - eight share one action - and is
-                                    not what disposition 5 forbids; inheritance is.
+                                    assigns one (or has no action) as a literal, with a
+                                    comment on it. A source test proves placement, not
+                                    authorship - a copied line passes it - and a mutant test
+                                    proves it refuses the #57 mechanism. Agreement between
+                                    fixtures is expected - eight share one action.
   * the edge is enforced         -> build.py reads the shape rules from the schema and
                                     refuses an entry that names no existing key, an empty
                                     edge, a repeated entry, a mis-shaped entry, or an
                                     action with no edge; the CLI exits 1 and writes nothing.
   * per fixture, both ways       -> nine positive tests name their fixture's exact edge;
-                                    nine negative tests break that fixture's edge.
+                                    nine negative tests each break the edge in a way that
+                                    only that fixture's observations make possible; generic
+                                    shape refusals live in one shared test.
   * nothing sealed moved         -> resume_decision, computed.freshness, stop_conditions
                                     and every oracle.yaml are byte-identical to the 2.0.0
                                     set, pinned here as literals and digests, not read
@@ -47,26 +51,28 @@ BUILD = ROOT / "docs/experiments/fixtures/build.py"
 SCHEMA = ROOT / "docs/experiments/schema/resume.schema.json"
 FIXTURES = ROOT / "docs/experiments/fixtures"
 
-EDGE = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
-
 # Per fixture: the edge its own function assigns (None = no action), and the sealed fields
-# as they were in the 2.0.0 set, before item 3. These are LITERALS on purpose: a test that
-# read them from git would pass against whatever git held.
+# as they were in the 2.0.0 set, before item 3. These are LITERALS on purpose, and the edge is
+# written out eight times rather than named once: a test that read them from git would pass
+# against whatever git held, and a shared constant here would be the one place an edit could
+# reach eight fixtures.
 EXPECTED: dict[str, dict] = {
-    "01-fresh":                  {"fn": "f1", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
-    "02-main-moved":             {"fn": "f2", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
-    "03-label-contradicts-merge": {"fn": "f3", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
-    "04-authority-expired":      {"fn": "f4", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
+    "01-fresh":                  {"fn": "f1", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
+    "02-main-moved":             {"fn": "f2", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
+    "03-label-contradicts-merge": {"fn": "f3", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
+    "04-authority-expired":      {"fn": "f4", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
     "05-zero-candidates":        {"fn": "f5", "requires": None, "decision": "COMPLETE", "freshness": "CURRENT"},
-    "06-multiple-candidates":    {"fn": "f6", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
-    "07-conflicting-inputs":     {"fn": "f7", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
-    "08-api-unavailable":        {"fn": "f8", "requires": EDGE, "decision": "CONTINUE", "freshness": "UNKNOWN"},
-    "09-tampered-bundle":        {"fn": "f9", "requires": EDGE, "decision": "CONTINUE", "freshness": "CURRENT"},
+    "06-multiple-candidates":    {"fn": "f6", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
+    "07-conflicting-inputs":     {"fn": "f7", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
+    "08-api-unavailable":        {"fn": "f8", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "UNKNOWN"},
+    "09-tampered-bundle":        {"fn": "f9", "requires": ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], "decision": "CONTINUE", "freshness": "CURRENT"},
 }
 # SHA-256 (first 16 hex) of each committed oracle.yaml blob at the 2.0.0 set (main at 83f0d5a),
 # taken with `git cat-file -p main:<path> | sha256sum` - from the blob, not a working copy, because
-# the first pins were computed on a CRLF checkout and matched nothing committed. An oracle that
-# changes under this package is a defect; the oracles wait for an independent author.
+# the first pins were computed on a CRLF checkout and matched nothing committed. The guard below
+# hashes the WORKING COPY, so it holds only because .gitattributes (WP-035) pins LF on checkout;
+# on a tree without that pin a CRLF checkout would fail it. An oracle that changes under this
+# package is a defect; the oracles wait for an independent author.
 ORACLE_SHA256 = {
     "01-fresh": "d04a4f264eae3b8b",
     "02-main-moved": "291d305531a667ad",
@@ -132,15 +138,37 @@ class TestNoInheritedDefault(unittest.TestCase):
                     self.assertNotIn('["requires"]', src)
                     self.assertIsNone(fn()["computed"]["next_action"])
                 else:
-                    self.assertIn('d["computed"]["next_action"]["requires"] =', src,
-                                  f"{spec['fn']} does not assign its own edge")
-                    self.assertIn("#", src, f"{spec['fn']} carries no comment saying why")
+                    lines = src.splitlines()
+                    hits = [i for i, line in enumerate(lines) if 'd["computed"]["next_action"]["requires"] =' in line]
+                    self.assertEqual(1, len(hits), f"{spec['fn']} does not assign its own edge exactly once")
+                    i = hits[0]
+                    near = lines[i] + (lines[i - 1] if i else "")
+                    self.assertIn("#", near, f"{spec['fn']}: no comment on the assignment or the line above it")
+                    self.assertNotIn("AUTHORING", src, f"{spec['fn']} names a shared constant")
 
     def test_the_source_guard_can_fail(self) -> None:
-        """A function whose edge arrived from base() would not contain the assignment."""
-        def inherited():
-            return self.build.base()
-        self.assertNotIn('["requires"]', inspect.getsource(inherited))
+        """Move f1's assignment into base() in a copy of build.py; the guard must go red.
+
+        A test that inspects source proves placement, not authorship: a one-liner copied
+        into eight functions passes it. What it does refuse is the #57 mechanism - one
+        assignment in base() reaching fixtures that never wrote it - and this proves it can.
+        """
+        import tempfile
+        src = BUILD.read_text(encoding="utf-8")
+        assignment = '    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]\n'
+        f1_start = src.index("def f1():"); f1_end = src.index("def f2():")
+        f1 = src[f1_start:f1_end]
+        self.assertIn(assignment, f1)
+        mutant = src[:f1_start] + f1.replace(assignment, "") + src[f1_end:]
+        mutant = mutant.replace("    for k, v in over.items():", assignment.replace("d[", "d[", 1) + "    for k, v in over.items():", 1)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "build.py"; path.write_text(mutant, encoding="utf-8")
+            spec = importlib.util.spec_from_file_location("wp024_build_mutant", path)
+            mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+            self.assertEqual(["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"], mod.f1()["computed"]["next_action"]["requires"],
+                             "the mutant must still produce the edge - inherited, not authored")
+            self.assertIn("requires", mod.base()["computed"]["next_action"], "the mutant's base() carries the edge")
+            self.assertNotIn('d["computed"]["next_action"]["requires"] =', inspect.getsource(mod.f1))
 
 
 class TestEnforcementReadsTheSchema(unittest.TestCase):
@@ -190,12 +218,20 @@ class TestEnforcementReadsTheSchema(unittest.TestCase):
             "output named":  (["computed.freshness"], "pattern"),
             "not a string":  ([3], "pattern"),
             "not a list":    ("observed.main_sha", "not an array"),
+            "trailing newline": (["observed.main_sha\n"], "not a key of"),
         }
         for label, (value, word) in cases.items():
             state = self.build.f1(); state["computed"]["next_action"]["requires"] = value
             with self.subTest(case=label):
                 found = self.build.violations(state, self.rules)
                 self.assertTrue(any(word in v for v in found), f"{label}: {found}")
+
+    def test_action_object_shape_is_enforced(self) -> None:
+        """The rules around the edge - closed key set, string properties - are read too."""
+        s = self.build.f1(); s["computed"]["next_action"]["extra"] = 1
+        self.assertTrue(any("not a declared key" in v for v in self.build.violations(s, self.rules)))
+        s = self.build.f1(); s["computed"]["next_action"]["id"] = 7
+        self.assertTrue(any("id is not a string" in v for v in self.build.violations(s, self.rules)))
 
     def test_entry_must_resolve_to_an_existing_key(self) -> None:
         for entry in ("observed.no_such_key", "asserted.no_such_grant",
@@ -260,9 +296,10 @@ class TestPerFixtureNegative(unittest.TestCase):
         found = self.build.violations(state, self.rules)
         self.assertTrue(any(word in v for v in found), f"{slug}: expected {word!r} in {found}")
 
-    def test_01_fresh_empty_edge(self) -> None:
-        s = self.build.f1(); s["computed"]["next_action"]["requires"] = []
-        self._refused(s, "fewer than", "01")
+    def test_01_fresh_edge_borrows_another_scenarios_observation(self) -> None:
+        # issue_2_linked_pr_merged exists only on fixture 03; the control does not observe it.
+        s = self.build.f1(); s["computed"]["next_action"]["requires"] = ["observed.issue_2_linked_pr_merged"]
+        self._refused(s, "not a key of observed", "01")
 
     def test_02_main_moved_edge_names_a_key_that_is_not_there(self) -> None:
         s = self.build.f2(); s["computed"]["next_action"]["requires"] = ["observed.main_sha_previous"]
@@ -272,9 +309,10 @@ class TestPerFixtureNegative(unittest.TestCase):
         s = self.build.f3(); s["computed"]["next_action"]["requires"] = ["asserted.issue_2_linked_pr_merged"]
         self._refused(s, "not a key of asserted", "03")
 
-    def test_04_authority_expired_edge_drops_to_a_bare_name(self) -> None:
-        s = self.build.f4(); s["computed"]["next_action"]["requires"] = ["documentation_authority"]
-        self._refused(s, "pattern", "04")
+    def test_04_authority_expired_grant_withdrawn_from_asserted(self) -> None:
+        # The expiring grant is the input this fixture turns on; if it is not asserted at all the edge cannot resolve.
+        s = self.build.f4(); del s["asserted"]["documentation_authority"]
+        self._refused(s, "not a key of asserted", "04")
 
     def test_05_zero_candidates_an_action_without_an_edge(self) -> None:
         s = self.build.f5()
@@ -285,17 +323,23 @@ class TestPerFixtureNegative(unittest.TestCase):
         s = self.build.f6(); del s["asserted"]["active_work_package"]
         self._refused(s, "not a key of asserted", "06")
 
-    def test_07_conflicting_inputs_edge_repeats(self) -> None:
-        s = self.build.f7(); s["computed"]["next_action"]["requires"] = EDGE + ["observed.main_sha"]
-        self._refused(s, "repeats", "07")
+    def test_07_conflicting_inputs_edge_names_the_count_under_another_name(self) -> None:
+        # This fixture observes open_pull_requests and all_work_merged; a near-miss name must not resolve.
+        s = self.build.f7(); s["computed"]["next_action"]["requires"] = ["observed.open_pull_request_count"]
+        self._refused(s, "not a key of observed", "07")
 
-    def test_08_api_unavailable_edge_names_an_output(self) -> None:
-        s = self.build.f8(); s["computed"]["next_action"]["requires"] = ["computed.freshness"]
-        self._refused(s, "pattern", "08")
+    def test_08_api_unavailable_edge_names_the_unavailable_call_by_a_wrong_key(self) -> None:
+        # ci_conclusion and pages_status exist (UNKNOWN); pages_build does not. An UNKNOWN key
+        # is a legal edge entry - the artifact may say the action needs an input nobody could read.
+        s = self.build.f8(); s["computed"]["next_action"]["requires"] = ["observed.ci_conclusion", "observed.pages_build"]
+        self._refused(s, "not a key of observed", "08")
+        s = self.build.f8(); s["computed"]["next_action"]["requires"] = ["observed.ci_conclusion"]
+        self.assertEqual([], self.build.violations(s, self.rules), "an UNKNOWN observation is still a key")
 
-    def test_09_tampered_bundle_edge_is_a_string(self) -> None:
-        s = self.build.f9(); s["computed"]["next_action"]["requires"] = "observed.main_sha"
-        self._refused(s, "not an array", "09")
+    def test_09_tampered_bundle_edge_names_the_manifest(self) -> None:
+        # The manifest is out of band and trusted; it is not an observation in the bundle.
+        s = self.build.f9(); s["computed"]["next_action"]["requires"] = ["observed.manifest_digest"]
+        self._refused(s, "not a key of observed", "09")
 
 
 class TestNothingSealedMoved(unittest.TestCase):

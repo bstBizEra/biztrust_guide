@@ -24,12 +24,12 @@ MOVED_SHA = "aa11bb22cc33dd44ee55ff6600778899aabbccdd"  # a later, different mai
 EVAL = "2026-09-04T09:00:00+07:00"
 
 SCHEMA = HERE.parent / "schema" / "resume.schema.json"
-# Action dependencies, added under NS-033 (issue #52 item 3, DEC-033 form iii). NOT set in base():
-# each fixture function assigns its own edge, and a test reads the source to prove it. The value
-# the eight NS-030 fixtures assign is the same because the action is the same - authoring against
-# a baseline, under a grant, inside a package - and one action consumes one set of inputs.
-# Agreement is expected; inheritance is what #57 reverted and what the source test forbids.
-AUTHORING_CONSUMES = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
+# Action dependencies, added under NS-033 (issue #52 item 3, DEC-033 form iii). There is NO shared
+# constant and nothing in base(): each fixture function below writes its own three-entry literal and
+# says why, so that no single edit can reach eight fixtures. The eight literals agree because the
+# action is the same - authoring against a baseline, under a grant, inside a package - and one action
+# consumes one set of inputs. The source test checks that each function carries its own assignment
+# and a comment on it; it cannot judge whether the comment is true. That judgement is the author's.
 
 # Repository identity, added under NS-032 (issue #52 item 2). Every observation source below is
 # RESOLVED against it; the schema refuses an unexpanded template, and this script enforces that
@@ -94,7 +94,7 @@ def base(**over):
 def f1():
     d = base()
     # Control. Local authoring reads the baseline, the grant and the package; nothing else.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
@@ -102,7 +102,7 @@ def f2():
     d = base()
     d["observed"]["main_sha"] = obs(MOVED_SHA)
     # The baseline this action authors against is exactly the input that moved.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d   # computed still says CONTINUE - true at derivation, false now
 
 
@@ -113,7 +113,7 @@ def f3():
     d["observed"]["issue_2_linked_pr_merged"] = obs(True, source=f"{API}/pulls/28")
     # Issue 2's label and its merged PR contradict each other; authoring fixtures reads neither.
     # The contradiction is a stop condition for the reader, not an input to this action.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
@@ -123,7 +123,7 @@ def f4():
         "GRANTED", "operator", until="2026-09-03T23:59:59+07:00",
         evidence="user request 2026-09-03, expiring")
     # The grant this action needs is the assertion that expires - named, so the reader need not infer it.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
@@ -140,7 +140,7 @@ def f6():
         ["BIZTRUST-GUIDE-WP-024", "BIZTRUST-GUIDE-WP-025"], "operator",
         evidence="two work packages asserted active; the repository permits one")
     # The package this action belongs to is the assertion that names two.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
@@ -149,7 +149,7 @@ def f7():
     d["observed"]["open_pull_requests"] = obs(3, source=f"{API}/pulls?state=open")
     d["observed"]["all_work_merged"] = obs(True, source=f"{API}/pulls?state=open")
     # Open-PR count and 'all merged' conflict; authoring on a branch consumes neither.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
@@ -162,13 +162,14 @@ def f8():
     d["computed"]["freshness"] = "UNKNOWN"   # the DERIVATION consumed ci and pages; the action does not
     # ci_conclusion and pages_status are UNKNOWN and are not in this edge: local authoring
     # needs neither. freshness stays UNKNOWN because it is the derivation's, not the action's.
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
 def f9():
     d = base()   # content is fine; the MANIFEST will disagree with it
-    d["computed"]["next_action"]["requires"] = list(AUTHORING_CONSUMES)
+    # The content is the control's, so the edge is the control's: baseline, grant, package.
+    d["computed"]["next_action"]["requires"] = ["observed.main_sha", "asserted.documentation_authority", "asserted.active_work_package"]
     return d
 
 
@@ -213,7 +214,7 @@ def digest(b: bytes) -> str:
 
 # ------------------------------------------------------- schema conformance
 def schema_rules() -> dict:
-    """The item-2 rules, read FROM the schema so the declaration and this enforcement
+    """The identity (item 2) and edge (item 3) rules, read FROM the schema so the declaration and this enforcement
     are one thing. A schema nothing reads is a comment; #56 shipped 241 lines of one.
 
     Everything the schema can say about identity is read here: the version constant,
@@ -229,6 +230,9 @@ def schema_rules() -> dict:
     requires = action["properties"]["requires"]
     return {
         "action_required": list(action["required"]),
+        "action_keys": list(action["properties"].keys()),
+        "action_closed": action.get("additionalProperties") is False,
+        "action_string_keys": [k for k, v in action["properties"].items() if v.get("type") == "string"],
         "requires_min_items": int(requires.get("minItems", 0)),
         "requires_unique": bool(requires.get("uniqueItems", False)),
         "requires_item_pattern": requires["items"]["pattern"],
@@ -246,7 +250,7 @@ def schema_rules() -> dict:
 
 
 def violations(state: dict, rules: dict) -> list[str]:
-    """Every way a state fails the item-2 rules. Empty means conformant."""
+    """Every way a state fails the identity and edge rules. Empty means conformant."""
     out: list[str] = []
     if state.get("schema_version") != rules["schema_version"]:
         out.append(f"schema_version {state.get('schema_version')!r} is not the schema's {rules['schema_version']!r}")
@@ -299,6 +303,13 @@ def violations(state: dict, rules: dict) -> list[str]:
         for key in rules["action_required"]:
             if key not in action:
                 out.append(f"computed.next_action.{key} missing")
+        if rules["action_closed"]:
+            for key in action:
+                if key not in rules["action_keys"]:
+                    out.append(f"computed.next_action.{key} is not a declared key")
+        for key in rules["action_string_keys"]:
+            if key in action and not isinstance(action[key], str):
+                out.append(f"computed.next_action.{key} is not a string")
         req = action.get("requires")
         if "requires" in action:
             if not isinstance(req, list):

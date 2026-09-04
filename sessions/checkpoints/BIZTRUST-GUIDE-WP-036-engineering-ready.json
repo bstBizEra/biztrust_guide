@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-036-001",
-  "created_at": "2026-09-04T17:45:20Z",
+  "created_at": "2026-09-04T18:00:51Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-036",
-  "state": "ENGINEERING_READY",
+  "state": "WAIT_FOR_AUTHORITY",
   "objective": "Issue #52 item 3 as DEC-033 form (iii): the action's edge, per fixture, enforced from the schema, with nothing sealed moved.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
@@ -12,17 +12,18 @@
   },
   "completed": [
     "resume.schema.json 3.0.0: computed.next_action.requires required on an action, minItems 1, uniqueItems, observed.*|asserted.* pattern; freshness described as the derivation's, not rescoped",
-    "build.py: AUTHORING_CONSUMES named once as a constant and assigned in each of eight fixture functions with a comment; base() carries no edge; schema_rules() reads the four shape rules; violations() applies them plus the code-only resolution rule",
+    "build.py: no shared constant and nothing in base(); each of eight fixture functions writes its own three-entry literal with a comment on it; schema_rules() reads the edge's shape rules and the action object's closed key set and string types; violations() applies them plus the code-only resolution rule",
     "Nine fixtures, frozen HTML and manifests regenerated; build.py --check certifies; all nine validate against the full schema under jsonschema 4.26.0 with zero errors",
-    "tests/test_resume_action_dependencies.py: declaration, no-inherited-default by source inspection, rules read from the schema and followed when changed, shape and resolution refusals, nine positive and nine negative per-fixture tests, byte-identical guard on sealed fields and oracle digests, CLI refusal in both modes",
+    "tests/test_resume_action_dependencies.py: declaration, no-inherited-default by source inspection (placement, not authorship - stated) plus a mutant test that moves the assignment into base() and shows the guard go red, rules read from the schema and followed when changed, shape and resolution refusals including the trailing-newline entry, nine positive and nine fixture-specific negative tests, byte-identical guard on sealed fields and oracle digests, CLI refusal in both modes",
     "tests/test_resume_schema_identity.py: the item-2-lands-alone guard retired; the resolved-sources control uses f1() because base() has no edge by design",
     "schema README, fixtures README and WP-024-results.md carry dated notes; nothing reinterpreted",
-    "NS-033 retired; NS-037 (issue #73, Plan outputs) primary"
+    "NS-033 stays primary and WAIT_FOR_AUTHORITY: the merge waits on the operator's recorded answer on issue #52; NS-037 (issue #73) proceeds in its own package",
+    "Fresh-context adversarial review (2026-09-04/05): one blocking finding - DEC-038 rested on a session instruction the charter says is not recorded authority - and six should-fix, all adopted; dispositions in DEC-038 as rewritten"
   ],
   "remaining": [
-    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
-    "Independent oracle authorship before any re-run - unchanged; fixture 08's sealed BLOCKED is now visibly at odds with its edge",
-    "NS-037 - issue #73 - in its own package after this one merges"
+    "The operator's one-line answer on issue #52; then re-verification of this head by the same reviewer and merge",
+    "Independent oracle authorship before any re-run; fixture 08's oracle and artifact now disagree on a scored axis",
+    "NS-037 - issue #73 - in its own package"
   ],
   "files_changed": [
     "docs/experiments/schema/resume.schema.json",
@@ -68,20 +69,21 @@
     },
     {
       "command": "first run of the oracle-digest guard FAILED on all nine: pins had been computed on a CRLF working copy; re-pinned from git cat-file blobs",
-      "status": "PASS",
+      "status": "FAIL",
       "exit_code": 1
     }
   ],
   "observations": [
     "The eight edges are identical because the action is identical; the source-inspection test is the guard against inheritance, and identical values are not evidence of it.",
-    "Fixture 08 after this package: ci_conclusion and pages_status UNKNOWN, computed.freshness UNKNOWN, edge naming neither. The sealed oracle says BLOCKED on the strength of those two; the artifact now says the action does not need them. Left for the independent oracle author.",
-    "Digests pinned from a working copy are digests of that copy's line endings. The first pins matched nothing committed; the second were taken from the blobs."
+    "Fixture 08 after this package: ci_conclusion and pages_status UNKNOWN, computed.freshness UNKNOWN, edge naming neither. Oracle 08 seals NONE_SAFE and the stop code CRITICAL_OBSERVATION_UNKNOWN - scored under disposition 3 - and the edge makes 'NS-030 is safe' articulable from the artifact. A disagreement on a scored axis, left for the independent oracle author.",
+    "Digests pinned from a working copy are digests of that copy's line endings. The first pins matched nothing committed; the second were taken from the blobs.",
+    "The source-inspection test proves each function contains the assignment and a comment; it cannot tell a copied line from an authored one. The mutant test proves it refuses the #57 mechanism, which is the guard disposition 5 asked for."
   ],
   "decisions": [
-    "DEC-038: the operator's instruction of 2026-09-05 read as the answer on asserted.* keys; form (iii) implemented; reversible by one revert"
+    "DEC-038 as rewritten: built as form (iii); merge held for the operator's recorded answer on issue #52; the session-instruction reading withdrawn as authority"
   ],
   "assumptions": [
-    "That 'proceed the rest of issue' answers the asserted.* question in the affirmative. Recorded in DEC-038 with the alternative reading, so the operator can reverse it by reverting this package."
+    "None about authority: the merge waits. One about content: that the authoring action consumes exactly the baseline, the grant and the package, recorded in each fixture function's comment."
   ],
   "blockers": [
     {
@@ -92,14 +94,14 @@
   ],
   "authority": {
     "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
-    "asserted_keys_in_requires": "GRANTED_BY_OPERATOR_INSTRUCTION_2026_09_05_SEE_DEC_038",
+    "asserted_keys_in_requires": "WAIT_FOR_AUTHORITY_ISSUE_52",
     "repository_publish": "GRANTED_VIA_PULL_REQUEST",
-    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_035",
+    "merge": "WAIT_FOR_AUTHORITY_ISSUE_52_THEN_REVIEWED_HEAD",
     "experiment_rerun": "NOT_GRANTED",
     "architecture_acceptance": "NOT_GRANTED",
     "production_platform_implementation": "NOT_GRANTED"
   },
-  "next_action_id": "NS-037",
+  "next_action_id": "NS-033",
   "recovery": {
     "first_safe_command": "python3 docs/experiments/fixtures/build.py --check",
     "read_first": [
@@ -109,6 +111,7 @@
       "docs/experiments/schema/resume.schema.json"
     ],
     "stop_if": [
+      "PR #74 is merged without an operator comment on issue #52 answering the asserted.* question",
       "An oracle file appears in a diff",
       "A requires value is assigned in base()",
       "resume_decision, computed.freshness or stop_conditions differ from the 2.0.0 set on any fixture",
