@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "work_package_id": "BIZTRUST-GUIDE-WP-040",
-  "updated_at": "2026-09-04T19:00:06Z",
+  "updated_at": "2026-09-04T19:10:14Z",
   "actions": [
     {
       "id": "NS-040",
@@ -18,7 +18,7 @@
         "An issue #78 comment per remaining item"
       ],
       "stop_conditions": [
-        "An agent supplies any of the four answers"
+        "An agent supplies either answer"
       ],
       "fallback": "Leave the catalogue's findings recorded, as they are now."
     },

@@ -95,10 +95,10 @@
         <tr><td><strong>Architecture contract</strong></td><td>What is committed, and at what version</td><td>It grows sections faster than it grows checks</td></tr>
         <tr><td><strong>Invariant register</strong></td><td>What must always hold, and how a violation is detected</td><td>An entry names no check that could catch its violation</td></tr>
         <tr><td><strong>Data ownership matrix</strong></td><td>Which system is authoritative for each datum</td><td>Two systems both claim a datum, or none does</td></tr>
-        <tr><td><strong>Bounded context map</strong><em>Named here and required by no exit-gate line.</em></td><td>Where the seams are</td><td>Seams are frozen before any code has crossed them</td></tr>
-        <tr><td><strong>State machines</strong><em>Named here and required by no exit-gate line.</em></td><td>Which transitions are legal, and who may cause them</td><td>One field is asked to carry several independent states</td></tr>
+        <tr><td><strong>Bounded context map</strong> <small>not gated</small></td><td>Where the seams are</td><td>Seams are frozen before any code has crossed them</td></tr>
+        <tr><td><strong>State machines</strong> <small>not gated</small></td><td>Which transitions are legal, and who may cause them</td><td>One field is asked to carry several independent states</td></tr>
         <tr><td><strong>API and event standard</strong></td><td>The shape of every interface before it is built</td><td>The normative version has no working tooling</td></tr>
-        <tr><td><strong>Integration boundaries</strong><em>Named here and required by no exit-gate line.</em></td><td>Where provider-specific logic is allowed to live</td><td>Vendor concepts leak into domain models</td></tr>
+        <tr><td><strong>Integration boundaries</strong> <small>not gated</small></td><td>Where provider-specific logic is allowed to live</td><td>Vendor concepts leak into domain models</td></tr>
         <tr><td><strong>Rollback strategy</strong></td><td>How the decision is reversed if it is wrong</td><td>It is written as "revert the commit" for a schema change</td></tr>
         <tr><td><strong>ADRs</strong></td><td>Why, and what was rejected</td><td>They are written for decisions nobody contested</td></tr>
         <tr><td><strong>Deferred-decision register</strong></td><td>What was deferred, and what would trigger revisiting it</td><td>A silent gap and a deliberate deferral read identically six months later</td></tr>

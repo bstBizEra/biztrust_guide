@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-040-001",
-  "created_at": "2026-09-04T19:00:06Z",
+  "created_at": "2026-09-04T19:10:14Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-040",
   "state": "ENGINEERING_READY",
   "objective": "Issue #78 items 1 and 3 documented without deciding; two stale schema-validation sentences corrected; NS-027 and NS-028 retired and the live half filed.",
@@ -11,13 +11,14 @@
     "baseline_commit": "0eab782ef593e310747b9a6ccf9a25a839b7e52e"
   },
   "completed": [
-    "stages/architect.html: the three ungated rows carry 'Named here and required by no exit-gate line', the catalogue's idiom; the gate is untouched",
-    "reference/artifact-catalogue.html: the nine-ungated paragraph says each page now marks them; the charter-artifacts sentence is precise about the hub's one mention and Plan's schema citation",
-    "index.html and stages/plan.html: 'nothing validates a checkpoint against that schema' corrected to name WP-035's test; the hub's count of nine checkpoints removed",
-    "badf/next-actions.json: NS-027 and NS-028 retired with reasons in DEC-042; NS-040 narrowed to items 2 and 4; issue #81 filed for Work Package traceability on Release and Operate"
+    "stages/architect.html: the three ungated rows are marked 'not gated' in the stage-page idiom plan.html uses; the gate is untouched",
+    "reference/artifact-catalogue.html: the nine-ungated paragraph says all nine are marked on their pages; the charter-artifacts sentence names the hub's two practice cards and its governance-card citation, and Plan's; the checkpoint row no longer says the continuity script validates it",
+    "index.html and stages/plan.html: 'nothing validates a checkpoint against that schema' corrected to name WP-035's test, with the three pre-enforcement records noted; the hub's count of nine checkpoints removed",
+    "badf/next-actions.json: NS-027 and NS-028 retired with reasons in DEC-042; NS-040 narrowed to items 2 and 4; issue #81 filed for Work Package traceability on Release and Operate",
+    "Fresh-context adversarial review (2026-09-05): six should-fix findings adopted - the italic note rendered run-together on a stage page; the hub names the handoff too; the catalogue's checkpoint row credited the continuity script; three provenance claims in DEC-042 named the wrong packages; 'a day' was under two hours; 'the tooling refused' was unattributed and the #52 relay comment still read as consent - withdrawn there"
   ],
   "remaining": [
-    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge",
     "NS-040 - issue #78 items 2 and 4 - waits on a human",
     "PR #74 - waits on the operator's own line on issue #52",
     "Issue #81 - a content decision, filed"
@@ -49,14 +50,14 @@
       "exit_code": 0
     },
     {
-      "command": "ls sessions/checkpoints | wc -l -> 21 (the hub said nine)",
+      "command": "ls sessions/checkpoints | wc -l -> 22 on this head, 21 on main (the hub said nine)",
       "status": "PASS",
       "exit_code": 0
     }
   ],
   "observations": [
     "The hub's 'nothing validates a checkpoint' sentence and Plan's twin were true when written and false since WP-035; neither was in WP-035's scope and nothing flagged them. A sentence about a mechanism goes stale exactly like a sentence about status.",
-    "The tooling refused to write state that treated the agent's relay of a session instruction as merge authority for PR #74. Recorded as agreement with the review, not as an obstacle."
+    "The Claude Code permission classifier - the harness, not any repository mechanism - denied the command that would have written state treating the agent's relay of a session instruction as merge authority for PR #74. Recorded as agreement with the review, and the relay comment on issue #52 is withdrawn as authority."
   ],
   "decisions": [
     "DEC-042: document the non-deciding halves of #78; correct the two sentences; retire NS-027/NS-028; PR #74 stays held"
@@ -104,7 +105,7 @@
     ]
   },
   "declared_non_coverage": [
-    "Whether every checkpoint on main records ENGINEERING_READY was not re-measured; the sentence kept says 'every session checkpoint' as plan.html already did.",
+    "Every checkpoint on main records ENGINEERING_READY (measured by the reviewer: 22 of 22); the sentence kept says 'every session checkpoint'.",
     "No test catches a sentence about a mechanism going stale; this class is found by reading."
   ]
 }
