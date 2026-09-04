@@ -89,9 +89,10 @@ been gutted, and that is the finding.
 KNOWN GAPS
 ==========
 
-operate.html and plan.html have NO outputs section. That is real, it is
-recorded in KNOWN_GAPS with a reason, and it is the single largest structural
-gap in the guide. It is registered rather than left red because this suite
+plan.html has NO outputs section. That is real, it is recorded in
+KNOWN_GAPS with a reason, and it is the largest structural gap left in the
+guide. operate.html had the same gap until WP-033 (issue #55) gave it one; its
+entry was deleted then, as the ratchet below demands. It is registered rather than left red because this suite
 shares one `unittest discover` run with two others, and a member that is red
 on a clean tree takes their signal down with it.
 
@@ -130,12 +131,6 @@ SPINE: tuple[tuple[str, tuple[str, ...], str], ...] = (
 # (page, spine key) -> why it is absent. Delete an entry the moment the page
 # gains the element; test_known_gaps_are_still_gaps will insist on it.
 KNOWN_GAPS: dict[tuple[str, str], str] = {
-    ("operate.html", "outputs"): (
-        "Operate is continuous and declares no per-cycle outputs table. Its "
-        "gate is 'Continuous exit to Learn' rather than a one-time exit. The "
-        "gap is genuine: eight gate items and five roles have no artifact "
-        "list to anchor to."
-    ),
     ("plan.html", "outputs"): (
         "Plan's artifact is the Work Package, described field-by-field under "
         "'Work Package anatomy' (#anatomy) instead of an outputs section. "
