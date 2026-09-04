@@ -1,34 +1,13 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-034",
-  "updated_at": "2026-09-04T17:06:31Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-035",
+  "updated_at": "2026-09-04T17:22:14Z",
   "actions": [
     {
-      "id": "NS-036",
+      "id": "NS-033",
       "primary": true,
       "priority": 1,
-      "owner_role": "documentation-engineer",
-      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
-      "action": "Issue #68: validate every file in sessions/checkpoints/ against schemas/session-checkpoint.schema.json from a stdlib-only test, repairing or re-recording the three that fail, and pin line endings with .gitattributes so a CRLF checkout passes the sealed-fixture tests.",
-      "prerequisites": [
-        "WP-034 merged - badf/ is edited by one package at a time"
-      ],
-      "evidence_required": [
-        "A test in tests/ that fails on a checkpoint missing a required field or carrying a string where the schema requires an object, proven by a negative control",
-        "The three checkpoints named in #68 validate, or are replaced by records that say what was there and why it changed; AGENTS.md section 6's note says what is now checked",
-        ".gitattributes present; python3 -m unittest discover -s tests and build.py --check pass in a fresh clone with core.autocrlf=true"
-      ],
-      "stop_conditions": [
-        "A checkpoint's recorded facts are altered rather than its shape",
-        "The schema is loosened to admit the malformed records"
-      ],
-      "fallback": "Leave #68 open with the count of failing checkpoints recorded in AGENTS.md section 6."
-    },
-    {
-      "id": "NS-033",
-      "primary": false,
-      "priority": 2,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
@@ -54,7 +33,7 @@
     {
       "id": "NS-024",
       "primary": false,
-      "priority": 3,
+      "priority": 2,
       "owner_role": "architecture-owner",
       "authority": "HUMAN_APPROVAL_REQUIRED",
       "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
@@ -72,7 +51,7 @@
     {
       "id": "NS-027",
       "primary": false,
-      "priority": 4,
+      "priority": 3,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Split the exit-gate rule into the four independent checks the audit recommended, including the INVERSE check, and key the outputs section on eyebrow text rather than id=produces.",
@@ -90,7 +69,7 @@
     {
       "id": "NS-028",
       "primary": false,
-      "priority": 5,
+      "priority": 4,
       "owner_role": "documentation-engineer",
       "authority": "AFTER_NS_026",
       "action": "Address the deferred structural findings: plan.html state model, Work Package traceability in release and operate.",

@@ -75,7 +75,7 @@ Create or update a checkpoint at every one of these boundaries:
 
 Every checkpoint must conform to `schemas/session-checkpoint.schema.json` and record:
 
-> Conformance is **not** mechanically checked. The validator confirms only that the schema files themselves parse and declare the right dialect — no checkpoint is validated against them.
+> Conformance is mechanically checked since WP-035 (issue #68): `tests/test_checkpoints_match_schema.py` validates every file in `sessions/checkpoints/` against the schema with a stdlib checker that refuses any schema keyword, or `format` value, it does not implement. Three checkpoints that predate enforcement — WP-017, WP-024, WP-026 — fail on shape and are registered there as a ratchet rather than rewritten; the registry may only shrink. `scripts/validate_continuity.py` itself still confirms only that the schema files parse and declare the right dialect.
 
 
 - work package and state;
