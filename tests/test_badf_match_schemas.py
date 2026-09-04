@@ -11,14 +11,14 @@ ONE CHECKER. This module loads errors() and the keyword-coverage guard from
 tests/test_checkpoints_match_schema.py by path, exactly as that module's docstring
 demands: a second hand-rolled validator would be a second thing to calibrate.
 
-CROSS-RECORD RULES the schemas cannot express, enforced here:
+CROSS-RECORD RULES the schemas cannot express, live in cross_record_problems():
   * exactly one action is primary, and current-state's primary_next_action_id names it;
   * next-actions' work_package_id equals current-state's active package id;
   * current-state's latest_checkpoint names a file that exists;
   * decision ids are unique and ascend line by line (the validator checks uniqueness;
     ascent is new here).
 
-Negative controls mutate in-memory copies; nothing here writes to the tree.
+Negative controls mutate in-memory copies against cross_record_problems; nothing here writes to the tree.
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -27,7 +27,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import re
 import unittest
 from pathlib import Path
 
@@ -61,6 +60,30 @@ def decision_lines() -> list[tuple[int, dict]]:
     for number, line in enumerate(RECORDS["decision-log"].read_text(encoding="utf-8").splitlines(), 1):
         if line.strip():
             out.append((number, json.loads(line)))
+    return out
+
+
+def cross_record_problems(state: dict, actions: dict, decisions: list[tuple[int, dict]]) -> list[str]:
+    """The rules JSON Schema cannot express, as 'reason' strings. Empty means consistent."""
+    out: list[str] = []
+    primaries = [a["id"] for a in actions["actions"] if a["primary"]]
+    if len(primaries) != 1:
+        out.append(f"expected exactly one primary action, found {primaries}")
+    elif primaries[0] != state["primary_next_action_id"]:
+        out.append(f"primary_next_action_id {state['primary_next_action_id']!r} is not the primary action {primaries[0]!r}")
+    priorities = [a["priority"] for a in actions["actions"]]
+    if priorities != list(range(1, len(priorities) + 1)):
+        out.append(f"priorities are not 1..n: {priorities}")
+    if state["active_work_package"]["id"] != actions["work_package_id"]:
+        out.append(f"current-state names {state['active_work_package']['id']}, next-actions names {actions['work_package_id']}")
+    if not (ROOT / state["latest_checkpoint"]).is_file():
+        out.append(f"latest_checkpoint {state['latest_checkpoint']!r} does not exist")
+    ids = [entry["id"] for _, entry in decisions]
+    if len(ids) != len(set(ids)):
+        out.append("duplicate decision id")
+    numbers = [int(i.split("-")[1]) for i in ids]
+    if numbers != sorted(numbers):
+        out.append("decision ids do not ascend line by line")
     return out
 
 
@@ -159,33 +182,57 @@ class TestChecksCanFail(Base):
 
 
 class TestCrossRecordRules(Base):
-    def test_exactly_one_primary_and_state_names_it(self) -> None:
-        primaries = [a["id"] for a in self.actions["actions"] if a["primary"]]
-        self.assertEqual(1, len(primaries), f"primary actions: {primaries}")
-        self.assertEqual(primaries[0], self.state["primary_next_action_id"])
-
-    def test_priorities_are_one_to_n(self) -> None:
-        self.assertEqual(list(range(1, len(self.actions["actions"]) + 1)), [a["priority"] for a in self.actions["actions"]])
-
-    def test_state_and_actions_name_the_same_package(self) -> None:
-        self.assertEqual(self.state["active_work_package"]["id"], self.actions["work_package_id"])
-
-    def test_latest_checkpoint_exists(self) -> None:
-        self.assertTrue((ROOT / self.state["latest_checkpoint"]).is_file(), self.state["latest_checkpoint"])
-
-    def test_decision_ids_are_unique_and_ascend(self) -> None:
-        ids = [entry["id"] for _, entry in self.decisions]
-        self.assertEqual(len(ids), len(set(ids)), "duplicate decision id")
-        numbers = [int(i.split("-")[1]) for i in ids]
-        self.assertEqual(numbers, sorted(numbers), "decision ids must ascend line by line; append, never insert")
+    def test_records_are_consistent(self) -> None:
+        """All cross-record rules pass on real data."""
+        self.assertEqual([], cross_record_problems(self.state, self.actions, self.decisions))
 
     def test_cross_record_rules_can_fail(self) -> None:
-        actions = json.loads(json.dumps(self.actions))
-        actions["actions"][0]["primary"] = not actions["actions"][0]["primary"]
-        primaries = [a["id"] for a in actions["actions"] if a["primary"]]
-        self.assertNotEqual(1, len(primaries))
-        numbers = [45, 44]
-        self.assertNotEqual(numbers, sorted(numbers))
+        """Each rule is exercised by a mutation that violates it."""
+        cases = {
+            "two primaries": lambda s, a: a["actions"].__setitem__(1, {**a["actions"][1], "primary": True}),
+            "primary id mismatch": lambda s, a: s.__setitem__("primary_next_action_id", "NS-999"),
+            "priorities [1, 3, 2]": lambda s, a: a["actions"].__setitem__(1, {**a["actions"][1], "priority": 3}) or a["actions"].__setitem__(2, {**a["actions"][2], "priority": 2}),
+            "work_package_id mismatch": lambda s, a: a.__setitem__("work_package_id", "WP-999"),
+            "latest_checkpoint missing": lambda s, a: s.__setitem__("latest_checkpoint", "sessions/checkpoints/MISSING.json"),
+            "duplicate decision id": lambda s, a: None,  # handled via decisions list
+            "decision ids reordered": lambda s, a: None,  # handled via decisions list
+        }
+        for name, mutate in cases.items():
+            with self.subTest(case=name):
+                state_copy = json.loads(json.dumps(self.state))
+                actions_copy = json.loads(json.dumps(self.actions))
+                decisions_copy = self.decisions[:]
+
+                if name == "duplicate decision id":
+                    # Add a duplicate by modifying a copy
+                    decisions_copy = [(n, e) for n, e in self.decisions]
+                    if len(decisions_copy) > 1:
+                        decisions_copy[-1] = (decisions_copy[-1][0], {**decisions_copy[-1][1], "id": decisions_copy[-2][1]["id"]})
+                elif name == "decision ids reordered":
+                    # Reverse the last two decision ids
+                    decisions_copy = [(n, e) for n, e in self.decisions]
+                    if len(decisions_copy) > 1:
+                        last = decisions_copy[-1][1]["id"]
+                        second_last = decisions_copy[-2][1]["id"]
+                        decisions_copy[-1] = (decisions_copy[-1][0], {**decisions_copy[-1][1], "id": second_last})
+                        decisions_copy[-2] = (decisions_copy[-2][0], {**decisions_copy[-2][1], "id": last})
+                else:
+                    mutate(state_copy, actions_copy)
+
+                problems = cross_record_problems(state_copy, actions_copy, decisions_copy)
+                key_phrases = {
+                    "two primaries": "expected exactly one primary action",
+                    "primary id mismatch": "is not the primary action",
+                    "priorities [1, 3, 2]": "priorities are not 1..n",
+                    "work_package_id mismatch": "current-state names",
+                    "latest_checkpoint missing": "does not exist",
+                    "duplicate decision id": "duplicate decision id",
+                    "decision ids reordered": "do not ascend line by line",
+                }
+                self.assertTrue(
+                    any(key_phrases[name] in p for p in problems),
+                    f"{name}: expected '{key_phrases[name]}' in {problems}"
+                )
 
 
 if __name__ == "__main__":
