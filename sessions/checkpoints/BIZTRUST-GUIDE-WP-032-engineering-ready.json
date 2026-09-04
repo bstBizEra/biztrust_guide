@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-032-001",
-  "created_at": "2026-09-04T16:19:28Z",
+  "created_at": "2026-09-04T16:25:04Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-032",
   "state": "ENGINEERING_READY",
   "objective": "Close the three documentation findings WP-030 filed: #61 README deployment claim, #62 README repository table, #63 Build page branch types.",
@@ -15,10 +15,11 @@
     "README.md: reference/ row added in the shape of the stages/ and phases/ rows; index.html row describes the hub as linking the stage and phase manuals - measured, the hub links no reference page - with no count",
     "stages/build.html: branch type defined by reference to the commit-type list; revert added to the commit-type list with its one permitted use; examples include a docs/ branch",
     "NS-033 redesigned as form (iii) after fresh-context review and queued behind NS-034; its unsatisfiable stop condition retired for a mechanical one (DEC-033); NS-034 for issue #55 is primary",
-    "Fresh-context adversarial review (2026-09-04): five should-fix findings, all fixed on the branch - README line 9 presupposition, deployments status semantics, undated serving claim in known_divergence, DEC-032's wrong provenance (#41 for #43), DEC-033's missed third form; dispositions in DEC-032 and DEC-033"
+    "Fresh-context adversarial review (2026-09-04): five should-fix findings, all fixed on the branch - README line 9 presupposition, deployments status semantics, undated serving claim in known_divergence, DEC-032's wrong provenance (#41 for #43), DEC-033's missed third form; dispositions in DEC-032 and DEC-033",
+    "Second review pass (2026-09-04): four should-fix findings, all fixed on the branch - deployment status ordering in the README, NS-033's stop condition attributed to WP-029 not WP-031, the asserted.* widening recorded as a departure from DEC-026 disposition 5 for the operator to confirm, the authority for item 3 cited as disposition 5 rather than an unrecorded instruction; PR body brought into line with the rewritten DEC-033"
   ],
   "remaining": [
-    "Re-verification of the fixed head by the same reviewer, then merge of that head",
+    "Merge of this head after the review's findings are confirmed fixed",
     "NS-034 - issue #55 - in its own package after this one merges",
     "NS-033 - form (iii), in its own package after NS-034",
     "Findings noticed and not fixed, filed: #66 (catalogue Build-row note; LIVE_PREVIEW.md line 5) and a second issue from the review (three earlier checkpoints fail the checkpoint schema; no .gitattributes pins LF)"

@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "work_package_id": "BIZTRUST-GUIDE-WP-032",
-  "updated_at": "2026-09-04T16:19:28Z",
+  "updated_at": "2026-09-04T16:25:04Z",
   "actions": [
     {
       "id": "NS-034",
@@ -36,7 +36,8 @@
       "prerequisites": [
         "NS-034 merged - badf/ is edited by one package at a time",
         "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing key, each fixture carries positive and negative tests for its own edge",
-        "DEC-033: requires may name asserted.* as well as observed.* keys (the #57 review's finding that an observed-only edge reads as complete while covering one of four categories); freshness is not rescoped to requires"
+        "DEC-033: requires may name asserted.* as well as observed.* keys - a recorded departure from the letter of DEC-026 disposition 5 ('an existing observation'), which the operator is asked to confirm or refuse on issue #52 before this action starts; freshness is not rescoped to requires",
+        "Schema amendment to 3.0.0: computed.next_action is additionalProperties false, so requires is a backward-incompatible addition that regenerates all nine fixtures, frozen HTML and manifests"
       ],
       "evidence_required": [
         "No requires value is assigned in build.py's base() or otherwise inherited; a test reads each fixture function's source and requires an explicit assignment in every function whose next_action is not null",

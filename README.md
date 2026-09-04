@@ -103,7 +103,7 @@ The guide is nine stage manuals, five phase manuals and two reference pages, plu
 Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph asserted a 404 five minutes after the first deployment had succeeded, then stood for a day. Read deployment state from the two places it actually lives:
 
 - the [Pages workflow runs](https://github.com/bstBizEra/biztrust_guide/actions/workflows/pages.yml) — the run bound to the current `main` head is the evidence that the head was built, validated and uploaded;
-- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the newest entry whose statuses (`/deployments/{id}/statuses`) end in `success` is the commit the site is serving; a failed newer deployment leaves the previous one live. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
+- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the entry whose latest status (`/deployments/{id}/statuses`, newest first) is `success` is the commit the site is serving; superseded deployments read `inactive`, and a failed newer deployment leaves the previous one live. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
 
 The workflow stages every tracked `*.html` — including the `stages/`, `phases/` and `reference/` subtrees — not only the repository root.
 
