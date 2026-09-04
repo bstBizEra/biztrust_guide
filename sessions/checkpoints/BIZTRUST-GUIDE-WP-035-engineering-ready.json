@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-035-001",
+  "created_at": "2026-09-04T17:11:01Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-035",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #68: checkpoints validated against their schema by a stdlib test with a shrinking registry for the three pre-enforcement records; LF pinned by .gitattributes.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-035-checkpoint-schema-and-eol",
+    "baseline_commit": "a8624e145aedb2d4027f623a102eb214a1248e0c"
+  },
+  "completed": [
+    "tests/test_checkpoints_match_schema.py: stdlib checker for the subset both schemas use; coverage test fails on any unimplemented keyword; ten negative controls; every unregistered checkpoint validates; LEGACY registry of three, each pinned to its failing paths, membership pinned to those three names; handoffs validated if sessions/handoffs/ ever exists",
+    ".gitattributes: text=auto eol=lf, *.png binary; git add --renormalize changed no tracked file",
+    "AGENTS.md section 6 note and README enforcement table say what is now checked and what still is not",
+    "NS-036 retired; NS-033 primary and WAIT_FOR_AUTHORITY - the last executable action is done"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "NS-033 - after the operator answers the asserted.* question on issue #52"
+  ],
+  "files_changed": [
+    "tests/test_checkpoints_match_schema.py",
+    ".gitattributes",
+    "AGENTS.md",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-035-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests -> OK (skipped=1: no sessions/handoffs/)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "calibration: for all sixteen checkpoints, the checker's failing (file, json-path) set equals jsonschema 4.26.0 Draft202012Validator's with FormatChecker -> 0 mismatches",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git add --renormalize . after adding .gitattributes -> no tracked file changed",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git -c core.autocrlf=true clone <branch> into scratch; ls-files --eol -> w/lf attr/text=auto eol=lf; unittest OK; build.py --check SCHEMA=CONFORMANT FIXTURES=CURRENT; validator PASS",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "Before this package the same fresh clone with core.autocrlf=true failed test_the_committed_tree_is_certified and test_committed_fixtures_match_their_source and listed all 27 fixture files STALE (checkpoint WP-032, observation 0).",
+    "WP-017's blocker is also a string, not only its validation entries; #68 named only the validation shape. Registered with its four failing paths.",
+    "templates/session-checkpoint.json is not validated: its placeholders fail the patterns by design. templates/handoff.json likewise."
+  ],
+  "decisions": [
+    "DEC-036: hand-rolled checker that refuses unknown keywords; registry not repair; LF pinned"
+  ],
+  "assumptions": [
+    "That the schema subset the checker implements is the whole contract: the coverage test enforces this for the two schema files as they stand, and would fail on the first keyword outside the set."
+  ],
+  "blockers": [
+    {
+      "code": "ASSERTED_KEYS_QUESTION_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Answer on issue #52; NS-033 waits."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_034",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-033",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/68"
+    ],
+    "stop_if": [
+      "A checkpoint written after WP-035 is added to LEGACY",
+      "A schema is loosened so a malformed record validates",
+      ".gitattributes is removed or eol changed"
+    ]
+  },
+  "declared_non_coverage": [
+    "The checker implements a subset of JSON Schema; anything outside it fails loudly rather than being enforced, but the subset's semantics were calibrated against jsonschema on sixteen documents and ten mutants, not proven.",
+    "Handoff records: none exist, so the handoff schema check has never run against a real document.",
+    "The CRLF proof was one fresh clone on one Windows machine."
+  ]
+}
