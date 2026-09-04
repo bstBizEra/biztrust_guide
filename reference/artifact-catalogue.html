@@ -49,7 +49,7 @@ td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-
 <main id="main">
 <section id="catalogue-intro" data-search="artifact catalogue path format producing role accepting role exit gate">
   <div class="section-heading"><span>REF</span><div><p>Reference &middot; not a stage</p><h2>Artifact catalogue</h2></div></div>
-  <p class="lede">The nine stage manuals name 63 artifacts, 55 of them required at an exit gate. Until this page existed none of them had a stated format or a stated location, so &ldquo;hand over the constraint register&rdquo; was an instruction two engineers could satisfy in two incompatible ways and both be right.</p>
+  <p class="lede">The nine stage manuals name 63 artifacts, 54 of them required at an exit gate. Until this page existed none of them had a stated format or a stated location, so &ldquo;hand over the constraint register&rdquo; was an instruction two engineers could satisfy in two incompatible ways and both be right.</p>
   <p class="section-intro">This table is a lookup, not guidance. It restates no rule: for what an artifact must contain and why, follow the stage link in the first column. What it adds is the four facts a gate condition needs before it can be checked at all &mdash; what shape the thing is, where it goes, who writes it, and who accepts it.</p>
 
   <div class="invariant">
@@ -117,7 +117,7 @@ td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-
         <tr><td><small>Architect</small></td><td><strong>Integration boundaries</strong><em>No exit-gate line names it.</em></td><td>Specification of where provider-specific logic may live</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td><small>not gated</small></td></tr>
         <tr><td><small>Architect</small></td><td><strong>Rollback strategy</strong></td><td>Prose: how the decision is reversed, in terms the change permits</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
         <tr><td><small>Architect</small></td><td><strong>ADRs</strong><em>Whether one is owed at all is a function of the risk tier.</em></td><td>One record per decision: context, decision, alternatives genuinely available</td><td><code>docs/adr/</code><br><small>target layout &mdash; no file exists</small></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
-        <tr><td><small>Architect</small></td><td><strong>Deferred-decision register</strong><em>Gated but absent from the outputs table &mdash; the inverse of the three rows above.</em></td><td>Register: each deferral and its revisit trigger</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
+        <tr><td><small>Architect</small></td><td><strong>Deferred-decision register</strong><em>Gated and, until WP-038, absent from the outputs table &mdash; the inverse of Architect&rsquo;s three ungated rows.</em></td><td>Register: each deferral and its revisit trigger</td><td><strong class="undef">NOT YET DEFINED</strong></td><td>Architect</td><td>Accepting authority</td><td>Architect §08</td></tr>
         <tr class="stage-break"><td colspan="7">Plan &mdash; <a href="../stages/plan.html">plan.html</a></td></tr>
         <tr><td><small>Plan</small></td><td><strong>Work Package</strong><em>The form carries nine of the eleven fields. Dependencies and the primary next action are not on it.</em></td><td>Eleven required fields; a package missing any of them is a draft</td><td><code>.github/ISSUE_TEMPLATE/work-package.yml</code></td><td>Planner</td><td>Authorizing role — grants execution</td><td>Plan §09</td></tr>
         <tr><td><small>Plan</small></td><td><strong>Authority record</strong><em>Target layout also assigns <code>docs/decisions/</code> to human authority records.</em></td><td>Granted actions, withheld actions, expiry, reserved acts</td><td><code>.github/ISSUE_TEMPLATE/work-package.yml — field <code>authority</code></code></td><td>Authorizing role</td><td>Authorizing role</td><td>Plan §09</td></tr>
@@ -170,10 +170,10 @@ td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-
   <div class="section-heading"><span>03</span><div><p>What the table makes visible</p><h2>Six things that only show up once the rows are side by side</h2></div></div>
   <div class="split">
     <div>
-      <h3>Eight artifacts are named and never gated</h3>
-      <p class="section-intro">Architect&rsquo;s bounded context map, state machines and integration boundaries appear in its outputs table and in no exit-gate condition. Five Operate artifacts &mdash; recovery objectives, capacity forecast, dependency inventory, secret rotation and the disclosure route &mdash; are named in the body and required by nothing. Producing none of them fails no check.</p>
-      <h3>One gate condition has no artifact behind it</h3>
-      <p class="section-intro">Architect&rsquo;s gate requires that &ldquo;deferred decisions are written down with their revisit triggers&rdquo;, but the outputs table lists no deferred-decision register. The condition is gated and the thing it gates is unnamed &mdash; the exact inverse of the three rows above it.</p>
+      <h3>Nine artifacts are named and never gated</h3>
+      <p class="section-intro">Architect&rsquo;s bounded context map, state machines and integration boundaries appear in its outputs table and in no exit-gate condition. Five Operate artifacts &mdash; recovery objectives, capacity forecast, dependency inventory, secret rotation and the disclosure route &mdash; are named in the body and required by nothing. Plan&rsquo;s machine-readable package state joined them under WP-037: named in its outputs section, required by its Package states section, and by no gate line. Producing none of the nine fails no check.</p>
+      <h3>One gate condition had no artifact behind it</h3>
+      <p class="section-intro">Architect&rsquo;s gate requires that &ldquo;deferred decisions are written down with their revisit triggers&rdquo;, and until WP-038 its outputs table listed no deferred-decision register: the condition was gated and the thing it gated was unnamed &mdash; the exact inverse of the three rows above it. The table now names it, in the words its own freeze section uses.</p>
     </div>
     <div>
       <h3>Two stages once produced artifacts through no outputs section</h3>
