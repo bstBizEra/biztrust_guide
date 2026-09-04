@@ -17,7 +17,8 @@
     "Wrote tests/test_phase_pages.py: epic and gate parity with the plan, spine presence by eyebrow, checkboxed gates, links to the track and the hub; five negative controls run by hand",
     "Extended tests/test_gate_namespaces.py to scan phases/ - it caught two bare identifiers in overview.html before commit",
     "Linked the track from the hub's #lifecycle, #p0 and #roadmap without renumbering; added the phases/ row to README",
-    "Measured phases x stages similarity with the detector's own functions; moved the one restated stop condition to a single home on overview.html"
+    "Measured phases x stages similarity with the detector's own functions; moved the one restated stop condition to a single home on overview.html",
+    "Fresh-context adversarial review before merge (2026-09-04): thirteen findings, all fixed on the branch except two recorded as not adopted - DEC-029"
   ],
   "remaining": [
     "Human merge of PR #58 (WP-029), then of this package's pull request - this branch is stacked on #58",
@@ -73,7 +74,7 @@
       "exit_code": 0
     },
     {
-      "command": "gh repo view over the ten upstream repositories cited on overview.html",
+      "command": "gh repo view over the eleven upstream repositories cited on overview.html",
       "status": "PASS",
       "exit_code": 0
     }
@@ -85,13 +86,17 @@
     "phases x stages before the fix: four element-level pairs at 0.824, all one line - the 'authority has expired' stop condition restated from build.html on every phase page. After moving it to overview.html alone: no phases x stages pair reaches 0.60 at either level.",
     "Five within-track element-level pairs remain at 0.727-0.889 and are deliberate: the pointer sentence to overview#monitor, the gate's closing 'recorded BT-G<n> with a date' line, and overview's summary of p0's independence requirement. Recorded here; the CI detector's corpus is stages/ only and was not widened.",
     "Word counts - overview 2013, p0 2088, p1 1867, p2 1719, p3 2199 - are over the 1700 band. Accepted per DEC-020's reasoning: the epic tables are the parity content.",
-    "README's delivery-state paragraph still says every push to main fails at Configure Pages and the URL returns 404; the site serves. Left as found, reported as a finding."
+    "README's delivery-state paragraph still says every push to main fails at Configure Pages and the URL returns 404; the site serves. Left as found, reported as a finding.",
+    "Review finding: the gate table's Recorded-by column and the phase pages' Who columns were the track's proposals presented as the plan's, with a citation to a table that assigns decisions, not gates. Labelled proposed. The plan names the evidence for each gate and never the recorder - that gap is a decision-rights row the hub does not yet have.",
+    "Review finding: the parity test held identifier SETS only. Deleting the whole epics table, swapping two row labels, or leaving a gate only in the page title all passed. It now requires the epics section, holds each row's label to the plan's deliverable text, strips the head, and asserts gate-set equality; the new negative controls are in its docstring.",
+    "Review finding: the stacked branch conflicts on badf/ under git merge once WP-029 is squash-merged (cherry-pick applies cleanly). The stacking deferred the conflict rather than avoiding it. Disposition: rebase onto main after WP-029 lands and re-measure on the new head."
   ],
   "decisions": [
     "A second rendering with a parity test, not a generator with a drift guard: the generator is the lean answer only once the plan changes often enough to make hand-rendering the bottleneck, and the parity test already fails on the drift a generator would prevent.",
     "Stack on WP-029's branch rather than base on main, so the two packages' badf/ edits cannot conflict at merge.",
     "Do not widen the CI duplication detector to phases/: its element-level headroom is 0.008 and re-calibration is its own package. Measure by hand, report, and record the deliberate parallels.",
-    "Leave the README's false deployment paragraph and the missing reference/ row alone: findings become packages, not in-place fixes."
+    "Leave the README's false deployment paragraph and the missing reference/ row alone: findings become packages, not in-place fixes.",
+    "Merge only a head that has been reviewed and re-verified after its fixes, never the head the review read. The evidence table is re-measured on every new SHA."
   ],
   "assumptions": [
     "That the documentation implementation authority of 2026-09-03 extends to a new published surface that renders an existing document. It does not extend to any claim that a capability is implemented, and no page makes one."

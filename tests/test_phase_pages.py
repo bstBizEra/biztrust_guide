@@ -10,10 +10,17 @@ WHAT IS EXACT HERE
 ==================
 
 Epic identifiers (`P0.1`, `P1.13`, ...) are a closed vocabulary that the plan
-defines in four tables and the pages must reproduce one-to-one. That makes the
-parity check mechanically decidable with no threshold and no calibration data -
-the property the spine test's docstring says a check needs before it is worth
-keeping. The same is true of the seven capability gate identifiers in plan §7.
+defines in four tables and the pages must reproduce one-to-one, and each id's
+LABEL - the plan's deliverable or capability text - must sit beside it in the
+epics table. That makes the parity check mechanically decidable with no
+threshold and no calibration data - the property the spine test's docstring
+says a check needs before it is worth keeping. The same is true of the seven
+capability gate identifiers in plan §7.
+
+The first version of this module checked identifier SETS only. A fresh-context
+review showed it passed with the entire epics table deleted (the ids survive in
+the execution-order list), with two row labels swapped, and with a gate present
+only in the page <title>. Each of those is now a failure, below.
 
 Two things are deliberately NOT checked, and why:
 
@@ -29,10 +36,11 @@ NEGATIVE CONTROLS, run by hand before this shipped
 ================================================
 
   * Remove EVERY `P0.7` from p0.html            -> test_epic_ids_match_the_plan FAILS
-    (deleting only the table row does NOT fail: the id also appears in the
-    execution-order list, and presence anywhere on the page satisfies parity.
-    The first run of this control deleted the row alone and passed - recorded
-    so the next person does not mistake that for the test being wrong.)
+    (deleting only the table row failed set-parity's first version silently -
+    the id survived in the execution-order list. It now fails the LABEL check.)
+  * Delete the whole epics <section> on p0.html  -> test_every_phase_page_has_its_spine FAILS
+  * Swap the P0.7 and P0.11 labels               -> test_epic_labels_match_the_plan FAILS
+  * Leave BT-G5 only in overview's <title>       -> test_overview_carries_every_gate FAILS
   * Add a `P1.14` that the plan does not have    -> test_epic_ids_match_the_plan FAILS
   * Put `P2.4` on p3.html                        -> test_epic_ids_match_the_plan FAILS
   * Remove BT-G5 from overview.html              -> test_overview_carries_every_gate FAILS
@@ -61,6 +69,7 @@ GATE = re.compile(r"\bBT-G[0-6]\b")
 # Keyed on the eyebrow, not the id, for the reason test_stage_page_spine records.
 SPINE: tuple[tuple[str, str], ...] = (
     ("preconditions", "entry criteria"),
+    ("epic to work package", "epics table"),
     ("execution order", "execution order"),
     ("what the human monitors", "monitoring section"),
     ("transition", "exit gate"),
@@ -102,8 +111,41 @@ def plan_gates() -> set[str]:
     return set(GATE.findall(section))
 
 
+def page_body(name: str) -> str:
+    """<main> only. The <title> and meta description also name gates and epics;
+    a gate surviving only there is exactly the false pass this must not give."""
+    html = (PHASES / name).read_text(encoding="utf-8")
+    m = re.search(r"<main\b[^>]*>(.*?)</main>", html, re.S)
+    return m.group(1) if m else ""
+
+
 def page_text(name: str) -> str:
-    return _text((PHASES / name).read_text(encoding="utf-8"))
+    return _text(page_body(name))
+
+
+def _norm(label: str) -> str:
+    return re.sub(r"\s+", " ", label.replace("`", "")).strip().lower()
+
+
+def plan_labels() -> dict[str, str]:
+    """Epic id -> the plan's deliverable/capability cell, from the same four tables."""
+    out: dict[str, str] = {}
+    for line in PLAN.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^\|\s*(P[0-3]\.\d{1,2})\s*\|\s*(.*?)\s*\|", line)
+        if m:
+            out[m.group(1)] = _norm(m.group(2))
+    return out
+
+
+def page_labels(name: str) -> dict[str, str]:
+    """Epic id -> the <small> label beside it in the page's epics table rows."""
+    out: dict[str, str] = {}
+    for sec in sections(name):
+        if sec["eyebrow"] != "epic to work package":
+            continue
+        for m in re.finditer(r"<strong>(P[0-3]\.\d{1,2})</strong>\s*<small>(.*?)</small>", sec["body"], re.S):
+            out[m.group(1)] = _norm(_text(m.group(2)))
+    return out
 
 
 def page_epics(name: str) -> dict[int, set[str]]:
@@ -191,7 +233,27 @@ class TestParityWithThePlan(unittest.TestCase):
                 gate_sections = [s for s in sections(name) if s["eyebrow"] == "transition"]
                 self.assertEqual(1, len(gate_sections), f"{name}: expected one exit-gate section")
                 present = set(GATE.findall(_text(gate_sections[0]["body"])))
-                self.assertTrue(gates <= present, f"{name}: exit gate names {sorted(present)}, expected {sorted(gates)}")
+                self.assertEqual(gates, present, f"{name}: exit gate names {sorted(present)}, expected exactly {sorted(gates)}")
+
+    def test_epic_labels_match_the_plan(self) -> None:
+        """Every plan epic has a row in the page's epics table whose label is the plan's text.
+
+        Set-parity alone let a page keep its ids in prose after the table was gone,
+        and let two rows trade labels. This binds the id to the deliverable beside it.
+        """
+        plan = plan_labels()
+        problems = []
+        for phase, name in PHASE_PAGES.items():
+            rows = page_labels(name)
+            for epic in sorted(plan_epics()[phase], key=lambda e: int(e.split(".")[1])):
+                if epic not in rows:
+                    problems.append(f"  {name}: no epics-table row for {epic}")
+                elif rows[epic] != plan[epic]:
+                    problems.append(f"  {name}: {epic} label {rows[epic]!r} != plan {plan[epic]!r}")
+            for epic in rows:
+                if epic not in plan:
+                    problems.append(f"  {name}: epics-table row {epic} is not in the plan")
+        self.assertEqual([], problems, "epic labels disagree with DELIVERY_PLAN.md:\n" + "\n".join(problems))
 
 
 class TestSpine(unittest.TestCase):
