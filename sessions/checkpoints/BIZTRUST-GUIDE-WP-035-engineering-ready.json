@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-035-001",
-  "created_at": "2026-09-04T17:11:01Z",
+  "created_at": "2026-09-04T17:22:14Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-035",
   "state": "ENGINEERING_READY",
   "objective": "Issue #68: checkpoints validated against their schema by a stdlib test with a shrinking registry for the three pre-enforcement records; LF pinned by .gitattributes.",
@@ -11,13 +11,14 @@
     "baseline_commit": "a8624e145aedb2d4027f623a102eb214a1248e0c"
   },
   "completed": [
-    "tests/test_checkpoints_match_schema.py: stdlib checker for the subset both schemas use; coverage test fails on any unimplemented keyword; ten negative controls; every unregistered checkpoint validates; LEGACY registry of three, each pinned to its failing paths, membership pinned to those three names; handoffs validated if sessions/handoffs/ ever exists",
+    "tests/test_checkpoints_match_schema.py: stdlib checker for the subset both schemas use, RFC 3339 date-time with a calendar check, JSON Schema equality for enum/const/uniqueItems; coverage test fails on any unimplemented keyword or format value; nineteen negative controls; every unregistered checkpoint validates; LEGACY registry of three, each pinned to its failing paths, membership pinned by number (< 35) and by name; handoffs validated if sessions/handoffs/ ever exists",
     ".gitattributes: text=auto eol=lf, *.png binary; git add --renormalize changed no tracked file",
     "AGENTS.md section 6 note and README enforcement table say what is now checked and what still is not",
-    "NS-036 retired; NS-033 primary and WAIT_FOR_AUTHORITY - the last executable action is done"
+    "NS-036 retired; NS-033 primary and WAIT_FOR_AUTHORITY - the last executable action is done",
+    "Fresh-context adversarial review (2026-09-04): the date-time calibration claim was unreproducible (no date-time checker in the local jsonschema) and the checker accepted six non-RFC-3339 forms; the coverage guard ignored format values; equality conflated booleans with numbers; the checkpoint count was wrong four times; the registry test was literal-only. All fixed; dispositions in DEC-036"
   ],
   "remaining": [
-    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge of that head",
     "NS-033 - after the operator answers the asserted.* question on issue #52"
   ],
   "files_changed": [
@@ -42,7 +43,7 @@
       "exit_code": 0
     },
     {
-      "command": "calibration: for all sixteen checkpoints, the checker's failing (file, json-path) set equals jsonschema 4.26.0 Draft202012Validator's with FormatChecker -> 0 mismatches",
+      "command": "structural calibration: for all eighteen checkpoints, the checker's failing (file, json-path) set equals jsonschema 4.26.0 Draft202012Validator's -> 0 mismatches. NOT a date-time calibration: the local jsonschema has no date-time format checker",
       "status": "PASS",
       "exit_code": 0
     },
@@ -55,12 +56,18 @@
       "command": "git -c core.autocrlf=true clone <branch> into scratch; ls-files --eol -> w/lf attr/text=auto eol=lf; unittest OK; build.py --check SCHEMA=CONFORMANT FIXTURES=CURRENT; validator PASS",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "python3 -c 'from jsonschema import FormatChecker; print(sorted(FormatChecker().checkers))' -> no date-time on this machine",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
     "Before this package the same fresh clone with core.autocrlf=true failed test_the_committed_tree_is_certified and test_committed_fixtures_match_their_source and listed all 27 fixture files STALE (checkpoint WP-032, observation 0).",
     "WP-017's blocker is also a string, not only its validation entries; #68 named only the validation shape. Registered with its four failing paths.",
-    "templates/session-checkpoint.json is not validated: its placeholders fail the patterns by design. templates/handoff.json likewise."
+    "templates/session-checkpoint.json is not validated: its placeholders fail the patterns by design. templates/handoff.json likewise.",
+    "The first draft's checkpoint claimed a date-time calibration against jsonschema that this machine cannot perform. The review caught it by listing the installed format checkers. Recorded because the same claim in DEC-036 would otherwise have stood as evidence."
   ],
   "decisions": [
     "DEC-036: hand-rolled checker that refuses unknown keywords; registry not repair; LF pinned"
@@ -104,7 +111,7 @@
     ]
   },
   "declared_non_coverage": [
-    "The checker implements a subset of JSON Schema; anything outside it fails loudly rather than being enforced, but the subset's semantics were calibrated against jsonschema on sixteen documents and ten mutants, not proven.",
+    "The checker implements a subset of JSON Schema; anything outside it fails loudly rather than being enforced. Its structural verdicts were calibrated against jsonschema on eighteen documents; its date-time and equality semantics were tested by hand against RFC 3339 and the specification, not against a reference implementation.",
     "Handoff records: none exist, so the handoff schema check has never run against a real document.",
     "The CRLF proof was one fresh clone on one Windows machine."
   ]
