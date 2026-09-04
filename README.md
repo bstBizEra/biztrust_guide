@@ -56,6 +56,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 |---|---|
 | `index.html` | The guide's hub — overview, lifecycle map and links to the nine stages |
 | `stages/` | Nine stage manuals — the bulk of the guide |
+| `phases/` | Five phase manuals — P0 to production: what agents code and humans monitor per delivery phase. A rendering of `docs/architecture/DELIVERY_PLAN.md`; `tests/test_phase_pages.py` holds its epic and gate identifiers to the plan |
 | `tests/` | Validator fail-closed suite and cross-page duplicate detector |
 | `sessions/` | Session checkpoints, the recovery procedure's primary input |
 | `assets/` | Brand images referenced by every page |
@@ -94,7 +95,7 @@ The validator's exit codes carry meaning: **0** pass · **1** a data defect, the
 
 ## Current delivery state
 
-The guide is nine stage manuals plus the `index.html` hub. Documentation actions remain open — see `badf/next-actions.json`.
+The guide is nine stage manuals, five phase manuals and two reference pages, plus the `index.html` hub. Documentation actions remain open — see `badf/next-actions.json`.
 
 Deployment is blocked on one repository-administrator action: select **GitHub Actions** under `Settings → Pages → Build and deployment → Source`. Until that is done, **every push to `main` fails CI at the `Configure Pages` step**, and `https://bstbizera.github.io/biztrust_guide/` returns 404. The workflow stages every tracked `*.html` — including the `stages/` subtree — not only the repository root.
 

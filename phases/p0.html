@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P0 · Foundation · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Phase P0 of the BizTrust delivery plan: twelve epics that freeze the contract and mechanically prove the tenant-security substrate — what the agent builds, where it lands, what proves it, and what a human must see before recording BT-G1.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery phases</strong><small>P0 · Architecture and platform foundation</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
+    <a class="github-link" href="overview.html">← Phase track</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">P0 · Foundation</p>
+  <nav id="sectionNav">
+    <a href="#entry"><span>01</span> Entry criteria</a>
+    <a href="#epics"><span>02</span> Epics to Work Packages</a>
+    <a href="#order"><span>03</span> Execution order</a>
+    <a href="#code"><span>04</span> What the agent codes</a>
+    <a href="#monitor"><span>05</span> What the human monitors</a>
+    <a href="#gate"><span>06</span> Exit gate · BT-G1</a>
+    <a href="#stop"><span>07</span> Stop conditions</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>P0 of P0–P3</strong><small>Enters at BT-G0 · exits at BT-G1</small></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<section id="p0-intro" data-search="P0 foundation security slice tenant isolation Logto APISIX PostgreSQL RLS audit">
+  <div class="section-heading"><span>P0</span><div><p>Delivery phases · P0</p><h2>Architecture and platform foundation</h2></div></div>
+  <p class="lede">P0 freezes the contract and mechanically proves the tenant-security substrate before any real insurance-domain data is placed on it. Nothing in this phase knows what a policy is. That is deliberate: a substrate proven on business data is a substrate whose proof leaked business data.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DELIVERY_PLAN.md">DELIVERY_PLAN.md §3</a>, with the authorization sequence from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §3</a> and the enforcement layers from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/AUTHORIZATION_BASELINE.md">AUTHORIZATION_BASELINE.md §5–§8</a>. The hub's <a href="../index.html#p0">P0 card</a> is the summary; this page is the manual.</p>
+  <div class="invariant">
+    <span>THE RULE THIS PHASE EXISTS TO ENFORCE</span>
+    <p>Tenant A cannot read or mutate Tenant B protected data, and application authorization and PostgreSQL Row-Level Security enforce that independently of each other — INV-003 and INV-004. A gateway allow is not domain authorization, and an application allow is still constrained by RLS.</p>
+  </div>
+</section>
+
+<section id="entry" data-search="entry criteria BT-G0 architecture ready authority granted repository exists">
+  <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
+  <div class="three-col">
+    <article>
+      <h3>BT-G0 is recorded</h3>
+      <p>The architecture authority has recorded Architecture Ready after slice S11 of <a href="https://github.com/bstBizEra/biztrust_guide/issues/27">WP-ARCH-001A</a>. P0 is not slice 12 of that package; it is a separate package that cannot be authorized until S11 passes.</p>
+    </article>
+    <article>
+      <h3>Implementation authority is written down</h3>
+      <p>The <code>authority</code> block of <code>badf/current-state.json</code> carries a production-platform implementation grant for the specific P0 package, with an expiry. Read the field; do not infer it from the gate.</p>
+    </article>
+    <article>
+      <h3>The ADRs P0 builds on are accepted</h3>
+      <p>ADR-001 (modular monolith), ADR-002 and ADR-003 (identity and organization-to-tenant mapping), ADR-004 (shared PostgreSQL with RLS) and ADR-005 (contract-first) — accepted per the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a>, not <code>DRAFT_REQUIRED</code>.</p>
+    </article>
+  </div>
+  <div class="callout">
+    <strong>The first package has nowhere to land</strong>
+    <p>The platform repository does not exist until P0.2 creates it. That package's Work Package is unusual: its deliverable is the repository, its <code>AGENTS.md</code>, its <code>badf/</code> registries, the CI skeleton and the boundary tests — and a human repository administrator is a named role in it, because protecting <code>main</code> is not something an agent can do.</p>
+  </div>
+</section>
+
+<section id="epics" data-search="epics work packages P0.1 P0.12 deliverable exit evidence source">
+  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Twelve epics, each one or more packages</h2></div></div>
+  <p class="section-intro">Each row is decomposed into Work Packages by the <a href="../stages/plan.html#anatomy">Plan stage</a> under the plan's decomposition rule: one bounded outcome, an accountable owner, explicit exclusions, authority with expiry, acceptance criteria with an independent verifier, rollback, an evidence manifest and one next safe action. The identifiers are the plan's; a package cites its epic.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>P0 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P0.1</strong><small>ARCH-001 and ADR-001…020</small></td><td>Nothing — this epic is the freeze itself, produced by WP-ARCH-001A</td><td><code>docs/adr/</code>, <code>docs/architecture/</code></td><td>Authority record and resolved findings</td><td>ADR register, foundation sequence</td></tr>
+        <tr><td><strong>P0.2</strong><small>Repository and module boundaries</small></td><td>The repository, <code>AGENTS.md</code>, <code>badf/</code> registries, CI skeleton, a dependency test that fails when one module imports another's internals</td><td>Repository root, <code>modules/</code>, <code>.github/workflows/</code></td><td>Build, dependency and boundary tests</td><td>ADR-001; the hub's repository design</td></tr>
+        <tr><td><strong>P0.3</strong><small>Logto integration spike</small></td><td>Token validation: signature, issuer, audience, expiry, <code>organization_id</code>, scopes — and the negative cases for each</td><td><code>modules/identity/</code>, <code>tests/security/</code></td><td>Token-validation evidence, positive and negative</td><td>ADR-002; Logto organization-level API resources</td></tr>
+        <tr><td><strong>P0.4</strong><small>Organization-to-tenant mapping</small></td><td>The mapping, its lifecycle, and the mismatch path: organization known, tenant unknown or disabled</td><td><code>modules/tenancy/</code></td><td>Mapping and mismatch tests</td><td>ADR-003; ARCH-001 §8</td></tr>
+        <tr><td><strong>P0.5</strong><small>Tenant provisioning</small></td><td>A repeatable command that provisions Tenant A and Tenant B identically, twice</td><td><code>modules/tenancy/</code>, <code>db/seeds/</code></td><td>Both tenants provisioned from the same code path, run twice, same result</td><td>ARCH-001 §7; INV-011</td></tr>
+        <tr><td><strong>P0.6</strong><small>PostgreSQL tenancy model</small></td><td>Mandatory <code>tenant_id</code>, the tenant-owned record baseline, expand-first migrations</td><td><code>db/migrations/</code></td><td>Migration and ownership tests</td><td>ADR-004; DOMAIN_MODEL §6</td></tr>
+        <tr><td><strong>P0.7</strong><small>RLS enforcement</small></td><td>Row-security policies with <code>WITH CHECK</code>; the application role without <code>BYPASSRLS</code>; the test path that bypasses application authorization and is still denied</td><td><code>db/policies/</code>, <code>tests/security/</code></td><td>Cross-tenant read, write and delete denial; bypass blocked by RLS</td><td>ADR-004; PostgreSQL row security policies; FLOWS §3</td></tr>
+        <tr><td><strong>P0.8</strong><small>API conventions</small></td><td>The OpenAPI baseline: <code>/api/v1</code>, bearer tokens, <code>X-Request-ID</code>, <code>traceparent</code>, <code>Idempotency-Key</code>, <code>ETag</code>/<code>If-Match</code>, <code>application/problem+json</code>; the lint step in CI</td><td><code>openapi/components/</code></td><td>Linted OpenAPI baseline; a deliberately broken contract fails CI</td><td>ADR-005; ARCH-001 §11; RFC 9457</td></tr>
+        <tr><td><strong>P0.9</strong><small>Event conventions</small></td><td>The AsyncAPI baseline and the CloudEvents envelope with the minimum metadata — event, tenant, subject, correlation, causation, <code>traceparent</code>, producer, authority reference</td><td><code>events/</code></td><td>Linted AsyncAPI and envelope</td><td>ARCH-001 §12; AsyncAPI; CloudEvents</td></tr>
+        <tr><td><strong>P0.10</strong><small>Audit framework</small></td><td>The decision record with every field of the authorization evidence contract; separate retention, access and mutation controls</td><td><code>modules/audit/</code></td><td>Attributable denial and success evidence for every matrix row</td><td>ARCH-001 §15; AUTHORIZATION_BASELINE §7</td></tr>
+        <tr><td><strong>P0.11</strong><small>Observability baseline</small></td><td>Structured logs with tenant-safe fields, metrics and traces, all linked by request and trace identifiers</td><td><code>packages/observability/</code></td><td>One request reconstructable across all three signals</td><td>OpenTelemetry context propagation; the hub's minimum telemetry</td></tr>
+        <tr><td><strong>P0.12</strong><small>Secrets and configuration</small></td><td>Externalized secrets, a rotation procedure that has been run, least-privilege credentials per environment</td><td><code>.github/workflows/</code>, environment configuration</td><td>Rotation and least-privilege evidence</td><td>The hub's security engineering track</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="order" data-search="execution order dependency sequence P0 one primary next action">
+  <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Why this order and not another</h2></div></div>
+  <p class="section-intro">The plan forbids opening all epics as simultaneously active. This is the dependency order; each step names what it needs from the one before it. One primary next action at a time.</p>
+  <ol class="migration-steps">
+    <li><b>P0.1 is the entry gate</b>, not the first package. If it is not recorded, nothing below starts.</li>
+    <li><b>P0.2 — the repository.</b> Everything else needs somewhere to land, a CI that runs, and a boundary test that already fails on the first cross-module import. Protect <code>main</code> before the second package opens a branch.</li>
+    <li><b>P0.3 — validate the token before anything trusts it.</b> The negative cases are the deliverable; a spike that only shows the happy path has not answered the question.</li>
+    <li><b>P0.4 — map organization to tenant</b>, including the paths where the organization is valid and the tenant is not.</li>
+    <li><b>P0.6 — the tenancy model</b>, because RLS policies need a <code>tenant_id</code> to police and the ownership baseline to attach to.</li>
+    <li><b>P0.7 — RLS.</b> Write the bypass test first and watch it fail against a table with no policy. Then add the policy. A denial that was never observed to pass proves nothing about the policy.</li>
+    <li><b>P0.5 — two tenants, repeatably.</b> The negative matrix needs a Tenant B to be denied from, and a proof run on hand-made tenants cannot be re-run by the independent verifier.</li>
+    <li><b>P0.10 — audit</b>, before the proof rather than after it, because the proof <em>is</em> audit evidence: every denial in the matrix must produce an attributable record, or the matrix passed silently.</li>
+    <li><b>P0.8 and P0.9 — contract conventions.</b> Independent of the security chain; may run beside it once the repository exists. Their proof is a broken contract failing CI.</li>
+    <li><b>P0.11 — observability</b>, so the proof run can be reconstructed from its own trace.</li>
+    <li><b>P0.12 — secrets and configuration</b>, last of the substrate, first thing the independent verifier checks.</li>
+    <li><b>The mandatory proof</b>, executed by someone who did not implement it, bound to a source revision — then <code>BT-G1</code>.</li>
+  </ol>
+</section>
+
+<section id="code" data-search="negative tests matrix deny RLS tenant context session variable idempotency audit record fields">
+  <div class="section-heading"><span>04</span><div><p>What the agent codes</p><h2>Negative tests first, evidence fields always</h2></div></div>
+  <p class="section-intro">The <a href="../stages/build.html">Build stage</a> governs how a change is made: one package per branch, migrations expand-first, telemetry in the same change, contracts before implementations. P0 adds the content of the tests. The matrix below is the minimum; every row is a test with an API expectation, a database expectation and an audit expectation, and all three are asserted.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Minimum negative proof matrix — rendered from FLOWS.md §3</caption>
+      <thead><tr><th>Attempt</th><th>API</th><th>Database</th><th>Audit</th></tr></thead>
+      <tbody>
+        <tr><td>Missing token</td><td>Deny</td><td>No business query</td><td>Authentication failure recorded</td></tr>
+        <tr><td>Expired or malformed token</td><td>Deny</td><td>No business query</td><td>Safe reason code recorded</td></tr>
+        <tr><td>Wrong audience</td><td>Deny</td><td>No business query</td><td>Audience failure recorded</td></tr>
+        <tr><td>Missing organization context</td><td>Deny the protected tenant route</td><td>No tenant query</td><td>Context failure recorded</td></tr>
+        <tr><td>Inactive membership</td><td>Deny</td><td>No mutation</td><td>Membership result recorded</td></tr>
+        <tr><td>Tenant A requests a Tenant B URL</td><td>Deny</td><td>No Tenant B rows</td><td>Mismatch recorded without data leakage</td></tr>
+        <tr><td>Tenant A injects a Tenant B identifier in body or header</td><td>Deny, or ignore the untrusted value</td><td><code>WITH CHECK</code> prevents the write</td><td>Tampering outcome recorded</td></tr>
+        <tr><td>Application check bypassed in a test path</td><td>Request cannot expose Tenant B</td><td>RLS denies</td><td>Database denial linked to the test</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="check-list">
+    <li><strong>Never copy an untrusted tenant identifier into the database session.</strong> The authenticated organization, the tenant mapping and the requested resource scope are reconciled first; the session variable is set from the reconciled value, and the header is evidence of tampering, not input</li>
+    <li><strong>RLS is default-deny.</strong> Enabling row security on a table with no matching policy denies everything; that state is the negative control for every policy written afterwards</li>
+    <li><strong>The application role cannot bypass.</strong> Table ownership and <code>BYPASSRLS</code> stay with a role the application never connects as; the design of that split is part of ADR-004's evidence</li>
+    <li><strong>Every mutation carries <code>Idempotency-Key</code></strong> from the first endpoint, so the retry behaviour that binding and money will need later is a property of the baseline, not a retrofit</li>
+    <li><strong>Every decision writes the full evidence record</strong> — decision, actor, tenant, membership, permission, resource and scope, conditions evaluated, approval reference, policy version, outcome, reason code, request and trace identifiers — and never a raw token, secret or unnecessary personal datum</li>
+    <li><strong>The suite is proven able to fail.</strong> The bypass test is committed in its red state first, and the pull request quotes both runs</li>
+  </ul>
+</section>
+
+<section id="monitor" data-search="human monitors P0 authorizations evidence independence security risk owner stop signals">
+  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Between BT-G0 and BT-G1</h2></div></div>
+  <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P0 adds these.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Authorizations reserved to a human in P0</caption>
+      <thead><tr><th>Authorization</th><th>Who</th><th>Must have seen first</th></tr></thead>
+      <tbody>
+        <tr><td>Each P0 package's implementation grant</td><td>Sponsor, per the decision-rights table</td><td>The package's acceptance criteria, each settled by a named command; its rollback; its independent verifier</td></tr>
+        <tr><td>Acceptance of ADR-002, ADR-003, ADR-004</td><td>Architecture authority, after the security lens</td><td>The spike evidence at a pinned version, the exit strategy, the owner and <code>BYPASSRLS</code> design</td></tr>
+        <tr><td>Protection of <code>main</code> in the new repository</td><td>Repository administrator</td><td>Required checks named; force-push and deletion blocked; one independent approval required</td></tr>
+        <tr><td><code>BT-G1</code> Security Ready</td><td>Security risk owner</td><td>The full matrix executed by someone other than the implementer, bound to a source revision, with an audit record for every row</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="definition-list">
+    <div><span>Stop signal: a green suite with no negative test</span><p>Every P0 package ships denial tests. A package whose evidence table shows only successes has tested the wrong property.</p></div>
+    <div><span>Stop signal: the bypass test is absent, skipped or cannot be made to fail</span><p>The row that proves RLS is independent of the application is the row the whole gate rests on. If it was never seen red, the policy has not been demonstrated.</p></div>
+    <div><span>Stop signal: insurance-domain data on the substrate</span><p>A P0 package that creates a policy, a client or a premium has left the phase. Send it back to Plan; do not accept it as an early P1.</p></div>
+    <div><span>Stop signal: the proof was run by the implementer</span><p>The plan says the proof passes <em>independently</em>. A self-run proof is a claim, and the gate is not recorded on claims.</p></div>
+    <div><span>Weekly</span><p>Exactly one P0 package in progress; the repository's protection still in force; no secret in the tree; every candidate still marked <code>IMPLEMENTATION_CANDIDATE</code> until its ADR is accepted.</p></div>
+  </div>
+</section>
+
+<section id="gate" data-search="exit gate BT-G1 security ready mandatory proof checklist">
+  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gate · BT-G1 Security Ready</h2></div></div>
+  <p class="section-intro">The seven lines of the plan's mandatory proof, plus the four conditions that make the proof a record rather than a report. No P1 authorization may be issued until every box is ticked.</p>
+  <div class="dod-grid">
+    <label><input type="checkbox" disabled> Tenant A can access authorized Tenant A data</label>
+    <label><input type="checkbox" disabled> Tenant A cannot read, create, update or delete Tenant B protected data</label>
+    <label><input type="checkbox" disabled> Missing or invalid organization context is denied</label>
+    <label><input type="checkbox" disabled> Tampered URL, header, body and query tenant identifiers are denied or ignored safely</label>
+    <label><input type="checkbox" disabled> Wrong audience, expired token, inactive membership and absent scope are denied</label>
+    <label><input type="checkbox" disabled> An application-level authorization bypass test remains blocked by RLS</label>
+    <label><input type="checkbox" disabled> Every outcome produces tenant-safe audit evidence</label>
+    <label><input type="checkbox" disabled> The proof was executed by someone who did not implement it</label>
+    <label><input type="checkbox" disabled> The evidence manifest binds the run to a source revision, workflow, environment and tool versions</label>
+    <label><input type="checkbox" disabled> ADR-002, ADR-003 and ADR-004 are accepted in the register</label>
+    <label><input type="checkbox" disabled> The security risk owner has recorded <code>BT-G1</code> with a date</label>
+  </div>
+</section>
+
+<section id="stop" data-search="stop conditions halt P0 BT-G0 missing tenant leak bypass irreproducible adopted">
+  <div class="section-heading"><span>07</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <ul class="cross-list">
+    <li><code>BT-G0</code> is not recorded, or slice S11 of the architecture package is not accepted — P0 has no entry</li>
+    <li>A package places insurance-domain data on the substrate before <code>BT-G1</code></li>
+    <li>Any test, log or response exposes a Tenant B row to a Tenant A actor, however the request was formed</li>
+    <li>The bypass test cannot be made to fail against an unpoliced table — the instrument is broken, not the policy</li>
+    <li>Tenant provisioning is manual, or two runs produce different tenants</li>
+    <li>A candidate technology is used in code before its ADR is accepted</li>
+  </ul>
+  <div class="next-action">
+    <span>NEXT PHASE</span>
+    <div>
+      <h3>P1 · Broker core MVP</h3>
+      <p>A manual-insurer-assisted quote-to-policy lifecycle with correct broker and insurer boundaries — on a substrate that has already been proven.</p>
+    </div>
+    <a class="github-link" href="p1.html">P1 →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team · Delivery phases · P0 of P0–P3 · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top ↑</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
