@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-038-001",
-  "created_at": "2026-09-04T18:13:09Z",
+  "created_at": "2026-09-04T18:23:09Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-038",
   "state": "ENGINEERING_READY",
   "objective": "Issue #76: the one row Architect's gate requires and its outputs table lacked, plus the catalogue's finding moved to the past tense; NS-038's scoping filed as #77 and #78.",
@@ -13,10 +13,11 @@
   "completed": [
     "stages/architect.html: Deferred-decision register row in the outputs table, 'Answers' and 'Fails when' taken from the freeze section's own sentences",
     "reference/artifact-catalogue.html: the row note and the 'one gate condition' finding rewritten in the past tense, naming WP-038",
-    "Issues #77 (catalogue-to-page agreement test) and #78 (four content decisions) filed under NS-038; NS-039 primary, NS-040 registered for the human"
+    "Issues #77 (catalogue-to-page agreement test) and #78 (four content decisions) filed under NS-038; NS-039 primary, NS-040 registered for the human",
+    "Fresh-context adversarial review (2026-09-05): three should-fix findings adopted - the catalogue's 'eight ungated' was nine since WP-037 (heading, lede and paragraph corrected; issue #78, NS-040 and DEC-040 reworded), the ledger lacked WP-037's merge and misdescribed the badf hazard, issue #78 steered on item 4 and left its fourth unowned artifact unnamed; notes adopted on the row-note wording, the third package's name, and NS-039's third criterion"
   ],
   "remaining": [
-    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge",
     "NS-039 - issue #77 - in its own package",
     "NS-040 - issue #78 - waits on a human",
     "PR #74 - held on issue #52"
@@ -48,7 +49,8 @@
   ],
   "observations": [
     "The new row's wording is the page's own (freeze section, lines about deferral); nothing was composed for it.",
-    "Architect's three never-gated artifacts (bounded context map, state machines, integration boundaries) are untouched; they are item 1 of issue #78."
+    "Architect's three never-gated artifacts (bounded context map, state machines, integration boundaries) are untouched; they are item 1 of issue #78.",
+    "The first draft carried the catalogue's 'eight ungated' into an issue for a human. The count was stale by one since WP-037 - the same class of defect DEC-040 attributes to WP-037 - and the review caught it before the human answered a question with a missing item."
   ],
   "decisions": [
     "DEC-040: transcribe the one documenting fix; file the content decisions as questions; queue the agreement test"

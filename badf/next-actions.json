@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "work_package_id": "BIZTRUST-GUIDE-WP-038",
-  "updated_at": "2026-09-04T18:13:09Z",
+  "updated_at": "2026-09-04T18:23:09Z",
   "actions": [
     {
       "id": "NS-039",
@@ -16,7 +16,8 @@
       ],
       "evidence_required": [
         "The test is red on a deliberate mismatch before it is green",
-        "The catalogue's 'Nothing is checked mechanically' bullet says what is checked and what is not"
+        "The catalogue's 'Nothing is checked mechanically' bullet says what is checked and what is not",
+        "The test is stdlib only and runs inside python3 -m unittest discover -s tests; it reads artifact names by a shape declared per page, since Release uses a definition list and Assure's outputs section is one artifact whose fields are listed"
       ],
       "stop_conditions": [
         "The test is loosened to pass an existing mismatch rather than the mismatch being fixed or allowlisted with a reason"
@@ -29,7 +30,7 @@
       "priority": 2,
       "owner_role": "human-reviewer",
       "authority": "HUMAN_DECISION_REQUIRED",
-      "action": "Issue #78: record a decision or explicit deferral for each of the four content questions the catalogue records - eight ungated artifacts, four unowned, the two charter artifacts no stage names, forty-one without a home.",
+      "action": "Issue #78: record a decision or explicit deferral for each of the four content questions the catalogue records - nine ungated artifacts (Plan's machine-readable package state joined the eight under WP-037), four unowned including that same row, the two charter artifacts no stage names, forty-one without a home.",
       "prerequisites": [
         "A human reads issue #78"
       ],
