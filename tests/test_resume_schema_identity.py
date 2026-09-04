@@ -18,8 +18,8 @@ rules FROM the schema (`schema_rules()`), applies them to every generated fixtur
   * the rule stays quiet on resolved input  -> test_resolved_sources_are_accepted
   * the CLI exits 1 and writes nothing      -> test_build_refuses_a_fixture_without_repository
 
-Item 3 (`next_action.requires`) is NOT here, by DEC-026 disposition 4: the two land
-separately. No oracle is read or written by this module or by the change it guards.
+Item 3 (`next_action.requires`) landed separately under NS-033 and is tested in
+test_resume_action_dependencies.py. No oracle is read or written by either module.
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -123,14 +123,6 @@ class TestEnforcementReadsTheSchema(unittest.TestCase):
             with self.subTest(fixture=p.parent.name):
                 self.assertEqual([], self.build.violations(json.loads(p.read_text(encoding="utf-8")), self.rules))
 
-    def test_no_fixture_carries_item_three(self) -> None:
-        """Disposition 4: item 2 lands alone. A `requires` key ANYWHERE is item 3 smuggled in."""
-        paths = sorted(FIXTURES.glob("*/RESUME.json"))
-        self.assertEqual(9, len(paths), "an empty glob must not pass this vacuously")
-        for p in paths:
-            with self.subTest(fixture=p.parent.name):
-                self.assertNotIn('"requires"', p.read_text(encoding="utf-8"))
-
     def test_missing_repository_is_refused(self) -> None:
         state = self.build.base()
         del state["static"]["repository"]
@@ -175,7 +167,7 @@ class TestEnforcementReadsTheSchema(unittest.TestCase):
                 self.assertTrue(any(word in v for v in found), f"{label}: {found}")
         state = self.build.base(); state["observed"]["issue_2_state"] = {"value": 1, "observed_at": None, "freshness": "UNKNOWN", "source": 123}
         self.assertTrue(any("not a string" in v for v in self.build.violations(state, self.rules)))
-        state = self.build.base(); state["schema_version"] = "1.0.0"
+        state = self.build.base(); state["schema_version"] = "2.0.0"
         self.assertTrue(any("schema_version" in v for v in self.build.violations(state, self.rules)))
 
     def test_enforcement_follows_a_changed_schema(self) -> None:
@@ -217,7 +209,7 @@ class TestEnforcementReadsTheSchema(unittest.TestCase):
 
     def test_resolved_sources_are_accepted(self) -> None:
         for src in RESOLVED:
-            state = self.build.base()
+            state = self.build.f1()   # base() carries no edge by design (item 3); f1 is the conformant control
             state["observed"]["issue_2_state"] = self.build.obs("closed", source=src)
             with self.subTest(source=src):
                 self.assertEqual([], self.build.violations(state, self.rules))

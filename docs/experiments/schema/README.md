@@ -10,6 +10,16 @@
 > neither `resume_decision`, nor `next_action`, nor any oracle — and `build.py` now reads the identity
 > rules from this file and refuses a fixture that breaks them, so the schema is enforced, not only declared.
 
+> **Amended again under `NS-033` (issue #52 item 3), to `3.0.0`.** `computed.next_action.requires` names the
+> `observed.*` and `asserted.*` keys the *action* consumes, so "critical input" has a referent; `computed.freshness`
+> is explicitly the *derivation's* worst input and is not rescoped by it. Every fixture function assigns its own edge
+> as a literal with a comment, and a test reads the source to prove the assignment is there (placement, not
+> authorship - a copied line passes) and a mutant test proves the #57 mechanism is refused; the eight fixtures that share one action carry one
+> edge, by design. `resume_decision`, `freshness`, `stop_conditions` and every oracle are held byte-identical to the
+> `2.0.0` set by `tests/test_resume_action_dependencies.py`. The `asserted.*` admission departs from the letter of
+> DEC-026 disposition 5 ("an existing observation") and waits on the operator's recorded answer on issue #52
+> (DEC-038).
+
 ## Why four categories and not one flat object
 
 `badf/current-state.json` is flat, and an audit of the WP-024 proposal showed why that is

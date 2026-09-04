@@ -2,26 +2,26 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-04T17:29:39Z",
+  "updated_at": "2026-09-04T18:00:51Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-035",
-    "title": "Checkpoints validated against their schema by a stdlib test; LF pinned by .gitattributes - issue #68 (NS-036)",
+    "id": "BIZTRUST-GUIDE-WP-036",
+    "title": "next_action.requires, per fixture, no inherited default, nothing sealed moved - issue #52 item 3 (NS-033, DEC-033 form iii)",
     "state": "ENGINEERING_READY",
-    "objective": "Make AGENTS.md section 6 true: every committed checkpoint is validated against schemas/session-checkpoint.schema.json by a test that refuses any schema keyword it cannot enforce, with the three pre-enforcement records registered as a shrinking ratchet rather than rewritten; and pin LF for every text file so a CRLF checkout passes the byte-exact fixture checks.",
-    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/68",
+    "objective": "Add computed.next_action.requires to the resume schema (3.0.0) naming the observed.* and asserted.* keys the action consumes; assign it in each fixture function with no default in base(); have build.py read the shape rules from the schema and refuse an edge that names no existing key; hold resume_decision, computed.freshness, stop_conditions and every oracle byte-identical to the 2.0.0 set by test.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/52",
     "owner_role": "documentation-engineer",
     "scope": [
-      "tests/test_checkpoints_match_schema.py",
-      ".gitattributes",
-      "AGENTS.md",
-      "README.md",
+      "docs/experiments/schema/",
+      "docs/experiments/fixtures/",
+      "docs/experiments/WP-024-results.md",
+      "tests/",
       "badf/",
       "sessions/checkpoints/"
     ]
   },
   "source": {
-    "branch": "fix/biztrust-guide-wp-035-checkpoint-schema-and-eol",
-    "baseline_commit": "a8624e145aedb2d4027f623a102eb214a1248e0c",
+    "branch": "fix/biztrust-guide-wp-036-action-dependencies",
+    "baseline_commit": "83f0d5aa0b88a2cee1673bb331f58600d325346e",
     "baseline_kind": "main",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
@@ -38,12 +38,13 @@
     "resume_decision_taxonomy": "DECIDED_2026_09_04_OPTION_B_NOT_SCORED",
     "experiment_rerun": "NOT_GRANTED_PENDING_INDEPENDENT_ORACLE_AUTHOR",
     "production_platform_implementation": "NOT_GRANTED",
-    "architecture_acceptance": "NOT_GRANTED"
+    "architecture_acceptance": "NOT_GRANTED",
+    "asserted_keys_in_requires": "WAIT_FOR_AUTHORITY_ISSUE_52"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-035-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-036-engineering-ready.json",
   "latest_handoff": null,
   "primary_next_action_id": "NS-033",
   "resume_decision": "WAIT_FOR_AUTHORITY",
-  "stop_reason": "WP-035 is done on this branch and awaits merge after fresh-context review. With it, every action an agent can execute alone is done: NS-033 (issue #52 item 3, form iii) waits on the asserted.* question posted on issue #52 on 2026-09-04; NS-024 needs a practising broker; NS-027 and NS-028 wait on packages that are not opened. Oracle authorship still requires an independent author; experiment re-run stays NOT_GRANTED.",
-  "known_divergence": "The sixth instance of stale operational state (PR #56, which applied items 2 and 3 against this repository's own recorded ordering) is closed: #57 reverted it, and the fixtures are byte-identical to the sealed set at e37fa3b. A seventh opened at 2026-09-04T06:46:45Z and is closed by this commit: the human decision was recorded on issue #52, and until now this file still read resume_decision WAIT_FOR_AUTHORITY with a stop_reason naming the question that decision answers, while NS-031 - whose evidence requirement the decision had already met - remained the primary action. The interval was under four minutes because the decision record named the gap itself. That is not a fix for the underlying defect: state still reconciles by hand, and the proposal that would retire hand-maintenance remains PROPOSED on a failed instrument. WP-030 is stacked on WP-029's unmerged branch so that both can update this file without a merge conflict; if PR #58 merges with its branch deleted, GitHub retargets WP-030 to main. Until both merge, main's copy of this file still names WP-029 - that is the ordinary lag of a stacked change, not an eighth instance, because the record here says so. WP-030 merged as PR #64 after its stacked PR #60 was closed by the deletion of its base branch; the stacking rationale in DEC-028 (7) was wrong and is corrected by DEC-029 and this note - stack nothing on a branch that will be deleted. WP-031 merged as PR #65 at 28898879bef6, and the github-pages environment recorded a successful deployment of that head at 2026-09-04T15:46:34Z (deployment 6267852711). The README paragraph that said Pages was blocked and the site returned 404 was committed at 2026-09-03T12:56:32Z, five minutes after the first successful deployment (6244308440, success at 12:51:36Z), and stood until WP-032 - false when written, not merely outlived. It is replaced by pointers rather than by a fresher sentence; a fresher sentence would be the eighth instance waiting to happen. WP-032 merged as PR #67; the site's serving commit is read from the deployments API, not asserted here. WP-033 merged as PR #69 at 0b564b6. The WP-034 branch replaces the pre-dated deployment claims in LIVE_PREVIEW.md, NEXT_STEPS.md and AGENT_CONTINUITY.md by pointer and by dated correction, not by a fresher sentence. One correction to the WP-032 sentence above: the README paragraph and the runbook line were authored on 2026-09-02 while still true (cc40f0f), and merged to main five minutes after the first deployment succeeded - 'false when written' overstated it; they were false when merged and stood for a day. WP-034 merged as PR #70. From WP-035 on, a checkpoint that does not match its schema fails the test suite; the three that predate enforcement are registered by name and may only leave the registry."
+  "stop_reason": "WP-036 is built, reviewed and fixed on this branch, and its merge waits on one recorded human line on issue #52: may next_action.requires name asserted.* keys, given DEC-026 disposition 5 says 'an existing observation'? The first draft of this package read a session instruction as that answer; the fresh-context review held, under DEC-002 and AGENTS.md section 2, that chat is not recorded authority, and the package was returned to WAIT_FOR_AUTHORITY (DEC-038 as rewritten). If the answer is yes, this head merges as reviewed. If no, the edge drops asserted.* and becomes ['observed.main_sha'] on eight fixtures, or item 3 is deferred to the independent oracle author. Content work (issue #73, NS-037) proceeds in its own package meanwhile.",
+  "known_divergence": "The sixth instance of stale operational state (PR #56, which applied items 2 and 3 against this repository's own recorded ordering) is closed: #57 reverted it, and the fixtures are byte-identical to the sealed set at e37fa3b. A seventh opened at 2026-09-04T06:46:45Z and is closed by this commit: the human decision was recorded on issue #52, and until now this file still read resume_decision WAIT_FOR_AUTHORITY with a stop_reason naming the question that decision answers, while NS-031 - whose evidence requirement the decision had already met - remained the primary action. The interval was under four minutes because the decision record named the gap itself. That is not a fix for the underlying defect: state still reconciles by hand, and the proposal that would retire hand-maintenance remains PROPOSED on a failed instrument. WP-030 is stacked on WP-029's unmerged branch so that both can update this file without a merge conflict; if PR #58 merges with its branch deleted, GitHub retargets WP-030 to main. Until both merge, main's copy of this file still names WP-029 - that is the ordinary lag of a stacked change, not an eighth instance, because the record here says so. WP-030 merged as PR #64 after its stacked PR #60 was closed by the deletion of its base branch; the stacking rationale in DEC-028 (7) was wrong and is corrected by DEC-029 and this note - stack nothing on a branch that will be deleted. WP-031 merged as PR #65 at 28898879bef6, and the github-pages environment recorded a successful deployment of that head at 2026-09-04T15:46:34Z (deployment 6267852711). The README paragraph that said Pages was blocked and the site returned 404 was committed at 2026-09-03T12:56:32Z, five minutes after the first successful deployment (6244308440, success at 12:51:36Z), and stood until WP-032 - false when written, not merely outlived. It is replaced by pointers rather than by a fresher sentence; a fresher sentence would be the eighth instance waiting to happen. WP-032 merged as PR #67; the site's serving commit is read from the deployments API, not asserted here. WP-033 merged as PR #69 at 0b564b6. The WP-034 branch replaces the pre-dated deployment claims in LIVE_PREVIEW.md, NEXT_STEPS.md and AGENT_CONTINUITY.md by pointer and by dated correction, not by a fresher sentence. One correction to the WP-032 sentence above: the README paragraph and the runbook line were authored on 2026-09-02 while still true (cc40f0f), and merged to main five minutes after the first deployment succeeded - 'false when written' overstated it; they were false when merged and stood for a day. WP-034 merged as PR #70. From WP-035 on, a checkpoint that does not match its schema fails the test suite; the three that predate enforcement are registered by name and may only leave the registry. WP-035 merged as PR #71 with two counts wrong, corrected by #72 (DEC-037). WP-036's first draft read the operator's session instruction of 2026-09-05 (+07:00) as the answer to the asserted.* question on issue #52; the fresh-context review blocked that under DEC-002, and the package waits on the answer being recorded on the issue."
 }
