@@ -93,7 +93,7 @@ The registry is EMPTY. operate.html had no outputs section until WP-033
 (issue #55) and plan.html until WP-037 (issue #73); each entry was deleted
 when the page gained the element, as the ratchet below demands. The registry
 stays, empty, so that a future gap has somewhere to be recorded with a reason
-rather than being left red or silently excused. It is registered rather than left red because this suite
+rather than being left red or silently excused. A gap is registered rather than left red because this suite
 shares one `unittest discover` run with two others, and a member that is red
 on a clean tree takes their signal down with it.
 

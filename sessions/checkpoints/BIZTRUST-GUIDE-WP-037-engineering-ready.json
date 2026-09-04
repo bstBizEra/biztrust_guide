@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-037-001",
-  "created_at": "2026-09-04T17:59:33Z",
+  "created_at": "2026-09-04T18:07:42Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-037",
   "state": "ENGINEERING_READY",
   "objective": "Issue #73: an outputs section for Plan naming what the catalogue already attributes to it, with every citation of a Plan section number updated in the same change; the spine registry emptied.",
@@ -14,10 +14,11 @@
     "stages/plan.html: section 02 'What this stage produces' (id produces, eyebrow Outputs) - four rows, each linked to the sections that describe it and naming what requires it; a callout stating what the table does not decide; sections 02-09 renumbered 03-10 in nav and headings",
     "reference/artifact-catalogue.html: three 'Plan section 08' citations now 09, two 'Plan section 06' now 07; the finding about stages without an outputs section rewritten in the past tense for both stages",
     "tests/test_stage_page_spine.py: KNOWN_GAPS is an empty dict; docstring says why the registry stays; the ratchet fired on the old registry against the new page before the entry was deleted",
-    "NS-037 retired; NS-038 - scoping the next content package from the catalogue's findings - is primary"
+    "The action PR #74's branch registers as NS-037 is done here (main never carried NS-037); NS-038 - scoping the next content package from the catalogue's findings - is primary",
+    "Fresh-context adversarial review (2026-09-05): one blocking and four should-fix findings, all adopted - the false 'WP-036 merged' in the divergence ledger, the overstated 'never named' claim, the catalogue row notes, the section-07 citation on the next-actions row, 'NS-037 retired'; dispositions in DEC-039"
   ],
   "remaining": [
-    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge; then a badf/ merge against PR #74 whichever lands second",
     "NS-038: file issues from the catalogue's findings before any content change"
   ],
   "files_changed": [
@@ -47,13 +48,14 @@
     },
     {
       "command": "main's test_stage_page_spine.py run against the new page -> test_known_gaps_are_still_gaps FAILS naming plan.html#produces",
-      "status": "PASS",
+      "status": "FAIL",
       "exit_code": 1
     }
   ],
   "observations": [
     "Every stage page now has all five spine elements; test_eyebrow_keying_is_load_bearing still passes because the new section uses id produces and assure.html#evidence remains the one outputs section with another id.",
-    "The two badf/ rows are the only place in the nine stage pages where a repository file is named as the implementation of a lifecycle requirement; the section marks them as such rather than presenting the files as the lifecycle's prescription."
+    "The two badf/ rows are the only place in the nine stage pages where a repository file is named as the implementation of a lifecycle requirement; the section marks them as such rather than presenting the files as the lifecycle's prescription.",
+    "plan.html section 07 already named badf/current-state.json as the recorded value of ENGINEERING_READY since WP-013; the outputs section is the first place it is named as something Plan produces. The catalogue row notes now say that; the first draft of this package repeated issue #73's overstatement that no page named either file."
   ],
   "decisions": [
     "DEC-039: document, do not author - four rows the catalogue already held; state files named as this repository's implementation; registry emptied, not deleted"
@@ -92,7 +94,7 @@
     ]
   },
   "declared_non_coverage": [
-    "No test ties the catalogue's plain-text section citations to the pages; verified once by grep. The four citations inside the new table are links, so html-refs checks their anchors but not the displayed numbers.",
+    "No test ties the catalogue's plain-text section citations to the pages; verified once by grep. The section citations inside the new table are links, so html-refs checks their anchors but not the displayed numbers.",
     "The 'Required by' cells are the author's reading of the gate; nothing checks them."
   ]
 }

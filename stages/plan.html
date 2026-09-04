@@ -84,16 +84,16 @@
 
 <section id="produces" data-search="artifacts produces outputs work package authority record package state next actions badf">
   <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
-  <p class="section-intro">Four artifacts. The first two are what the lifecycle prescribes and every section below describes; the last two are how this repository keeps the state that <a href="#states">Package states</a> requires, named here because a reader working only from this page would otherwise never produce them. This table adds nothing the <a href="../reference/artifact-catalogue.html">artifact catalogue</a> had not already attributed to Plan.</p>
+  <p class="section-intro">Four artifacts. The first two are what the lifecycle prescribes and the sections below describe; the last two are how this repository keeps the state that <a href="#anatomy">§03</a> and <a href="#states">§07</a> require, named here because §07 cites one of them only as a recorded value and no page had named the other. This table adds nothing the <a href="../reference/artifact-catalogue.html">artifact catalogue</a> had not already attributed to Plan.</p>
   <div class="table-wrap">
     <table>
       <caption>Plan artifacts, where each is described, and what requires it</caption>
       <thead><tr><th>Artifact</th><th>What it records</th><th>Described in</th><th>Required by</th></tr></thead>
       <tbody>
-        <tr><td><strong>Work Package</strong></td><td>The eleven fields of one authorized unit of work &mdash; identifier, outcome, scope both ways, risk class, authority, criteria, evidence, rollback, dependencies, primary next action</td><td><a href="#anatomy">§03</a>, <a href="#criteria">§04</a>, <a href="#decompose">§06</a></td><td>Every line of the <a href="#gate">exit gate</a>; <a href="build.html#entry">Build</a> enters on one</td></tr>
+        <tr><td><strong>Work Package</strong></td><td>The eleven fields of one authorized unit of work &mdash; identifier, outcome, scope both ways, risk class, authority, criteria, evidence, rollback, dependencies, primary next action</td><td><a href="#anatomy">§03</a>, <a href="#criteria">§04</a>, <a href="#decompose">§06</a></td><td>Every line of the <a href="#gate">exit gate</a> reads a field of it, and <a href="build.html#entry">Build</a> enters on one</td></tr>
         <tr><td><strong>Authority record</strong></td><td>Granted actions, withheld actions, expiry, and the acts reserved to a human whatever the grant says</td><td><a href="#authority">§05</a></td><td>Gate: authority recorded with permitted actions, prohibitions and expiry; a human has authorized execution</td></tr>
         <tr><td><strong>Machine-readable package state</strong></td><td>The declared state of the active package, reconciled against the issue tracker; in this repository, <code>badf/current-state.json</code></td><td><a href="#states">§07</a></td><td><small>not gated</small> &mdash; the page requires the state, no gate line requires the file</td></tr>
-        <tr><td><strong>Ordered next actions</strong></td><td>Exactly one action marked primary, so a resuming reader has no choice to make; in this repository, <code>badf/next-actions.json</code></td><td><a href="#anatomy">§03</a>, <a href="#states">§07</a></td><td>Gate: exactly one next action is identified as primary</td></tr>
+        <tr><td><strong>Ordered next actions</strong></td><td>Exactly one action marked primary, so a resuming reader has no choice to make; in this repository, <code>badf/next-actions.json</code></td><td><a href="#anatomy">§03</a></td><td>Gate: exactly one next action is identified as primary</td></tr>
       </tbody>
     </table>
   </div>
