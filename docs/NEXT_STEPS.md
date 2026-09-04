@@ -1,7 +1,7 @@
 # Recommended Next Steps
 
 **Document:** BIZTRUST-GUIDE-ROADMAP-002  
-**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Production verification (NS-002) and governance hardening remain; deployment activation (NS-001) is done and dated below.
+**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Governance hardening remains; deployment activation (NS-001) and production verification (NS-002) are done and dated below.
 
 > ⚠️ **The NS ids in this document are frozen roadmap labels from 2026-09-02. They are NOT the live action ledger.**
 >
@@ -25,6 +25,28 @@
 - **Action:** Verify entry page, CSS, JavaScript, images, navigation, search, mobile layout and HTTPS.
 - **Evidence:** Deployment URL, source SHA, checklist and timestamp.
 - **Stop if:** The deployment SHA differs from approved `main`.
+- **Verified, dated 2026-09-04T19:22:58Z:** recorded in the format § 7 of `LIVE_PREVIEW.md` prescribes, against `main` at `6a88463b7db2d20ef2a1c71c9983536c340f65f3`.
+
+  ```text
+  source_commit: 6a88463b7db2d20ef2a1c71c9983536c340f65f3
+  preview_mode: github-pages
+  url: https://bstbizera.github.io/biztrust_guide/
+  entry_file: index.html
+  assets_checked: true                         # styles.css, script.js, assets/unitrust-icon.png -> 200
+  validation_command: python3 scripts/validate_continuity.py
+  validation_exit_code: 0
+  workflow_run: https://github.com/bstBizEra/biztrust_guide/actions/runs/33910065490   # pointer only; expires
+  deployment: 6271172171 (github-pages, sha 6a88463b, created 2026-09-04T19:14:09Z)
+  deployed_bytes: 42335
+  deployed_sha256: c06d5c6831f7a84bc1dd6694042c93ed91f78360d5610091cfbf4f5aeed183a2
+  source_bytes: 42335
+  source_sha256: c06d5c6831f7a84bc1dd6694042c93ed91f78360d5610091cfbf4f5aeed183a2
+  all_tracked_pages: 17 fetched, 17 byte-identical to git show main:<path> (sha256 compared)
+  verified_by: documentation-engineer (agent), evidence in the WP-041 checkpoint
+  verified_at: 2026-09-04T19:22:58Z
+  ```
+
+  This records that the deployment of that commit was verified at that time. It says nothing about what the site serves now; read that from the deployments API, as NS-001 says.
 
 ## Next 7 days — establish controlled collaboration
 

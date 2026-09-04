@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-041-001",
+  "created_at": "2026-09-04T19:24:14Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-041",
+  "state": "ENGINEERING_READY",
+  "objective": "NS-002: production verified against main at 6a88463 with the runbook's evidence block; nothing decided.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-041-production-verification",
+    "baseline_commit": "6a88463b7db2d20ef2a1c71c9983536c340f65f3"
+  },
+  "completed": [
+    "docs/NEXT_STEPS.md: NS-002 gains a dated evidence block in the section-7 format - deployment id and sha, entry-file bytes and sha256 both ways, seventeen of seventeen tracked pages byte-identical, assets 200, validator 0 - and the lead sentence says NS-001 and NS-002 are done",
+    "badf: stop_reason states what remains and why each waits on the operator; DEC-043 records the second refusal on PR #74"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "PR #74 - an operator comment on issue #52",
+    "Issue #78 items 2 and 4, issue #81 - operator decisions",
+    "docs/NEXT_STEPS.md NS-004 governance hardening - repository administrator"
+  ],
+  "files_changed": [
+    "docs/NEXT_STEPS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-041-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "for p in $(git ls-files '*.html'); do curl -s https://bstbizera.github.io/biztrust_guide/$p | sha256sum vs git show main:$p | sha256sum; done -> pages=17 mismatches=0 (2026-09-04T19:22:58Z)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/bstBizEra/biztrust_guide/deployments?environment=github-pages&per_page=1 -> 6271172171 sha 6a88463b... created 2026-09-04T19:14:09Z",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "curl -s https://bstbizera.github.io/biztrust_guide/index.html | wc -c -> 42335; sha256 c06d5c68...; git show main:index.html identical",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The runbook's evidence format had existed since 2026-09-02 and had never been filled in; the site had been serving since 2026-09-03T12:51Z.",
+    "A sweep of index.html, the stage, phase and reference pages and docs/ for count words and 'never/nothing/not yet' status phrasing found no live claim left stale: the two remaining hits are dated history with corrections beneath."
+  ],
+  "decisions": [
+    "DEC-043: a dated evidence block, not a sentence; the second refusal on PR #74 recorded"
+  ],
+  "assumptions": [
+    "None. The block is a measurement at a named time against a named commit."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "One comment by the operator on issue #52; PR #74 then merges after re-verification."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Decisions on #78 items 2 and 4, and on #81."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_040",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-040",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/NEXT_STEPS.md"
+    ],
+    "stop_if": [
+      "PR #74 is merged without an operator comment on issue #52",
+      "The NS-002 block is edited to describe a later deployment instead of a new dated block being added"
+    ]
+  },
+  "declared_non_coverage": [
+    "The verification compares bytes; it does not exercise navigation, search or the theme toggle in a browser, which NS-002's checklist also names.",
+    "The workflow-run link expires in about ninety days; the deployment id and digests do not."
+  ]
+}
