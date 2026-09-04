@@ -1,7 +1,7 @@
 # Recommended Next Steps
 
 **Document:** BIZTRUST-GUIDE-ROADMAP-002  
-**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Deployment activation and governance hardening remain.
+**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Production verification (NS-002) and governance hardening remain; deployment activation (NS-001) is done and dated below.
 
 > ⚠️ **The NS ids in this document are frozen roadmap labels from 2026-09-02. They are NOT the live action ledger.**
 >
@@ -9,7 +9,7 @@
 >
 > A `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
 
-## Immediate — activate the public guide
+## Immediate — verify the public guide
 
 ### NS-001: Enable GitHub Pages
 
@@ -17,6 +17,7 @@
 - **Action:** Select `GitHub Actions` under `Settings → Pages → Build and deployment → Source`.
 - **Evidence:** Successful `Deploy BizTrust Guide to GitHub Pages` run and reachable production URL.
 - **Stop if:** The repository contains sensitive or unapproved information.
+- **Done, dated 2026-09-04:** `GET /repos/bstBizEra/biztrust_guide/pages` reports `build_type: workflow`, and the `github-pages` environment's first successful deployment (6244308440, of `ba46e1f7`) is timestamped 2026-09-03T12:51:36Z. This entry records that the action happened; it does not say what the site serves now — read that from the deployments API.
 
 ### NS-002: Verify production
 

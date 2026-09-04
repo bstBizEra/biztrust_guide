@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-034-001",
+  "created_at": "2026-09-04T17:06:31Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-034",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #66: retire two stale status notes and correct, with dates, the runbook entries behind them.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-034-stale-status-notes",
+    "baseline_commit": "0b564b6e14d1c1d623fd6280904c5555aca9784b"
+  },
+  "completed": [
+    "reference/artifact-catalogue.html: the Build Implementation row's note links build.html#discipline instead of citing closed issue #31 item 5; no other row cites it (grep)",
+    "docs/LIVE_PREVIEW.md line 5: no present-tense claim about Pages; points at the workflow runs and the deployments API via README; says what the line used to claim - true when written on 2026-09-02, merged five minutes after the first deployment, stood for a day",
+    "docs/NEXT_STEPS.md NS-001: dated done line with the pages API build_type and the first successful deployment",
+    "docs/AGENT_CONTINUITY.md section 11: dated correction beneath the 2026-09-03 note, each claim measured separately - build_type, both branch policies and the admin bypass, deployments through the current head with five cancelled pushes named, protection 404, rulesets empty, no CODEOWNERS; item 5 'configured, not in force'; heading stands",
+    "NS-036 (#68) registered and primary; NS-033 priority 2, still WAIT_FOR_AUTHORITY on issue #52",
+    "docs/NEXT_STEPS.md lead paragraph and 'Immediate' heading no longer say activation is pending; README.md's WP-032 sentence corrected from 'asserted five minutes after' to 'true when written, merged five minutes after'",
+    "Fresh-context adversarial review (2026-09-04): five should-fix findings and three notes, all adopted - the authoring-date conflation, the 'every push' universal, the item-5 wording and the omitted bypass flag, the half-edited NEXT_STEPS.md, the scope justification; dispositions in DEC-035"
+  ],
+  "remaining": [
+    "Re-verification of the fixed head by the same reviewer, then merge of that head",
+    "NS-036 - issue #68 - in its own package after this one merges",
+    "NS-033 - after the operator answers on issue #52"
+  ],
+  "files_changed": [
+    "README.md",
+    "reference/artifact-catalogue.html",
+    "docs/LIVE_PREVIEW.md",
+    "docs/NEXT_STEPS.md",
+    "docs/AGENT_CONTINUITY.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-034-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/bstBizEra/biztrust_guide/branches/main/protection -> 404 Branch not protected (2026-09-04)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/bstBizEra/biztrust_guide/environments/github-pages/deployment-branch-policies -> None (branch), main (branch); gh api .../pages -> build_type workflow",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "grep -c 'issue #31' reference/artifact-catalogue.html -> 0",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git log --all -S'GitHub Pages has never been activated' -- docs/LIVE_PREVIEW.md -> authored cc40f0f 2026-09-02T22:02:30Z, merged 3ff58b3 2026-09-03T12:56:32Z; first deployment success 12:51:36Z",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh run list --workflow=pages.yml --branch main --event push -> success 24, cancelled 5, failure 8 (failures predate Pages activation)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api .../environments/github-pages -> can_admins_bypass true; .../rulesets -> []; .../rules/branches/main -> []; no CODEOWNERS in the tree",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The environment now carries a 'main' branch policy alongside the 'None' pattern the 2026-09-03 note described; whoever added it is not recorded in this repository.",
+    "docs/NEXT_STEPS.md NS-002 (verify production) is still open in substance: nothing in the repository records a production verification against LIVE_PREVIEW.md section 7's evidence block. Not in #66's scope; not fixed.",
+    "The first draft of the section 11 correction contained an unmeasured universal ('every push') and an incomplete measurement (the bypass flag) inside a paragraph that claimed to measure each claim separately. The reviewer measured; the paragraph now cites what it measured and nothing more."
+  ],
+  "decisions": [
+    "DEC-035: pointers and dated corrections, not fresher sentences; the section 11 note kept as dated history"
+  ],
+  "assumptions": [
+    "That editing docs/NEXT_STEPS.md and one README.md sentence - files #66 does not name - is acceptable as the same defect class fixed in the same package, recorded as such in DEC-035 rather than justified by a pointer chain that the new line 5 no longer has."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "ASSERTED_KEYS_QUESTION_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; NS-033 waits."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_033",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-036",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/66"
+    ],
+    "stop_if": [
+      "Any docs/*.md file gains a present-tense sentence about whether Pages is enabled or what the site returns",
+      "The 2026-09-03 note in AGENT_CONTINUITY.md section 11 is rewritten rather than corrected beneath"
+    ]
+  },
+  "declared_non_coverage": [
+    "No test scans docs/ for present-tense deployment claims; this class of defect is found by reading.",
+    "This checkpoint is not validated against its schema by any test (issue #68, NS-036).",
+    "The five cancelled deployments are the workflow's concurrency group cancelling superseded runs; whether any of those five heads differed materially from the head that did deploy was not checked."
+  ]
+}

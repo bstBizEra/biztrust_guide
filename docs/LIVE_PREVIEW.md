@@ -2,7 +2,7 @@
 
 **Document:** BIZTRUST-GUIDE-RUNBOOK-001  
 **Applies to:** `bstBizEra/biztrust_guide`  
-**Production URL (not yet enabled):** `https://bstbizera.github.io/biztrust_guide/` — currently returns 404. GitHub Pages has never been activated on this repository; see NS-001.
+**Production URL:** `https://bstbizera.github.io/biztrust_guide/` — published by `.github/workflows/pages.yml`. Whether it currently serves the `main` head is not recorded here: read it from the Pages workflow runs and the `github-pages` deployments, as `README.md` § *Current delivery state* describes. An earlier version of this line said Pages had never been activated. It was true when written on 2026-09-02, was merged to `main` five minutes after the first deployment succeeded, and stood for a day (issue #66).
 
 ## 1. Choose the correct preview mode
 
