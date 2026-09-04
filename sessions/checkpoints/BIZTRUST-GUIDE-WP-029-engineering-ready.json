@@ -47,15 +47,22 @@
       "exit_code": 0
     },
     {
-      "command": "jsonschema Draft202012Validator over sessions/checkpoints/*.json",
+      "command": "jsonschema Draft202012Validator over this checkpoint",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "jsonschema Draft202012Validator over all twelve sessions/checkpoints/*.json - 3 non-conformant (WP-017, WP-024, WP-026), see observations",
+      "status": "FAIL",
+      "exit_code": 1
     }
   ],
   "observations": [
     "The decision was recorded on issue #52 at 2026-09-04T06:46:45Z while this file's predecessor still read resume_decision WAIT_FOR_AUTHORITY with a stop_reason naming the question it answered. That gap is the seventh opening of the same defect in three days, and it is closed by this commit rather than by a later one.",
     "Disposition item 4 - reapply repository identity independently - is the operative correction to PR #56. The bundle is how a single inherited dependency value reached four mandatory fixtures; two actions cannot bundle.",
-    "The three most recent checkpoints before this one (WP-017, WP-024, WP-026) do not conform to schemas/session-checkpoint.schema.json. All three record validation as an array of strings where the schema requires objects with command, status and exit_code; WP-017 additionally records blockers as strings. Measured with jsonschema 4.26.0 Draft202012Validator over all 12 checkpoints: 9 conform, 3 do not. AGENTS.md section 6 requires conformance and states in as many words that it is not mechanically checked - and three consecutive checkpoints then drifted. This checkpoint conforms and was verified with a negative control. The three that do not are recorded here rather than retrofitted; that is a separate change."
+    "The three most recent checkpoints before this one (WP-017, WP-024, WP-026) do not conform to schemas/session-checkpoint.schema.json. All three record validation as an array of strings where the schema requires objects with command, status and exit_code; WP-017 additionally records blockers as strings. Measured with jsonschema 4.26.0 Draft202012Validator over all 12 checkpoints: 9 conform, 3 do not. AGENTS.md section 6 requires conformance and states in as many words that it is not mechanically checked - and three consecutive checkpoints then drifted. This checkpoint conforms and was verified with a negative control. The three that do not are recorded here rather than retrofitted; that is a separate change.",
+    "Review finding (fresh-context, 2026-09-04): the first version of this checkpoint recorded the all-checkpoints jsonschema run as PASS while its own observation said three fail. A state-accuracy package shipped a false PASS. Corrected to one PASS for this file and one FAIL for the set, which is what was measured.",
+    "Review finding: NS-032's authority was first written GRANTED_BY_HUMAN_DECISION_2026_09_04. The decision unblocked the item and granted nothing; the grant is the standing 2026-09-03 documentation-implementation grant, and it is now cited as such. Attributing an inferred grant to the human is the defect DEC-027's rationale names."
   ],
   "decisions": [
     "Record the human decision and the reconciliation as two log entries, not one: DEC-026 carries OPERATOR_INSTRUCTION authority and DEC-027 carries IMPLEMENTATION_SCOPE. Folding an agent's state edits into a human authority record is how an agent's choices acquire a human's weight.",

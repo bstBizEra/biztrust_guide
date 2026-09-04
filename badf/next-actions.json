@@ -9,14 +9,15 @@
       "primary": true,
       "priority": 1,
       "owner_role": "documentation-engineer",
-      "authority": "GRANTED_BY_HUMAN_DECISION_2026_09_04",
+      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
       "action": "Reapply issue #52 item 2 alone: make repository identity required in resume.schema.json - owner, name and the https remote - so a bundle is self-identifying, and refuse an observation source that still carries an unfilled template.",
       "prerequisites": [
         "DEC-026 is on main",
-        "docs/experiments/fixtures are byte-identical to the sealed set at e37fa3b"
+        "docs/experiments/fixtures are byte-identical to the sealed set at e37fa3b",
+        "DEC-026 UNBLOCKED this item; it granted nothing. The authority above is the standing documentation-implementation grant, the same grant WP-025 and WP-026 ran under - recorded here so the grant is not read as the human's decision"
       ],
       "evidence_required": [
-        "static.repository required in resume.schema.json, with owner, name and https remote",
+        "static.repository required in resume.schema.json, with owner, name and https remote - AND a test that validates every fixture RESUME.json against resume.schema.json and fails on a fixture lacking static.repository. Nothing in the repository reads the schema today (build.py --check compares bytes; no jsonschema reader exists), so the declaration alone is inert and cannot be evidence",
         "The source guard refuses :o/, :r and /:sha AND the {owner}/{repo} form the reverted guard let through",
         "Nine fixtures regenerated and build.py --check green",
         "A negative test proving the guard fails on an unfilled template, run before the fix and shown red"
