@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-038-001",
+  "created_at": "2026-09-04T18:13:09Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-038",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #76: the one row Architect's gate requires and its outputs table lacked, plus the catalogue's finding moved to the past tense; NS-038's scoping filed as #77 and #78.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-038-architect-deferred-register",
+    "baseline_commit": "7df92b666356dd1ac74264c2ed1eb7ee95108e55"
+  },
+  "completed": [
+    "stages/architect.html: Deferred-decision register row in the outputs table, 'Answers' and 'Fails when' taken from the freeze section's own sentences",
+    "reference/artifact-catalogue.html: the row note and the 'one gate condition' finding rewritten in the past tense, naming WP-038",
+    "Issues #77 (catalogue-to-page agreement test) and #78 (four content decisions) filed under NS-038; NS-039 primary, NS-040 registered for the human"
+  ],
+  "remaining": [
+    "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
+    "NS-039 - issue #77 - in its own package",
+    "NS-040 - issue #78 - waits on a human",
+    "PR #74 - held on issue #52"
+  ],
+  "files_changed": [
+    "stages/architect.html",
+    "reference/artifact-catalogue.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-038-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "grep -c 'Deferred-decision register' stages/architect.html -> 1 (was 0); reference/artifact-catalogue.html -> 1 (unchanged)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The new row's wording is the page's own (freeze section, lines about deferral); nothing was composed for it.",
+    "Architect's three never-gated artifacts (bounded context map, state machines, integration boundaries) are untouched; they are item 1 of issue #78."
+  ],
+  "decisions": [
+    "DEC-040: transcribe the one documenting fix; file the content decisions as questions; queue the agreement test"
+  ],
+  "assumptions": [
+    "That copying two sentences from the freeze section into the outputs table is transcription. Recorded so a human can disagree."
+  ],
+  "blockers": [
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "ASSERTED_KEYS_QUESTION_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "PR #74 waits."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_037",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-039",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/76"
+    ],
+    "stop_if": [
+      "A gate line, owner or artifact home is added that no page already establishes",
+      "PR #74 is merged without an operator comment on issue #52"
+    ]
+  },
+  "declared_non_coverage": [
+    "No test ties the outputs table to the catalogue yet; that is issue #77.",
+    "The 'Fails when' cell is the freeze section's sentence, not a measured failure signature."
+  ]
+}
