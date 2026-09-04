@@ -171,7 +171,7 @@ td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-
   <div class="split">
     <div>
       <h3>Nine artifacts are named and never gated</h3>
-      <p class="section-intro">Architect&rsquo;s bounded context map, state machines and integration boundaries appear in its outputs table and in no exit-gate condition. Five Operate artifacts &mdash; recovery objectives, capacity forecast, dependency inventory, secret rotation and the disclosure route &mdash; are named in the body and required by nothing. Plan&rsquo;s machine-readable package state joined them under WP-037: named in its outputs section, required by its Package states section, and by no gate line. Producing none of the nine fails no check.</p>
+      <p class="section-intro">Architect&rsquo;s bounded context map, state machines and integration boundaries appear in its outputs table and in no exit-gate condition. Five Operate artifacts &mdash; recovery objectives, capacity forecast, dependency inventory, secret rotation and the disclosure route &mdash; are named in the body and required by nothing. Plan&rsquo;s machine-readable package state joined them under WP-037: named in its outputs section, required by its Package states section, and by no gate line. Producing none of the nine fails no check, and since WP-040 each page says so beside the artifact: Architect&rsquo;s three rows carry the note, Operate&rsquo;s and Plan&rsquo;s tables mark them <em>not gated</em>.</p>
       <h3>One gate condition had no artifact behind it</h3>
       <p class="section-intro">Architect&rsquo;s gate requires that &ldquo;deferred decisions are written down with their revisit triggers&rdquo;, and until WP-038 its outputs table listed no deferred-decision register: the condition was gated and the thing it gated was unnamed &mdash; the exact inverse of the three rows above it. The table now names it, in the words its own freeze section uses.</p>
     </div>
@@ -194,7 +194,7 @@ td em{display:block;margin-top:.35rem;color:var(--muted);font-style:normal;font-
 
 <section id="charter" data-search="checkpoint handoff schema agents charter not named by any stage">
   <div class="section-heading"><span>04</span><div><p>Named by the charter, by no stage page</p><h2>Two artifacts the lifecycle never mentions</h2></div></div>
-  <p class="section-intro">These two have schemas, templates and a validator in this repository, and they are mandatory at boundaries every stage crosses. No stage manual names either. A reader who works only from the nine pages will never produce one.</p>
+  <p class="section-intro">These two have schemas, templates and, since WP-035, a test in this repository, and they are mandatory at boundaries every stage crosses. No stage manual names either; the hub names the checkpoint once, as a practice (&ldquo;persist state at every coherent slice, blocker, authority boundary and handoff&rdquo;), and Plan cites its schema only for the state enum. A reader who works only from the nine stage pages will never produce one.</p>
   <div class="table-wrap">
     <table>
       <caption>Required by <code>AGENTS.md</code>, absent from the lifecycle</caption>
