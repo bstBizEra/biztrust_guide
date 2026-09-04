@@ -1,7 +1,7 @@
 # Recommended Next Steps
 
 **Document:** BIZTRUST-GUIDE-ROADMAP-002  
-**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Deployment activation and governance hardening remain.
+**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Production verification (NS-002) and governance hardening remain; deployment activation (NS-001) is done and dated below.
 
 > ⚠️ **The NS ids in this document are frozen roadmap labels from 2026-09-02. They are NOT the live action ledger.**
 >
@@ -9,7 +9,7 @@
 >
 > A `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
 
-## Immediate — activate the public guide
+## Immediate — verify the public guide
 
 ### NS-001: Enable GitHub Pages
 
