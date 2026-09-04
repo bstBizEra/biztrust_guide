@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bstbizera.github.io/biztrust_guide/schemas/decision-record.schema.json",
+  "title": "One line of badf/decision-log.jsonl",
+  "$comment": "Schema version 1.0.0. Derived from all 44 entries at main 6ba41e5 under BIZTRUST-GUIDE-WP-044. type and authority are open strings: nothing in the repository declares their vocabulary, and closing them here would invent one. Uniqueness and ordering of ids are cross-record rules in tests/test_badf_match_schemas.py and scripts/validate_continuity.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "timestamp", "work_package_id", "type", "decision", "rationale", "authority", "supersedes"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^DEC-[0-9]{3}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "work_package_id": { "type": "string", "pattern": "^BIZTRUST-GUIDE-WP-[0-9]{3}$" },
+    "type": { "type": "string", "pattern": "^[A-Z][A-Z_]*$" },
+    "decision": { "type": "string", "minLength": 1 },
+    "rationale": { "type": "string", "minLength": 1 },
+    "authority": { "type": "string", "minLength": 1 },
+    "supersedes": { "type": ["string", "null"], "pattern": "^DEC-[0-9]{3}$" }
+  }
+}

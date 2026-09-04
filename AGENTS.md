@@ -48,6 +48,8 @@ An agent must not continue from chat recollection alone.
 | Session recovery | Latest valid checkpoint + handoff |
 | Approval | Explicit authority record; never inferred |
 
+Since WP-044, `badf/current-state.json`, `badf/next-actions.json` and every entry of `badf/decision-log.jsonl` are validated against `schemas/*.schema.json` by `tests/test_badf_match_schemas.py`, together with the rules the schemas cannot express: exactly one primary action, named by the state file; priorities numbered 1 to n; one package id across both files; the latest checkpoint present; decision ids unique and ascending.
+
 If sources disagree, the agent records the conflict and stops the affected transition.
 
 ## 5. Work constraints

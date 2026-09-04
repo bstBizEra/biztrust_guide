@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-044-001",
+  "created_at": "2026-09-04T21:18:35Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-044",
+  "state": "ENGINEERING_READY",
+  "objective": "Derive descriptive JSON Schemas for the three badf/ records, extend the WP-035 stdlib checker with cross-record rules and negative controls, and register them in the validator and roadmap for issue #89.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "feat/biztrust-guide-wp-044-badf-schemas",
+    "baseline_commit": "6ba41e588326f5f3e3ee771076c815fe7de9f455"
+  },
+  "completed": [
+    "Task 1: schemas/current-state.schema.json, schemas/next-actions.schema.json and schemas/decision-record.schema.json created, derived from the records at main 6ba41e5; enums closed only where AGENTS.md closes them (state, resume_decision); type and authority left open. Calibrated against jsonschema 4.26.0 with zero errors on the first attempt.",
+    "Task 2: tests/test_badf_match_schemas.py loads the WP-035 checker by path, validates all three records including every decision-log entry, guards keyword coverage, exercises one negative control per schema, and enforces five cross-record rules via cross_record_problems(), each with its own control. A fresh-context review found the original cross-record control tautological and it was replaced (DEC-046).",
+    "Task 3: scripts/validate_continuity.py lists the three new schemas in required-files and the dialect-parse loop; docs/NEXT_STEPS.md NS-006 carries a dated coverage line; AGENTS.md section 4 and README.md's checks table carry the same sentence and row.",
+    "Task 4: badf/current-state.json, badf/next-actions.json and badf/decision-log.jsonl (DEC-046) updated to WP-044's own state, and this checkpoint written, so the test added in Task 2 validates the package's own records."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-043.",
+    "NS-007 (issue-branch-PR binding) is the next unticketed engineering item."
+  ],
+  "files_changed": [
+    "schemas/current-state.schema.json",
+    "schemas/next-actions.schema.json",
+    "schemas/decision-record.schema.json",
+    "tests/test_badf_match_schemas.py",
+    "scripts/validate_continuity.py",
+    "docs/NEXT_STEPS.md",
+    "AGENTS.md",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-044-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -c \"jsonschema 4.26.0 Draft202012Validator over badf/current-state.json, badf/next-actions.json and every badf/decision-log.jsonl entry against the three new schemas\"",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "scratch copy of tests/test_checkpoints_match_schema.py with errors() returning []; a copy of tests/test_badf_match_schemas.py pointed at it; python -m unittest on that copy -> the 18 schema-control subtests fail; both copies deleted",
+      "status": "FAIL",
+      "exit_code": 1
+    }
+  ],
+  "observations": [
+    "The Task 2 fresh-context review found the plan's cross-record control tautological: it re-derived the same computation the code under test performs instead of applying a mutation that could fail it. cross_record_problems() replaced it with a function the rule tests and the negative controls both call, on real and mutated data respectively.",
+    "Calibrating errors() against jsonschema 4.26.0 over both state files and all 44 decision-log entries found zero divergence on the first attempt; no schema needed loosening."
+  ],
+  "decisions": [
+    "DEC-046: descriptive schemas, closed enums only where AGENTS.md closes them, jsonschema calibration at zero errors, and the tautological-control finding replaced by cross_record_problems()."
+  ],
+  "assumptions": [
+    "Describing today's records is the right baseline for a schema; a stricter schema is a later, separate decision."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Create a GitHub Project and grant write access; branch protection; documentation ownership."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_043",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-040",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_badf_match_schemas",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/89"
+    ],
+    "stop_if": [
+      "A schema is loosened to admit a malformed record instead of the record being a finding.",
+      "A record is edited to fit a schema."
+    ]
+  },
+  "declared_non_coverage": [
+    "Evidence manifests (NS-008) and Work Package issues are not covered by these schemas or this checker.",
+    "The checker's semantics are calibrated against jsonschema 4.26.0, not proven equivalent to the JSON Schema 2020-12 specification, and the jsonschema calibration did not assert format: date-time, since that install has no date-time checker.",
+    "The implementation plan this package was executed from is not in the tree; PR #90 and DEC-046 record the design and its two review-driven deviations."
+  ]
+}
