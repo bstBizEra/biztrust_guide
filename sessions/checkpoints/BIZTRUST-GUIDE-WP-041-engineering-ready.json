@@ -1,18 +1,20 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-041-001",
-  "created_at": "2026-09-04T19:24:14Z",
+  "created_at": "2026-09-04T19:32:30Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-041",
   "state": "ENGINEERING_READY",
-  "objective": "NS-002: production verified against main at 6a88463 with the runbook's evidence block; nothing decided.",
+  "objective": "NS-002 (issue #84): production verified against main at 6a88463 for bytes, assets and HTTPS with the runbook's evidence block; navigation, search and mobile layout named as not exercised; nothing decided about content.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-041-production-verification",
     "baseline_commit": "6a88463b7db2d20ef2a1c71c9983536c340f65f3"
   },
   "completed": [
-    "docs/NEXT_STEPS.md: NS-002 gains a dated evidence block in the section-7 format - deployment id and sha, entry-file bytes and sha256 both ways, seventeen of seventeen tracked pages byte-identical, assets 200, validator 0 - and the lead sentence says NS-001 and NS-002 are done",
-    "badf: stop_reason states what remains and why each waits on the operator; DEC-043 records the second refusal on PR #74"
+    "docs/NEXT_STEPS.md: NS-002 gains a dated evidence block in the section-7 format with two added fields - deployment id and sha, entry-file bytes and sha256 both ways, seventeen of seventeen tracked pages byte-identical, all assets 200 at committed sizes, HTTPS enforced, validator 0 - plus an item-by-item checklist naming navigation, search and mobile layout as not exercised; the lead sentence and heading say the same",
+    "badf: stop_reason states what remains and why each waits on the operator; DEC-043 records the second refusal on PR #74",
+    "AGENTS.md section 10: 'nine of the ten pages' corrected to sixteen of seventeen under stages/, phases/ and reference/",
+    "Fresh-context adversarial review (2026-09-05): four should-fix findings adopted - NS-002 called done at half its checklist, non-coverage naming the wrong items, the #52 transcript's consequence line standing as a third chat-as-authority attempt (withdrawn there), no ticket (issue #84 opened); notes on the harness-refusal claim, the format wording, the stale AGENTS.md count, and two overstatements"
   ],
   "remaining": [
     "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
@@ -22,6 +24,7 @@
   ],
   "files_changed": [
     "docs/NEXT_STEPS.md",
+    "AGENTS.md",
     "badf/current-state.json",
     "badf/next-actions.json",
     "badf/decision-log.jsonl",
@@ -52,11 +55,17 @@
       "command": "python3 scripts/validate_continuity.py",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "curl assets/unitrust-horizontal.png -> 200 20471; unitrust-vertical.png -> 200 24601; gh api .../pages -> https_enforced true; http://bstbizera.github.io/biztrust_guide/ -> 301 https",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
     "The runbook's evidence format had existed since 2026-09-02 and had never been filled in; the site had been serving since 2026-09-03T12:51Z.",
-    "A sweep of index.html, the stage, phase and reference pages and docs/ for count words and 'never/nothing/not yet' status phrasing found no live claim left stale: the two remaining hits are dated history with corrections beneath."
+    "A sweep of index.html, the stage, phase and reference pages and docs/ for count words and 'never/nothing/not yet' status phrasing found no live claim left stale in that scope; the review found one just outside it, in AGENTS.md section 10, corrected here. README.md was not swept.",
+    "The transcript of the operator's instructions posted on issue #52 was a third attempt to make chat into merge authority, after the relay and its withdrawal; the PR #83 reviewer named it and its consequence line is withdrawn. The agent's claim that the harness refused its state-writing command is unrecorded and is marked as the agent's assertion."
   ],
   "decisions": [
     "DEC-043: a dated evidence block, not a sentence; the second refusal on PR #74 recorded"
@@ -104,7 +113,8 @@
     ]
   },
   "declared_non_coverage": [
-    "The verification compares bytes; it does not exercise navigation, search or the theme toggle in a browser, which NS-002's checklist also names.",
-    "The workflow-run link expires in about ninety days; the deployment id and digests do not."
+    "Bytes, assets and HTTPS reachability were verified; navigation, search and mobile layout - three of NS-002's eight checklist items - were not exercised in a browser.",
+    "The workflow-run link expires in about ninety days; the deployment id and digests do not.",
+    "README.md was not included in the stale-claim sweep."
   ]
 }

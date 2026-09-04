@@ -1,7 +1,7 @@
 # Recommended Next Steps
 
 **Document:** BIZTRUST-GUIDE-ROADMAP-002  
-**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Governance hardening remains; deployment activation (NS-001) and production verification (NS-002) are done and dated below.
+**Decision posture:** The nine-stage guide is drafted and under defect correction — see `gates.content` in `badf/current-state.json`. Governance hardening remains; deployment activation (NS-001) is done, and production verification (NS-002) is verified for bytes, assets and HTTPS with navigation, search and mobile layout not exercised — both dated below.
 
 > ⚠️ **The NS ids in this document are frozen roadmap labels from 2026-09-02. They are NOT the live action ledger.**
 >
@@ -9,7 +9,7 @@
 >
 > A `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
 
-## Immediate — verify the public guide
+## Immediate — verify the public guide (NS-001 and NS-002 dated below)
 
 ### NS-001: Enable GitHub Pages
 
@@ -25,14 +25,14 @@
 - **Action:** Verify entry page, CSS, JavaScript, images, navigation, search, mobile layout and HTTPS.
 - **Evidence:** Deployment URL, source SHA, checklist and timestamp.
 - **Stop if:** The deployment SHA differs from approved `main`.
-- **Verified, dated 2026-09-04T19:22:58Z:** recorded in the format § 7 of `LIVE_PREVIEW.md` prescribes, against `main` at `6a88463b7db2d20ef2a1c71c9983536c340f65f3`.
+- **Verified (bytes, assets, HTTPS), dated 2026-09-04T19:22:58Z:** recorded in the § 7 format of `LIVE_PREVIEW.md`, with two added fields (`deployment`, `all_tracked_pages`), against `main` at `6a88463b7db2d20ef2a1c71c9983536c340f65f3`.
 
   ```text
   source_commit: 6a88463b7db2d20ef2a1c71c9983536c340f65f3
   preview_mode: github-pages
   url: https://bstbizera.github.io/biztrust_guide/
   entry_file: index.html
-  assets_checked: true                         # styles.css, script.js, assets/unitrust-icon.png -> 200
+  assets_checked: true                         # styles.css, script.js and all three assets/*.png -> 200 at committed sizes
   validation_command: python3 scripts/validate_continuity.py
   validation_exit_code: 0
   workflow_run: https://github.com/bstBizEra/biztrust_guide/actions/runs/33910065490   # pointer only; expires
@@ -42,9 +42,12 @@
   source_bytes: 42335
   source_sha256: c06d5c6831f7a84bc1dd6694042c93ed91f78360d5610091cfbf4f5aeed183a2
   all_tracked_pages: 17 fetched, 17 byte-identical to git show main:<path> (sha256 compared)
-  verified_by: documentation-engineer (agent), evidence in the WP-041 checkpoint
+  https: enforced (GET /pages https_enforced true; http:// -> 301 to https://)
+  verified_by: documentation-engineer (agent), evidence in the WP-041 checkpoint; independently reproduced by the PR #83 reviewer
   verified_at: 2026-09-04T19:22:58Z
   ```
+
+  Checklist against the Action line above: entry page ✓ · CSS ✓ · JavaScript ✓ · images ✓ (three PNGs) · HTTPS ✓ (enforced) · navigation ✗ · search ✗ · mobile layout ✗ — the last three were not exercised in a browser and remain open.
 
   This records that the deployment of that commit was verified at that time. It says nothing about what the site serves now; read that from the deployments API, as NS-001 says.
 
