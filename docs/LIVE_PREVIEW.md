@@ -36,11 +36,12 @@ Expected URL:
 https://bstbizera.github.io/biztrust_guide/
 ```
 
-GitHub notes that initial publication or updates can take several minutes.
+GitHub notes that initial publication or updates "can take up to 10 minutes" ([creating a GitHub Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)).
 
 **The Actions run is a convenience pointer, not the deployment record.** From 1 October 2026
 GitHub's Actions retention setting covers checks, workflow runs and statuses, defaulting to 90
-days. A `workflow_run` URL recorded as evidence therefore stops resolving roughly three months
+days ("Starting October 1, 2026, checks, workflow runs, and statuses will be governed by the same
+Actions retention setting … with a default of 90 days" — [GitHub Changelog, 2026-08-27](https://github.blog/changelog/2026-08-27-actions-retention-will-cover-checks-workflow-runs-and-statuses/)). A `workflow_run` URL recorded as evidence therefore stops resolving roughly three months
 after it is written, and an evidence record whose only citation has expired proves nothing.
 
 The durable record is the pair **`source_commit` + what the live URL actually serves**, because

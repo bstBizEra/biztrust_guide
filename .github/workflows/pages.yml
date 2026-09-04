@@ -19,6 +19,11 @@ permissions:
 concurrency:
   # Deployments must serialise, so every push shares one group. Validation runs
   # must NOT: a single shared group meant a queued pull-request run was cancelled
+  # (documented: "any existing pending job or workflow in the same concurrency group
+  # will be canceled and the new queued job or workflow will take its place" -
+  # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs).
+  # Pull-request runs are grouped per ref, so a later push to the SAME pull request
+  # still replaces its queued run; only runs for different pull requests are independent.
   # and replaced by the next arrival, which is the same "CI never ran but nothing
   # says so" failure the unfiltered pull_request trigger above was added to fix.
   group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}

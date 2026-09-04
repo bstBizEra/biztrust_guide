@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-042-001",
+  "created_at": "2026-09-04T20:09:17Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-042",
+  "state": "ENGINEERING_READY",
+  "objective": "Issue #85: every framework-specific claim cited to its official source; the two unsupported clauses marked unverified in place.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-042-source-citations",
+    "baseline_commit": "f73ca52ec440cab57bde409524ed000e3c3e057a"
+  },
+  "completed": [
+    "README.md: the .nojekyll row cites the action README and the starter workflow, and marks the Jekyll clause unverified with the two Pages pages that were checked; the deployment instruction sorts statuses by created_at and cites the REST reference's silence on order; five sources added to Authoritative references",
+    ".github/workflows/pages.yml: the concurrency comment quotes and links the documented behaviour",
+    "tests/test_checkpoints_match_schema.py: the date-time regex compiled with re.ASCII and ended with \\Z after the review showed it admitted Unicode digits and a trailing newline; two negative controls; the strictness note cites the validation vocabulary, core section 4.2.2 for equality, and RFC 3339 section 5.6, and names the two opt-ins and the two things the grammar admits that section 5.7 restricts",
+    "README.md: the inactive-deployment rule cited to the deployments reference with the environment's flags confirmed; 'most recent status' quoted; created_at ties broken by id; the starter comparison weakened to what it bears; nearest support quoted beside the unverified marker; the UI-page sentence labelled an observation",
+    "docs/LIVE_PREVIEW.md: the retention claim cites the 2026-08-27 changelog; 'several minutes' becomes the documented 'up to 10 minutes'",
+    "Fresh-context adversarial review (2026-09-04T20:0xZ): two should-fix findings - the regex looser than the grammar it cited, an uncited claim with a source one page over - and nine notes, all adopted; dispositions in DEC-044"
+  ],
+  "remaining": [
+    "Re-verification of the fixed head by the same reviewer, then merge",
+    "Everything else open waits on the operator (PR #74 via issue #52; #78 items 2 and 4; #81) or on a broker and a lawyer (#15, #27)"
+  ],
+  "files_changed": [
+    "README.md",
+    "docs/LIVE_PREVIEW.md",
+    ".github/workflows/pages.yml",
+    "tests/test_checkpoints_match_schema.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-042-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "gh api repos/actions/{checkout,configure-pages,upload-pages-artifact,deploy-pages}/releases/latest -> v7.0.1, v6.0.0, v5.0.0, v5.0.1; git/ref/tags/{v7,v6,v5,v5} resolve",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/actions/starter-workflows/contents/pages/static.yml | base64 -d | grep -i nojekyll -> no match; configure-pages@v5, upload-pages-artifact@v3 path '.', deploy-pages@v5",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "WebFetch of the upload-pages-artifact README, the two GitHub Pages pages, the concurrency page, the REST deployment-statuses page, the JSON Schema 2020-12 validation spec and RFC 3339 section 5.6 (2026-09-05)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/bstBizEra/biztrust_guide/deployments/6271513367 -> production_environment false, transient_environment false (the inactive rule applies)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -c \"from tests.test_checkpoints_match_schema import _date_time as f; print(f('\\uff12\\uff10\\uff12\\uff16-09-04T00:00:00Z'), f('2026-09-04T00:00:00Z\\\\n'))\" -> False False (were True True before the fix)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The starter workflow pins configure-pages@v5 and upload-pages-artifact@v3; this repository pins v6 and v5, which are the current majors. The starter is behind, not this workflow.",
+    "Two of the repository's claims rested on observation rather than documentation and had read as documented facts. Both stand as observations now, labelled.",
+    "A regex cited to an ABNF was looser than the ABNF in two ways the citation itself made findable. Citing a source is not the same as matching it; the review matched it."
+  ],
+  "decisions": [
+    "DEC-044: cite at the claim; mark unverified rather than delete; sort statuses rather than assume order"
+  ],
+  "assumptions": [
+    "That the documentation fetched on 2026-09-05 is current; the URLs are recorded so a later reader can re-fetch."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_041",
+    "experiment_rerun": "NOT_GRANTED",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-040",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/85"
+    ],
+    "stop_if": [
+      "A framework-specific claim is added without a source, or an unverified marker is removed without one"
+    ]
+  },
+  "declared_non_coverage": [
+    "Fetched pages were read for the quoted passages only; nothing else on them was checked.",
+    "The Jekyll clause and the status ordering remain unverified; they are marked, not resolved.",
+    "External links are not checked by any test."
+  ]
+}
