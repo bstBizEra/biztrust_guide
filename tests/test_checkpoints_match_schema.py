@@ -7,7 +7,7 @@ only that the schema file parsed and declared the right dialect. Measured
 before this file existed, three of seventeen committed checkpoints failed the
 schema - WP-017, WP-024 and WP-026 record `validation` entries as strings
 where the schema requires objects, and WP-017's one blocker is a string too -
-and nothing would have noticed a seventeenth.
+and nothing would have noticed an eighteenth.
 
 WHY A HAND-ROLLED CHECKER
 =========================
