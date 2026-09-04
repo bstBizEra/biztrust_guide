@@ -92,32 +92,32 @@
 
 <section id="produces" data-search="artifacts produces outputs objective alert rota incident record restore drill recovery objectives cost attribution capacity forecast dependency inventory patching timeline access review secret rotation disclosure route learn handover">
   <div class="section-heading"><span>02</span><div><p>Outputs</p><h2>What this stage produces</h2></div></div>
-  <p class="section-intro">Thirteen artifacts, every one already required or named by a section below; this table adds no artifact, it names them in one place so the gate and <a href="learn.html#entry">Learn&rsquo;s entry criteria</a> have something to point at. Operate runs continuously, so none is produced once: each is a record that is kept current, and the gate checks the current state of it.</p>
-  <p class="section-intro">The <a href="../reference/artifact-catalogue.html">artifact catalogue</a> holds the home and the accepter of each row, where a stage has named one. Two of the thirteen are the only things Operate hands to Learn; the rest stay here.</p>
+  <p class="section-intro">Thirteen artifacts, every one already read off a section below by the artifact catalogue; this table adds none, it names them in one place so the gate and <a href="learn.html#entry">Learn&rsquo;s entry criteria</a> have something to point at. Where a section names an activity rather than a record &mdash; rotating a secret, reviewing access, attributing cost &mdash; the record is the catalogue&rsquo;s reading of it, kept here so the two agree. Operate runs continuously, so none is produced once: each is a record that is kept current, and the gate checks the current state of it.</p>
+  <p class="section-intro">The <a href="../reference/artifact-catalogue.html">artifact catalogue</a> holds the home and the accepter of each row, where a stage has named one. One row, and conditionally a second, is all Operate hands to Learn; the rest stay here.</p>
   <div class="table-wrap">
     <table>
       <caption>Operate artifacts, the section that requires each, and which reach Learn</caption>
       <thead><tr><th>Artifact</th><th>What it records</th><th>Required by</th><th>Reaches Learn as</th></tr></thead>
       <tbody>
-        <tr><td><strong>Service objective definition</strong></td><td>Indicator, objective, error budget, agreed consequence and review cadence</td><td>§03; gate</td><td>A decision record each time the review revises or defends the objective &mdash; graded in <a href="learn.html#decision">Learn §03</a></td></tr>
-        <tr><td><strong>Alert definitions</strong></td><td>One per symptom, each actionable</td><td>§05; gate</td><td>&mdash;</td></tr>
-        <tr><td><strong>Escalation rota</strong></td><td>Who is called second, and after how long</td><td>§05; gate</td><td>&mdash;</td></tr>
-        <tr><td><strong>Incident record</strong></td><td>Detect, declare, mitigate, communicate, learn &mdash; and the control change it produced</td><td>§06; gate</td><td>The production entries of the escape list <a href="learn.html#entry">Learn §01</a> asks for; the control change lands in Learn&rsquo;s control change set</td></tr>
-        <tr><td><strong>Restore drill record</strong></td><td>The result of a performed restore, including the parts that went badly</td><td>§07; gate</td><td>&mdash;</td></tr>
-        <tr><td><strong>Recovery objectives</strong></td><td>How much time may pass before service returns, and how much data may be lost</td><td>§07; not gated</td><td>&mdash;</td></tr>
-        <tr><td><strong>Cost attribution record</strong></td><td>Cost per tenant and per capability</td><td>§08; gate</td><td>&mdash;</td></tr>
-        <tr><td><strong>Capacity forecast</strong></td><td>Forecast against measured growth, with rate limits and quotas in place</td><td>§08; not gated</td><td>&mdash;</td></tr>
-        <tr><td><strong>Dependency inventory</strong></td><td>Every dependency, monitored</td><td>§09; not gated</td><td>&mdash;</td></tr>
-        <tr><td><strong>Patching timeline</strong></td><td>Agreed timeline by severity, set before the urgent case arrives</td><td>§09; gate</td><td>&mdash;</td></tr>
-        <tr><td><strong>Access review record</strong></td><td>Periodic review; accounts nobody has needed for a year first</td><td>§09; gate</td><td>&mdash;</td></tr>
-        <tr><td><strong>Secret rotation record</strong></td><td>Rotation exercised on a schedule, not assumed to work</td><td>§09; not gated</td><td>&mdash;</td></tr>
-        <tr><td><strong>Disclosure route</strong></td><td>A published route, and evidence that it is answered</td><td>§09; not gated</td><td>&mdash;</td></tr>
+        <tr><td><strong>Service objective definition</strong></td><td>Indicator, objective, error budget, agreed consequence and review cadence</td><td><a href="#objectives">§03</a>; gate</td><td>The review&rsquo;s revise-or-defend outcome, where its expectation was written first &mdash; a decision <a href="learn.html#decision">Learn §03</a> can grade; this page does not require that record</td></tr>
+        <tr><td><strong>Alert definitions</strong></td><td>One per symptom, each actionable</td><td><a href="#oncall">§05</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Escalation rota</strong></td><td>Who is called second, and after how long</td><td><a href="#oncall">§05</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Incident record</strong></td><td>Detect, declare, mitigate, communicate, learn &mdash; and the control change it produced</td><td><a href="#incident">§06</a>; gate</td><td>The production entries of the escape ledger <a href="learn.html#entry">Learn §01</a> asks for; the control change lands in Learn&rsquo;s control change set</td></tr>
+        <tr><td><strong>Restore drill record</strong></td><td>The result of a performed restore, including the parts that went badly</td><td><a href="#recovery">§07</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Recovery objectives</strong></td><td>How much time may pass before service returns, and how much data may be lost</td><td><a href="#recovery">§07</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Cost attribution record</strong></td><td>Cost per tenant and per capability</td><td><a href="#cost">§08</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Capacity forecast</strong></td><td>Forecast against measured growth, with rate limits and quotas in place</td><td><a href="#cost">§08</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Dependency inventory</strong></td><td>Every dependency, monitored</td><td><a href="#vuln">§09</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Patching timeline</strong></td><td>Agreed timeline by severity, set before the urgent case arrives</td><td><a href="#vuln">§09</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Access review record</strong></td><td>Periodic review; accounts nobody has needed for a year first</td><td><a href="#vuln">§09</a>; gate</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Secret rotation record</strong></td><td>Rotation exercised on a schedule, not assumed to work</td><td><a href="#vuln">§09</a>; not gated</td><td><small>stays in Operate</small></td></tr>
+        <tr><td><strong>Disclosure route</strong></td><td>A published route, and evidence that it is answered</td><td><a href="#vuln">§09</a>; not gated</td><td><small>stays in Operate</small></td></tr>
       </tbody>
     </table>
   </div>
   <div class="callout">
     <strong>What Operate does not hand to Learn</strong>
-    <p>A near-miss register. <a href="learn.html#promotion">Learn</a> says in as many words that no stage owns one and Operate keeps none; this table does not create one, because doing so would decide a control-retirement question that belongs to whoever owns Learn&rsquo;s promotion bar. Five rows above are named by a section and required by no gate line &mdash; the <a href="../reference/artifact-catalogue.html#visible">catalogue</a> lists them; this table records the fact rather than repairing it.</p>
+    <p>A near-miss register. <a href="learn.html#promotion">Learn</a> says in as many words that no stage owns one and Operate keeps none; this table does not create one, because doing so would decide a control-retirement question that belongs to Learn&rsquo;s control owner. Five rows above are named by a section and required by no gate line &mdash; the <a href="../reference/artifact-catalogue.html#visible">catalogue</a> lists them; this table records the fact rather than repairing it.</p>
   </div>
 </section>
 

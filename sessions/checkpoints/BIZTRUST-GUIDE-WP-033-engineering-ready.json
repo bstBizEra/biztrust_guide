@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-033-001",
-  "created_at": "2026-09-04T16:29:51Z",
+  "created_at": "2026-09-04T16:39:55Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-033",
   "state": "ENGINEERING_READY",
   "objective": "Issue #55: an outputs section for Operate that names what the page already produces and which of it reaches Learn, with every citation of an Operate section number updated in the same change.",
@@ -15,10 +15,11 @@
     "stages/learn.html: the 'Inputs assembled beforehand' criterion names where the escape list and decision records come from, and links Operate's outputs section",
     "reference/artifact-catalogue.html: ten 'Operate section 10' citations now section 11; five 'Named in' citations moved by one; the Operate block note and the 'no outputs section' finding rewritten in the past tense",
     "tests/test_stage_page_spine.py: Operate exemption deleted from KNOWN_GAPS; docstring updated; the ratchet test that demanded the deletion passes",
-    "NS-034 retired; NS-033 is primary and WAIT_FOR_AUTHORITY on the asserted.* question recorded on issue #52"
+    "NS-034 retired; NS-033 is primary and WAIT_FOR_AUTHORITY on the asserted.* question recorded on issue #52",
+    "Fresh-context adversarial review (2026-09-04): two should-fix and six notes, all adopted on the branch - the objective-review decision record hedged on both pages, the Assure link corrected, ledger naming, dash cells, linked section citations, reification sentence, control-owner attribution; dispositions in DEC-034"
   ],
   "remaining": [
-    "Fresh-context adversarial review of this branch, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge of that head",
     "NS-033 - after the operator answers the asserted.* question on issue #52",
     "Independent oracle authorship before any re-run - unchanged"
   ],
@@ -73,7 +74,7 @@
     "DEC-034: document, do not author - thirteen rows the catalogue had already read off the page, no register, no owner, no new gate line; Learn's criterion names its sources"
   ],
   "assumptions": [
-    "That naming which two of thirteen existing artifacts reach Learn - the incident record and the objective review's revise-or-defend outcome, both already described on the page - is transcription rather than the content decision #55 reserved to a human. Recorded so a human can disagree."
+    "That naming the incident record as the production source of Learn's escape ledger entries - both already described on their pages - is transcription rather than the content decision #55 reserved to a human. The objective review's outcome is offered to Learn only where a record of it exists; the page is not made to require one. Recorded so a human can disagree."
   ],
   "blockers": [
     {
@@ -111,7 +112,7 @@
     ]
   },
   "declared_non_coverage": [
-    "No test ties the catalogue's section-number citations to the pages; the renumbering was verified by grep once and can drift again silently, which is the hazard #55 named and this package did not mechanise.",
+    "No test ties section-number citations to the pages: the catalogue's plain-text 'Operate section N' citations were verified once by grep and can drift again silently, which is the hazard #55 named and this package did not mechanise. The thirteen citations inside the new table are links, so html-refs checks that each anchor exists but not that the displayed number matches the heading.",
     "The two 'reaches Learn' cells are the author's reading of learn.html; nothing checks them.",
     "This checkpoint is not validated against its schema by any test (issue #68)."
   ]
