@@ -25,7 +25,7 @@
 - **Action:** Verify entry page, CSS, JavaScript, images, navigation, search, mobile layout and HTTPS.
 - **Evidence:** Deployment URL, source SHA, checklist and timestamp.
 - **Stop if:** The deployment SHA differs from approved `main`.
-- **Verified (bytes, assets, HTTPS), dated 2026-09-04T19:22:58Z:** recorded in the § 7 format of `LIVE_PREVIEW.md`, with two added fields (`deployment`, `all_tracked_pages`), against `main` at `6a88463b7db2d20ef2a1c71c9983536c340f65f3`.
+- **Verified (bytes, assets, HTTPS), dated 2026-09-04T19:22:58Z:** recorded in the § 7 format of `LIVE_PREVIEW.md`, with three added fields (`deployment`, `all_tracked_pages`, `https`), against `main` at `6a88463b7db2d20ef2a1c71c9983536c340f65f3`.
 
   ```text
   source_commit: 6a88463b7db2d20ef2a1c71c9983536c340f65f3

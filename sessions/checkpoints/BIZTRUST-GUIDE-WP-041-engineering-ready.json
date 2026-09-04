@@ -11,10 +11,10 @@
     "baseline_commit": "6a88463b7db2d20ef2a1c71c9983536c340f65f3"
   },
   "completed": [
-    "docs/NEXT_STEPS.md: NS-002 gains a dated evidence block in the section-7 format with two added fields - deployment id and sha, entry-file bytes and sha256 both ways, seventeen of seventeen tracked pages byte-identical, all assets 200 at committed sizes, HTTPS enforced, validator 0 - plus an item-by-item checklist naming navigation, search and mobile layout as not exercised; the lead sentence and heading say the same",
-    "badf: stop_reason states what remains and why each waits on the operator; DEC-043 records the second refusal on PR #74",
+    "docs/NEXT_STEPS.md: NS-002 gains a dated evidence block in the section-7 format with three added fields - deployment id and sha, entry-file bytes and sha256 both ways, seventeen of seventeen tracked pages byte-identical, all assets 200 at committed sizes, HTTPS enforced, validator 0 - plus an item-by-item checklist naming navigation, search and mobile layout as not exercised; the lead sentence and heading say the same",
+    "badf: stop_reason states what remains and why each waits on the operator; DEC-043 records that the #52 transcript was a third attempt at chat-as-authority and that its consequence line is withdrawn",
     "AGENTS.md section 10: 'nine of the ten pages' corrected to sixteen of seventeen under stages/, phases/ and reference/",
-    "Fresh-context adversarial review (2026-09-05): four should-fix findings adopted - NS-002 called done at half its checklist, non-coverage naming the wrong items, the #52 transcript's consequence line standing as a third chat-as-authority attempt (withdrawn there), no ticket (issue #84 opened); notes on the harness-refusal claim, the format wording, the stale AGENTS.md count, and two overstatements"
+    "Fresh-context adversarial review (2026-09-04T19:26Z): four should-fix findings adopted - NS-002 called done at half its checklist, non-coverage naming the wrong items, the #52 transcript's consequence line standing as a third chat-as-authority attempt (withdrawn there), no ticket (issue #84 opened); notes on the harness-refusal claim, the format wording, the stale AGENTS.md count, and two overstatements"
   ],
   "remaining": [
     "Fresh-context adversarial review, fixes on the branch, merge of the fixed head",
@@ -68,7 +68,7 @@
     "The transcript of the operator's instructions posted on issue #52 was a third attempt to make chat into merge authority, after the relay and its withdrawal; the PR #83 reviewer named it and its consequence line is withdrawn. The agent's claim that the harness refused its state-writing command is unrecorded and is marked as the agent's assertion."
   ],
   "decisions": [
-    "DEC-043: a dated evidence block, not a sentence; the second refusal on PR #74 recorded"
+    "DEC-043: a dated evidence block that says what it lacks; the #52 transcript named a third attempt, its consequence withdrawn; the harness-refusal claim marked as the agent's own"
   ],
   "assumptions": [
     "None. The block is a measurement at a named time against a named commit."
