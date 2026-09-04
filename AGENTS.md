@@ -138,7 +138,7 @@ Before handoff or pull request:
 
 1. Run deterministic validation.
 2. Confirm no broken local asset references.
-3. Confirm every tracked `*.html` reaches the publishing artifact — CI step *Verify every tracked page reached the artifact* — not only root `index.html`. Nine of the ten pages live in `stages/`.
+3. Confirm every tracked `*.html` reaches the publishing artifact — CI step *Verify every tracked page reached the artifact* — not only root `index.html`. Sixteen of the seventeen tracked pages live under `stages/`, `phases/` and `reference/`.
 4. Update `badf/current-state.json` and `badf/next-actions.json`.
 5. Create a checkpoint from `templates/session-checkpoint.json`.
 6. Summarize risks, non-coverage and next action.
