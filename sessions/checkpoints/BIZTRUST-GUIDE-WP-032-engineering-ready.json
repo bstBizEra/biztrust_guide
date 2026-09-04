@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-032-001",
-  "created_at": "2026-09-04T16:05:10Z",
+  "created_at": "2026-09-04T16:19:28Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-032",
   "state": "ENGINEERING_READY",
   "objective": "Close the three documentation findings WP-030 filed: #61 README deployment claim, #62 README repository table, #63 Build page branch types.",
@@ -14,13 +14,14 @@
     "README.md: the 'Current delivery state' deployment paragraph and the 'Live website' lead-in replaced by pointers to the Pages workflow runs and the github-pages environment; no sentence in the file asserts whether Pages is enabled or what the site returns (verified by reading the whole file)",
     "README.md: reference/ row added in the shape of the stages/ and phases/ rows; index.html row describes the hub as linking the stage and phase manuals - measured, the hub links no reference page - with no count",
     "stages/build.html: branch type defined by reference to the commit-type list; revert added to the commit-type list with its one permitted use; examples include a docs/ branch",
-    "NS-033 demoted with the two forms recorded on issue #52 (DEC-033); NS-034 for issue #55 is primary"
+    "NS-033 redesigned as form (iii) after fresh-context review and queued behind NS-034; its unsatisfiable stop condition retired for a mechanical one (DEC-033); NS-034 for issue #55 is primary",
+    "Fresh-context adversarial review (2026-09-04): five should-fix findings, all fixed on the branch - README line 9 presupposition, deployments status semantics, undated serving claim in known_divergence, DEC-032's wrong provenance (#41 for #43), DEC-033's missed third form; dispositions in DEC-032 and DEC-033"
   ],
   "remaining": [
-    "Fresh-context adversarial review of this branch, fixes on the branch, merge of the fixed head",
+    "Re-verification of the fixed head by the same reviewer, then merge of that head",
     "NS-034 - issue #55 - in its own package after this one merges",
-    "NS-033 - awaiting the human choice recorded on issue #52",
-    "Two findings noticed and not fixed, filed as an issue: reference/artifact-catalogue.html's Build row still says the branch convention is unstated (issue #31 item 5), and docs/LIVE_PREVIEW.md line 5 says Pages has never been activated"
+    "NS-033 - form (iii), in its own package after NS-034",
+    "Findings noticed and not fixed, filed: #66 (catalogue Build-row note; LIVE_PREVIEW.md line 5) and a second issue from the review (three earlier checkpoints fail the checkpoint schema; no .gitattributes pins LF)"
   ],
   "files_changed": [
     "README.md",
@@ -60,26 +61,28 @@
       "command": "gh pr list --state all --json headRefName | branch-type histogram -> fix 19, feat 9, docs 7, test 2, revert 1",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "gh api repos/bstBizEra/biztrust_guide/deployments/6267852711/statuses -> success@2026-09-04T15:46:34Z; deployments/6244308440/statuses -> success@2026-09-03T12:51:36Z; git log -1 3ff58b3 -> 2026-09-03T12:56:32Z",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
     "On a Windows checkout with core.autocrlf=true, two tests fail and build.py --check reports all 27 fixture files STALE because the working tree is CRLF and the byte comparison is exact. CI is Linux and green. Worked in a worktree with autocrlf=false; nothing in the repository was changed for it. Recorded because the next Windows agent will see the same two red tests on a clean tree.",
     "Issue #62's premise that index.html links the reference pages is false on the current tree; the row was written from grep, not from the issue.",
-    "Issue #63's count of docs/ branches was six on 2026-09-04 morning and is seven now (#64 added one); the page no longer carries a list that a count can invalidate."
+    "Issue #63's count of docs/ branches was six on 2026-09-04 morning and is seven now (#64 added one); the page no longer carries a list that a count can invalidate.",
+    "The README's 404 paragraph was committed in 3ff58b3 at 2026-09-03T12:56:32Z, five minutes after deployment 6244308440 reached success. It was false when written, not merely outlived - a stronger instance of the defect class than the issue recorded.",
+    "Review found that DEC-033's dilemma was self-constructed: the schema does not scope freshness to the action's inputs, so an edge that names what the action consumes leaves fixture 08's freshness and scenario untouched. The stop condition that fired was one no honest edge could pass."
   ],
   "decisions": [
     "DEC-032: pointers not sentences for deployment state; one branch-type list by reference; revert admitted",
-    "DEC-033: NS-033 stopped at design time and returned to the human"
+    "DEC-033: NS-033 designed as form (iii); its unsatisfiable stop condition retired for a byte-identical guard on sealed fields"
   ],
   "assumptions": [
     "That the standing documentation-implementation grant of 2026-09-03 covers three documentation corrections whose acceptance criteria were written by the filing package."
   ],
   "blockers": [
-    {
-      "code": "ITEM_3_FORM_REQUIRES_HUMAN_CHOICE",
-      "owner_role": "human-reviewer",
-      "resolution": "Choose form (i) or (ii) on issue #52, or defer item 3 until an independent oracle author exists."
-    },
     {
       "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
       "owner_role": "human-reviewer",
@@ -106,12 +109,12 @@
     "stop_if": [
       "README.md gains a sentence asserting whether Pages is enabled or what the site returns",
       "stages/build.html carries two type lists that can disagree",
-      "next_action.requires appears in a fixture before the choice on issue #52 is recorded"
+      "next_action.requires appears in a fixture outside a package that carries the byte-identical guard on sealed fields"
     ]
   },
   "declared_non_coverage": [
     "The README's two links are not fetched by any test. Both answered 200 to an anonymous request on 2026-09-04; the environment's HTML page (/deployments/github-pages) answered 404 anonymously, which is why the API address is linked instead.",
     "The catalogue's stale Build-row note and LIVE_PREVIEW.md line 5 are filed, not fixed.",
-    "This checkpoint is not validated against schemas/session-checkpoint.schema.json by any test in the repository."
+    "This checkpoint validates against schemas/session-checkpoint.schema.json (jsonschema 4.26.0, by the reviewer); no test in the repository runs that validation, and three earlier checkpoints fail it."
   ]
 }

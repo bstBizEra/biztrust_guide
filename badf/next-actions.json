@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "work_package_id": "BIZTRUST-GUIDE-WP-032",
-  "updated_at": "2026-09-04T16:05:10Z",
+  "updated_at": "2026-09-04T16:19:28Z",
   "actions": [
     {
       "id": "NS-034",
@@ -31,21 +31,22 @@
       "primary": false,
       "priority": 2,
       "owner_role": "documentation-engineer",
-      "authority": "HUMAN_DECISION_REQUIRED",
-      "action": "Reapply issue #52 item 3: add next_action dependencies PER ACTION with no inherited global default, each referencing an existing observation key, each with fixture-specific positive and negative tests.",
+      "authority": "GRANTED_BY_USER_REQUEST_2026_09_03",
+      "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
       "prerequisites": [
-        "NS-032 merged - static.repository and resolved sources are on main, enforced by build.py reading the schema",
-        "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing observation key, each fixture carries positive and negative tests for its own edge",
-        "A human chooses, on issue #52, between the two forms recorded there on 2026-09-04: (i) fixture 08's edge names the inputs the action honestly consumes, which forces its computed.freshness from UNKNOWN to CURRENT and changes the sealed scenario; or (ii) fixture 08's edge names ci_conclusion and pages_status so the scenario is untouched, which asserts that a local authoring action consumes CI - the oracle's answer written into the artifact. Either choice pre-decides fixture 08; DEC-033 records why no third form was found."
+        "NS-034 merged - badf/ is edited by one package at a time",
+        "DEC-026 disposition 5: per action, no inherited global default, each dependency names an existing key, each fixture carries positive and negative tests for its own edge",
+        "DEC-033: requires may name asserted.* as well as observed.* keys (the #57 review's finding that an observed-only edge reads as complete while covering one of four categories); freshness is not rescoped to requires"
       ],
       "evidence_required": [
-        "No dependency value is assigned in build.py's base() or otherwise inherited by a fixture it was not authored for",
-        "Every fixture carries a positive and a negative test for its own edge",
-        "A test proving a dependency naming a non-existent observation key fails"
+        "No requires value is assigned in build.py's base() or otherwise inherited; a test reads each fixture function's source and requires an explicit assignment in every function whose next_action is not null",
+        "Every fixture carries a positive test naming its own expected edge and a negative test proving build.py --check refuses an edge naming a key that does not exist, and refuses an empty edge",
+        "A test diffs every fixture's resume_decision, computed.freshness, stop_conditions and every oracle.yaml against the pre-change tree and requires them byte-identical - the additive-only guard",
+        "Eight identical edges on the eight fixtures that share NS-030 are expected and recorded as such: the same action consumes the same inputs; what is forbidden is inheritance, not agreement"
       ],
       "stop_conditions": [
-        "One constant is assigned to more than one fixture - that is exactly what #57 reverted",
-        "The edge changes which resume_decision is defensible on any fixture - it is not scored, and the edge must not smuggle it back",
+        "One value is assigned in base() or reaches a fixture whose function did not assign it - that is exactly what #57 reverted",
+        "Any sealed field - resume_decision, computed.freshness, stop_conditions, any oracle - differs byte-for-byte from the pre-change tree",
         "Oracles are edited by the author who wrote the fixtures"
       ],
       "fallback": "Leave item 3 open and record that the artifact still cannot say what an action consumes."

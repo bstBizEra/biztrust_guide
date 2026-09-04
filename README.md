@@ -6,7 +6,7 @@ Enterprise-grade implementation guide for a governed AI engineering team deliver
 
 ## Live website
 
-The Pages workflow publishes the guide to:
+The Pages workflow (`.github/workflows/pages.yml`) targets:
 
 **https://bstbizera.github.io/biztrust_guide/**
 
@@ -100,10 +100,10 @@ The validator's exit codes carry meaning: **0** pass · **1** a data defect, the
 
 The guide is nine stage manuals, five phase manuals and two reference pages, plus the `index.html` hub. Documentation actions remain open — see `badf/next-actions.json`.
 
-Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph kept asserting a 404 after the site had begun to serve. Read deployment state from the two places it actually lives:
+Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph asserted a 404 five minutes after the first deployment had succeeded, then stood for a day. Read deployment state from the two places it actually lives:
 
 - the [Pages workflow runs](https://github.com/bstBizEra/biztrust_guide/actions/workflows/pages.yml) — the run bound to the current `main` head is the evidence that the head was built, validated and uploaded;
-- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the newest entry's `sha` is the commit the site is serving. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
+- the [`github-pages` environment's deployments](https://api.github.com/repos/bstBizEra/biztrust_guide/deployments?environment=github-pages) — the newest entry whose statuses (`/deployments/{id}/statuses`) end in `success` is the commit the site is serving; a failed newer deployment leaves the previous one live. The API address is used because it answers without a login; the environment's page in the repository UI shows the same record.
 
 The workflow stages every tracked `*.html` — including the `stages/`, `phases/` and `reference/` subtrees — not only the repository root.
 
