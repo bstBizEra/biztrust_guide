@@ -7,7 +7,7 @@
     "id": "BIZTRUST-GUIDE-WP-040",
     "title": "The documenting half of issue #78: ungated artifacts say so on their pages; the catalogue's charter-artifacts claim made precise; two stale schema-validation sentences corrected; two retired-prerequisite ledger actions closed",
     "state": "ENGINEERING_READY",
-    "objective": "Take from issue #78 only what documents the current state: mark Architect's three ungated artifacts 'not gated' in its outputs table as Operate's and Plan's already are; make the catalogue's 'no page names the checkpoint or handoff' precise against the hub; correct the hub's and Plan's sentence that nothing validates a checkpoint, false since WP-035; retire NS-027 and NS-028, whose prerequisite WP-017 retired, and file the live half of NS-028 as an issue. Items 2 and 4 of #78 stay with a human.",
+    "objective": "Take from issue #78 only what documents the current state: mark Architect's three ungated artifacts 'not gated' in its outputs table as Operate's and Plan's already are; make the catalogue's 'no page names the checkpoint or handoff' precise against the hub; correct the hub's and Plan's sentence that nothing validates a checkpoint, false since WP-035; retire NS-027 and NS-028 on the grounds DEC-042 records, and file the live half of NS-028 as an issue. Items 2 and 4 of #78 stay with a human.",
     "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/78",
     "owner_role": "documentation-engineer",
     "scope": [
