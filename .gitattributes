@@ -1,0 +1,7 @@
+# Line endings are part of the sealed-fixture contract: docs/experiments/fixtures/build.py --check
+# and tests/test_wp024_fixtures_are_sealed.py compare bytes, so a checkout that rewrites LF to
+# CRLF (Git for Windows default, core.autocrlf=true) fails both on a clean tree. Pin LF for every
+# text file regardless of the client setting; binaries are declared so auto-detection never guesses.
+# Added under BIZTRUST-GUIDE-WP-035 (issue #68).
+* text=auto eol=lf
+*.png binary
