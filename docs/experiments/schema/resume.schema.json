@@ -2,12 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bstbizera.github.io/biztrust_guide/schema/resume.schema.json",
   "title": "RESUME.json",
-  "description": "The artifact a resuming agent reads. Sealed for WP-024 before any fixture existed. Every leaf declares which of the four categories it belongs to, because the categories carry different invalidation rules: observations expire on observation age, assertions on their own terms, computations on their inputs, and constants never.",
+  "description": "The artifact a resuming agent reads. Sealed for WP-024 at e37fa3b before any fixture existed; amended under NS-032 (issue #52 item 2) to 2.0.0 after WP-024 ran, with the nine fixtures regenerated against the amendment. The amendment adds static.repository and refuses unresolved observation sources; it does not touch resume_decision, next_action or any oracle. Every leaf declares which of the four categories it belongs to, because the categories carry different invalidation rules: observations expire on observation age, assertions on their own terms, computations on their inputs, and constants never.",
   "type": "object",
   "required": ["schema_version", "source_sha", "derived_at", "static", "observed", "asserted", "computed", "declared_non_coverage"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "2.0.0" },
     "source_sha": {
       "type": "string", "pattern": "^[0-9a-f]{40}$",
       "description": "The commit this state was derived from. An agent compares it against observed.main_sha; a mismatch makes the whole artifact stale regardless of any other field."
@@ -15,11 +15,21 @@
     "derived_at": { "type": "string", "format": "date-time" },
 
     "static": {
-      "type": "object", "required": ["project_id", "deriver_policy_version"],
+      "type": "object", "required": ["project_id", "deriver_policy_version", "repository"],
       "additionalProperties": false,
       "properties": {
         "project_id": { "type": "string" },
-        "deriver_policy_version": { "type": "string" }
+        "deriver_policy_version": { "type": "string" },
+        "repository": {
+          "type": "object", "required": ["owner", "name", "remote"],
+          "additionalProperties": false,
+          "properties": {
+            "owner":  { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$" },
+            "name":   { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9._-]+$" },
+            "remote": { "type": "string", "pattern": "^https://[^/\\s@]+/[^/\\s]+/[^/\\s]+$" }
+          },
+          "description": "Required since NS-032 (issue #52 item 2). Nine of nine WP-024 agents refused a bundle whose sources read GET /repos/:o/:r/... because it could not say which repository it described. Two rules JSON Schema cannot express are enforced by build.py beside these: remote ends in /owner/name, and every URL-shaped observation source references /owner/name."
+        }
       },
       "description": "Never expires. Constants do not need an invalidation rule."
     },
@@ -82,7 +92,11 @@
         "value": { "description": "null is permitted and means the observation could not be made. It must be paired with freshness UNKNOWN." },
         "observed_at": { "type": ["string", "null"], "format": "date-time" },
         "freshness": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
-        "source": { "type": "string", "description": "How it was obtained, e.g. 'git rev-parse HEAD' or 'GET /repos/:o/:r/pulls?state=open'." }
+        "source": {
+          "type": "string", "minLength": 1,
+          "not": { "pattern": "(/:[A-Za-z_]|\\{[^}]*\\}|<[^>]*>)" },
+          "description": "How it was obtained, fully RESOLVED: a command as run ('git rev-parse HEAD'), or a request with every path parameter filled and naming the repository in static.repository. An unexpanded template names no repository and no commit, so the observation cannot be re-run or checked - the defect that failed WP-024's control fixture. A source that resolves only from a working directory (gh api repos/{owner}/{repo}) is not resolved. build.py reads this pattern from here and enforces it."
+        }
       }
     },
     "assertion": {

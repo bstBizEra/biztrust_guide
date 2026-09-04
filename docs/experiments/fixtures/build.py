@@ -15,13 +15,21 @@ the sealed digest is the digest of what the agent reads.
 Usage:  python3 docs/experiments/fixtures/build.py [--check]
 """
 from __future__ import annotations
-import hashlib, json, sys
+import hashlib, json, re, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SEAL_SHA = "e23143ef91dcf0fd03e1686a1b2880c0696b798d"   # main when fixtures were authored
 MOVED_SHA = "aa11bb22cc33dd44ee55ff6600778899aabbccdd"  # a later, different main
 EVAL = "2026-09-04T09:00:00+07:00"
+
+SCHEMA = HERE.parent / "schema" / "resume.schema.json"
+# Repository identity, added under NS-032 (issue #52 item 2). Every observation source below is
+# RESOLVED against it; the schema refuses an unexpanded template, and this script enforces that
+# refusal by reading the rule from the schema - one place, not two.
+REPO = {"owner": "bstBizEra", "name": "biztrust_guide",
+        "remote": "https://github.com/bstBizEra/biztrust_guide"}
+API = "GET https://api.github.com/repos/bstBizEra/biztrust_guide"
 
 
 def obs(value, at=EVAL, freshness="CURRENT", source="git rev-parse HEAD"):
@@ -36,17 +44,18 @@ def asrt(value, issuer, effective="2026-09-03T00:00:00+07:00",
 
 def base(**over):
     d = {
-        "schema_version": "1.0.0",
+        "schema_version": "2.0.0",
         "source_sha": SEAL_SHA,
         "derived_at": EVAL,
-        "static": {"project_id": "BIZTRUST-GUIDE", "deriver_policy_version": "0.1.0-fixture"},
+        "static": {"project_id": "BIZTRUST-GUIDE", "deriver_policy_version": "0.1.0-fixture",
+                   "repository": REPO},
         "observed": {
             "main_sha": obs(SEAL_SHA),
-            "open_pull_requests": obs(0, source="GET /repos/:o/:r/pulls?state=open"),
-            "ci_conclusion": obs("success", source="GET /repos/:o/:r/commits/:sha/check-runs"),
-            "pages_status": obs("serving", source="GET /repos/:o/:r/pages"),
-            "issue_2_state": obs("closed", source="GET /repos/:o/:r/issues/2"),
-            "issue_2_labels": obs([], source="GET /repos/:o/:r/issues/2"),
+            "open_pull_requests": obs(0, source=f"{API}/pulls?state=open"),
+            "ci_conclusion": obs("success", source=f"{API}/commits/{SEAL_SHA}/check-runs"),
+            "pages_status": obs("serving", source=f"{API}/pages"),
+            "issue_2_state": obs("closed", source=f"{API}/issues/2"),
+            "issue_2_labels": obs([], source=f"{API}/issues/2"),
         },
         "asserted": {
             "active_work_package": asrt("BIZTRUST-GUIDE-WP-024", "operator"),
@@ -87,9 +96,9 @@ def f2():
 
 def f3():
     d = base()
-    d["observed"]["issue_2_state"] = obs("open", source="GET /repos/:o/:r/issues/2")
-    d["observed"]["issue_2_labels"] = obs(["state:in-progress"], source="GET /repos/:o/:r/issues/2")
-    d["observed"]["issue_2_linked_pr_merged"] = obs(True, source="GET /repos/:o/:r/pulls/28")
+    d["observed"]["issue_2_state"] = obs("open", source=f"{API}/issues/2")
+    d["observed"]["issue_2_labels"] = obs(["state:in-progress"], source=f"{API}/issues/2")
+    d["observed"]["issue_2_linked_pr_merged"] = obs(True, source=f"{API}/pulls/28")
     return d
 
 
@@ -118,17 +127,17 @@ def f6():
 
 def f7():
     d = base()
-    d["observed"]["open_pull_requests"] = obs(3, source="GET /repos/:o/:r/pulls?state=open")
-    d["observed"]["all_work_merged"] = obs(True, source="GET /repos/:o/:r/pulls?state=open")
+    d["observed"]["open_pull_requests"] = obs(3, source=f"{API}/pulls?state=open")
+    d["observed"]["all_work_merged"] = obs(True, source=f"{API}/pulls?state=open")
     return d
 
 
 def f8():
     d = base()
     d["observed"]["ci_conclusion"] = obs(None, at=None, freshness="UNKNOWN",
-                                         source="GET /repos/:o/:r/commits/:sha/check-runs - 503")
+                                         source=f"{API}/commits/{SEAL_SHA}/check-runs - 503")
     d["observed"]["pages_status"] = obs(None, at=None, freshness="UNKNOWN",
-                                        source="GET /repos/:o/:r/pages - 503")
+                                        source=f"{API}/pages - 503")
     d["computed"]["freshness"] = "UNKNOWN"
     return d
 
@@ -176,12 +185,100 @@ def digest(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 
+# ------------------------------------------------------- schema conformance
+def schema_rules() -> dict:
+    """The item-2 rules, read FROM the schema so the declaration and this enforcement
+    are one thing. A schema nothing reads is a comment; #56 shipped 241 lines of one.
+
+    Everything the schema can say about identity is read here: the version constant,
+    the required keys, the closed key set, the three patterns, the source minimum.
+    Two rules JSON Schema cannot express are in violations() as code, and the schema's
+    own description names them so a reader of either file sees both."""
+    s = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    static = s["properties"]["static"]
+    repo = static["properties"]["repository"]
+    rp = repo["properties"]
+    source = s["$defs"]["observation"]["properties"]["source"]
+    return {
+        "schema_version": s["properties"]["schema_version"]["const"],
+        "static_required": list(static["required"]),
+        "repository_required": list(repo["required"]),
+        "repository_keys": list(rp.keys()),
+        "repository_closed": repo.get("additionalProperties") is False,
+        "owner_pattern": rp["owner"]["pattern"],
+        "name_pattern": rp["name"]["pattern"],
+        "remote_pattern": rp["remote"]["pattern"],
+        "source_min_length": int(source.get("minLength", 0)),
+        "unresolved_source": source["not"]["pattern"],
+    }
+
+
+def violations(state: dict, rules: dict) -> list[str]:
+    """Every way a state fails the item-2 rules. Empty means conformant."""
+    out: list[str] = []
+    if state.get("schema_version") != rules["schema_version"]:
+        out.append(f"schema_version {state.get('schema_version')!r} is not the schema's {rules['schema_version']!r}")
+    static = state.get("static") if isinstance(state.get("static"), dict) else {}
+    for key in rules["static_required"]:
+        if key not in static:
+            out.append(f"static.{key} missing")
+    repo = static.get("repository")
+    owner = name = None
+    if isinstance(repo, dict):
+        if rules["repository_closed"]:
+            for key in repo:
+                if key not in rules["repository_keys"]:
+                    out.append(f"static.repository.{key} is not a declared key")
+        for key in rules["repository_required"]:
+            if not isinstance(repo.get(key), str) or not repo.get(key):
+                out.append(f"static.repository.{key} missing or not a non-empty string")
+        owner, name, remote = repo.get("owner"), repo.get("name"), repo.get("remote")
+        if isinstance(owner, str) and not re.search(rules["owner_pattern"], owner):
+            out.append(f"static.repository.owner {owner!r} does not match the schema pattern")
+        if isinstance(name, str) and not re.search(rules["name_pattern"], name):
+            out.append(f"static.repository.name {name!r} does not match the schema pattern")
+        if isinstance(remote, str):
+            if not re.search(rules["remote_pattern"], remote):
+                out.append(f"static.repository.remote {remote!r} is not a plain https remote")
+            elif isinstance(owner, str) and isinstance(name, str) \
+                    and not remote.rstrip("/").endswith(f"/{owner}/{name}"):
+                # Cross-field, code-only: JSON Schema cannot say "ends in /owner/name".
+                out.append(f"static.repository.remote {remote!r} does not end in /{owner}/{name}")
+    elif "repository" in static:
+        out.append("static.repository is not an object")
+    observed = state.get("observed") if isinstance(state.get("observed"), dict) else {}
+    for key, ob in observed.items():
+        src = ob.get("source") if isinstance(ob, dict) else None
+        if not isinstance(src, str):
+            out.append(f"observed.{key}.source missing or not a string")
+        elif len(src) < rules["source_min_length"]:
+            out.append(f"observed.{key}.source is shorter than minLength {rules['source_min_length']}")
+        elif re.search(rules["unresolved_source"], src):
+            out.append(f"observed.{key}.source is an unresolved template: {src!r}")
+        elif "://" in src and isinstance(owner, str) and isinstance(name, str) \
+                and f"/{owner}/{name}" not in src:
+            # Cross-field, code-only: a lexical pattern cannot see $OWNER, OWNER/REPO or a
+            # different repository. A URL-shaped source must name THIS repository.
+            out.append(f"observed.{key}.source is a URL that does not reference /{owner}/{name}: {src!r}")
+    return out
+
+
 def build(check: bool) -> int:
+    rules = schema_rules()
+    states = [(slug, fn(), honest) for slug, fn, honest in FIXTURES]
+    # Pass 1: every fixture is judged before any is written or certified. A single
+    # non-conformant fixture stops the run with nothing written. Judging per fixture
+    # inside the write loop wrote eight good fixtures before refusing the ninth and
+    # left the tree half-regenerated; a review found it, and this is the fix.
+    bad = [f"{slug}: {v}" for slug, state, _honest in states for v in violations(state, rules)]
+    if bad:
+        print("SCHEMA=VIOLATION\n  " + "\n  ".join(bad))
+        return 1
+    print(f"SCHEMA=CONFORMANT count={len(states)}")
+
     problems = []
-    for slug, fn, honest in FIXTURES:
+    for slug, state, honest in states:
         d = HERE / slug
-        d.mkdir(exist_ok=True)
-        state = fn()
         rj = (json.dumps(state, indent=2, sort_keys=True) + "\n").encode()
         html = render(slug, state).encode()
 
@@ -204,6 +301,8 @@ def build(check: bool) -> int:
         targets = {d / "RESUME.json": rj,
                    d / "control-room.html.frozen": html,
                    d / "manifest.yaml": manifest.encode()}
+        if not check:
+            d.mkdir(exist_ok=True)
         for path, content in targets.items():
             if check:
                 if not path.is_file() or path.read_bytes() != content:
@@ -219,7 +318,6 @@ def build(check: bool) -> int:
         return 0
     print(f"FIXTURES=WRITTEN count={len(FIXTURES)}")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(build("--check" in sys.argv))

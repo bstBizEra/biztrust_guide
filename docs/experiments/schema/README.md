@@ -4,6 +4,12 @@
 > it has more influence on the experiment's outcome than any individual fixture. Committing
 > it alone, ahead of the fixtures, means no fixture could be written to flatter it.
 
+> **Amended after WP-024 ran, under `NS-032` (issue #52 item 2), to `2.0.0`.** `static.repository` became
+> required and an observation source may no longer be an unresolved template; the nine fixtures were
+> regenerated against the amendment. The sealed `1.0.0` form is at `e37fa3b`. The amendment touches
+> neither `resume_decision`, nor `next_action`, nor any oracle — and `build.py` now reads the identity
+> rules from this file and refuses a fixture that breaks them, so the schema is enforced, not only declared.
+
 ## Why four categories and not one flat object
 
 `badf/current-state.json` is flat, and an audit of the WP-024 proposal showed why that is
@@ -55,5 +61,5 @@ thing it is meant to check, so integrity lives in the out-of-band manifest.
 
 ## Provenance
 
-Sealed under `NS-030`, before fixtures, per
+Sealed under `NS-030`, before fixtures, and amended to `2.0.0` under `NS-032` after WP-024 ran, per
 [`WP-024-blind-handoff-preregistration.md`](../WP-024-blind-handoff-preregistration.md) v2.
