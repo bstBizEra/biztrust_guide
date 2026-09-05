@@ -11,11 +11,12 @@
     "baseline_commit": "e5398c9cbf7fb7750f96b61133ce318a2d2c9299"
   },
   "completed": [
-    "Wayfinder map #128 charted for the P0 design pack and the landing page: twenty child tickets with native edges, five of them cross-map to ADR tickets on #91; P0 implementation out of scope.",
+    "Wayfinder map #128 charted for the P0 design pack and the landing page: twenty child tickets with native edges, seven of the eleven epic designs edge directly to ADR tickets on #91 and ten transitively; P0 implementation out of scope.",
     "Research tickets #133 to #136 resolved by background agents on research/<slug> branches under docs/research/p0-design/; pointers on #128.",
     "Ticket #129 resolved: TypeScript on Node.js LTS as a preference; candidates named; fed to #103 by comment; closed.",
-    "Ticket #130 resolved by this package: docs/architecture/p0/README.md written; phases/p0.html epics intro links to it; docs/architecture/README.md carries its row.",
-    "badf/ re-anchored: NS-043 added, DEC-048 appended, this checkpoint written."
+    "Ticket #130 resolved by this branch: docs/architecture/p0/README.md written; phases/p0.html epics intro links to it by GitHub URL, since the Pages artifact never carries docs/; docs/architecture/README.md carries its row. #130 closes with a resolution comment when this merges.",
+    "badf/ re-anchored: NS-043 added, DEC-048 appended, this checkpoint written.",
+    "Review pass: fifteen findings adopted, including the dead site link, the design-count wording, REJECTED added to the status vocabulary, the authorization-sequence term, and the authority string aligned on NS-043."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-045.",
@@ -44,22 +45,23 @@
   ],
   "observations": [
     "The operator's P0 recap document agreed with DELIVERY_PLAN.md and phases/ on every count checked (12, 13, 10, 11 epics; 5 phase pages; 7 gates); its text carried mojibake from a character-set round trip but no factual divergence.",
-    "The sibling UniPay project at c:/laragon/www/unipay is a Next.js and TypeScript static site; the architecture pack names no language anywhere.",
+    "The sibling UniPay project at c:/laragon/www/unipay is a Next.js and TypeScript static site (a path outside this repository, not verifiable from it); the architecture pack names no language anywhere.",
     "Research findings bearing on the designs are indexed on #128; none is reviewed by anyone but its authoring agent.",
-    "Validation ran 2026-09-05 in an LF worktree cut from origin/main at e5398c9 on Windows 11 with Python 3.13; html-refs rose from 582 to 583, the one new link."
+    "Validation ran 2026-09-05 in an LF worktree cut from origin/main at e5398c9 on Windows 11 with Python 3.13; html-refs rose from 582 to 583, the one new link.",
+    "The Pages workflow stages only tracked HTML, the stylesheet, the script, .nojekyll and three PNGs; docs/ is never in the artifact, so a page may link into docs/ only by GitHub URL. The validator resolves relative references against the tree, not the artifact, which is why the first draft's link passed."
   ],
   "decisions": [
     "DEC-048: map #128 charted with implementation out of scope; the design template fixed; TypeScript on Node.js LTS adopted as a preference and fed to ADR-001."
   ],
   "assumptions": [
-    "The operator's 'proceed on your plan and recommend' adopts the agent's recommendations on #129 as the human decision; each is reversible by comment and ADR-001 records the final form.",
+    "The operator's 'proceed on your plan and recommend' was given in chat and transcribed onto #129 by the agent with a marker; it is a delegation, not an authority record; ADR-001 stays DRAFT_REQUIRED and the recommendation is reversible by an operator comment.",
     "Tenant names UniTrust and the travel scheme remain acceptable in the design pack because both are already public; withdrawable by the operator."
   ],
   "blockers": [
     {
       "code": "OPERATOR_WAIVER_ON_ISSUE_27",
       "owner_role": "human-reviewer",
-      "resolution": "Post the #92 waiver comment on #27; every ADR ticket on #91 and, through them, five epic designs on #128 wait on it."
+      "resolution": "Post the #92 waiver comment on #27; every ADR ticket on #91 and, through them, seven epic designs on #128 directly and ten transitively wait on it."
     },
     {
       "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
@@ -117,7 +119,7 @@
   "declared_non_coverage": [
     "The template has been applied to no design yet; its sections are a proposal until the first design exercises them.",
     "The four research files under docs/research/p0-design/ were reviewed only by their authoring agents.",
-    "The manual's new sentence was checked by the validator's reference check only; the rendered page was not viewed in a browser.",
+    "The manual's new sentence was checked by the validator's reference check and by reading the workflow's staging list; the rendered page was not viewed in a browser.",
     "The stack decision is the agent's recommendation adopted by delegation; no team, hosting or procurement constraint was verified because none was stated."
   ]
 }

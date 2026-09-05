@@ -36,6 +36,7 @@ docs/architecture/p0/
 ```
 
 - `P0.NN-<slug>.md`: two-digit epic number, then a slug of at most four words. The number is the epic's number in `DELIVERY_PLAN.md` section 3; the slug may differ from the manual's row title but the number may not.
+- Exception: the independent security proof, ticket [#148](https://github.com/bstBizEra/biztrust_guide/issues/148), is `P0.SECURITY-PROOF.md`. It is not an epic; it is the `BT-G1` matrix that the epics' negative controls feed.
 - One design per epic. An epic that needs two documents is an epic that should be two Work Packages; say so in the design's open questions rather than splitting the file.
 - The manual links each epic row to its design once the design exists. A design links back to the manual's `#epics` anchor, to every ADR it depends on by register number, and to every research file it cites by branch and path.
 
@@ -46,8 +47,11 @@ DRAFT        the file exists; sections may be empty
 PROPOSED     every mandatory section is filled and every dependency is named
 IN_REVIEW    a fresh-context review is recorded on the ticket
 ACCEPTED     the architecture authority has recorded acceptance after BT-G0 and after every ADR the design depends on is ACCEPTED
+REJECTED     a review turned the design down; the ticket records why, and a replacement starts at DRAFT
 SUPERSEDED   replaced by a later design, which is linked
 ```
+
+The vocabulary is a subset of the ADR register's, with the same acceptance rule. A `DRAFT` lives on its branch; a design lands on `main` only at `PROPOSED`.
 
 No agent marks a design `ACCEPTED`. A design cannot be `ACCEPTED` while any ADR it names is not, and cannot be `ACCEPTED` before `BT-G0`. A `PROPOSED` design is a proposal to review, nothing more; the manual's status language for P0 does not change because a design exists.
 
@@ -61,15 +65,15 @@ A table at the top: version, status (from section 3), epic number and manual row
 
 ### 4.2 Scope and non-scope
 
-What this epic builds and what it deliberately does not. Non-scope names the epic or phase that owns each excluded item, so a gap reads as a decision and not an omission (the manual's own rule for deferrals).
+What this epic builds and what it deliberately does not. Non-scope names the epic or phase that owns each excluded item, so a gap reads as a decision and not an omission (the Architect stage's rule, [`stages/architect.html#freeze`](../../stages/architect.html#freeze): deferral is an output, not an omission).
 
-### 4.3 Security-spine step
+### 4.3 Authorization-sequence step
 
-Which step of the P0 security spine this epic implements or supports: user or service, organization token, gateway candidate, API boundary, organization-to-tenant resolver, business authorization, row-level security, audit and observability, or the allow-or-deny with evidence. An epic outside the spine (repository boundaries, secrets) says which spine steps it protects.
+Which step of the tenant authorization sequence ([`FLOWS.md`](../FLOWS.md) section 3, the manual's "security chain"; the map's tickets call it the security spine) this epic implements or supports: user or service, organization token, gateway candidate, API boundary, organization-to-tenant resolver, business authorization, row-level security, audit and observability, or the allow-or-deny with evidence. An epic outside the sequence (repository boundaries, secrets) says which steps it protects.
 
 ### 4.4 Interfaces and data shapes
 
-What the epic exposes and what it consumes: commands, queries, events, tables, configuration, environment. Each interface names its owner module, its authority (who may call it and under which validated context), and its provenance fields. Data shapes carry `tenant_id` where the tenancy contract requires it and both effective and record time where ADR-015 requires it. Shapes are stated in prose and tables, or as fenced pseudo-schema; not as code that could be mistaken for an implementation.
+What the epic exposes and what it consumes: commands, queries, events, tables, configuration, environment. Each interface names its owner module, its authority (who may call it and under which validated context), and its provenance fields. Data shapes carry `tenant_id` where the tenancy contract requires it and both valid time (the flows' effective time) and record time where ADR-015 requires it. Shapes are stated in prose and tables, or as fenced pseudo-schema; not as code that could be mistaken for an implementation.
 
 ### 4.5 Negative controls
 
@@ -93,10 +97,10 @@ How the epic becomes one or more Work Packages: each with one bounded outcome, a
 
 ## 5. Rules every design obeys
 
-1. **Tenant names.** Tenant A is UniTrust, corporate multi-line broking; Tenant B is the government-linked travel scheme. Both names are used because they are already public in this repository; the operator may withdraw either.
+1. **Tenant names.** Tenant A is UniTrust, the corporate brokerage; Tenant B is the government-linked travel scheme. Both names are used because they are already public in this repository; the operator may withdraw either.
 2. **Vocabulary** follows `CONTEXT.md` once it exists and [`DOMAIN_MODEL.md`](../DOMAIN_MODEL.md) section 3 until then. *Instruct*, *confirm* and *issue* are three binding moments, never one *bind*; an *indication* is a broker-computed price and a *quote* an insurer's offer; a *representation* is never the *fact* it represents.
 3. **Claims.** A design never says a capability is implemented, secure, compliant or production-ready. It says what would prove that, and who would record it.
-4. **Sources.** A fact about a product or specification cites the primary source by URL and date checked, or is marked `UNVERIFIED`. The research files under [`../../research/p0-design/`](../../research/p0-design/) on their `research/<slug>` branches, and under `../../research/arch-001a/` for the contract map, are the pack's first citations.
+4. **Sources.** A fact about a product or specification cites the primary source by URL and date checked, or is marked `UNVERIFIED`. The research files are the pack's first citations: `docs/research/p0-design/<slug>.md` on branch `research/<slug>` for this map, and `docs/research/arch-001a/<slug>.md` on branch `research/<slug>` for the contract map. None is merged to `main`; a design cites the branch and the commit.
 5. **Synthetic data only.** Every example, fixture and scenario in a design uses synthetic Tenant A and Tenant B records. No client, policy, claim or premium data, real or plausible, enters this repository.
 6. **Landing.** A design lands by one Work Package pull request from one branch, referencing the map and its ticket, after a fresh-context review of the head that is merged, with `badf/` re-anchored and a checkpoint, as every package here does.
 
