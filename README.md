@@ -57,6 +57,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | Path | Purpose |
 |---|---|
 | `index.html` | The guide's hub — overview, lifecycle map and links to the stage and phase manuals |
+| `landing/index.html` | The product landing page: a human-readable projection of the governed architecture for tenant principals and prospective broker tenants, written in the design voice; it claims nothing implemented and is revised when the records change |
 | `stages/` | Nine stage manuals — the bulk of the guide |
 | `phases/` | Five phase manuals — P0 to production: what agents code and humans monitor per delivery phase. A rendering of `docs/architecture/DELIVERY_PLAN.md`; `tests/test_phase_pages.py` holds its epic and gate identifiers to the plan |
 | `reference/` | Two reference pages — the artifact catalogue and the risk-tier schedule: cross-stage lookups that the stage manuals cite rather than restate |
@@ -102,7 +103,7 @@ The validator's exit codes carry meaning: **0** pass · **1** a data defect, the
 
 ## Current delivery state
 
-The guide is nine stage manuals, five phase manuals and two reference pages, plus the `index.html` hub. Documentation actions remain open — see `badf/next-actions.json`.
+The guide is nine stage manuals, five phase manuals and two reference pages, plus the `index.html` hub and the product landing page at `landing/index.html`. Documentation actions remain open — see `badf/next-actions.json`.
 
 Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph, true when written on 2026-09-02, was merged five minutes after the first deployment had succeeded and then stood for a day. Read deployment state from the two places it actually lives:
 

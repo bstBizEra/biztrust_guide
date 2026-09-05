@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-046",
-  "updated_at": "2026-09-05T12:21:02Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-047",
+  "updated_at": "2026-09-05T16:28:44Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child: next is #131 the landing page brief, then #132 its prototype. Of the eleven epic designs #137 to #147, seven wait directly on an ADR ticket of map #91 and ten transitively; #147 (secrets) waits only on the template. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. The landing brief (#131) and prototype (#132) are resolved and the page shipped under WP-047; next is #147 the secrets-and-configuration design, the one epic design not gated by an ADR. Of the other ten, seven wait directly on an ADR ticket of map #91 and ten transitively. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046)",
         "For an ADR-gated epic design: its ADR ticket on map #91 is closed, which needs the #92 waiver (NS-041) first"
