@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-047-001",
+  "created_at": "2026-09-05T16:28:44Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-047",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #132 on the P0 design map: ship landing/index.html from the accepted prototype variant, in the design voice with the status strip above every section and every section sourced; link it from the handbook's footer and README; move the tracked-page count in AGENTS.md from seventeen to eighteen; record DEC-049.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-047-landing-page",
+    "baseline_commit": "8bcac2e0aebf0dd7846d93b603fb0cc58cde9295"
+  },
+  "completed": [
+    "Ticket #131 resolved on the operator's answers: audience, design voice, seven sourced sections, two calls to action, placement, wordmark; positioning terms fed to #102.",
+    "Ticket #132 prototyped on branch prototype/landing-page (three variants, one file) and resolved by delegation: ledger variant shipped.",
+    "landing/index.html written from the ledger variant with the claims pass applied; index.html footer, README.md and AGENTS.md section 10 updated; badf/ re-anchored; DEC-049 appended; this checkpoint written.",
+    "Review pass: sixteen findings adopted on the page, the decision record and the PR, including the two blocking ones (the freeze sentence; the source line) and the layout fixes."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-046.",
+    "After merge: #132 closed with a resolution comment; the prototype branch kept as the primary source.",
+    "Map #128 frontier: #147 secrets-and-configuration design, then designs as ADR tickets on #91 unblock them."
+  ],
+  "files_changed": [
+    "landing/index.html",
+    "index.html",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-047-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The full suite passed with an eighteenth page present in the prototype worktree before any count sentence moved; the only count that names the page total is AGENTS.md section 10.",
+    "The handbook's header and footer carry UniTrust marks, so a page bound by the brief's branding rule cannot share them; the landing page copies the stylesheet's tokens instead.",
+    "The Pages workflow stages every tracked HTML file, so the page reaches the artifact without a workflow change; the relative link ../index.html resolves in the artifact and in the tree.",
+    "Validation ran 2026-09-05 in an LF worktree cut from origin/main at 8bcac2e on Windows 11 with Python 3.13; html-pages 18."
+  ],
+  "decisions": [
+    "DEC-049: the landing page shipped as a projection, ledger variant, design voice, status strip, sourced sections, wordmark only."
+  ],
+  "assumptions": [
+    "The operator's 'proceed on your call and recommend' on the five prototype reactions was given in chat and is transcribed on #132 by the agent with a marker; it is a delegation, not an authority record, and the operator may reverse any reaction by a comment there.",
+    "Tenant names UniTrust and the travel scheme remain acceptable on a public page because both are already public in the handbook; either may be withdrawn."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; the page's call to action points principals at the tenant questions, not at the waiver."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_046",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/index.html",
+      "https://github.com/bstBizEra/biztrust_guide/issues/132"
+    ],
+    "stop_if": [
+      "The landing page states a capability as implemented, secure or compliant, or its strip disagrees with badf/current-state.json.",
+      "A tenant mark or a UniPay mark appears on the landing page.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser by the agent; layout was checked by reading the CSS and by the validator's reference check only.",
+    "The page's tokens are a copy of styles.css :root; a change there is not propagated by any test.",
+    "The page's status strip is hand-maintained from badf/current-state.json; no test compares them.",
+    "The five tenant questions are paraphrased from the #15 review comment, not quoted; the comment is linked."
+  ]
+}

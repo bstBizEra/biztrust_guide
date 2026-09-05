@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BizTrust is being designed as a multi-tenant insurance infrastructure and distribution platform for Laos. This page explains what it is designed to become, what has been decided, and what remains open.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — Insurance infrastructure and distribution platform for Laos</title>
+  <!-- A projection of the governed architecture in this repository, for tenant principals and prospective broker tenants.
+       Not a source of truth: the handbook and the machine-readable records under badf/ and docs/architecture/ are.
+       Written under the brief on issue #131 and the prototype on issue #132 (P0 design map, issue #128).
+       Tokens are copied from styles.css so this page shares no chrome with the handbook, whose header and footer carry tenant marks. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#071a2c;--navy-2:#0d2942;--ink:#122638;--muted:#5f7280;--paper:#f5f8f9;--surface:#fff;--line:#dce5e8;--teal:#10a8a0;--teal-dark:#087b78;--lime:#bfdc6a;--amber:#f1b84b;--red:#c92f2f;--strip:2.6rem;--measure:44rem}
+    @media(prefers-color-scheme:dark){:root{--ink:#d7e5e9;--muted:#8da4ae;--paper:#071721;--surface:#0c2230;--line:#173444;--teal-dark:#46b8b0}}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:calc(var(--strip) + 1rem)}
+    body{margin:0;overflow-x:clip;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    a:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+    .skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--navy);color:#fff;padding:.7rem 1rem;border-radius:.4rem}.skip:focus{top:1rem}
+
+    /* status strip: the evidence boundary, above everything */
+    .strip{position:sticky;top:0;z-index:50;min-height:var(--strip);background:var(--navy);color:#fff;border-bottom:3px solid var(--amber);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.45rem 1.5rem;font-size:.82rem}
+    .strip ul{display:flex;gap:1.6rem;margin:0;padding:0;list-style:none;flex-wrap:wrap}
+    .strip li{display:flex;align-items:center;gap:.5rem}
+    .strip li::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--amber)}
+    .strip li.no::before{background:var(--red)}
+    .strip a{color:#d9e8ed;font-size:.72rem;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+
+    header.mast{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:1.6rem 1.5rem 0;max-width:72rem;margin:0 auto}
+    .wordmark{font-weight:800;font-size:1.35rem;letter-spacing:-.03em;text-decoration:none}
+    .wordmark small{font-weight:500;font-size:.8rem;color:var(--muted);margin-left:.5rem;letter-spacing:0}
+    header.mast a.handbook{font-size:.78rem;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+
+    main{max-width:72rem;margin:0 auto;padding:0 1.5rem 4rem}
+    .hero{background:radial-gradient(circle at 85% 10%,rgba(16,168,160,.22),transparent 34%),linear-gradient(145deg,#071a2c,#0c2b43 72%,#0f3b50);color:#fff;margin:1.5rem -1.5rem 0;padding:4rem 1.5rem 3.2rem}
+    @media(min-width:900px){.hero{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding-left:max(1.5rem,calc(50vw - 36rem));padding-right:max(1.5rem,calc(50vw - 36rem))}}
+    .hero h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.02;letter-spacing:-.04em;margin:0 0 1.4rem;max-width:22ch}
+    .hero p{max-width:var(--measure);font-size:1.12rem;color:#b9ccd5;margin:0 0 1rem}
+    .hero p.defn{color:#fff;border-left:3px solid var(--lime);padding-left:1rem;font-size:1rem}
+    .actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
+    .btn{display:inline-block;text-decoration:none;font-weight:700;font-size:.9rem;padding:.8rem 1.15rem;border-radius:.35rem;background:var(--teal);color:#04131f}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+    .hero .btn.secondary{color:#fff;border-color:#8fa9b7}
+
+    section.block{padding:3rem 0;border-bottom:1px solid var(--line)}
+    section.block h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.03em;line-height:1.15;margin:0 0 1.2rem;max-width:26ch}
+    section.block p,section.block li{max-width:var(--measure)}
+    section.block p{margin:0 0 1rem}
+    .models{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:1.5rem 0;max-width:none}
+    .models div{background:var(--surface);padding:1rem 1.1rem}
+    .models b{display:block;font-size:.92rem;margin-bottom:.3rem}
+    .models span{font-size:.8rem;color:var(--muted)}
+    .pair{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem}
+    .pair>div{border-top:2px solid var(--ink);padding-top:1rem}
+    .pair h3{margin:0 0 .5rem;font-size:1rem}
+    .pair p{font-size:.92rem}
+    blockquote.principle{margin:1.5rem 0;padding:1.4rem 1.6rem;background:var(--surface);border-left:4px solid var(--lime);font-size:1.2rem;font-weight:600;line-height:1.45;max-width:var(--measure)}
+    blockquote.principle cite{display:block;font-size:.75rem;font-weight:400;color:var(--muted);margin-top:.6rem;font-style:normal}
+    .ledger{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;max-width:none}
+    .ledger>div{background:var(--surface);border:1px solid var(--line);padding:1.4rem}
+    .ledger h3{margin:0 0 .3rem;font-size:1.05rem}
+    .ledger h3+p{font-size:.8rem;color:var(--muted);margin-bottom:1rem}
+    .ledger ul{margin:0;padding-left:1.1rem;font-size:.9rem}
+    .ledger li{margin:.45rem 0}
+    .ledger li small{display:block;color:var(--muted);font-size:.75rem}
+    .ledger .open{border-color:var(--amber);border-width:1px 1px 1px 4px}
+    .today{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:1.5rem;max-width:none}
+    .today div{background:var(--surface);padding:1rem 1.1rem;font-size:.9rem}
+    .today b{display:block;margin-bottom:.25rem}
+    .source{font-size:.74rem;color:var(--muted);margin-top:1.2rem;max-width:var(--measure)}
+    .source a{color:var(--teal-dark);text-decoration:underline;text-underline-offset:3px}
+    .engage{padding:3rem 0}
+    .engage h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.03em;line-height:1.15;margin:0 0 1.2rem}
+    .engage .pair>div{border-top-color:var(--teal)}
+    .engage p{max-width:var(--measure)}
+    footer{border-top:1px solid var(--line);color:var(--muted);font-size:.74rem;padding:1.5rem;max-width:72rem;margin:0 auto}
+    footer a{color:var(--teal-dark)}
+    @media(max-width:760px){html{scroll-padding-top:6.5rem}.strip{font-size:.8rem;padding:.4rem 1rem}.strip ul{gap:.8rem}.pair,.ledger{grid-template-columns:1fr}header.mast{flex-direction:column;gap:.3rem}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    @media print{.skip{display:none}.strip{position:static}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#status">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <h1>Insurance infrastructure and distribution platform for Laos</h1>
+      <p>BizTrust is being designed so that insurers, brokers and distribution channels in Laos can share one trusted infrastructure without any of them building the whole stack. Brokerage is one operating model on it, not the definition of it.</p>
+      <p class="defn">The architecture contract's own words: “BizTrust is a multi-tenant insurance brokerage, distribution and insurance API platform. It is not an insurer policy-administration or underwriting core.”</p>
+      <div class="actions">
+        <a class="btn" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">Read the architecture contract</a>
+        <a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/issues/15#issuecomment-5526326101">Answer the tenant authority questions</a>
+      </div>
+    </section>
+
+    <section class="block" id="what">
+      <h2>What BizTrust is being designed to become</h2>
+      <p>One platform that several organisations would use at once, each within its own boundary, keeping its own records, and working with insurers through the same contracts. The design is meant to support five ways of operating on it.</p>
+      <div class="models">
+        <div><b>Insurance software as a service</b><span>An organisation would run its insurance operations on BizTrust rather than on software it builds and hosts itself.</span></div>
+        <div><b>Brokerage</b><span>A broker would manage clients, risks, submissions, placement, recommendations, policy records, claims advocacy and renewals.</span></div>
+        <div><b>Broker tenant platform</b><span>A second and third brokerage would join without a copy of the platform being made for each.</span></div>
+        <div><b>Insurer agency and distribution</b><span>Where an insurer has granted the authority in writing, an organisation would distribute that insurer's products within the granted scope.</span></div>
+        <div><b>Interfaces for partners</b><span>Other systems would connect through published, versioned contracts rather than through private arrangements.</span></div>
+      </div>
+      <p class="source">Source: architecture contract, sections 1, 6 and 10; capability map and product architecture. The five models are the positioning recorded on the landing brief and proposed to the glossary; the contract's sentence above is the definition of record until that changes.</p>
+    </section>
+
+    <section class="block" id="who">
+      <h2>Who it is designed for first</h2>
+      <p>Two organisations are the first intended deployments of the platform model. They are its first uses, not its definition, and their arrangements are the first questions the design needs answered.</p>
+      <div class="pair">
+        <div><h3>UniTrust, a corporate brokerage</h3><p>Commercial insurance placed for business clients: several lines, several insurers, and the full lifecycle from submission to renewal.</p></div>
+        <div><h3>A government-linked travel scheme</h3><p>Travel cover issued to many people under one master policy, which raises the question of who has the authority to issue each certificate and what that obliges.</p></div>
+      </div>
+      <p class="source">Source: the tenant-names rule of the P0 design template (<code>docs/architecture/p0/README.md</code>), the tenant authority questions on issue 15, and the contract's section 1 on master-policy authority. The handbook holds no discovery record for either organisation. Both names are already public in this repository; either may be withdrawn.</p>
+    </section>
+
+    <section class="block" id="principle">
+      <h2>A request is not a confirmation</h2>
+      <p>When a broker records that a customer asked for cover, that record says what was requested. It does not say that an insurer accepted the risk, issued the policy, or is now liable. BizTrust is designed to keep those two facts apart at every step, because a system that blurs them will eventually tell someone they are covered when they are not.</p>
+      <blockquote class="principle">“An operating record of a request is not a confirmation that the request was granted. Where the two are conflated, the interface will eventually tell someone they are covered when they are not.”<cite>Handbook, Architect stage</cite></blockquote>
+      <p>This one rule shapes how quotations would be labelled (a broker's estimate is not an insurer's price), how policies would be recorded (a broker's record points at the insurer's document rather than replacing it), who is accountable for each fact, and which system is the owner of each record. It is why the design treats an insurer's confirmation as something received and kept as evidence, never something the platform could generate for itself.</p>
+      <p class="source">Source: architecture contract, section 1 and invariant candidates INV-005, INV-016, INV-018 and INV-022.</p>
+    </section>
+
+    <section class="block" id="separation">
+      <h2>Each organisation within its own scope, every decision with its evidence</h2>
+      <p>The design gives each organisation on the platform its own boundary. People and systems would act only within the scope they have been granted, and an organisation's records would not be visible to another. Every action that matters is meant to be attributable to an authorised actor and supported by evidence that can be traced afterwards.</p>
+      <p>The design also separates two things that are easy to confuse: permission to use the platform, and the legal authority to create an insurance fact. Being allowed to press a button is never the same as being licensed or delegated to make cover effective. The platform is designed so that configuration alone cannot create that authority.</p>
+      <p>How the design would achieve this, from identity context to database-level isolation to audit records, is the implementation handbook's subject.</p>
+      <p class="source">Source: architecture contract, invariant candidates INV-001 to INV-004, INV-007, INV-015 and INV-022; the handbook's flows document, section 3. Mechanisms: <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md</a>.</p>
+    </section>
+
+    <section class="block" id="decisions">
+      <h2>What is decided, and what remains open</h2>
+      <p>The architecture has been written down, sequenced, and mapped question by question. Nothing in it is accepted yet, and the first questions it is waiting on belong to the tenants, not the engineers.</p>
+      <div class="ledger">
+        <div>
+          <h3>Proposed and recorded, awaiting acceptance</h3>
+          <p>Positions the architecture contract takes, each with an architecture decision record still to be reviewed.</p>
+          <ul>
+            <li>Start as one application with strict internal boundaries, and split it only on evidence.<small>ADR-001</small></li>
+            <li>Use a dedicated identity service; an organisation there would be the security boundary for a tenant here.<small>ADR-002, ADR-003</small></li>
+            <li>One shared database with row-level isolation as the default, to be proven by tests that try to cross it.<small>ADR-004</small></li>
+            <li>Broker records and insurer decisions are owned by different systems, and the platform is designed never to pretend otherwise.<small>ADR-007</small></li>
+            <li>When cover starts and when it was recorded are two dates, and corrections never erase what was asserted before.<small>ADR-015</small></li>
+          </ul>
+        </div>
+        <div class="open">
+          <h3>Needs a tenant principal's answer before the contract can be frozen</h3>
+          <p>Five questions, in plain language, each deciding the shape of stored data.</p>
+          <ul>
+            <li>When your team confirms cover to a client, is that binding on the insurer at that moment, or must an insurer still say yes afterwards?<small>Asked separately for each organisation</small></li>
+            <li>Before the premium reaches the insurer, whose money is it, and may commission be deducted first?</li>
+            <li>Does cover often start on a different date from the day it is typed in, and does it ever matter what the record said last week?</li>
+            <li>Is one risk ever placed with several insurers, by share or by layer?</li>
+            <li>When a figure is given to a client, is it the insurer's agreed price or the broker's estimate?</li>
+          </ul>
+        </div>
+      </div>
+      <p class="source">Source: the ADR register (twenty decisions registered, none accepted); the tenant authority questions on <a href="https://github.com/bstBizEra/biztrust_guide/issues/15">issue 15</a>; the two decision maps, <a href="https://github.com/bstBizEra/biztrust_guide/issues/91">the contract set</a> and <a href="https://github.com/bstBizEra/biztrust_guide/issues/128">the P0 design pack</a>.</p>
+    </section>
+
+    <section class="block" id="status">
+      <h2>What is true today</h2>
+      <div class="today">
+        <div><b>A public handbook</b>Nine engineering stages and four delivery phases, with the rules agents and engineers must follow.</div>
+        <div><b>A draft architecture contract</b>Version 0.1, marked draft for contract freeze. Its invariants are candidates until an architecture authority accepts them.</div>
+        <div><b>Twenty decisions registered</b>Fourteen ready to draft, six waiting on the tenant questions above. None accepted.</div>
+        <div><b>Nothing implemented</b>No platform implementation is recorded or authorised: this repository holds no application code, no database and no identity service, and no page of the handbook says otherwise.</div>
+      </div>
+      <p class="source">Source: the handbook's continuity state, <code>badf/current-state.json</code>, read on 2026-09-05: architecture acceptance not granted; production platform implementation not granted. The design stage is read from the contract's <code>0.1-draft</code> status. The strip at the top of this page states those records and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you hold authority for a tenant</h3><p>Answer the five questions. They take about ten minutes, and six of the architecture's twenty decisions cannot be drafted until they are answered.</p><a class="btn" href="https://github.com/bstBizEra/biztrust_guide/issues/15#issuecomment-5526326101">Answer the tenant authority questions</a></div>
+        <div><h3>If you want to understand the design</h3><p>The contract is an engineering document, but its purpose, scope and invariants (sections 1, 2 and 5) can be read without the rest. Start there.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">Read the architecture contract</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing.
+  </footer>
+</body>
+</html>
