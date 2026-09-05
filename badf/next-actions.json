@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-045",
-  "updated_at": "2026-09-05T05:21:06Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-046",
+  "updated_at": "2026-09-05T12:21:02Z",
   "actions": [
     {
       "id": "NS-040",
@@ -81,9 +81,31 @@
       "fallback": "#15, ADR-014 (#117) and ADR-019 (#119) stay blocked on #94."
     },
     {
-      "id": "NS-033",
+      "id": "NS-043",
       "primary": false,
       "priority": 5,
+      "owner_role": "documentation-engineer",
+      "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child: next is #131 the landing page brief, then #132 its prototype; epic designs #137 to #147 open as their ADR tickets on map #91 and the template (#130, done under this package) unblock them. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
+      "prerequisites": [
+        "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046)",
+        "For an epic design: its ADR ticket on map #91 is closed, which needs the #92 waiver (NS-041) first"
+      ],
+      "evidence_required": [
+        "The ticket's resolution comment, the ticket closed, one line appended to #128 Decisions so far",
+        "For a landed design: the PR's review record and badf/ re-anchored"
+      ],
+      "stop_conditions": [
+        "A design says a capability is implemented, secure or compliant",
+        "A design names a technology without an ADR row, or marks itself ACCEPTED",
+        "Real client, policy, claim or premium data appears in an example"
+      ],
+      "fallback": "Leave the map's frontier as it stands; nothing on it is time-critical before BT-G0."
+    },
+    {
+      "id": "NS-033",
+      "primary": false,
+      "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",

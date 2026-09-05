@@ -30,6 +30,7 @@ No agent may silently promote a status. Acceptance requires an explicit authorit
 | [`FOUNDATION_SEQUENCE.md`](FOUNDATION_SEQUENCE.md) | Dependency-ordered S01–S11 architecture completion sequence and issue contract |
 | [`TENANT_AUTHORITY_PROFILE_TEMPLATE.md`](TENANT_AUTHORITY_PROFILE_TEMPLATE.md) | First-slice evidence template for authority, jurisdiction, product and money regimes |
 | [`ADR_REGISTER.md`](ADR_REGISTER.md) | ADR-001…020 status and minimum acceptance evidence |
+| [`p0/README.md`](p0/README.md) | P0 design pack: the template, naming and status rules for one engineering design per P0 epic; designs land there as `PROPOSED` |
 | [`SOURCE_RECONCILIATION.md`](SOURCE_RECONCILIATION.md) | Source fingerprints, promoted content, resolved conflicts and deferred questions |
 | [`../research/architecture-foundation/report-source.md`](../research/architecture-foundation/report-source.md) | Primary-source research ledger, gap matrix and claim-to-source map |
 
