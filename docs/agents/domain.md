@@ -17,7 +17,7 @@ If `CONTEXT.md` or `docs/adr/` don't exist, **proceed silently**. Don't flag the
 
 ## Repo-specific rules for ADRs
 
-- A new ADR file under `docs/adr/` must be registered as a row in `docs/architecture/ADR_REGISTER.md`, and must follow the structure that file requires.
+- A new ADR file under `docs/adr/` is named `NNN-<slug>.md` with the register's number (`001` for ADR-001), must be registered as a row in `docs/architecture/ADR_REGISTER.md`, and must follow the structure that file requires.
 - Writing an ADR does not accept it. Under `AGENTS.md` an ADR moves from `DRAFT_REQUIRED` only through the authority and review process of its Work Package. Never set an ADR's status to accepted yourself.
 - Documentation must not claim a capability is implemented, secure, compliant or production-ready unless linked evidence proves it.
 
@@ -29,7 +29,7 @@ Single-context repo (this repo):
 /
 ├── CONTEXT.md                          ← created lazily by /domain-modeling
 ├── docs/adr/                           ← created lazily; each file registered in ADR_REGISTER.md
-│   └── 0001-<slug>.md
+│   └── 001-<slug>.md                   ← numbered by the register's ADR-NNN
 └── docs/architecture/
     ├── ADR_REGISTER.md                 ← existing decision register
     └── DOMAIN_MODEL.md                 ← existing conceptual model

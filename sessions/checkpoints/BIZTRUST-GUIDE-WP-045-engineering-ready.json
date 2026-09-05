@@ -4,7 +4,7 @@
   "created_at": "2026-09-05T05:21:06Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-045",
   "state": "ENGINEERING_READY",
-  "objective": "Commit the AGENTS.md Agent skills block and docs/agents/ written by /setup-matt-pocock-skills; record wayfinder map #91 (34 tickets under #27, seven research tickets resolved on research/ branches) in badf/ with one next-action per frontier operator task; record the six charting choices and the rebased-away peer commit.",
+  "objective": "Commit the AGENTS.md Agent skills block and docs/agents/ written by /setup-matt-pocock-skills; record wayfinder map #91 (35 child tickets under #27: #92 to #125 plus #15; seven research tickets resolved on research/ branches) in badf/ with one next-action per frontier operator task; record the six charting choices and the rebased-away peer commit.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-045-agent-skills-and-map",
@@ -12,9 +12,10 @@
   },
   "completed": [
     "AGENTS.md gained an Agent skills block; docs/agents/issue-tracker.md, triage-labels.md and domain.md written from the skill's seed templates with repo-specific sections that defer to AGENTS.md sections 1 to 12.",
-    "Wayfinder map #91 charted under #27: 34 child tickets (#92 to #125 plus #15) with native sub-issue and blocked-by edges; five wayfinder:* labels created; seven research tickets resolved by background agents on research/<slug> branches and closed; each pointer appended to #91 Decisions so far.",
+    "Wayfinder map #91 charted under #27: 35 child tickets (#92 to #125 plus #15) with native sub-issue and blocked-by edges; five wayfinder:* labels created; seven research tickets resolved by background agents on research/<slug> branches and closed; each pointer appended to #91 Decisions so far.",
     "badf/next-actions.json: NS-041 (waiver, primary) and NS-042 (seats) added; NS-024 repointed at #93 and #91; priorities 1..5. badf/current-state.json re-anchored to WP-045 at e1b20d1. DEC-047 appended. This checkpoint written.",
-    "Local main rebased onto origin/main and the peer session's mangled commit dropped, keeping the edit uncommitted until this package."
+    "Local main rebased onto origin/main and the peer session's mangled commit dropped, keeping the edit uncommitted until this package.",
+    "Review pass: two blocked-by edges (#92 to #117 and #119) added on the map; four triage labels created; docs/agents/ corrected to describe the repository's actual Work Package practice and label state; authority keys aligned between the checkpoint and the state file."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-044.",
@@ -45,13 +46,15 @@
   "observations": [
     "ListAgents showed more than ten interactive sessions on this repository at once; one committed another session's uncommitted edit to local main, and PR #90 for issue #89 had been opened and merged by a peer before this session looked at the issue.",
     "GitHub's sub-issue and issue-dependency REST endpoints both work on this repository; #27 now shows one blocker (#91) and #91 shows 35 sub-issues.",
-    "Research findings that will shape early grilling: Logto organizations are a permission boundary not a data boundary; PostgreSQL RLS has fifteen documented leak paths; no API gateway states OpenAPI 3.2 support; DBOS has no PHP SDK; timestamptz discards the stated zone; the 2019 Lao insurance law replaced the one English summaries describe and the 2018 premium-handling rule was repealed in 2023; nothing ACORD is freely implementable."
+    "Research findings that will shape early grilling: Logto organizations are a permission boundary not a data boundary; PostgreSQL RLS has fifteen documented leak paths; no API gateway states OpenAPI 3.2 support; DBOS has no PHP SDK; timestamptz discards the stated zone; the 2019 Lao insurance law replaced the one English summaries describe and the 2018 premium-handling rule was repealed in 2023; nothing ACORD is freely implementable.",
+    "Validation ran on 2026-09-05 in an LF worktree cut from origin/main at e1b20d1 on Windows 11 with Python 3.13, at the review-pass head; the checkpoint schema admits no environment field on a validation entry, so it is recorded here.",
+    "The fresh-context review counted 22 of 24 drafting tickets blocked on #92 at 0d1d764; #117 and #119 reached only #15 and #94. The edges were added rather than the sentence weakened, since drafting an S01-blocked ADR as PROPOSED needs the waiver too."
   ],
   "decisions": [
     "DEC-047: skills configuration adopted; map #91 charted with six recorded charting choices; NS-041 primary; research stays on branches."
   ],
   "assumptions": [
-    "The operator holds the business-authority and architecture-owner seats; the other three are unfilled until #94 says otherwise.",
+    "No review seat is filled until #94 records it. Map #91's Notes carry a working assumption, flagged for correction there, that grilling tickets route to the operator; that routes conversation, it fills no seat.",
     "Naming Tenant A as UniTrust and Tenant B as the travel scheme is acceptable because both names were already public; the operator may withdraw them."
   ],
   "blockers": [
@@ -87,13 +90,14 @@
     }
   ],
   "authority": {
-    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_05_ON_YOUR_CALL",
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
     "repository_publish": "GRANTED_VIA_PULL_REQUEST",
     "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_044",
     "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
     "architecture_acceptance": "NOT_GRANTED",
     "production_platform_implementation": "NOT_GRANTED",
-    "experiment_rerun": "NOT_GRANTED"
+    "experiment_rerun": "NOT_GRANTED",
+    "wayfinder_charting": "OPERATOR_INSTRUCTION_ON_YOUR_CALL_2026_09_05"
   },
   "next_action_id": "NS-041",
   "recovery": {

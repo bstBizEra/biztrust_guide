@@ -166,7 +166,7 @@ This repository may document future BizTrust architecture, but documentation mus
 
 ## Agent skills
 
-Configuration read by the mattpocock engineering skills (`/triage`, `/to-tickets`, `/to-spec`, `/wayfinder`, `/domain-modeling`, `/grill-with-docs`, `/improve-codebase-architecture`). Nothing here loosens sections 1 to 12; where the two disagree, sections 1 to 12 win.
+Configuration for the mattpocock engineering skills reached through `/setup-matt-pocock-skills`: `/triage` and `/code-review` read it by name; `/wayfinder`, `/to-tickets`, `/to-spec`, `/domain-modeling`, `/grill-with-docs` and `/improve-codebase-architecture` rely on the tracker and layout it records. Nothing here loosens sections 1 to 12; where the two disagree, sections 1 to 12 win.
 
 ### Issue tracker
 

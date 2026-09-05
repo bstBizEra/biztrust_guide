@@ -28,7 +28,7 @@
       "priority": 2,
       "owner_role": "human-reviewer",
       "authority": "HUMAN_DECISION_REQUIRED",
-      "action": "Wayfinder ticket #92: the operator posts one comment on issue #27 recording an explicit, expiring waiver of the one-slice-at-a-time rule so that ADR-001 to ADR-020 and the other v0.1 artifacts may be drafted as PROPOSED while S01 (#15) is open. Every drafting ticket on map #91 (#102 to #125) is blocked on #92.",
+      "action": "Wayfinder ticket #92: the operator posts one comment on issue #27 recording an explicit, expiring waiver of the one-slice-at-a-time rule so that ADR-001 to ADR-020 and the other v0.1 artifacts may be drafted as PROPOSED while S01 (#15) is open. All 24 drafting tickets on map #91 (#102 to #125) are blocked on #92, directly or transitively; #117 and #119 gained that edge during the WP-045 review, which found them wired to #15 and #94 only.",
       "prerequisites": [
         "A human with business or architecture authority reads #27 and #91"
       ],
@@ -46,7 +46,7 @@
       "primary": false,
       "priority": 3,
       "owner_role": "architecture-owner",
-      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "authority": "HUMAN_DECISION_REQUIRED",
       "action": "Answer the binding-authority question in issue #15, now wayfinder ticket #93 on map #91: send the ten-minute sheet from the #15 review comment to a placing broker for Tenant A (UniTrust) and Tenant B (the travel scheme), or answer as the tenant's principal, and record who answered, their role and the date. Does the entity ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
       "prerequisites": [
         "Access to a practising broker or the UniTrust principals",

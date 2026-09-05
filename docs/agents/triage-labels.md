@@ -16,6 +16,6 @@ Edit the right-hand column to match whatever vocabulary you actually use.
 
 ## Repo notes
 
-- As of 2026-09-05 only `wontfix` exists in the GitHub repo. `/triage` creates the other four on first use.
+- All five labels exist in the GitHub repo as of 2026-09-05: `wontfix` was a default, and the other four were created once under WP-045 with `gh label create`, because `/triage` does not create labels itself (mattpocock/skills issue 616).
 - `ready-for-agent` is a triage verdict, not authority. Under `AGENTS.md`, an agent may start only when the issue is a Work Package with a human authority record; the `work-package` label marks that, and triage labels never substitute for it.
-- Existing repo labels `work-package` and `state:in-progress` are not triage roles. Leave them alone.
+- The repo's other labels are not triage roles: the nine GitHub defaults, `work-package`, `state:in-progress` and the five `wayfinder:*` labels. Leave them alone.
