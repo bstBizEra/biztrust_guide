@@ -225,7 +225,7 @@ Recommended Project fields:
 | Evidence | Missing, Partial, Complete, Rejected |
 | Blocker | None, Internal, External, Authority |
 
-The `Lifecycle` values are the eight states of `AGENTS.md` §8, in order, and match the `state` enum of `schemas/session-checkpoint.schema.json`. The `Gate` values are the Work Package lifecycle gates; `BT-G0`–`BT-G6` are a different namespace (BizTrust platform capability milestones, defined in `docs/architecture/DELIVERY_PLAN.md` §1) and are not valid values for this field. Neither list is redefined here — if one is wrong, fix it at the source and update this row.
+The `Lifecycle` values are the eight states of `AGENTS.md` §8, in order, and match the `state` enum of `schemas/session-checkpoint.schema.json`. The `Gate` values are the Work Package lifecycle gates; `BT-G0`–`BT-G7` are a different namespace (BizTrust platform capability milestones, named in `docs/architecture/DELIVERY_PLAN.md` §1 and tabled in `docs/architecture/BIZTRUST-PLAN-001.md` §10) and are not valid values for this field. Neither list is redefined here — if one is wrong, fix it at the source and update this row.
 
 ## 11. Minimum repository controls — RECOMMENDED, NONE IN FORCE
 

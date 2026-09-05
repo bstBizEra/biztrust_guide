@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-051-001",
+  "created_at": "2026-09-05T19:12:18Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-051",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #165 on the Guide v2 map: rewrite phases/overview.html to PLAN-001's five phases, the eight-gate table with executive labels, the authorizations per phase and the executive interpretation, while the four phase pages still render the previous plan; move the gate source of tests/test_phase_pages.py to PLAN-001 section 10 and widen both tests' gate regexes to BT-G7; retire DELIVERY_PLAN.md section 7 to a pointer; set the hub's version to v2.0-draft and its gate range to BT-G7.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-051-overview-v2",
+    "baseline_commit": "b90c5102d421ed77f88d02b64476661c798a67e2"
+  },
+  "completed": [
+    "Ticket #165 resolved by this branch: phases/overview.html rewritten to PLAN-001 with a new five-phases section, the eight-gate table with labels beside identifiers, the authorizations per phase, the executive interpretation, a label stop condition, and the transition note per phase page.",
+    "tests/test_phase_pages.py: gates from PLAN-001 section 10, regex BT-G[0-7], the seven-gate assertion now eight; tests/test_gate_namespaces.py: capability regex BT-G[0-7]; DELIVERY_PLAN.md section 7 retired to a pointer; PLAN-001's transition sentences updated.",
+    "index.html: Engineering Guide v2.0-draft in the top bar and footer, the gate range BT-G0 to BT-G7, the phase-manuals callout's link text; README.md's phases row.",
+    "badf/ re-anchored: NS-044 repointed at the manuals, DEC-053 appended, this checkpoint written.",
+    "Review pass: one blocking and eight should-fix findings adopted, among them verbatim gate cells with additions in small print, the hub's and README's rendering sentences, the old plan's section 1 row, the state file's claim about the phase pages, and the stop condition's wording; the hub's roadmap section and Continuous Operations sentence recorded as a new ticket."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-050.",
+    "The hub's 90-day mobilization section still speaks the previous plan's phases, and the hub says nothing about Continuous Operations; both are ticket #190 on map #153, not this package.",
+    "After merge: #165 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: the manuals #166 to #170, then #171 the catalogue and tests, then the showcase tickets."
+  ],
+  "files_changed": [
+    "phases/overview.html",
+    "index.html",
+    "README.md",
+    "docs/AGENT_CONTINUITY.md",
+    "tests/test_phase_pages.py",
+    "tests/test_gate_namespaces.py",
+    "docs/architecture/SOURCE_RECONCILIATION.md",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-051-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "tests/test_phase_pages.py's exit-gate expectations per phase page (p1 BT-G2, p2 BT-G3, p3 BT-G4 to BT-G6) are unchanged because the pages are unchanged; each manual ticket moves its own expectation.",
+    "The overview's gate rows quote PLAN-001 section 10.2's three columns verbatim after the review pass, with the track's additions (the slice that produces BT-G0's evidence; independent execution of BT-G1's) in small print beneath the cell and the label in small print beneath the identifier; the fourth column, the proposed recorder, is the track's own and now carries BT-G7's recorder as the security risk owner with the production-readiness reviewer.",
+    "The overview does not name an epic identifier anywhere, which test_overview_names_no_epic requires; the epic identifier rule is described in prose with group letters only.",
+    "docs/AGENT_CONTINUITY.md's sentence naming the capability namespace as BT-G0 to BT-G6 moved to BT-G7 with PLAN-001 section 10 as the table. Validation ran 2026-09-06 in an LF worktree cut from origin/main at b90c510 on Windows 11 with Python 3.13.",
+    "Two commits: the first stopped at a corrupted anchor after the overview, the phase-page test's gate source and badf/; the second carried the hub, README, both plans, the continuity doc and the namespace test; this checkpoint was written before the first commit and its completed list describes the head, not the sequence."
+  ],
+  "decisions": [
+    "DEC-053: the overview renders PLAN-001; the tests read PLAN-001 for gates and admit BT-G7; section 7 of the previous plan is a pointer; the hub reads v2.0-draft."
+  ],
+  "assumptions": [
+    "The wayfinder invocation is a chat instruction to work the next frontier ticket; it adopts nothing and authorises nothing.",
+    "v2.0-draft is the honest version string until #171 lands; the map's destination names v2.0 and this package does not claim it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_050",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages tests.test_gate_namespaces",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "The overview names an epic identifier, or a gate the plan does not list, or a label without its identifier.",
+      "A phase page's epics table changes without its plan source and test expectation moving in the same package.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered overview was not viewed in a browser; its sections, links and gate set were checked by the tests and the validator.",
+    "The proposed recorder for BT-G7 is the track's proposal, unread by any gate owner, like the seven before it.",
+    "The four phase pages remain on the previous plan; their intros do not yet say so in their own words, which each manual ticket does when it moves the page."
+  ]
+}

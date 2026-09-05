@@ -5,7 +5,7 @@
 | Version | `0.1-draft` |
 | Status | `PLANNING BASELINE — AUTHORITY REQUIRED PER WORK PACKAGE` |
 | Parent | `BIZTRUST-ARCH-001` |
-| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the phase manuals under `phases/` render, and `tests/test_phase_pages.py` binds them to it, until tickets #165 to #170 on the Guide v2 map (#153) move each manual; section 7 remains the gate table the manuals render and `tests/test_phase_pages.py` reads (exactly `BT-G0` to `BT-G6`) until the overview ticket #165 moves it, while PLAN-001 section 10 is the record of the gates going forward; sections 8, 9 and 11 stand until a ticket carries them |
+| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the phase manuals under `phases/` render, and `tests/test_phase_pages.py` binds them to it, until tickets #165 to #170 on the Guide v2 map (#153) move each manual; section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), which the overview renders and the phase-page test reads; sections 8, 9 and 11 stand until a ticket carries them |
 
 ## 1. Naming rule
 
@@ -14,7 +14,7 @@ Two gate systems exist and must never be confused:
 | Namespace | Purpose | Examples |
 |---|---|---|
 | `ENG-G0…ENG-G8` | Lifecycle gate applied to every Work Package | Discover, define, architect, plan, build, assure, release, operate, learn |
-| `BT-G0…BT-G6` | BizTrust platform capability milestone | Architecture ready through tenant ready |
+| `BT-G0…BT-G7` | BizTrust platform capability milestone | Architecture ready through production ready; the table is `BIZTRUST-PLAN-001.md` section 10 |
 
 `P0…P3` are delivery phases, not approval states. A phase may contain many Work Packages, each moving through the `ENG-G*` lifecycle.
 
@@ -148,17 +148,7 @@ End-to-end evidence must trace customer/partner activity through indication/offe
 
 ## 7. BizTrust architecture gates
 
-| Gate | Requirement | Blocking evidence |
-|---|---|---|
-| `BT-G0 Architecture Ready` | Domain, tenancy, API, event, workflow, data and financial contracts accepted | ARCH-001, ADR set and review record |
-| `BT-G1 Security Ready` | Tenant isolation mechanically proven | P0 negative-test evidence |
-| `BT-G2 Broker Core Ready` | Offer → recommendation → acceptance → authority-supported coverage → policy representation passes | P1 trace and domain UAT |
-| `BT-G3 Lifecycle Ready` | Placement, endorsement, claim and renewal pass failure scenarios | P2 workflow and recovery evidence |
-| `BT-G4 Financial Ready` | Payment, ledger, commission and settlement reconcile | Balanced journals and reconciliation evidence |
-| `BT-G5 Integration Ready` | External adapters pass contract, retry and security tests | Provider sandbox and fault-injection evidence |
-| `BT-G6 Tenant Ready` | A second independent tenant provisions without a core-code fork | Tenant #2 provisioning and isolation proof |
-
-Failure at any gate blocks dependent authorization. A waiver requires a named human risk owner, expiry, compensating controls and recorded dissent.
+The gate table is in [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) section 10 since WP-049: the seven rows this section held, `BT-G0` to `BT-G6`, are reproduced there verbatim, `BT-G7 Production Ready` is added, and the executive labels A to E are mapped onto the identifiers. The phase overview renders that table and `tests/test_phase_pages.py` holds it to PLAN-001 since WP-051. The rule stands: failure at any gate blocks dependent authorization, and a waiver requires a named human risk owner, expiry, compensating controls and recorded dissent.
 
 ## 8. Work Package decomposition rule
 

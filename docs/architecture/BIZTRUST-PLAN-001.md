@@ -283,7 +283,7 @@ Rows `BT-G0` to `BT-G6` are the previous plan's section 7 verbatim; `BT-G7` is n
 | `BT-G6 Tenant Ready` | A second independent tenant provisions without a core-code fork | Tenant #2 provisioning and isolation proof |
 | `BT-G7 Production Ready` | The whole system is shown to be operable: every item of section 10.3's Gate E list has revision-bound evidence, and `BT-G6` is recorded | The Gate E evidence set, an independent production-readiness review, and the security risk owner's dated record |
 
-In the `BT-G2` and `BT-G3` rows, "P1" and "P2" are the previous plan's phase names; in this plan they are P1A and P1B. The rows are kept verbatim so that they match the manuals until the overview ticket moves them. The `BT-G3` row, kept verbatim, names P1B's proof; where P1C's proof sits inside Gate C is the P1 manual ticket's ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)).
+In the `BT-G2` and `BT-G3` rows, "P1" and "P2" are the previous plan's phase names; in this plan they are P1A and P1B. The rows are kept verbatim so that the phase pages, which still name these gates as their exit gates, match them. The `BT-G3` row, kept verbatim, names P1B's proof; where P1C's proof sits inside Gate C is the P1 manual ticket's ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)).
 
 The `BT-G7` row adds to the roadmap's Gate E four things the roadmap does not state, and they are this plan's proposals: revision binding of the evidence (`AGENTS.md` section 9); `BT-G6` recorded (the map's charting decision 3); an independent production-readiness review and the security risk owner's dated record (the hub's Definition of Done, whose last item is an independent review, and the previous plan's section 7 waiver rule, which names a human risk owner).
 
@@ -355,7 +355,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ## 14. What this document does not yet carry
 
-- **The previous plan's section 7** remains the gate table the manuals render and `tests/test_phase_pages.py` reads (exactly `BT-G0` to `BT-G6`) until the overview ticket ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) moves it; section 10 here is the record of the gates going forward, and the two differ by `BT-G7` and the labels only.
+- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)); the overview renders section 10 and `tests/test_phase_pages.py` reads it. The four phase pages still render the previous plan's epics and exit gates until their tickets move them.
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
 - **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.
@@ -364,7 +364,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 ## 15. Sources
 
 - The operator's roadmap draft, sections 1 to 8, 11 to 15, as transcribed at [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md).
-- [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1 and 3 to 11; its section 7 gate rows are quoted verbatim in section 10.
+- [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1 and 3 to 11; the gate rows its section 7 held until WP-051 are quoted verbatim in section 10.
 - The guide's hub, `index.html`, section 10 (the eight-item Definition of Done and the assurance metrics) and sections 11 and 12 (security engineering and production operations), as rendered at the commit this document cites.
 - Research on the Guide v2 map: [#161](https://github.com/bstBizEra/biztrust_guide/issues/161) for the definitions the P3 gate rests on, [#162](https://github.com/bstBizEra/biztrust_guide/issues/162) for store release, [#163](https://github.com/bstBizEra/biztrust_guide/issues/163) for reconciliation statuses, [#164](https://github.com/bstBizEra/biztrust_guide/issues/164) for the compliance track.
 - [`FOUNDATION_SEQUENCE.md`](FOUNDATION_SEQUENCE.md), [`ADR_REGISTER.md`](ADR_REGISTER.md), [`DOMAIN_MODEL.md`](DOMAIN_MODEL.md) section 1, [`BIZTRUST-ARCH-001.md`](BIZTRUST-ARCH-001.md) sections 5 and 17.

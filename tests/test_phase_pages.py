@@ -14,8 +14,8 @@ defines in four tables and the pages must reproduce one-to-one, and each id's
 LABEL - the plan's deliverable or capability text - must sit beside it in the
 epics table. That makes the parity check mechanically decidable with no
 threshold and no calibration data - the property the spine test's docstring
-says a check needs before it is worth keeping. The same is true of the seven
-capability gate identifiers in plan §7.
+says a check needs before it is worth keeping. The same is true of the eight
+capability gate identifiers in PLAN-001 §10.
 
 The first version of this module checked identifier SETS only. A fresh-context
 review showed it passed with the entire epics table deleted (the ids survive in
@@ -41,6 +41,7 @@ NEGATIVE CONTROLS, run by hand before this shipped
   * Delete the whole epics <section> on p0.html  -> test_every_phase_page_has_its_spine FAILS
   * Swap the P0.7 and P0.11 labels               -> test_epic_labels_match_the_plan FAILS
   * Leave BT-G5 only in overview's <title>       -> test_overview_carries_every_gate FAILS
+  * Remove BT-G7 from overview.html              -> test_overview_carries_every_gate FAILS (run 2026-09-06 under WP-051)
   * Add a `P1.14` that the plan does not have    -> test_epic_ids_match_the_plan FAILS
   * Put `P2.4` on p3.html                        -> test_epic_ids_match_the_plan FAILS
   * Remove BT-G5 from overview.html              -> test_overview_carries_every_gate FAILS
@@ -58,12 +59,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PHASES = ROOT / "phases"
 PLAN = ROOT / "docs/architecture/DELIVERY_PLAN.md"
+# Epics still come from the previous plan, which the phase pages render row by row
+# until each page moves (Guide v2 map, issue #153). Gates come from PLAN-001 section 10,
+# the record since WP-049; the overview renders that table, so it is held to it.
+GATE_PLAN = ROOT / "docs/architecture/BIZTRUST-PLAN-001.md"
 
 PHASE_PAGES = {0: "p0.html", 1: "p1.html", 2: "p2.html", 3: "p3.html"}
 OVERVIEW = "overview.html"
 
 EPIC = re.compile(r"\bP([0-3])\.(\d{1,2})\b")
-GATE = re.compile(r"\bBT-G[0-6]\b")
+GATE = re.compile(r"\bBT-G[0-7]\b")
 
 # Eyebrow text (the small <p> above the <h2>) that locates each spine element.
 # Keyed on the eyebrow, not the id, for the reason test_stage_page_spine records.
@@ -105,10 +110,10 @@ def plan_epics() -> dict[int, set[str]]:
 
 
 def plan_gates() -> set[str]:
-    """Gate ids from plan §7, the table whose rows start with a backticked gate."""
-    text = PLAN.read_text(encoding="utf-8")
-    section = text.split("## 7.", 1)[1].split("\n## ", 1)[0]
-    return set(GATE.findall(section))
+    """Gate ids from PLAN-001 §10, the table whose rows start with a backticked gate."""
+    text = GATE_PLAN.read_text(encoding="utf-8")
+    section = text.split("## 10. Gates", 1)[1].split("\n## 11.", 1)[0]
+    return {m for line in section.splitlines() if line.startswith("| `BT-G") for m in GATE.findall(line)}
 
 
 def page_body(name: str) -> str:
@@ -185,10 +190,10 @@ class TestCorpusIsPresent(unittest.TestCase):
                     f"shape changed or the parser is wrong - fix that before the pages",
                 )
 
-    def test_plan_yields_seven_gates(self) -> None:
+    def test_plan_yields_eight_gates(self) -> None:
         self.assertEqual(
-            {f"BT-G{n}" for n in range(7)}, plan_gates(),
-            "plan §7 no longer lists exactly BT-G0..BT-G6; re-derive this test",
+            {f"BT-G{n}" for n in range(8)}, plan_gates(),
+            "PLAN-001 §10 no longer lists exactly BT-G0..BT-G7; re-derive this test",
         )
 
     def test_every_page_exists_and_parses(self) -> None:
@@ -223,7 +228,7 @@ class TestParityWithThePlan(unittest.TestCase):
 
     def test_overview_carries_every_gate(self) -> None:
         on_page = set(GATE.findall(page_text(OVERVIEW)))
-        self.assertEqual(plan_gates(), on_page, "overview.html and plan §7 disagree on the gate set")
+        self.assertEqual(plan_gates(), on_page, "overview.html and PLAN-001 §10 disagree on the gate set")
 
     def test_each_phase_page_names_its_exit_gate(self) -> None:
         expected = {"p0.html": {"BT-G1"}, "p1.html": {"BT-G2"}, "p2.html": {"BT-G3"},

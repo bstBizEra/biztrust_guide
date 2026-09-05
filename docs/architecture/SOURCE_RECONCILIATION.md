@@ -34,7 +34,7 @@ The raw drafts are not copied into the repository because they substantially dup
 | RBAC matrix | Architecture authorization model | Role/permission/scope/condition/authority concept retained; exact grants deferred to IAM contract |
 | State machines | `FLOWS` §6–13 | Promoted with immutable offer revisions, temporal semantics and policy dimensions |
 | P0–P3 plan | `DELIVERY_PLAN` | Promoted as the near-term planning baseline |
-| Architecture gates | `DELIVERY_PLAN` §7 | Renamed `BT-G0…BT-G6` within this pack; the matching guide-side `ENG-G*` rename is applied — see §2 |
+| Architecture gates | `DELIVERY_PLAN` §7 (table now `BIZTRUST-PLAN-001` §10) | Renamed `BT-G0…BT-G6` within this pack; the matching guide-side `ENG-G*` rename is applied — see §2 |
 | Required ADRs | `BIZTRUST-ARCH-001` §16; `ADR_REGISTER` | Expanded from 12 to 20 after issue #15; none marked accepted |
 
 ## Conflicts resolved
