@@ -14,7 +14,7 @@ Nothing in this document is accepted, and nothing it names is implemented. It is
 
 ## 0. Relation to the previous plan
 
-`DELIVERY_PLAN.md` v0.1 defined four phases, P0 to P3, and 46 epics. The P3 manual under `phases/` still renders that file, and `tests/test_phase_pages.py` fails if it disagrees with it; the overview and the P0, P1 and P2 manuals render this document. So this document does not overwrite it. Until the manuals are rewritten under tickets [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#170](https://github.com/bstBizEra/biztrust_guide/issues/170), the previous plan remains the record the manuals render, and this document is the record of where the partition is going. Section 9 maps every epic from the one to the other. When the last manual moves, the previous plan's sections 3 to 6 are retired and this document takes the file's place.
+`DELIVERY_PLAN.md` v0.1 defined four phases, P0 to P3, and 46 epics. The overview and the four phase manuals under `phases/` render this document since the manuals moved under tickets [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#169](https://github.com/bstBizEra/biztrust_guide/issues/169), and `tests/test_phase_pages.py` fails if a page disagrees with the section named for it. The previous plan's sections 3 to 6 are retired to a pointer since the last manual moved (WP-055); its sections 1, 2 and 8 to 11 stand, and section 9 here maps every epic from the one to the other.
 
 ## 1. Naming rule
 
@@ -153,6 +153,27 @@ The roadmap's P1 Web list (the broker workstation) is not a new epic: it is the 
 
 From the roadmap's section 5 and the contract's invariant candidates INV-005, INV-016 and INV-022: a broker bind request is not a carrier bind confirmation; a broker policy record is not the insurer's authoritative policy; a broker claim status is not the insurer's adjudication status. These are the same boundary the landing page states as "a request is not a confirmation".
 
+### 5.5 P1A vertical-slice acceptance
+
+Carried verbatim from the previous plan's section 4 under WP-055 ([#169](https://github.com/bstBizEra/biztrust_guide/issues/169)), so that the P1 manual's first twelve execution steps have a record to be held to:
+
+```mermaid
+flowchart TD
+    A[Create tenant] --> B[Create broker user]
+    B --> C[Create client]
+    C --> D[Capture risk]
+    D --> E[Select sourced distribution version]
+    E --> F[Submit risk]
+    F --> G[Record authority offers]
+    G --> H[Compare and recommend]
+    H --> I[Record client acceptance]
+    I --> J[Request bind]
+    J --> K[Record authority-supported cover]
+    K --> L[Register broker policy representation]
+```
+
+Automation of insurer APIs is not required for P1. Correct state, evidence and ownership are required.
+
 ## 6. P2 — Payment and Finance
 
 **Objective** (previous plan, section 6, with the roadmap's section 6 wording): close the insurance-to-money-to-insurer loop with attributable, reconcilable records, so that payment, ledger, commission, settlement and reconciliation are each their own thing. The roadmap's rule that invoice, payment, payment intent, payment attempt, payment allocation, ledger, commission, settlement, reconciliation and refund must never collapse into one object is carried as P2's design constraint.
@@ -171,7 +192,7 @@ The nine finance epics of the previous plan's P3 become P2's epics, grouped by t
 | P2E.1 | Bank/provider/ledger reconciliation | P3.8 |
 | P2F.1 | Insurer and payment Adapter SDKs | P3.9 |
 
-The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant Pack validation foundation, are not P2 work: they are the first items of the expansion streams E2 and E1 in section 8, and section 9 records the move. The end-to-end evidence sentence of the previous plan's section 6 remains P2's exit condition; the P2 manual renders it as the last item of its exit checklist (WP-054, [#168](https://github.com/bstBizEra/biztrust_guide/issues/168)); the failure cases the roadmap's Gate D lists are in section 10.3.
+The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant Pack validation foundation, are not P2 work: they are the first items of the expansion streams E2 and E1 in section 8, and section 9 records the move. The end-to-end evidence sentence of the previous plan's section 6 remains P2's exit condition; the P2 manual renders it as the last item of its exit checklist (WP-054, [#168](https://github.com/bstBizEra/biztrust_guide/issues/168)); the failure cases the roadmap's Gate D lists are in section 10.3. The sentence, carried verbatim from the previous plan's section 6 under WP-055 so that the checklist item has a record to be held to: "End-to-end evidence must trace customer/partner activity through indication/offer, payment, authority-supported coverage confirmation, policy representation, ledger, commission, settlement and reconciliation."
 
 ## 7. P3 — Production
 
@@ -190,7 +211,7 @@ The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant
 | P3I.1 | Security operations: continuous detection across authentication, tenancy, privilege, API, payment, dependencies, secrets, drift | Roadmap section 7, P3I |
 | P3J.1 | Incident management: detect, triage, contain, restore, investigate, correct, postmortem, prevent; a severity scale | Roadmap section 7, P3J |
 
-The definitions these epics rest on are sourced in the map's research: release engineering, reliability and disaster recovery ([#161](https://github.com/bstBizEra/biztrust_guide/issues/161)) and mobile release pipelines ([#162](https://github.com/bstBizEra/biztrust_guide/issues/162)). Three findings bind this table: neither store offers a rollback for a released build, so P3H.1 plans on halting a rollout and shipping forward; the SRE sources define rollback for blue-green as a reversal of the routing change but give no standalone definition of rollback or of rolling deployment, so P3C.1 defines both locally and cites the workbook for blue-green; and no current standard defines an incident severity scale, so P3J.1's scale is a local decision and must be labelled one. Gate E's evidence list is part two's.
+The definitions these epics rest on are sourced in the map's research: release engineering, reliability and disaster recovery ([#161](https://github.com/bstBizEra/biztrust_guide/issues/161)) and mobile release pipelines ([#162](https://github.com/bstBizEra/biztrust_guide/issues/162)). Three findings bind this table: neither store offers a rollback for a released build, so P3H.1 plans on halting a rollout and shipping forward; the SRE sources define rollback for blue-green as a reversal of the routing change but give no standalone definition of rollback or of rolling deployment, so P3C.1 defines both locally and cites the workbook for blue-green; and no current standard defines an incident severity scale, so P3J.1's scale is a local decision and must be labelled one. Gate E's evidence list is section 10.3's; the P3 manual renders it with the three local definitions labelled (WP-055, [#169](https://github.com/bstBizEra/biztrust_guide/issues/169)).
 
 ## 8. Continuous Operations and the expansion streams
 
@@ -307,7 +328,7 @@ Restated from the roadmap so that a manual or a showcase page can cite one place
 
 **Gate A, `BT-G0`** (roadmap section 3): the architecture can answer who owns each datum; which tenant owns each record; who may perform each operation; which module owns each state transition; what the authoritative insurance state is; what the authoritative financial state is; how a quote becomes bound coverage; how money becomes premium; how commission is calculated and posted; how a carrier integrates; how Tenant #2 onboards without a fork; how cross-tenant isolation is mechanically proved; how failures are recovered; how a transaction is reconstructed from evidence. They correspond to, and are fewer than, the contract's seventeen section 17 exit criteria; the contract's list governs.
 
-**Gate B, `BT-G1`** (roadmap section 4): the chain authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence is mechanically demonstrated, and the P0 mandatory proof of the previous plan's section 3 passes independently of the implementer.
+**Gate B, `BT-G1`** (roadmap section 4): the chain authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence is mechanically demonstrated, and the P0 mandatory proof, section 4 here, passes independently of the implementer.
 
 **Gate C, `BT-G2` and `BT-G3`** (roadmap section 5): the trace tenant, client, risk, submission, placement, quotes, comparison, recommendation, acceptance, bind coordination, carrier confirmation, policy, then endorsement, claim and renewal, is proven with authorisation, product and version reproducibility, tenant isolation, deterministic state transitions, an audit trail, web and mobile coverage, API contracts, documents, and insurer-authority separation.
 
@@ -367,7 +388,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ## 14. What this document does not yet carry
 
-- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)); the overview renders section 10 and `tests/test_phase_pages.py` reads it. The P0, P1 and P2 pages render sections 4 to 6 here; the P3 page still renders the previous plan's epics and exit gates until its ticket moves it.
+- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)), and its sections 3 to 6 are a pointer to sections 3 to 7 and 9 here since WP-055 ([#169](https://github.com/bstBizEra/biztrust_guide/issues/169)); the overview renders section 10, the four phase pages render sections 4 to 7, and `tests/test_phase_pages.py` reads them.
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
 - **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.

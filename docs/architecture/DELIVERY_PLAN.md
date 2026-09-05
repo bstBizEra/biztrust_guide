@@ -5,7 +5,7 @@
 | Version | `0.1-draft` |
 | Status | `PLANNING BASELINE — AUTHORITY REQUIRED PER WORK PACKAGE` |
 | Parent | `BIZTRUST-ARCH-001` |
-| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the P3 manual under `phases/` renders, and `tests/test_phase_pages.py` binds it to it, until tickets #169 and #170 on the Guide v2 map (#153) move the last manual and write the operations one (the overview, P0, P1 and P2 manuals moved under #165 to #168); section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), which the overview renders and the phase-page test reads; sections 8, 9 and 11 stand until a ticket carries them |
+| Superseded | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phases, the epics and the gates: sections 3 to 6 here are retired to a pointer since WP-055 (#169), section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), and no page or test reads this file's epics. Sections 1, 2, 8, 9, 10 and 11 stand until a ticket carries them: the naming rule, the execution chain, the Work Package decomposition rule, the recommended backlog, the horizon and the exit from planning |
 
 ## 1. Naming rule
 
@@ -36,107 +36,9 @@ flowchart TD
 
 Architecture acceptance authorizes only the next bounded planning step. It does not grant blanket implementation or production authority.
 
-## 3. P0 — Architecture and platform foundation
+## 3. to 6. P0 to P3 (retired)
 
-**Objective:** freeze the contract and mechanically prove the tenant-security substrate before placing real insurance-domain data on it.
-
-| Epic | Deliverable | Exit evidence |
-|---|---|---|
-| P0.1 | `BIZTRUST-ARCH-001` and ADR-001…020 | Authority record and resolved findings |
-| P0.2 | Repository and module boundaries | Build, dependency and boundary tests |
-| P0.3 | Logto integration spike | Token-validation evidence |
-| P0.4 | Organization-to-tenant mapping | Mapping and mismatch tests |
-| P0.5 | Tenant provisioning | Repeatable Tenant A and B provisioning |
-| P0.6 | PostgreSQL tenancy model | Migration and ownership tests |
-| P0.7 | RLS enforcement | Cross-tenant read/write/delete denial |
-| P0.8 | API conventions | Linted OpenAPI baseline |
-| P0.9 | Event conventions | Linted AsyncAPI/event envelope |
-| P0.10 | Audit framework | Attributable denial and success evidence |
-| P0.11 | Observability baseline | Logs, metrics and traces linked by request |
-| P0.12 | Secrets/configuration management | Rotation and least-privilege evidence |
-| P0.13 | Control-plane web surface | Tenant selection, member administration and the audit viewer exercised end to end after the independent proof, with no insurance function present |
-
-### P0 mandatory proof
-
-Carried verbatim into [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) section 4 under WP-052, which the P0 manual renders; the seven lines and the rule that no P1 authorization may be issued until the proof passes independently stand there.
-
-## 4. P1 — Broker core MVP
-
-**Objective:** deliver a manual-insurer-assisted quote-to-policy lifecycle with correct broker/insurer boundaries.
-
-| Epic | Capability |
-|---|---|
-| P1.1 | Party and client account |
-| P1.2 | Client 360 and relationship view |
-| P1.3 | Risk profile and submission snapshot |
-| P1.4 | Insurer-product provenance and immutable distribution product version |
-| P1.5 | Submission lifecycle |
-| P1.6 | Manual insurer/delegated offer and revisions; broker indication kept distinct |
-| P1.7 | Coverage comparison |
-| P1.8 | Broker recommendation and disclosures |
-| P1.9 | Client acceptance evidence |
-| P1.10 | Bind request and authority-supported coverage evidence |
-| P1.11 | Broker policy register |
-| P1.12 | Documents and audit trail |
-| P1.13 | Basic broker portal |
-
-### P1 vertical-slice acceptance
-
-```mermaid
-flowchart TD
-    A[Create tenant] --> B[Create broker user]
-    B --> C[Create client]
-    C --> D[Capture risk]
-    D --> E[Select sourced distribution version]
-    E --> F[Submit risk]
-    F --> G[Record authority offers]
-    G --> H[Compare and recommend]
-    H --> I[Record client acceptance]
-    I --> J[Request bind]
-    J --> K[Record authority-supported cover]
-    K --> L[Register broker policy representation]
-```
-
-Automation of insurer APIs is not required for P1. Correct state, evidence and ownership are required.
-
-## 5. P2 — Professional brokerage lifecycle
-
-**Objective:** expand the core into professional placement, servicing and claims/renewal operations.
-
-| Epic | Capability |
-|---|---|
-| P2.1 | Placement workspace and insurer panel |
-| P2.2 | Market requests and communication evidence |
-| P2.3 | Quote revision and coverage matrix |
-| P2.4 | Durable binding workflow |
-| P2.5 | Policy endorsement and cancellation workflow |
-| P2.6 | Claims notification and broker advocacy |
-| P2.7 | Renewal case and market re-engagement |
-| P2.8 | Tasks, diary and SLA controls |
-| P2.9 | Compliance, consent and advice file |
-| P2.10 | Event infrastructure and workflow operations |
-
-P2 exits only when delayed, duplicate and conflicting external interactions have been exercised without corrupting broker state.
-
-## 6. P3 — Financial and integration platform
-
-**Objective:** close the insurance-to-money-to-insurer loop with attributable, reconcilable records.
-
-| Epic | Capability |
-|---|---|
-| P3.1 | Invoice and premium due |
-| P3.2 | Payment intent, attempt and allocation |
-| P3.3 | Payment adapter and signed webhook handling |
-| P3.4 | Refund, reversal and chargeback |
-| P3.5 | Immutable double-entry insurance subledger |
-| P3.6 | Versioned broker and agent commission |
-| P3.7 | Insurer settlement and remittance |
-| P3.8 | Bank/provider/ledger reconciliation |
-| P3.9 | Insurer and payment Adapter SDKs |
-| P3.10 | Partner API and versioned webhooks |
-| P3.11 | Tenant Pack validation foundation |
-
-End-to-end evidence must trace customer/partner activity through indication/offer, payment, authority-supported coverage confirmation, policy representation, ledger, commission, settlement and reconciliation.
+The four phase sections this file held, P0 Architecture and platform foundation, P1 Broker core MVP, P2 Professional brokerage lifecycle and P3 Financial and integration platform, with their 47 epics, the P0 mandatory proof and the P1 vertical-slice acceptance, are retired since WP-055 ([#169](https://github.com/bstBizEra/biztrust_guide/issues/169)). [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) carries the five phases in its sections 3 to 7, the mandatory proof in its section 4, the vertical-slice acceptance verbatim in its section 5.5, the end-to-end evidence sentence verbatim in its section 6, and every epic of these four sections with its new home in its section 9, except P0.13, which was added to both plans under WP-050 and is unchanged in its section 4. The phase manuals under `phases/` render that document, and `tests/test_phase_pages.py` holds them to it. The retired tables and the vertical-slice acceptance are in this file's history at the WP-054 merge, `cf4eac1`; the mandatory proof was already a pointer there, its lines having moved to PLAN-001 section 4 under WP-052.
 
 ## 7. BizTrust architecture gates
 
