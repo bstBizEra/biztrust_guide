@@ -10,7 +10,8 @@ WHAT IS EXACT HERE
 ==================
 
 Epic identifiers (`P0.1`, `P1.13`, ...) are a closed vocabulary that the plan
-defines in four tables and the pages must reproduce one-to-one, and each id's
+defines in four tables (one plan section per phase; see EPIC_SOURCES) and the pages must
+reproduce one-to-one, and each id's
 LABEL - the plan's deliverable or capability text - must sit beside it in the
 epics table. That makes the parity check mechanically decidable with no
 threshold and no calibration data - the property the spine test's docstring
@@ -63,6 +64,16 @@ PLAN = ROOT / "docs/architecture/DELIVERY_PLAN.md"
 # until each page moves (Guide v2 map, issue #153). Gates come from PLAN-001 section 10,
 # the record since WP-049; the overview renders that table, so it is held to it.
 GATE_PLAN = ROOT / "docs/architecture/BIZTRUST-PLAN-001.md"
+# Each phase page renders one section of one plan. P0 moved to PLAN-001 section 4 under
+# WP-052 (its thirteen rows are identical in both plans); P1 to P3 still render the previous
+# plan's sections 4 to 6 and move one ticket at a time. A manual ticket moves the page, this
+# row, and the page's exit-gate expectation together.
+EPIC_SOURCES: dict[int, tuple[Path, str, str]] = {
+    0: (GATE_PLAN, "\n## 4. P0", "\n## 5. P1"),
+    1: (PLAN, "\n## 4. P1", "\n## 5. P2"),
+    2: (PLAN, "\n## 5. P2", "\n## 6. P3"),
+    3: (PLAN, "\n## 6. P3", "\n## 7. "),
+}
 
 PHASE_PAGES = {0: "p0.html", 1: "p1.html", 2: "p2.html", 3: "p3.html"}
 OVERVIEW = "overview.html"
@@ -99,13 +110,23 @@ def _text(fragment: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", fragment)).strip()
 
 
+def _phase_section(phase: int) -> str:
+    """The plan section that holds this phase's epics table, and nothing outside it."""
+    path, start, end = EPIC_SOURCES[phase]
+    text = path.read_text(encoding="utf-8")
+    return text.split(start, 1)[1].split(end, 1)[0]
+
+
 def plan_epics() -> dict[int, set[str]]:
-    """Epic ids per phase, read from the plan's tables: `| P0.7 | ... |`."""
+    """Epic ids per phase, read from that phase's plan section: `| P0.7 | ... |`.
+    A row is counted only inside its own section, so PLAN-001's mapping table
+    (section 9, which repeats every old id) can never feed a phase."""
     found: dict[int, set[str]] = {n: set() for n in PHASE_PAGES}
-    for line in PLAN.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^\|\s*(P([0-3])\.\d{1,2})\s*\|", line)
-        if m:
-            found[int(m.group(2))].add(m.group(1))
+    for phase in PHASE_PAGES:
+        for line in _phase_section(phase).splitlines():
+            m = re.match(r"^\|\s*(P([0-3])\.\d{1,2})\s*\|", line)
+            if m and int(m.group(2)) == phase:
+                found[phase].add(m.group(1))
     return found
 
 
@@ -133,12 +154,13 @@ def _norm(label: str) -> str:
 
 
 def plan_labels() -> dict[str, str]:
-    """Epic id -> the plan's deliverable/capability cell, from the same four tables."""
+    """Epic id -> the plan's deliverable/capability cell, from the same four sections."""
     out: dict[str, str] = {}
-    for line in PLAN.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^\|\s*(P[0-3]\.\d{1,2})\s*\|\s*(.*?)\s*\|", line)
-        if m:
-            out[m.group(1)] = _norm(m.group(2))
+    for phase in PHASE_PAGES:
+        for line in _phase_section(phase).splitlines():
+            m = re.match(r"^\|\s*(P([0-3])\.\d{1,2})\s*\|\s*(.*?)\s*\|", line)
+            if m and int(m.group(2)) == phase:
+                out[m.group(1)] = _norm(m.group(3))
     return out
 
 

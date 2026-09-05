@@ -58,15 +58,7 @@ Architecture acceptance authorizes only the next bounded planning step. It does 
 
 ### P0 mandatory proof
 
-- Tenant A can access authorized Tenant A data.
-- Tenant A cannot read, create, update or delete Tenant B protected data.
-- Missing or invalid organization context is denied.
-- Tampered URL, header, body and query tenant identifiers are denied or ignored safely.
-- Wrong audience, expired token, inactive membership and absent scope are denied.
-- An application-level authorization bypass test remains blocked by RLS.
-- Every outcome produces tenant-safe audit evidence.
-
-No P1 authorization may be issued until this proof passes independently.
+Carried verbatim into [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) section 4 under WP-052, which the P0 manual renders; the seven lines and the rule that no P1 authorization may be issued until the proof passes independently stand there.
 
 ## 4. P1 — Broker core MVP
 

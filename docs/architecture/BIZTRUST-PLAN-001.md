@@ -74,7 +74,19 @@ The first twelve epics are unchanged from the previous plan and keep their ident
 
 The roadmap's section 4 groups the same work as identity, tenancy, authorisation, data isolation and platform controls under headings it numbers P0.1 to P0.7; those are group headings, not this plan's epics, and `P0.n` here always means the previous plan's epic. It adds two surfaces. The control-plane web surface (login, tenant selection, member administration, roles, business units, branch management, security settings, sessions, tenant configuration, audit viewer; roadmap section 4, group P0.5) is `P0.13`: it is how a human exercises the tenant authorization sequence, so it belongs in P0, but it is built only after the independent security proof and it is outside the `BT-G1` test matrix, which proves the substrate and not a screen. The mobile identity surface (roadmap section 4, group P0.6) is not P0 work, because no mobile client exists before P1. By the map's charting decision 4 it is `P1A.14` in section 5.1, ahead of the P1C clients (P1C.6, P1C.7) that depend on it; the P1 manual ticket ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)) may move it to P1C if the first mobile slice argues so. P0 still carries no insurance function.
 
-The P0 mandatory proof and the rule that no P1 authorisation may issue until it passes independently stand in the previous plan's section 3 and are carried into this document by the P0 manual ticket ([#166](https://github.com/bstBizEra/biztrust_guide/issues/166)), so that they have one home at a time. The engineering designs for P0.2 to P0.13 are the [P0 design pack](p0/README.md).
+The P0 mandatory proof is the previous plan's section 3 block, carried here verbatim under WP-052 ([#166](https://github.com/bstBizEra/biztrust_guide/issues/166)) so that it has one home:
+
+- Tenant A can access authorized Tenant A data.
+- Tenant A cannot read, create, update or delete Tenant B protected data.
+- Missing or invalid organization context is denied.
+- Tampered URL, header, body and query tenant identifiers are denied or ignored safely.
+- Wrong audience, expired token, inactive membership and absent scope are denied.
+- An application-level authorization bypass test remains blocked by RLS.
+- Every outcome produces tenant-safe audit evidence.
+
+No P1 authorization may be issued until this proof passes independently.
+
+The engineering designs for P0.2 to P0.13 are the [P0 design pack](p0/README.md).
 
 ## 5. P1 — Insurance
 
