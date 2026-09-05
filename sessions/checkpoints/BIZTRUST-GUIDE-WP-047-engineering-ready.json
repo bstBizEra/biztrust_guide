@@ -13,7 +13,8 @@
   "completed": [
     "Ticket #131 resolved on the operator's answers: audience, design voice, seven sourced sections, two calls to action, placement, wordmark; positioning terms fed to #102.",
     "Ticket #132 prototyped on branch prototype/landing-page (three variants, one file) and resolved by delegation: ledger variant shipped.",
-    "landing/index.html written from the ledger variant with the claims pass applied; index.html footer, README.md and AGENTS.md section 10 updated; badf/ re-anchored; DEC-049 appended; this checkpoint written."
+    "landing/index.html written from the ledger variant with the claims pass applied; index.html footer, README.md and AGENTS.md section 10 updated; badf/ re-anchored; DEC-049 appended; this checkpoint written.",
+    "Review pass: sixteen findings adopted on the page, the decision record and the PR, including the two blocking ones (the freeze sentence; the source line) and the layout fixes."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-046.",
@@ -52,7 +53,7 @@
     "DEC-049: the landing page shipped as a projection, ledger variant, design voice, status strip, sourced sections, wordmark only."
   ],
   "assumptions": [
-    "The operator's 'proceed on your call and recommend' on the five prototype reactions is a chat instruction transcribed by the agent; the operator may reverse any reaction by a comment on #132.",
+    "The operator's 'proceed on your call and recommend' on the five prototype reactions was given in chat and is transcribed on #132 by the agent with a marker; it is a delegation, not an authority record, and the operator may reverse any reaction by a comment there.",
     "Tenant names UniTrust and the travel scheme remain acceptable on a public page because both are already public in the handbook; either may be withdrawn."
   ],
   "blockers": [

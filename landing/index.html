@@ -12,19 +12,19 @@
        Tokens are copied from styles.css so this page shares no chrome with the handbook, whose header and footer carry tenant marks. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{--navy:#071a2c;--navy-2:#0d2942;--ink:#122638;--muted:#5f7280;--paper:#f5f8f9;--surface:#fff;--line:#dce5e8;--teal:#10a8a0;--teal-dark:#087b78;--lime:#bfdc6a;--amber:#f1b84b;--red:#c92f2f;--strip:2.6rem;--measure:44rem}
     @media(prefers-color-scheme:dark){:root{--ink:#d7e5e9;--muted:#8da4ae;--paper:#071721;--surface:#0c2230;--line:#173444;--teal-dark:#46b8b0}}
     *{box-sizing:border-box}
     html{scroll-behavior:smooth;scroll-padding-top:calc(var(--strip) + 1rem)}
-    body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Noto Sans Lao",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+    body{margin:0;overflow-x:clip;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
     a{color:inherit}
     a:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
     .skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--navy);color:#fff;padding:.7rem 1rem;border-radius:.4rem}.skip:focus{top:1rem}
 
     /* status strip: the evidence boundary, above everything */
-    .strip{position:sticky;top:0;z-index:50;min-height:var(--strip);background:var(--navy);color:#fff;border-bottom:3px solid var(--amber);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.45rem 1.5rem;font-size:.78rem}
+    .strip{position:sticky;top:0;z-index:50;min-height:var(--strip);background:var(--navy);color:#fff;border-bottom:3px solid var(--amber);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.45rem 1.5rem;font-size:.82rem}
     .strip ul{display:flex;gap:1.6rem;margin:0;padding:0;list-style:none;flex-wrap:wrap}
     .strip li{display:flex;align-items:center;gap:.5rem}
     .strip li::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--amber)}
@@ -80,7 +80,7 @@
     .engage p{max-width:var(--measure)}
     footer{border-top:1px solid var(--line);color:var(--muted);font-size:.74rem;padding:1.5rem;max-width:72rem;margin:0 auto}
     footer a{color:var(--teal-dark)}
-    @media(max-width:760px){.strip{font-size:.7rem;padding:.4rem 1rem}.strip ul{gap:.8rem}.pair,.ledger{grid-template-columns:1fr}header.mast{flex-direction:column;gap:.3rem}}
+    @media(max-width:760px){html{scroll-padding-top:6.5rem}.strip{font-size:.8rem;padding:.4rem 1rem}.strip ul{gap:.8rem}.pair,.ledger{grid-template-columns:1fr}header.mast{flex-direction:column;gap:.3rem}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
     @media print{.skip{display:none}.strip{position:static}}
   </style>
@@ -88,14 +88,14 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <div class="strip" role="status" aria-label="Where BizTrust stands">
+  <aside class="strip" aria-label="Where BizTrust stands">
     <ul>
       <li>Architecture design stage</li>
       <li>Contract freeze pending</li>
       <li class="no">Implementation not yet authorised</li>
     </ul>
     <a href="#status">What this means</a>
-  </div>
+  </aside>
 
   <header class="mast">
     <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
@@ -115,7 +115,7 @@
 
     <section class="block" id="what">
       <h2>What BizTrust is being designed to become</h2>
-      <p>One platform that several organisations would use at once, each within its own boundary, keeping its own records, and working with insurers through the same contracts. The design supports five ways of operating on it.</p>
+      <p>One platform that several organisations would use at once, each within its own boundary, keeping its own records, and working with insurers through the same contracts. The design is meant to support five ways of operating on it.</p>
       <div class="models">
         <div><b>Insurance software as a service</b><span>An organisation would run its insurance operations on BizTrust rather than on software it builds and hosts itself.</span></div>
         <div><b>Brokerage</b><span>A broker would manage clients, risks, submissions, placement, recommendations, policy records, claims advocacy and renewals.</span></div>
@@ -133,7 +133,7 @@
         <div><h3>UniTrust, a corporate brokerage</h3><p>Commercial insurance placed for business clients: several lines, several insurers, and the full lifecycle from submission to renewal.</p></div>
         <div><h3>A government-linked travel scheme</h3><p>Travel cover issued to many people under one master policy, which raises the question of who has the authority to issue each certificate and what that obliges.</p></div>
       </div>
-      <p class="source">Source: the discover stage of the handbook, and the tenant authority profile template. Both names are already public in the handbook; either may be withdrawn.</p>
+      <p class="source">Source: the tenant-names rule of the P0 design template (<code>docs/architecture/p0/README.md</code>), the tenant authority questions on issue 15, and the contract's section 1 on master-policy authority. The handbook holds no discovery record for either organisation. Both names are already public in this repository; either may be withdrawn.</p>
     </section>
 
     <section class="block" id="principle">
@@ -154,7 +154,7 @@
 
     <section class="block" id="decisions">
       <h2>What is decided, and what remains open</h2>
-      <p>The architecture has been written down, reviewed for sequence, and mapped question by question. Nothing in it is accepted yet, and the first questions it is waiting on belong to the tenants, not the engineers.</p>
+      <p>The architecture has been written down, sequenced, and mapped question by question. Nothing in it is accepted yet, and the first questions it is waiting on belong to the tenants, not the engineers.</p>
       <div class="ledger">
         <div>
           <h3>Proposed and recorded, awaiting acceptance</h3>
@@ -162,7 +162,7 @@
           <ul>
             <li>Start as one application with strict internal boundaries, and split it only on evidence.<small>ADR-001</small></li>
             <li>Use a dedicated identity service; an organisation there would be the security boundary for a tenant here.<small>ADR-002, ADR-003</small></li>
-            <li>One shared database with row-level isolation as the default, proven by tests that try to cross it.<small>ADR-004</small></li>
+            <li>One shared database with row-level isolation as the default, to be proven by tests that try to cross it.<small>ADR-004</small></li>
             <li>Broker records and insurer decisions are owned by different systems, and the platform is designed never to pretend otherwise.<small>ADR-007</small></li>
             <li>When cover starts and when it was recorded are two dates, and corrections never erase what was asserted before.<small>ADR-015</small></li>
           </ul>
@@ -188,22 +188,22 @@
         <div><b>A public handbook</b>Nine engineering stages and four delivery phases, with the rules agents and engineers must follow.</div>
         <div><b>A draft architecture contract</b>Version 0.1, marked draft for contract freeze. Its invariants are candidates until an architecture authority accepts them.</div>
         <div><b>Twenty decisions registered</b>Fourteen ready to draft, six waiting on the tenant questions above. None accepted.</div>
-        <div><b>Nothing implemented</b>No code, no database, no identity service. Implementation authority is not granted, and no page of the handbook says otherwise.</div>
+        <div><b>Nothing implemented</b>No platform implementation is recorded or authorised: this repository holds no application code, no database and no identity service, and no page of the handbook says otherwise.</div>
       </div>
-      <p class="source">Source: the handbook's continuity state, <code>badf/current-state.json</code>, read on 2026-09-05: architecture acceptance not granted; production platform implementation not granted. The strip at the top of this page states that record and is revised when it changes.</p>
+      <p class="source">Source: the handbook's continuity state, <code>badf/current-state.json</code>, read on 2026-09-05: architecture acceptance not granted; production platform implementation not granted. The design stage is read from the contract's <code>0.1-draft</code> status. The strip at the top of this page states those records and is revised when they change.</p>
     </section>
 
     <section class="engage" id="engage">
       <h2>What to do with this page</h2>
       <div class="pair">
-        <div><h3>If you hold authority for a tenant</h3><p>Answer the five questions. They take ten minutes, and they are the only thing standing between the architecture and its freeze.</p><a class="btn" href="https://github.com/bstBizEra/biztrust_guide/issues/15#issuecomment-5526326101">Answer the tenant authority questions</a></div>
-        <div><h3>If you want to understand the design</h3><p>The contract is written to be read by someone who places insurance, not only by engineers. Start with its purpose and scope, then the invariants.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">Read the architecture contract</a></div>
+        <div><h3>If you hold authority for a tenant</h3><p>Answer the five questions. They take about ten minutes, and six of the architecture's twenty decisions cannot be drafted until they are answered.</p><a class="btn" href="https://github.com/bstBizEra/biztrust_guide/issues/15#issuecomment-5526326101">Answer the tenant authority questions</a></div>
+        <div><h3>If you want to understand the design</h3><p>The contract is an engineering document, but its purpose, scope and invariants (sections 1, 2 and 5) can be read without the rest. Start there.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">Read the architecture contract</a></div>
       </div>
     </section>
   </main>
 
   <footer>
-    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims nothing about capabilities that exist.
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing.
   </footer>
 </body>
 </html>
