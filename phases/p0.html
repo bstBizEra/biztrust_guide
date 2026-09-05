@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>P0 · Foundation · BizTrust Agentic Engineer Team Guide</title>
-<meta name="description" content="Phase P0 of the BizTrust delivery plan: twelve epics that freeze the contract and mechanically prove the tenant-security substrate — what the agent builds, where it lands, what proves it, and what a human must see before recording BT-G1.">
+<meta name="description" content="Phase P0 of the BizTrust delivery plan: thirteen epics that freeze the contract and mechanically prove the tenant-security substrate — what the agent builds, where it lands, what proves it, and what a human must see before recording BT-G1.">
 <link rel="icon" href="../assets/unitrust-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,8 +79,8 @@
   </div>
 </section>
 
-<section id="epics" data-search="epics work packages P0.1 P0.12 deliverable exit evidence source">
-  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Twelve epics, each one or more packages</h2></div></div>
+<section id="epics" data-search="epics work packages P0.1 P0.13 deliverable exit evidence source">
+  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Thirteen epics, each one or more packages</h2></div></div>
   <p class="section-intro">Each row is decomposed into Work Packages by the <a href="../stages/plan.html#anatomy">Plan stage</a> under the plan's decomposition rule: one bounded outcome, an accountable owner, explicit exclusions, authority with expiry, acceptance criteria with an independent verifier, rollback, an evidence manifest and one next safe action. The identifiers are the plan's; a package cites its epic. An epic's engineering design, when it exists, lives in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/p0/README.md">P0 design pack</a>: one file per epic with scope, interfaces, negative controls, the evidence contract and every technology as a candidate naming its ADR. A design is a proposal to review; it changes nothing said on this page about authority.</p>
   <div class="table-wrap">
     <table>
@@ -99,6 +99,7 @@
         <tr><td><strong>P0.10</strong><small>Audit framework</small></td><td>The decision record with every field of the authorization evidence contract; separate retention, access and mutation controls</td><td><code>modules/audit/</code></td><td>Attributable denial and success evidence for every matrix row</td><td>ARCH-001 §15; AUTHORIZATION_BASELINE §7</td></tr>
         <tr><td><strong>P0.11</strong><small>Observability baseline</small></td><td>Structured logs with tenant-safe fields, metrics and traces, all linked by request and trace identifiers</td><td><code>packages/observability/</code></td><td>One request reconstructable across all three signals</td><td>OpenTelemetry context propagation; the hub's minimum telemetry</td></tr>
         <tr><td><strong>P0.12</strong><small>Secrets/configuration management</small></td><td>Externalized secrets, a rotation procedure that has been run, least-privilege credentials per environment</td><td><code>.github/workflows/</code>, environment configuration</td><td>Rotation and least-privilege evidence</td><td>The hub's security engineering track</td></tr>
+        <tr><td><strong>P0.13</strong><small>Control-plane web surface</small></td><td>Login, tenant selection, member administration, roles, business units, branch management, security settings, sessions, tenant configuration and an audit viewer — the screens through which a human exercises the tenant authorization sequence, and nothing that touches a client, policy, claim or premium</td><td><code>apps/control-plane/</code> (candidate)</td><td>Tenant selection, member administration and the audit viewer exercised end to end after the independent proof, with no insurance function present</td><td>ADR-002 and ADR-003 for identity context; the P0 design pack, ticket #185</td></tr>
       </tbody>
     </table>
   </div>
@@ -106,7 +107,7 @@
 
 <section id="order" data-search="execution order dependency sequence P0 one primary next action">
   <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Why this order and not another</h2></div></div>
-  <p class="section-intro">The plan lists the twelve epics and forbids opening all of them at once; it does not order them. This order is the track's proposal, derived from the dependency each step names. The plan's own rule is one primary next action, with the rest queued behind it in dependency order.</p>
+  <p class="section-intro">The plan lists the thirteen epics and forbids opening all of them at once; it does not order them. This order is the track's proposal, derived from the dependency each step names. The plan's own rule is one primary next action, with the rest queued behind it in dependency order.</p>
   <ol class="migration-steps">
     <li><b>P0.1 is the entry gate</b>, not the first package. If it is not recorded, nothing below starts.</li>
     <li><b>P0.2 — the repository.</b> Everything else needs somewhere to land, a CI that runs, and a boundary test that already fails on the first cross-module import. Protect <code>main</code> before the second package opens a branch.</li>
@@ -119,6 +120,7 @@
     <li><b>P0.8 and P0.9 — contract conventions.</b> Independent of the security chain; queued beside it once the repository exists, and taken as the primary action whenever the chain is blocked. Their proof is a broken contract failing CI.</li>
     <li><b>P0.11 — observability</b>, so the proof run can be reconstructed from its own trace.</li>
     <li><b>P0.12 — secrets and configuration</b>, last of the substrate, first thing the independent verifier checks.</li>
+    <li><b>P0.13 — the control-plane web surface, after the proof.</b> It is built last and is not part of the <code>BT-G1</code> matrix: the matrix proves the substrate, and a screen that drives it is evidence that a human can exercise tenant selection and member administration, not evidence that isolation holds. Any insurance function on it is a stop condition.</li>
     <li><b>The mandatory proof</b>, executed by someone who did not implement it, bound to a source revision — then <code>BT-G1</code>.</li>
   </ol>
 </section>

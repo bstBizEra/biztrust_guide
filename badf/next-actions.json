@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-049",
-  "updated_at": "2026-09-05T18:23:49Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-050",
+  "updated_at": "2026-09-05T18:44:52Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. The landing brief (#131) and prototype (#132) are resolved and the page shipped under WP-047; next is #147 the secrets-and-configuration design, the one epic design not gated by an ADR. Of the other ten, seven wait directly on an ADR ticket of map #91 and ten transitively. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Next is #147 the secrets-and-configuration design; #185 (P0.13 control-plane web) was added under WP-050 and waits on the security proof #148. Of the epic designs, seven wait directly on an ADR ticket of map #91 and ten transitively. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046)",
         "For an ADR-gated epic design: its ADR ticket on map #91 is closed, which needs the #92 waiver (NS-041) first"
@@ -108,7 +108,7 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: #155 and #156 are resolved (PLAN-001 parts one and two); next is #157 P0 scope (P0.13 control-plane web after the security proof; mobile identity to P1A; a design ticket on #128), then the manuals #165 to #170 one page per ticket, each moving its page off DELIVERY_PLAN.md v0.1 under the phase-page test, the overview first since it carries the gate table. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156 and #157 are resolved; next is #165 the overview manual, which moves the gate table, the seven-gate assertion in tests/test_phase_pages.py and the BT-G[0-6] regex in tests/test_gate_namespaces.py together, then the manuals #166 to #170 one page per ticket. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
       "prerequisites": [
         "docs/architecture/BIZTRUST-PLAN-001.md v1.0-draft with sections 0 to 15 (WP-048, WP-049)",
         "For the overview manual: tests/test_phase_pages.py's seven-gate assertion and DELIVERY_PLAN.md section 7 move in the same package"

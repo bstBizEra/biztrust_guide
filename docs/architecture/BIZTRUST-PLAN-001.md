@@ -54,7 +54,7 @@ What the roadmap's section 3 adds to the family, `UX-001` and `OPS-001`, and the
 
 **Objective** (previous plan, section 3, with the roadmap's section 4 wording): prove who performed what, under which tenant, with which authority, against which resource, before any client, policy, claim or premium data exists on the platform. P0 carries no insurance function.
 
-The twelve epics are unchanged from the previous plan and keep their identifiers:
+The first twelve epics are unchanged from the previous plan and keep their identifiers; the thirteenth is added by ticket [#157](https://github.com/bstBizEra/biztrust_guide/issues/157) to both plans at once, since the manual renders the previous plan:
 
 | Epic | Deliverable | Exit evidence |
 |---|---|---|
@@ -70,10 +70,11 @@ The twelve epics are unchanged from the previous plan and keep their identifiers
 | P0.10 | Audit framework | Attributable denial and success evidence |
 | P0.11 | Observability baseline | Logs, metrics and traces linked by request |
 | P0.12 | Secrets/configuration management | Rotation and least-privilege evidence |
+| P0.13 | Control-plane web surface | Tenant selection, member administration and the audit viewer exercised end to end after the independent proof, with no insurance function present |
 
-The roadmap's section 4 groups the same work as identity, tenancy, authorisation, data isolation and platform controls under headings it numbers P0.1 to P0.7; those are group headings, not this plan's epics, and `P0.n` here always means the previous plan's epic. It adds two surfaces: a control-plane web surface and a mobile identity surface. Ticket [#157](https://github.com/bstBizEra/biztrust_guide/issues/157) decides their placement; the charting decision on the map is that the web surface becomes `P0.13` after the independent security proof and outside the `BT-G1` matrix, and mobile identity moves to P1A. Neither is listed here until that ticket resolves.
+The roadmap's section 4 groups the same work as identity, tenancy, authorisation, data isolation and platform controls under headings it numbers P0.1 to P0.7; those are group headings, not this plan's epics, and `P0.n` here always means the previous plan's epic. It adds two surfaces. The control-plane web surface (login, tenant selection, member administration, roles, business units, branch management, security settings, sessions, tenant configuration, audit viewer; roadmap section 4, group P0.5) is `P0.13`: it is how a human exercises the tenant authorization sequence, so it belongs in P0, but it is built only after the independent security proof and it is outside the `BT-G1` test matrix, which proves the substrate and not a screen. The mobile identity surface (roadmap section 4, group P0.6) is not P0 work: no mobile client exists before P1, so it is `P1A.14` in section 5.1, and the customer and agent clients of P1C depend on it. P0 still carries no insurance function.
 
-The P0 mandatory proof and the rule that no P1 authorisation may issue until it passes independently stand in the previous plan's section 3 and are carried into this document by the P0 manual ticket ([#166](https://github.com/bstBizEra/biztrust_guide/issues/166)), so that they have one home at a time. The engineering designs for P0.2 to P0.12 are the [P0 design pack](p0/README.md).
+The P0 mandatory proof and the rule that no P1 authorisation may issue until it passes independently stand in the previous plan's section 3 and are carried into this document by the P0 manual ticket ([#166](https://github.com/bstBizEra/biztrust_guide/issues/166)), so that they have one home at a time. The engineering designs for P0.2 to P0.13 are the [P0 design pack](p0/README.md).
 
 ## 5. P1 — Insurance
 
@@ -98,6 +99,7 @@ The previous plan's P1 (section 4), objective unchanged: a manual-insurer-assist
 | P1A.11 | Broker policy register | P1.11 |
 | P1A.12 | Documents and audit trail | P1.12 |
 | P1A.13 | Basic broker portal | P1.13 |
+| P1A.14 | Mobile identity foundation: secure login, token lifecycle, biometric local unlock, tenant context, secure storage, session expiry, device revocation | New; roadmap section 4, group P0.6, moved here by [#157](https://github.com/bstBizEra/biztrust_guide/issues/157); research [#162](https://github.com/bstBizEra/biztrust_guide/issues/162) |
 
 The vertical-slice acceptance flow of the previous plan's section 4 is P1A's acceptance and is carried by the P1 manual ticket ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)).
 
@@ -248,7 +250,7 @@ Every one of the previous plan's 46 epics, once:
 | P3.10 | Partner API and versioned webhooks | E2 | Moved to an expansion stream; first item of E2 |
 | P3.11 | Tenant Pack validation foundation | E1 | Moved to an expansion stream; first item of E1 |
 
-Counts: 12 unchanged, 13 renumbered, 19 moved within the production-critical plan (10 to P1B, 9 to P2), 2 moved to expansion streams; 46 in all. New in this plan: 8 epics in P1C and 10 in P3, 18 in all; `P0.13` pending [#157](https://github.com/bstBizEra/biztrust_guide/issues/157).
+Counts: 12 unchanged, 13 renumbered, 19 moved within the production-critical plan (10 to P1B, 9 to P2), 2 moved to expansion streams; 46 in all. New in this plan: 8 epics in P1C, 10 in P3, `P0.13` and `P1A.14`, 20 in all.
 
 ## 10. Gates
 
@@ -355,7 +357,6 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 - **The previous plan's section 7** remains the gate table the manuals render and `tests/test_phase_pages.py` reads (exactly `BT-G0` to `BT-G6`) until the overview ticket ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) moves it; section 10 here is the record of the gates going forward, and the two differ by `BT-G7` and the labels only.
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
-- **P0.13 and mobile identity**: [#157](https://github.com/bstBizEra/biztrust_guide/issues/157).
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
 - **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.
 - **The manuals**: [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#170](https://github.com/bstBizEra/biztrust_guide/issues/170); until they move, `phases/` renders the previous plan.
