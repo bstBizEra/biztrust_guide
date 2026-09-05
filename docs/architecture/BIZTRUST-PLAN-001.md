@@ -26,11 +26,11 @@ Three things are named here and must never be confused (previous plan, section 1
 | Phase | What is delivered between the architecture contract and production | Architecture, P0, P1, P2, P3, then Continuous Operations |
 | Gate | A platform capability milestone that closes a phase | `BT-G0` onward; the executive labels A to E and the mapping between them are part two's |
 
-**Epic identifier rule.** P0 keeps its identifiers, `P0.1` to `P0.12`, with the same meaning in both plans. Every other phase uses the roadmap's group letter so that no new identifier can be mistaken for an old one: `P1A.n`, `P1B.n`, `P1C.n`; `P2A.n` to `P2F.n`; `P3A.n` to `P3J.n`. While the previous plan stands, `P1.n`, `P2.n` and `P3.n` refer only to it.
+**Epic identifier rule.** P0 keeps its identifiers, `P0.1` to `P0.12`, with the same meaning in both plans. Every other phase uses the roadmap's group letter so that no new identifier can be mistaken for an old one: `P1A.n`, `P1B.n`, `P1C.n`; `P2A.n` to `P2F.n`; `P3A.n` to `P3J.n`. While the previous plan stands, `P1.n`, `P2.n` and `P3.n` refer only to it. The map's vocabulary line, written before this rule, said `P2.n` and `P3.n`; it is amended on the map to match.
 
 ## 2. The five phases
 
-The roadmap's section 1, unchanged in substance:
+After the roadmap's section 1, with the purposes of P0 and P2 drawn from its sections 4 and 6 rather than quoted from section 1:
 
 | Phase | Name | Strategic purpose | Trust established |
 |---|---|---|---|
@@ -40,7 +40,7 @@ The roadmap's section 1, unchanged in substance:
 | P2 | Payment and Finance | Control money, ledger, commission, settlement and reconciliation | Trust in financial integrity |
 | P3 | Production | Operate securely and reliably | Trust in production operation |
 
-After P3, **Continuous Operations** (measure, learn, improve, expand) is an operating lifecycle, not a build phase, and the expansion streams of section 8 are named there. The previous plan's section 10 said post-P3 work must not be labelled P4 to P9 because that would imply an unreviewed sequencing commitment; the streams keep that rule by carrying no sequence number.
+After P3, **Continuous Operations** (measure, learn, improve, expand) is an operating lifecycle, not a build phase, and the expansion streams of section 8 are named there. The previous plan's section 10 said post-P3 work must not be labelled P4 to P9 because that would imply an unreviewed sequencing commitment; the streams keep that rule by carrying no phase number.
 
 The executive interpretation is the roadmap's section 15: architecture establishes trust in the design; P0 in identity, authorisation and tenant isolation; P1 in brokerage operations; P2 in money, commissions, settlement and reconciliation; P3 in continuous, safe operation.
 
@@ -71,7 +71,7 @@ The twelve epics are unchanged from the previous plan and keep their identifiers
 | P0.11 | Observability baseline | Logs, metrics and traces linked by request |
 | P0.12 | Secrets/configuration management | Rotation and least-privilege evidence |
 
-The roadmap's section 4 groups the same work as identity, tenancy, authorisation, data isolation and platform controls, and adds two surfaces: a control-plane web surface and a mobile identity surface. Ticket [#157](https://github.com/bstBizEra/biztrust_guide/issues/157) decides their placement; the charting decision on the map is that the web surface becomes `P0.13` after the independent security proof and outside the `BT-G1` matrix, and mobile identity moves to P1. Neither is listed here until that ticket resolves.
+The roadmap's section 4 groups the same work as identity, tenancy, authorisation, data isolation and platform controls under headings it numbers P0.1 to P0.7; those are group headings, not this plan's epics, and `P0.n` here always means the previous plan's epic. It adds two surfaces: a control-plane web surface and a mobile identity surface. Ticket [#157](https://github.com/bstBizEra/biztrust_guide/issues/157) decides their placement; the charting decision on the map is that the web surface becomes `P0.13` after the independent security proof and outside the `BT-G1` matrix, and mobile identity moves to P1A. Neither is listed here until that ticket resolves.
 
 The P0 mandatory proof and the rule that no P1 authorisation may issue until it passes independently stand in the previous plan's section 3 and are carried into this document by the P0 manual ticket ([#166](https://github.com/bstBizEra/biztrust_guide/issues/166)), so that they have one home at a time. The engineering designs for P0.2 to P0.12 are the [P0 design pack](p0/README.md).
 
@@ -176,11 +176,11 @@ The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant
 | P3I.1 | Security operations: continuous detection across authentication, tenancy, privilege, API, payment, dependencies, secrets, drift | Roadmap section 7, P3I |
 | P3J.1 | Incident management: detect, triage, contain, restore, investigate, correct, postmortem, prevent; a severity scale | Roadmap section 7, P3J |
 
-The definitions these epics rest on are sourced in the map's research: release engineering, reliability and disaster recovery ([#161](https://github.com/bstBizEra/biztrust_guide/issues/161)) and mobile release pipelines ([#162](https://github.com/bstBizEra/biztrust_guide/issues/162)). Two findings bind this table: no primary source defines a rollback for a store release, so P3C.1 and P3H.1 plan on halting and shipping forward; and no current standard defines an incident severity scale, so P3J.1's scale is a local decision and must be labelled one. Gate E's evidence list is part two's.
+The definitions these epics rest on are sourced in the map's research: release engineering, reliability and disaster recovery ([#161](https://github.com/bstBizEra/biztrust_guide/issues/161)) and mobile release pipelines ([#162](https://github.com/bstBizEra/biztrust_guide/issues/162)). Three findings bind this table: neither store offers a rollback for a released build, so P3H.1 plans on halting a rollout and shipping forward; the SRE sources define rollback for blue-green as a reversal of the routing change but give no standalone definition of rollback or of rolling deployment, so P3C.1 defines both locally and cites the workbook for blue-green; and no current standard defines an incident severity scale, so P3J.1's scale is a local decision and must be labelled one. Gate E's evidence list is part two's.
 
 ## 8. Continuous Operations and the expansion streams
 
-After `BT-G7` is recorded and Production v1.0 is released, Continuous Operations runs: measure, learn, improve, expand. The roadmap's section 13 converts the earlier P4 to P9 proposals into eight streams with no sequence number, which is what the previous plan's section 10 required:
+After the gate part two names as `BT-G7` is recorded and Production v1.0 is released, Continuous Operations runs: measure, learn, improve, expand. The roadmap's section 13 converts the earlier P4 to P9 proposals into eight streams with no phase number, which is what the previous plan's section 10 required:
 
 | Stream | Capability | Carries from the previous plan |
 |---|---|---|
@@ -248,7 +248,7 @@ Every one of the previous plan's 46 epics, once:
 | P3.10 | Partner API and versioned webhooks | E2 | Moved to an expansion stream; first item of E2 |
 | P3.11 | Tenant Pack validation foundation | E1 | Moved to an expansion stream; first item of E1 |
 
-Counts: 12 unchanged, 13 renumbered, 21 moved within the production-critical plan, 2 moved to expansion streams; 46 in all. New in this plan: 8 epics in P1C and 10 in P3, 18 in all; `P0.13` pending [#157](https://github.com/bstBizEra/biztrust_guide/issues/157).
+Counts: 12 unchanged, 13 renumbered, 19 moved within the production-critical plan (10 to P1B, 9 to P2), 2 moved to expansion streams; 46 in all. New in this plan: 8 epics in P1C and 10 in P3, 18 in all; `P0.13` pending [#157](https://github.com/bstBizEra/biztrust_guide/issues/157).
 
 ## 10. What this document does not yet carry
 
@@ -256,11 +256,12 @@ Counts: 12 unchanged, 13 renumbered, 21 moved within the production-critical pla
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
 - **P0.13 and mobile identity**: [#157](https://github.com/bstBizEra/biztrust_guide/issues/157).
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
+- **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.
 - **The manuals**: [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#170](https://github.com/bstBizEra/biztrust_guide/issues/170); until they move, `phases/` renders the previous plan.
 
 ## 11. Sources
 
-- The operator's roadmap draft, sections 1, 2, 4, 5, 6, 7, 13 and 15, as transcribed at [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md).
-- [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1, 3 to 7 and 10.
+- The operator's roadmap draft, sections 1 to 7, 13, 14 and 15, as transcribed at [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md).
+- [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1 and 3 to 11.
 - [`FOUNDATION_SEQUENCE.md`](FOUNDATION_SEQUENCE.md), [`ADR_REGISTER.md`](ADR_REGISTER.md), [`DOMAIN_MODEL.md`](DOMAIN_MODEL.md) section 1, [`BIZTRUST-ARCH-001.md`](BIZTRUST-ARCH-001.md) sections 5 and 17.
 - Research on the Guide v2 map: [#161](https://github.com/bstBizEra/biztrust_guide/issues/161), [#162](https://github.com/bstBizEra/biztrust_guide/issues/162), [#163](https://github.com/bstBizEra/biztrust_guide/issues/163), [#164](https://github.com/bstBizEra/biztrust_guide/issues/164), on their `research/<slug>` branches.

@@ -4,9 +4,9 @@
 |---|---|
 | Author | The operator (bstBizEra), in chat, 2026-09-05 (Asia/Vientiane) |
 | Transcribed by | The agent, 2026-09-06, without edits other than this header; agent marker at the foot |
-| Status | `OPERATOR DRAFT — NOT A RECORD`. The record is `BIZTRUST-PLAN-001` in `docs/architecture/DELIVERY_PLAN.md`, which cites this file by section |
+| Status | `OPERATOR DRAFT — NOT A RECORD`. The record is `docs/architecture/BIZTRUST-PLAN-001.md`, which cites this file by section; `docs/architecture/DELIVERY_PLAN.md` v0.1 is superseded in part by it |
 | Map | [Guide v2 map, issue #153](https://github.com/bstBizEra/biztrust_guide/issues/153) |
-| Known divergences from the records at the time of transcription | Gates A to E versus `BT-G0` to `BT-G6`; phases P1 to P3 re-partitioned; P0 gains web and mobile groups; contract family omits `AUTHORITY-001` and adds `UX-001`, `OPS-001`; ADR list of twelve against a register of twenty; the cited "platform architecture", "engineering roadmap" and "P4 to P9 roadmap" are not in this repository (ticket #154). Each is a charting decision on #153, not a fact about this text |
+| Known divergences from the records at the time of transcription | Gates A to E versus `BT-G0` to `BT-G6`; phases P1 to P3 re-partitioned; P0 gains web and mobile groups; contract family omits `AUTHORITY-001` and adds `UX-001`, `OPS-001`; ADR list of twelve against a register of twenty; section 4's group headings numbered P0.1 to P0.7 collide with the plan's epic identifiers P0.1 to P0.12 and are headings only; the cited "platform architecture", "engineering roadmap" and "P4 to P9 roadmap" are not in this repository (ticket #154). Each is a charting decision on #153, not a fact about this text |
 
 ---
 
