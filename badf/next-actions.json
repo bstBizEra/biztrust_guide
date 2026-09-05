@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Next is #147 the secrets-and-configuration design; #185 (P0.13 control-plane web) was added under WP-050 and waits on the security proof #148. Of the epic designs, seven wait directly on an ADR ticket of map #91 and ten transitively. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Next is #147 the secrets-and-configuration design; #185 (P0.13 control-plane web) was added under WP-050 behind the security proof #148 and the tenant-mapping design #139. Of the epic designs, seven wait directly on an ADR ticket of map #91 and eleven transitively, #185 among them. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046)",
         "For an ADR-gated epic design: its ADR ticket on map #91 is closed, which needs the #92 waiver (NS-041) first"

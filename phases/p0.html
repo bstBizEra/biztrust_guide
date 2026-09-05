@@ -107,7 +107,7 @@
 
 <section id="order" data-search="execution order dependency sequence P0 one primary next action">
   <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Why this order and not another</h2></div></div>
-  <p class="section-intro">The plan lists the thirteen epics and forbids opening all of them at once; it does not order them. This order is the track's proposal, derived from the dependency each step names. The plan's own rule is one primary next action, with the rest queued behind it in dependency order.</p>
+  <p class="section-intro">The plan lists the thirteen epics and forbids opening all of them at once; it orders only P0.13, after the proof. This order is the track's proposal, derived from the dependency each step names. The plan's own rule is one primary next action, with the rest queued behind it in dependency order.</p>
   <ol class="migration-steps">
     <li><b>P0.1 is the entry gate</b>, not the first package. If it is not recorded, nothing below starts.</li>
     <li><b>P0.2 — the repository.</b> Everything else needs somewhere to land, a CI that runs, and a boundary test that already fails on the first cross-module import. Protect <code>main</code> before the second package opens a branch.</li>
@@ -120,8 +120,8 @@
     <li><b>P0.8 and P0.9 — contract conventions.</b> Independent of the security chain; queued beside it once the repository exists, and taken as the primary action whenever the chain is blocked. Their proof is a broken contract failing CI.</li>
     <li><b>P0.11 — observability</b>, so the proof run can be reconstructed from its own trace.</li>
     <li><b>P0.12 — secrets and configuration</b>, last of the substrate, first thing the independent verifier checks.</li>
-    <li><b>P0.13 — the control-plane web surface, after the proof.</b> It is built last and is not part of the <code>BT-G1</code> matrix: the matrix proves the substrate, and a screen that drives it is evidence that a human can exercise tenant selection and member administration, not evidence that isolation holds. Any insurance function on it is a stop condition.</li>
     <li><b>The mandatory proof</b>, executed by someone who did not implement it, bound to a source revision — then <code>BT-G1</code>.</li>
+    <li><b>P0.13 — the control-plane web surface, opened only after the proof has run.</b> <code>BT-G1</code> is recorded on the proof, not on this epic, and this epic is not part of the matrix: the matrix proves the substrate, and a screen that drives it is evidence that a human can exercise tenant selection and member administration, not evidence that isolation holds. A client, policy, claim or premium reaching this surface halts the package (stop conditions, below).</li>
   </ol>
 </section>
 
@@ -205,6 +205,7 @@
     <li>The bypass test cannot be made to fail against an unpoliced table — the instrument is broken, not the policy</li>
     <li>Tenant provisioning is manual, or two runs produce different tenants</li>
     <li>A candidate technology is used in code before its ADR is accepted</li>
+    <li>P0.13 carries any function that touches a client, policy, claim or premium</li>
   </ul>
   <div class="next-action">
     <span>NEXT PHASE</span>
