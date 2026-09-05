@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-049-001",
+  "created_at": "2026-09-05T18:23:49Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-049",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #156 on the Guide v2 map: extend docs/architecture/BIZTRUST-PLAN-001.md with the gate table (the previous plan's seven rows verbatim plus BT-G7 Production Ready), the executive-label mapping A to E with BT-G6 judged inside E, what each label requires, the expansion streams' entry conditions, the eight cross-cutting tracks per phase, and the Definition of Done reconciled with the guide's eight items; leave DELIVERY_PLAN.md section 7 untouched so the phase-page test's seven-gate assertion holds.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-049-plan-001-gates",
+    "baseline_commit": "8992a7dad81d47d36d52a2a16aa628ae89228177"
+  },
+  "completed": [
+    "Ticket #156 resolved by this branch: PLAN-001 sections 10 to 13 inserted (gates and labels; stream entry conditions; tracks; Definition of Done), the tail renumbered to 14 and 15, the header and section 1 and 8 cross-references updated; DELIVERY_PLAN.md's supersession row and the index row updated; no epic or gate row of the previous plan changed.",
+    "badf/ re-anchored: NS-044 repointed at #157, DEC-051 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-048.",
+    "After merge: #156 closed with a resolution comment; the map's Not yet specified loses the P3 epics and tracks entries that are now sharp.",
+    "Map #153: #157 next, then the overview manual #165 (which moves the gate table and the seven-gate assertion together)."
+  ],
+  "files_changed": [
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-049-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "tests/test_phase_pages.py asserts that DELIVERY_PLAN.md section 7 lists exactly BT-G0 to BT-G6 and its GATE regex matches [0-6] only; BT-G7 in PLAN-001 is invisible to it, and BT-G7 in DELIVERY_PLAN.md section 7 would not fail it either but would put the eighth gate where the manuals do not render it.",
+    "tests/test_gate_namespaces.py's capability regex is BT-G[0-6]; when BT-G7 reaches the guide surface under #165, that regex and the disjointness test must widen in the same package.",
+    "The hub's Definition of Done is rendered as an eight-checkbox grid on index.html and on seven stage pages; changing the item count would touch eight pages, which is why the eight stand and the roadmap's items sit beneath them.",
+    "Hand check at the head: the seven BT-G0 to BT-G6 rows in PLAN-001 section 10.2 are character-identical to DELIVERY_PLAN.md section 7, which still lists exactly those seven; PLAN-001 sections run 0 to 15. Validation ran 2026-09-06 in an LF worktree cut from origin/main at 8992a7d on Windows 11 with Python 3.13."
+  ],
+  "decisions": [
+    "DEC-051: gates BT-G0 to BT-G7 with labels A to E; stream entry conditions; tracks per phase; the Definition of Done stays eight items with 'gate passed' excluded."
+  ],
+  "assumptions": [
+    "The wayfinder invocation with no argument is a chat instruction to work the next frontier ticket; it adopts nothing and authorises nothing.",
+    "The roadmap's Gate C list applies to P1 as a whole, with BT-G2 closing P1A and BT-G3 closing P1B and P1C; the manual ticket may refine where P1C's proof sits."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_048",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages tests.test_gate_namespaces",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "DELIVERY_PLAN.md section 7 gains or loses a gate while any manual still renders it.",
+      "A gate is recorded by an agent, or a record says a gate has passed.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The stream entry conditions and the per-phase track cells are the agent's proposals from the roadmap's lists; no gate owner or review seat has read them.",
+    "BT-G7's requirement adds an independent review and a dated record that the roadmap's Gate E did not state; the addition is marked as the research's consequence, not the roadmap's text.",
+    "The Definition of Done mapping was checked by reading the hub's eight items and the roadmap's eighteen; no test binds PLAN-001 section 13 to index.html.",
+    "The three source documents the roadmap cites remain absent (#154)."
+  ]
+}
