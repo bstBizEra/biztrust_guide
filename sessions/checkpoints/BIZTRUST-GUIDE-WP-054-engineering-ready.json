@@ -14,7 +14,8 @@
     "Ticket #168 resolved by this branch: phases/p2.html rewritten as Payment and Finance from PLAN-001 section 6 with nine rows in six groups, the ten records, the transaction flow, the status mapping, the research facts, the ten failure cases, a nine-step order, the two-gate exit section and the transition notes.",
     "tests/test_phase_pages.py: P2 reads PLAN-001 section 6; the exit-gate expectation for p2.html is BT-G4 and BT-G5; two negative controls recorded.",
     "Transition sentences on the hub, README, overview, both plans and the P1 page updated; the hub's P2 link text; the overview's BT-G4 and BT-G5 rows reach the P2 page.",
-    "badf/ re-anchored: NS-044 repointed at #169, DEC-056 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #169, DEC-056 appended, this checkpoint written.",
+    "Review pass: one blocking, six should-fix and three nits adopted: the overview's BT-G3 row no longer names the P2 page; the period-close rule and the timing-difference definition are labelled this track's reading of research section 7; the Lao facts cite section 5 and the unverifiable class section 7; the candidate invariant is called one; the two added exit conditions are labelled; the provider-facing failure cases are distinguished from the ledger, reconciliation and settlement ones; the research's hedges are kept; the test's docstring names all four moved pages; the deferred list uses the source's wording; DEC-056 counts five research facts rendered as four entries."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-053.",

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Each phase page is a rendering of one plan section, named by EPIC_SOURCES, and must stay one.
 
-`phases/` renders the delivery plan for the published site: the overview and P0 from
-BIZTRUST-PLAN-001.md, P3 from DELIVERY_PLAN.md v0.1 until it moves. The plan is
+`phases/` renders the delivery plan for the published site: the overview, P0, P1 and P2 from
+BIZTRUST-PLAN-001.md; P3 from DELIVERY_PLAN.md v0.1 until it moves. The plan is
 the source; the pages are a second rendering. The risk that shape carries is the one
 issue #32 measured: a rendering that nothing checks against its source drifts, and
 drifts silently, because the page keeps looking finished. This module is the check.

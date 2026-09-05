@@ -70,7 +70,7 @@
     </article>
     <article>
       <h3>The ledger, adapter and idempotency ADRs are accepted</h3>
-      <p>ADR-008 (immutable double-entry subledger), ADR-009 (adapters), ADR-012 (idempotent financial and binding mutations) and ADR-018 (premium conditions and non-payment without payment systems inventing cover). Provider selections — payment provider, bank, and any insurer whose settlement the platform reconciles — are on the deliberately-deferred list and each arrives as its own ADR.</p>
+      <p>ADR-008 (immutable double-entry subledger), ADR-009 (adapters), ADR-012 (idempotent financial and binding mutations) and ADR-018 (premium conditions and non-payment without payment systems inventing cover). Provider selections — insurer, payment provider, bank — are on the deliberately-deferred list and each arrives as its own ADR.</p>
     </article>
   </div>
 </section>
@@ -119,7 +119,7 @@
     <li><b>P2C.1 — commission</b>, with its retained inputs, and clawback under ADR-020.</li>
     <li><b>P2D.1 — settlement and remittance.</b></li>
     <li><b>P2E.1 — the three reconciliations</b>, each proven by a planted difference. Then <code>BT-G4</code>.</li>
-    <li><b>The fault-injection suite across P2A.3 and P2F.1</b> — the ten failure cases of Gate D, each a test, against a provider sandbox. Then <code>BT-G5</code>.</li>
+    <li><b>The fault-injection suite across P2A.3 and P2F.1</b> — the provider-facing failure cases of Gate D, each a test, against a provider sandbox; the ledger, reconciliation and settlement cases were proven under their own epics before <code>BT-G4</code>. Then <code>BT-G5</code>.</li>
   </ol>
 </section>
 
@@ -156,16 +156,16 @@
         <tr><td><code>MATCHED</code></td><td>matched</td><td>Internal fact, provider fact and bank fact agree on key and amount</td></tr>
         <tr><td><code>UNMATCHED</code>, <code>MISSING_INTERNAL</code>, <code>MISSING_PROVIDER</code></td><td>unexplained difference, or timing difference</td><td>A fact present on one side only; a timing difference only where the bank's booking date and value date, or the ledger's effective date, explain the gap, otherwise unexplained with the roadmap's name as its reason code</td></tr>
         <tr><td><code>AMOUNT_MISMATCH</code>, <code>DUPLICATE</code></td><td>unexplained difference</td><td>Both sides present, but the amount or the count disagrees; the reason code names which</td></tr>
-        <tr><td><code>PENDING_INVESTIGATION</code></td><td>unexplained difference, under a named owner</td><td>Not a fifth state: an unexplained difference that has been assigned. ARCH-001 §13 forbids settlement completion while a required difference remains unowned</td></tr>
+        <tr><td><code>PENDING_INVESTIGATION</code></td><td>unexplained difference, under a named owner</td><td>Not a fifth state: an unexplained difference that has been assigned. ARCH-001 §13 lists as a candidate invariant that no settlement completes while a required difference remains unowned</td></tr>
         <tr><td><code>RESOLVED</code></td><td>resolved</td><td>Evidence-bound: the reconciliation owner's decision and the adjustment or reversal it produced</td></tr>
       </tbody>
     </table>
   </div>
   <div class="definition-list">
-    <div><span>The bank-versus-ledger control closes on a statement, not a notification</span><p>ISO 20022's camt.053 statement contains booked entries only and carries balances; camt.052 and camt.054 may report pending and booked items and camt.054 carries no balance. A period closes on the statement; a notification only advances a status (research §3, primary source).</p></div>
-    <div><span>Two keys on every bank transaction</span><p>The platform's <code>EndToEndId</code>, passed unchanged through the whole chain and meant for reconciliation, and the bank's own <code>AcctSvcrRef</code>. Timing difference is defined on the entry's booking date versus its value date versus the ledger's effective date (research §3).</p></div>
+    <div><span>The bank-versus-ledger control closes on a statement, not a notification</span><p>ISO 20022's camt.053 statement contains booked entries only and carries balances; camt.052 and camt.054 may report pending and booked items and camt.054 carries no balance. Those are the publisher's words (research §3). That a period closes on the statement and a notification only advances a status is this track's reading of research §7.</p></div>
+    <div><span>Two keys on every bank transaction</span><p>The platform's <code>EndToEndId</code>, passed unchanged through the whole chain and usable for reconciliation, and the bank's own <code>AcctSvcrRef</code> (research §3). Timing difference can be defined on the entry's booking date versus its value date versus the ledger's effective date (this track's reading of research §7).</p></div>
     <div><span>Outsourcing card capture does not take the platform out of PCI DSS</span><p>The PCI Security Standards Council says so directly; written agreements and annual monitoring of the provider remain the platform's obligations, and an embedded card form is scoped differently from a redirect. Which self-assessment applies is the compliance-accepting entity's call, not this page's (research §4).</p></div>
-    <div><span>Lao rails, as the Bank of the Lao PDR publishes them</span><p>The bank-reporting standard lists ISO 20022 messages at version 001.02, so a current-catalogue parser needs version negotiation per bank; Lao QR is a BOL scheme switched by LAPNet, so the reconciled fact is the bank statement, not the QR acknowledgement. Whether a given Lao bank delivers statement files to corporate customers is UNVERIFIABLE from BOL's pages, and the research marks twelve such items (research §5 and §8).</p></div>
+    <div><span>Lao rails, as the Bank of the Lao PDR publishes them</span><p>The bank-reporting standard lists ISO 20022 messages at version 001.02, so a current-catalogue parser needs version negotiation per bank; Lao QR is a BOL scheme switched by LAPNet, so the reconciled fact is the bank statement, not the QR acknowledgement (research §5). Whether a given Lao bank delivers statement files to corporate customers is UNVERIFIABLE from BOL's pages, and the research marks twelve such items (research §7 and §8).</p></div>
   </div>
   <div class="table-wrap">
     <table>
@@ -221,7 +221,7 @@
 
 <section id="gate" data-search="exit gates BT-G4 financial ready BT-G5 integration ready label D checklist trace failure cases">
   <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gates · BT-G4 Financial Ready and BT-G5 Integration Ready (label D)</h2></div></div>
-  <p class="section-intro">Label D is two gates, two record-keepers. Each is recorded separately, by a human, and the phase is not complete until both are. The trace and the ten failure cases are the roadmap's Gate D, restated in PLAN-001 section 10.3 as a proposal until each gate's owner accepts it; the last item is the previous plan's end-to-end evidence sentence, which PLAN-001 section 6 keeps as P2's exit condition.</p>
+  <p class="section-intro">Label D is two gates, two record-keepers. Each is recorded separately, by a human, and the phase is not complete until both are. The trace and the ten failure cases are the roadmap's Gate D, restated in PLAN-001 section 10.3 as a proposal until each gate's owner accepts it; the last item is the previous plan's end-to-end evidence sentence, which PLAN-001 section 6 keeps as P2's exit condition. The statement-close item under BT-G4 and the vocabulary item under BT-G5 are this track's additions.</p>
   <div class="dod-grid">
     <h3>BT-G4 · Financial Ready</h3>
     <label><input type="checkbox" disabled> Every journal balances; an unbalanced draft is rejected whole, and the rejection is recorded</label>
@@ -234,7 +234,7 @@
     <h3>BT-G5 · Integration Ready</h3>
     <label><input type="checkbox" disabled> Replayed, tampered and out-of-order provider events cannot repeat or invent a mutation</label>
     <label><input type="checkbox" disabled> Two adapters pass the same SDK contract tests without touching the domain core</label>
-    <label><input type="checkbox" disabled> The ten failure cases are each a test that passed against a provider sandbox, with the evidence bound to a revision</label>
+    <label><input type="checkbox" disabled> The ten failure cases are each a test that passed, the provider-facing ones against a provider sandbox, with the evidence bound to a revision</label>
     <label><input type="checkbox" disabled> No provider payload or status vocabulary reached a domain schema</label>
     <label><input type="checkbox" disabled> The end-to-end evidence traces one activity through indication or offer, payment, authority-supported confirmation, policy representation, ledger, commission, settlement and reconciliation</label>
   </div>
