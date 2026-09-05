@@ -107,6 +107,6 @@ How the epic becomes one or more Work Packages: each with one bounded outcome, a
 
 ## 6. How the manual and the pack refer to each other
 
-- The manual's twelve-epics section links to this file, and each epic row links to its design when that design reaches `PROPOSED`.
+- The manual's epics section links to this file, and each epic row links to its design when that design reaches `PROPOSED`.
 - A design's status block links to the manual's `#epics` anchor.
 - The manual's status sentences about P0 do not change because designs exist. The manual describes the phase; the pack describes the work; `BT-G0` and `BT-G1` are recorded by humans in neither.
