@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-044",
-  "updated_at": "2026-09-04T21:18:35Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-045",
+  "updated_at": "2026-09-05T05:21:06Z",
   "actions": [
     {
       "id": "NS-040",
-      "primary": true,
+      "primary": false,
       "priority": 1,
       "owner_role": "human-reviewer",
       "authority": "HUMAN_DECISION_REQUIRED",
@@ -23,9 +23,67 @@
       "fallback": "Leave the catalogue's findings recorded, as they are now."
     },
     {
+      "id": "NS-041",
+      "primary": true,
+      "priority": 2,
+      "owner_role": "human-reviewer",
+      "authority": "HUMAN_DECISION_REQUIRED",
+      "action": "Wayfinder ticket #92: the operator posts one comment on issue #27 recording an explicit, expiring waiver of the one-slice-at-a-time rule so that ADR-001 to ADR-020 and the other v0.1 artifacts may be drafted as PROPOSED while S01 (#15) is open. Every drafting ticket on map #91 (#102 to #125) is blocked on #92.",
+      "prerequisites": [
+        "A human with business or architecture authority reads #27 and #91"
+      ],
+      "evidence_required": [
+        "A comment on #27 with no agent marker stating the waiver's scope, that nothing drafted is accepted, the expiry date and the operator's role",
+        "#92 closed with a link to that comment"
+      ],
+      "stop_conditions": [
+        "An agent posts the waiver, or a chat instruction is treated as the waiver (DEC-043)"
+      ],
+      "fallback": "The map's frontier stays at #92, #93 and #94; no ADR is drafted."
+    },
+    {
+      "id": "NS-024",
+      "primary": false,
+      "priority": 3,
+      "owner_role": "architecture-owner",
+      "authority": "HUMAN_APPROVAL_REQUIRED",
+      "action": "Answer the binding-authority question in issue #15, now wayfinder ticket #93 on map #91: send the ten-minute sheet from the #15 review comment to a placing broker for Tenant A (UniTrust) and Tenant B (the travel scheme), or answer as the tenant's principal, and record who answered, their role and the date. Does the entity ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
+      "prerequisites": [
+        "Access to a practising broker or the UniTrust principals",
+        "Map #91 Notes: conclusions and document digests only on GitHub; no agreements or licence numbers"
+      ],
+      "evidence_required": [
+        "A written answer per tenant, recorded on #93 and then against the architecture contract",
+        "#93 closed and #15 unblocked on its native blocked-by edge"
+      ],
+      "stop_conditions": [
+        "The answer is assumed rather than obtained"
+      ],
+      "fallback": "Freeze nothing that depends on it, and record the dependency."
+    },
+    {
+      "id": "NS-042",
+      "primary": false,
+      "priority": 4,
+      "owner_role": "human-reviewer",
+      "authority": "HUMAN_DECISION_REQUIRED",
+      "action": "Wayfinder ticket #94: name the five review seats #27 requires - business authority, insurance practitioner, qualified Lao legal/compliance reviewer, broker finance reviewer, architecture owner - or record each unfilled seat with what would fill it and by when; and answer #15 suggestion 3, whether the practitioner seat must sign off any change touching cover state or money.",
+      "prerequisites": [
+        "A human reads #27's S01 entry requirements"
+      ],
+      "evidence_required": [
+        "Five rows on #94, one per seat, filled or UNFILLED with a date",
+        "#94 closed"
+      ],
+      "stop_conditions": [
+        "An agent occupies or infers a seat"
+      ],
+      "fallback": "#15, ADR-014 (#117) and ADR-019 (#119) stay blocked on #94."
+    },
+    {
       "id": "NS-033",
       "primary": false,
-      "priority": 2,
+      "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
@@ -47,24 +105,6 @@
         "Oracles are edited by the author who wrote the fixtures"
       ],
       "fallback": "Leave item 3 open and record that the artifact still cannot say what an action consumes."
-    },
-    {
-      "id": "NS-024",
-      "primary": false,
-      "priority": 3,
-      "owner_role": "architecture-owner",
-      "authority": "HUMAN_APPROVAL_REQUIRED",
-      "action": "Answer the binding-authority question in issue #15: does UniTrust ever commit an insurer to cover, or is every bind a request requiring separate insurer confirmation?",
-      "prerequisites": [
-        "Access to a practising broker or the UniTrust principals"
-      ],
-      "evidence_required": [
-        "A written answer per tenant, recorded against the architecture contract"
-      ],
-      "stop_conditions": [
-        "The answer is assumed rather than obtained"
-      ],
-      "fallback": "Freeze nothing that depends on it, and record the dependency."
     }
   ]
 }

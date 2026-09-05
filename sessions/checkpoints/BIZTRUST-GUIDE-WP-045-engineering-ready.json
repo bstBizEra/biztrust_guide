@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-045-001",
+  "created_at": "2026-09-05T05:21:06Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-045",
+  "state": "ENGINEERING_READY",
+  "objective": "Commit the AGENTS.md Agent skills block and docs/agents/ written by /setup-matt-pocock-skills; record wayfinder map #91 (34 tickets under #27, seven research tickets resolved on research/ branches) in badf/ with one next-action per frontier operator task; record the six charting choices and the rebased-away peer commit.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-045-agent-skills-and-map",
+    "baseline_commit": "e1b20d18776ab630fdba66d2dd0b6bf268638f69"
+  },
+  "completed": [
+    "AGENTS.md gained an Agent skills block; docs/agents/issue-tracker.md, triage-labels.md and domain.md written from the skill's seed templates with repo-specific sections that defer to AGENTS.md sections 1 to 12.",
+    "Wayfinder map #91 charted under #27: 34 child tickets (#92 to #125 plus #15) with native sub-issue and blocked-by edges; five wayfinder:* labels created; seven research tickets resolved by background agents on research/<slug> branches and closed; each pointer appended to #91 Decisions so far.",
+    "badf/next-actions.json: NS-041 (waiver, primary) and NS-042 (seats) added; NS-024 repointed at #93 and #91; priorities 1..5. badf/current-state.json re-anchored to WP-045 at e1b20d1. DEC-047 appended. This checkpoint written.",
+    "Local main rebased onto origin/main and the peer session's mangled commit dropped, keeping the edit uncommitted until this package."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-044.",
+    "Operator: #92 waiver on #27, #93 broker sheet, #94 review seats. Then the first grilling ticket, #102 glossary."
+  ],
+  "files_changed": [
+    "AGENTS.md",
+    "docs/agents/issue-tracker.md",
+    "docs/agents/triage-labels.md",
+    "docs/agents/domain.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-045-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "ListAgents showed more than ten interactive sessions on this repository at once; one committed another session's uncommitted edit to local main, and PR #90 for issue #89 had been opened and merged by a peer before this session looked at the issue.",
+    "GitHub's sub-issue and issue-dependency REST endpoints both work on this repository; #27 now shows one blocker (#91) and #91 shows 35 sub-issues.",
+    "Research findings that will shape early grilling: Logto organizations are a permission boundary not a data boundary; PostgreSQL RLS has fifteen documented leak paths; no API gateway states OpenAPI 3.2 support; DBOS has no PHP SDK; timestamptz discards the stated zone; the 2019 Lao insurance law replaced the one English summaries describe and the 2018 premium-handling rule was repealed in 2023; nothing ACORD is freely implementable."
+  ],
+  "decisions": [
+    "DEC-047: skills configuration adopted; map #91 charted with six recorded charting choices; NS-041 primary; research stays on branches."
+  ],
+  "assumptions": [
+    "The operator holds the business-authority and architecture-owner seats; the other three are unfilled until #94 says otherwise.",
+    "Naming Tenant A as UniTrust and Tenant B as the travel scheme is acceptable because both names were already public; the operator may withdraw them."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Post the #92 waiver comment on #27; every drafting ticket on #91 waits on it."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "#93 and #94; they block #15."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_05_ON_YOUR_CALL",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_044",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/91"
+    ],
+    "stop_if": [
+      "An agent posts the #92 waiver, answers #93 or fills a #94 seat.",
+      "A research branch is merged to main without a citing artifact.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The seven research files were reviewed only by their authoring agents; no fresh-context review has read them. They are inputs to grilling tickets, not conclusions.",
+    "The map's 24 grilling tickets are sized by judgement, not measured; a ticket that overruns one session should be split on the map.",
+    "docs/agents/*.md are read by skills this repository has not yet run (triage, to-tickets, to-spec); their conventions are untested here.",
+    "The mangled commit's origin session was not identified."
+  ]
+}
