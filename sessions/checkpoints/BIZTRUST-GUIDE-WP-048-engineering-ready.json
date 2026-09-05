@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-048-001",
+  "created_at": "2026-09-05T17:53:17Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-048",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #155 on the Guide v2 map: write docs/architecture/BIZTRUST-PLAN-001.md v1.0-draft with the five phases, P1A, P1B and P1C, P2 and P3 by capability group, the expansion streams, and a mapping table giving every one of the previous plan's 46 epics a home; import the operator's roadmap verbatim as the cited source; mark DELIVERY_PLAN.md superseded in part without touching an epic row, so the phase-page test keeps binding the manuals to it until each manual moves.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-048-plan-001-partition",
+    "baseline_commit": "eb8e745edd273b3233404f146d156a09d0e34caa"
+  },
+  "completed": [
+    "Wayfinder map #153 charted: 27 tickets with native edges, one cross-map edge to the contract map's waiver (#92); four research tickets resolved by background agents and indexed.",
+    "Ticket #155 resolved by this branch: docs/architecture/BIZTRUST-PLAN-001.md v1.0-draft with the five phases, sub-phases and groups, 46-row mapping table and identifier rule; the operator's roadmap imported verbatim under docs/research/roadmap/; DELIVERY_PLAN.md superseded in part by a header row only; two index rows.",
+    "badf/ re-anchored: NS-044 added for the Guide v2 frontier, DEC-050 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-047.",
+    "After merge: #155 closed with a resolution comment naming the deviation from its letter.",
+    "Map #153: #156 part two next; then #157 and the manuals."
+  ],
+  "files_changed": [
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "docs/research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-048-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "mapping self-check: every DELIVERY_PLAN.md epic row appears once in PLAN-001 section 9 with its label verbatim; no P1.n to P3.n row outside section 9",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "tests/test_phase_pages.py reads DELIVERY_PLAN.md table rows whose first cell is P0.n to P3.n and compares them with the phase pages; a status row without an epic id is invisible to it, and a separate file is invisible to it entirely.",
+    "tests/test_gate_namespaces.py scans index.html, README.md, AGENTS.md, stages/, reference/, phases/ and docs/*.md, not docs/architecture/, for bare G<n>; BT-G7 and the labels A to E do not reach it.",
+    "The operator's roadmap cites three documents not in this repository; PLAN-001's mapping cites the roadmap draft itself and the previous plan, never those documents.",
+    "Validation ran 2026-09-06 in an LF worktree cut from origin/main at eb8e745 on Windows 11 with Python 3.13."
+  ],
+  "decisions": [
+    "DEC-050: map #153 charted with seven recorded choices; PLAN-001 as its own file beside v0.1; group-letter identifiers; a 46-row mapping with nothing dropped."
+  ],
+  "assumptions": [
+    "The operator's 'proceed complete full Engineering Guide' is a chat instruction transcribed on #153 by the agent with a marker; it adopts the seven charting recommendations as reversible, not as authority.",
+    "The previous plan's 46 epic labels are the mapping's labels verbatim; where the roadmap names a capability the previous plan lacks, it is a new epic citing the roadmap section, never a relabelling of an old one."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158, the doctrine ticket."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Import the three cited documents or name them by title and digest."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_047",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "An epic row of DELIVERY_PLAN.md changes while any manual still renders it.",
+      "PLAN-001 or any manual says a phase is accepted, authorised or implemented.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "PLAN-001's 18 new epics are the roadmap's capability groups made into epics by the agent; no human has reviewed the cut, and the manuals that would render them are not written.",
+    "The roadmap's three cited source documents are not in the repository (#154); no claim in PLAN-001 rests on them.",
+    "The four Guide v2 research files were reviewed only by their authoring agents.",
+    "No test checks PLAN-001's mapping table against DELIVERY_PLAN.md's epic rows; the 46-row count was checked by hand and by the reviewer."
+  ]
+}

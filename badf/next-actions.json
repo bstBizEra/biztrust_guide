@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-047",
-  "updated_at": "2026-09-05T16:28:44Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-048",
+  "updated_at": "2026-09-05T17:53:17Z",
   "actions": [
     {
       "id": "NS-040",
@@ -103,9 +103,31 @@
       "fallback": "Leave the map's frontier as it stands; nothing on it is time-critical before BT-G0."
     },
     {
-      "id": "NS-033",
+      "id": "NS-044",
       "primary": false,
       "priority": 6,
+      "owner_role": "documentation-engineer",
+      "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155 PLAN-001 part one is resolved by WP-048; next is #156 part two (gates BT-G0 to BT-G7 with labels A to E, expansion-stream entry conditions, cross-cutting tracks, Definition of Done), then #157 P0 scope and the manuals #165 to #170, which move phases/ off DELIVERY_PLAN.md v0.1 one page at a time under the phase-page test. #159 loop mapping and #160 team model are independent.",
+      "prerequisites": [
+        "docs/architecture/BIZTRUST-PLAN-001.md v1.0-draft exists (WP-048)",
+        "For the manuals: PLAN-001 part two merged, since the gate table moves with them"
+      ],
+      "evidence_required": [
+        "The ticket's resolution comment, the ticket closed, one line appended to #153 Decisions so far",
+        "For a landed record: the PR's review record, tests OK with the phase-page test still passing, badf/ re-anchored"
+      ],
+      "stop_conditions": [
+        "A change to DELIVERY_PLAN.md's epic rows while any manual still renders it",
+        "A record says a phase is accepted, authorised or implemented",
+        "An identifier of the form P1.n, P2.n or P3.n is used with PLAN-001's meaning while DELIVERY_PLAN.md v0.1 stands"
+      ],
+      "fallback": "Leave PLAN-001 as the record of intent beside the previous plan; the manuals keep rendering v0.1."
+    },
+    {
+      "id": "NS-033",
+      "primary": false,
+      "priority": 7,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",
