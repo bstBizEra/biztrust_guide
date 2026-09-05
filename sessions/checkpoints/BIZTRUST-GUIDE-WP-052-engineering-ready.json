@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-052-001",
+  "created_at": "2026-09-05T19:41:38Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-052",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #166 on the Guide v2 map: rename the P0 manual to Identity and Tenant and render it from PLAN-001 section 4; map the roadmap's seven capability groups onto the thirteen epics on the page; name Gate B as the label of BT-G1; move the P0 mandatory proof into PLAN-001 section 4 so it has one home; move the test's P0 epic source to PLAN-001 section 4 with per-phase sources so the mapping table can never feed a phase.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-052-p0-manual-v2",
+    "baseline_commit": "0a717518ae036859666b7d62d2b7c15f20f27647"
+  },
+  "completed": [
+    "Ticket #166 resolved by this branch: phases/p0.html renamed Identity and Tenant in title, meta, top bar, sidebar and heading; the lede and intro rendered from PLAN-001 section 4; a capability-groups block under the epics table; Gate B beside BT-G1 in the exit-gate heading and sidebar; the next-phase card names P1 Insurance and the transition.",
+    "The P0 mandatory proof moved verbatim into PLAN-001 section 4; DELIVERY_PLAN.md section 3 keeps its table and points at PLAN-001 for the proof.",
+    "tests/test_phase_pages.py: EPIC_SOURCES gives each phase one plan section; plan_epics and plan_labels read only inside it; P0 reads PLAN-001 section 4; index.html's P0 link text.",
+    "badf/ re-anchored: NS-044 repointed at #167 with the rule for moving a P1 to P3 manual, DEC-054 appended, this checkpoint written.",
+    "Review pass: two blocking and nine should-fix findings adopted: the hub, README, overview, both plans' headers and PLAN-001 section 14 now say the P0 page renders PLAN-001 and three pages remain on v0.1; the groups mapping is labelled the track's reading and names every item with no P0 row; the footer, the search terms, the one-primary rule's attribution and the test's prose corrected; DEC-054's attribution and divergence sentences corrected; the negative controls re-run and recorded."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-051.",
+    "After merge: #166 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #167 P1 next; a P1 to P3 manual moves its page, its EPIC_SOURCES row and its exit-gate expectation together, and widens the EPIC regex for group letters."
+  ],
+  "files_changed": [
+    "phases/p0.html",
+    "index.html",
+    "phases/overview.html",
+    "README.md",
+    "tests/test_phase_pages.py",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-052-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "PLAN-001 section 9 repeats every previous-plan identifier in its mapping table; a whole-file epic scan of PLAN-001 would count 47 old ids as PLAN-001's, which is why the test reads one section per phase.",
+    "The roadmap's group numbering P0.1 to P0.7 is the second P0.n vocabulary a reader meets; the page names it as headings before mapping it, as PLAN-001 section 4 does.",
+    "The P0 manual's execution order, code and monitoring sections were unchanged: their content was the previous plan's and PLAN-001 section 4 carries the same epics.",
+    "Validation ran 2026-09-06 in an LF worktree cut from origin/main at 0a71751 on Windows 11 with Python 3.13; the mandatory proof's seven lines occur once across the two plans, in PLAN-001."
+  ],
+  "decisions": [
+    "DEC-054: the P0 manual renders PLAN-001 section 4 as Identity and Tenant; groups mapped on the page; Gate B beside BT-G1; the proof has one home; one plan section per phase in the test."
+  ],
+  "assumptions": [
+    "The wayfinder invocation and 'proceed next steps on information and evidence' are chat instructions to work the next frontier ticket; they adopt nothing and authorise nothing.",
+    "Mapping the roadmap's groups onto epics is the track's reading, labelled as such on the page; PLAN-001 section 4 names the groups but does not map them row by row."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_051",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A phase page's epics table differs from the plan section EPIC_SOURCES names for it.",
+      "The mandatory proof appears in two records.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered P0 manual was not viewed in a browser; its rows, sections and links were checked by the tests and the validator.",
+    "The groups-to-epics mapping is the track's reading of the roadmap's section 4; no human has reviewed it.",
+    "The manual's intro search terms carried the previous plan's words (foundation, security slice) until the review pass; the code and monitoring sections never did. The groups mapping names, per group, the items no P0 row carries; where they go is the P0 design pack's or P1's, not decided here."
+  ]
+}

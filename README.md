@@ -59,7 +59,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | `index.html` | The guide's hub — overview, lifecycle map and links to the stage and phase manuals |
 | `landing/index.html` | The product landing page: a human-readable projection of the governed architecture for tenant principals and prospective broker tenants, written in the design voice; it claims nothing implemented and is revised when the records change |
 | `stages/` | Nine stage manuals — the bulk of the guide |
-| `phases/` | Five phase manuals — architecture to production: what agents code and humans monitor per delivery phase. The overview renders `docs/architecture/BIZTRUST-PLAN-001.md`; the four phase pages still render `docs/architecture/DELIVERY_PLAN.md` v0.1 until their tickets move them; `tests/test_phase_pages.py` holds epic identifiers to v0.1 and gate identifiers to PLAN-001 |
+| `phases/` | Five phase manuals — architecture to production: what agents code and humans monitor per delivery phase. The overview renders `docs/architecture/BIZTRUST-PLAN-001.md`; the P0 page renders its section 4; the P1, P2 and P3 pages still render `docs/architecture/DELIVERY_PLAN.md` v0.1 until their tickets move them; `tests/test_phase_pages.py` holds each page's epic identifiers to the plan section named for it and gate identifiers to PLAN-001 |
 | `reference/` | Two reference pages — the artifact catalogue and the risk-tier schedule: cross-stage lookups that the stage manuals cite rather than restate |
 | `tests/` | Validator fail-closed suite and cross-page duplicate detector |
 | `sessions/` | Session checkpoints, the recovery procedure's primary input |

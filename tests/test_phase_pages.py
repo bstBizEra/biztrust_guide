@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""The phase track is a rendering of DELIVERY_PLAN.md, and must stay one.
+"""Each phase page is a rendering of one plan section, named by EPIC_SOURCES, and must stay one.
 
-`phases/` renders the P0-P3 delivery plan for the published site. The plan is the
-source; the pages are a second rendering. The risk that shape carries is the one
+`phases/` renders the delivery plan for the published site: the overview and P0 from
+BIZTRUST-PLAN-001.md, P1 to P3 from DELIVERY_PLAN.md v0.1 until each moves. The plan is
+the source; the pages are a second rendering. The risk that shape carries is the one
 issue #32 measured: a rendering that nothing checks against its source drifts, and
 drifts silently, because the page keeps looking finished. This module is the check.
 
@@ -10,7 +11,8 @@ WHAT IS EXACT HERE
 ==================
 
 Epic identifiers (`P0.1`, `P1.13`, ...) are a closed vocabulary that the plan
-defines in four tables and the pages must reproduce one-to-one, and each id's
+defines in four tables (one plan section per phase; see EPIC_SOURCES) and the pages must
+reproduce one-to-one, and each id's
 LABEL - the plan's deliverable or capability text - must sit beside it in the
 epics table. That makes the parity check mechanically decidable with no
 threshold and no calibration data - the property the spine test's docstring
@@ -42,6 +44,8 @@ NEGATIVE CONTROLS, run by hand before this shipped
   * Swap the P0.7 and P0.11 labels               -> test_epic_labels_match_the_plan FAILS
   * Leave BT-G5 only in overview's <title>       -> test_overview_carries_every_gate FAILS
   * Remove BT-G7 from overview.html              -> test_overview_carries_every_gate FAILS (run 2026-09-06 under WP-051)
+  * Remove EVERY P0.7 with P0 read from PLAN-001  -> test_epic_ids_match_the_plan FAILS (re-run 2026-09-06 under WP-052)
+  * Swap P0.7 and P0.11 labels, section-scoped    -> test_epic_labels_match_the_plan FAILS (re-run 2026-09-06 under WP-052)
   * Add a `P1.14` that the plan does not have    -> test_epic_ids_match_the_plan FAILS
   * Put `P2.4` on p3.html                        -> test_epic_ids_match_the_plan FAILS
   * Remove BT-G5 from overview.html              -> test_overview_carries_every_gate FAILS
@@ -59,10 +63,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PHASES = ROOT / "phases"
 PLAN = ROOT / "docs/architecture/DELIVERY_PLAN.md"
-# Epics still come from the previous plan, which the phase pages render row by row
-# until each page moves (Guide v2 map, issue #153). Gates come from PLAN-001 section 10,
-# the record since WP-049; the overview renders that table, so it is held to it.
+# Gates come from PLAN-001 section 10, the record since WP-049; the overview renders that
+# table, so it is held to it. Epics come from one plan section per phase, EPIC_SOURCES below.
 GATE_PLAN = ROOT / "docs/architecture/BIZTRUST-PLAN-001.md"
+# Each phase page renders one section of one plan. P0 moved to PLAN-001 section 4 under
+# WP-052 (its thirteen rows are identical in both plans); P1 to P3 still render the previous
+# plan's sections 4 to 6 and move one ticket at a time. A manual ticket moves the page, this
+# row, and the page's exit-gate expectation together.
+EPIC_SOURCES: dict[int, tuple[Path, str, str]] = {
+    0: (GATE_PLAN, "\n## 4. P0", "\n## 5. P1"),
+    1: (PLAN, "\n## 4. P1", "\n## 5. P2"),
+    2: (PLAN, "\n## 5. P2", "\n## 6. P3"),
+    3: (PLAN, "\n## 6. P3", "\n## 7. "),
+}
 
 PHASE_PAGES = {0: "p0.html", 1: "p1.html", 2: "p2.html", 3: "p3.html"}
 OVERVIEW = "overview.html"
@@ -99,13 +112,23 @@ def _text(fragment: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", fragment)).strip()
 
 
+def _phase_section(phase: int) -> str:
+    """The plan section that holds this phase's epics table, and nothing outside it."""
+    path, start, end = EPIC_SOURCES[phase]
+    text = path.read_text(encoding="utf-8")
+    return text.split(start, 1)[1].split(end, 1)[0]
+
+
 def plan_epics() -> dict[int, set[str]]:
-    """Epic ids per phase, read from the plan's tables: `| P0.7 | ... |`."""
+    """Epic ids per phase, read from that phase's plan section: `| P0.7 | ... |`.
+    A row is counted only inside its own section, so PLAN-001's mapping table
+    (section 9, which repeats every old id) can never feed a phase."""
     found: dict[int, set[str]] = {n: set() for n in PHASE_PAGES}
-    for line in PLAN.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^\|\s*(P([0-3])\.\d{1,2})\s*\|", line)
-        if m:
-            found[int(m.group(2))].add(m.group(1))
+    for phase in PHASE_PAGES:
+        for line in _phase_section(phase).splitlines():
+            m = re.match(r"^\|\s*(P([0-3])\.\d{1,2})\s*\|", line)
+            if m and int(m.group(2)) == phase:
+                found[phase].add(m.group(1))
     return found
 
 
@@ -133,12 +156,13 @@ def _norm(label: str) -> str:
 
 
 def plan_labels() -> dict[str, str]:
-    """Epic id -> the plan's deliverable/capability cell, from the same four tables."""
+    """Epic id -> the plan's deliverable/capability cell, from the same four sections."""
     out: dict[str, str] = {}
-    for line in PLAN.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^\|\s*(P[0-3]\.\d{1,2})\s*\|\s*(.*?)\s*\|", line)
-        if m:
-            out[m.group(1)] = _norm(m.group(2))
+    for phase in PHASE_PAGES:
+        for line in _phase_section(phase).splitlines():
+            m = re.match(r"^\|\s*(P([0-3])\.\d{1,2})\s*\|\s*(.*?)\s*\|", line)
+            if m and int(m.group(2)) == phase:
+                out[m.group(1)] = _norm(m.group(3))
     return out
 
 
@@ -219,7 +243,7 @@ class TestParityWithThePlan(unittest.TestCase):
                 problems.append(f"  {name} names {sorted(invented)} - the plan does not")
             if foreign:
                 problems.append(f"  {name} names another phase's epics {sorted(foreign)}")
-        self.assertEqual([], problems, "phase pages disagree with DELIVERY_PLAN.md:\n" + "\n".join(problems))
+        self.assertEqual([], problems, "phase pages disagree with their plan sections (EPIC_SOURCES):\n" + "\n".join(problems))
 
     def test_overview_names_no_epic(self) -> None:
         """The overview is the map. An epic id on it is a second place to keep in step."""
@@ -258,7 +282,7 @@ class TestParityWithThePlan(unittest.TestCase):
             for epic in rows:
                 if epic not in plan:
                     problems.append(f"  {name}: epics-table row {epic} is not in the plan")
-        self.assertEqual([], problems, "epic labels disagree with DELIVERY_PLAN.md:\n" + "\n".join(problems))
+        self.assertEqual([], problems, "epic labels disagree with their plan sections (EPIC_SOURCES):\n" + "\n".join(problems))
 
 
 class TestSpine(unittest.TestCase):

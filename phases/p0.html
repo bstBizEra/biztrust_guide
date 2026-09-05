@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P0 · Foundation · BizTrust Agentic Engineer Team Guide</title>
-<meta name="description" content="Phase P0 of the BizTrust delivery plan: thirteen epics that freeze the contract and mechanically prove the tenant-security substrate — what the agent builds, where it lands, what proves it, and what a human must see before recording BT-G1.">
+<title>P0 · Identity and Tenant · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Phase P0 of the BizTrust delivery plan, Identity and Tenant: thirteen epics that prove who performed what, under which tenant, with which authority, against which resource, before any insurance data exists — what the agent builds, where it lands, what proves it, and what a human must see before recording BT-G1.">
 <link rel="icon" href="../assets/unitrust-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <header class="topbar">
   <a class="brand" href="../index.html">
     <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
-    <span class="brand-copy"><strong>Delivery phases</strong><small>P0 · Architecture and platform foundation</small></span>
+    <span class="brand-copy"><strong>Delivery phases</strong><small>P0 · Identity and Tenant</small></span>
   </a>
   <div class="top-actions">
     <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
@@ -29,28 +29,28 @@
 </header>
 
 <aside class="sidebar" id="sidebar">
-  <p class="nav-label">P0 · Foundation</p>
+  <p class="nav-label">P0 · Identity and Tenant</p>
   <nav id="sectionNav">
     <a href="#entry"><span>01</span> Entry criteria</a>
     <a href="#epics"><span>02</span> Epics to Work Packages</a>
     <a href="#order"><span>03</span> Execution order</a>
     <a href="#code"><span>04</span> What the agent codes</a>
     <a href="#monitor"><span>05</span> What the human monitors</a>
-    <a href="#gate"><span>06</span> Exit gate · BT-G1</a>
+    <a href="#gate"><span>06</span> Exit gate · BT-G1 (B)</a>
     <a href="#stop"><span>07</span> Stop conditions</a>
   </nav>
   <div class="sidebar-card">
     <span class="status-dot"></span>
-    <div><strong>P0 of P0–P3</strong><small>Enters at BT-G0 · exits at BT-G1</small></div>
+    <div><strong>P0 of five phases</strong><small>Enters at BT-G0 (label A) · exits at BT-G1 (label B)</small></div>
   </div>
 </aside>
 
 <main id="main">
 
-<section id="p0-intro" data-search="P0 foundation security slice tenant isolation Logto APISIX PostgreSQL RLS audit">
-  <div class="section-heading"><span>P0</span><div><p>Delivery phases · P0</p><h2>Architecture and platform foundation</h2></div></div>
-  <p class="lede">P0 freezes the contract and mechanically proves the tenant-security substrate before any real insurance-domain data is placed on it. Nothing in this phase knows what a policy is. That is deliberate: a substrate proven on business data is a substrate whose proof leaked business data.</p>
-  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DELIVERY_PLAN.md">DELIVERY_PLAN.md §3</a>, with the authorization sequence from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §3</a> and the enforcement layers from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/AUTHORIZATION_BASELINE.md">AUTHORIZATION_BASELINE.md §5–§8</a>. The hub's <a href="../index.html#p0">P0 card</a> is the summary; this page is the manual.</p>
+<section id="p0-intro" data-search="P0 identity tenant isolation Logto APISIX PostgreSQL RLS audit">
+  <div class="section-heading"><span>P0</span><div><p>Delivery phases · P0</p><h2>Identity and Tenant</h2></div></div>
+  <p class="lede">P0 proves who performed what, under which tenant, with which authority, against which resource, before any real insurance-domain data is placed on the substrate. Nothing in this phase knows what a policy is. That is deliberate: a substrate proven on business data is a substrate whose proof leaked business data.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">BIZTRUST-PLAN-001.md §4</a>, whose thirteen P0 epics are identical to the previous plan's rows and whose mandatory proof is the previous plan's, with the authorization sequence from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §3</a> and the enforcement layers from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/AUTHORIZATION_BASELINE.md">AUTHORIZATION_BASELINE.md §5–§8</a>. The hub's <a href="../index.html#p0">P0 card</a> is the summary; this page is the manual.</p>
   <div class="invariant">
     <span>THE RULE THIS PHASE EXISTS TO ENFORCE</span>
     <p>Tenant A cannot read or mutate Tenant B protected data, and application authorization and PostgreSQL Row-Level Security enforce that independently of each other — INV-003 and INV-004. A gateway allow is not domain authorization, and an application allow is still constrained by RLS.</p>
@@ -103,11 +103,21 @@
       </tbody>
     </table>
   </div>
+  <p class="section-intro">The roadmap that PLAN-001 adopts groups the same work seven ways, under headings it numbers P0.1 to P0.7; those are group headings, not epics. The mapping below is this track's reading of the roadmap, not the plan's; where no P0 row carries an item, it says so.</p>
+  <div class="definition-list">
+    <div><span>Identity</span><p>Users, authentication, OAuth and OIDC, session lifecycle: P0.3 for token validation and P0.4 for membership. MFA, SSO, revocation, service principals and machine identities have no P0 row; they are candidates for the P0 design pack's token-validation design</p></div>
+    <div><span>Tenancy</span><p>Tenant, legal entity, membership and product entitlement: P0.4, P0.5 and P0.6; business units, branches, tenant configuration, domain and branding are administered through P0.13; channel and insurer panel have no P0 row and belong to P1</p></div>
+    <div><span>Authorization</span><p>The decision's tenant and scope inputs are P0.3 and P0.4, and its record is P0.10; role, permission, resource, condition and approval authority have no P0 row and rest on AUTHORIZATION_BASELINE.md §5 to §8 until the P0 design pack places them</p></div>
+    <div><span>Data isolation</span><p>Every tenant-owned aggregate with enforceable ownership, application checks never sufficient alone: P0.6 and P0.7</p></div>
+    <div><span>Web</span><p>The control-plane surface: P0.13, opened only after the proof</p></div>
+    <div><span>Mobile</span><p>Not P0 work: no mobile client exists before P1, so the mobile identity foundation is P1A.14 in PLAN-001</p></div>
+    <div><span>Platform controls</span><p>API conventions, configuration, secrets, audit events, logging, tracing, initial CI and migration control: P0.2, P0.6, P0.8, P0.10, P0.11 and P0.12; security scanning has no P0 row and stays with the hub's security track and P3's pipeline</p></div>
+  </div>
 </section>
 
 <section id="order" data-search="execution order dependency sequence P0 one primary next action">
   <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Why this order and not another</h2></div></div>
-  <p class="section-intro">The plan lists the thirteen epics and forbids opening all of them at once; it orders only P0.13, after the proof. This order is the track's proposal, derived from the dependency each step names. The plan's own rule is one primary next action, with the rest queued behind it in dependency order.</p>
+  <p class="section-intro">PLAN-001 section 4 lists the thirteen epics and orders only P0.13, after the proof; the previous plan's section 8, which PLAN-001 keeps, forbids opening all of them at once. This order is the track's proposal, derived from the dependency each step names. The previous plan's section 8 rule is one primary next action, with the rest queued behind it in dependency order.</p>
   <ol class="migration-steps">
     <li><b>P0.1 is the entry gate</b>, not the first package. If it is not recorded, nothing below starts.</li>
     <li><b>P0.2 — the repository.</b> Everything else needs somewhere to land, a CI that runs, and a boundary test that already fails on the first cross-module import. Protect <code>main</code> before the second package opens a branch.</li>
@@ -179,7 +189,7 @@
 </section>
 
 <section id="gate" data-search="exit gate BT-G1 security ready mandatory proof checklist">
-  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gate · BT-G1 Security Ready</h2></div></div>
+  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gate · BT-G1 Security Ready (label B)</h2></div></div>
   <p class="section-intro">The seven lines of the plan's mandatory proof, plus the four conditions that make the proof a record rather than a report. No P1 authorization may be issued until every box is ticked.</p>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Tenant A can access authorized Tenant A data</label>
@@ -210,8 +220,8 @@
   <div class="next-action">
     <span>NEXT PHASE</span>
     <div>
-      <h3>P1 · Broker core MVP</h3>
-      <p>A manual-insurer-assisted quote-to-policy lifecycle with correct broker and insurer boundaries — on a substrate that has already been proven.</p>
+      <h3>P1 · Insurance</h3>
+      <p>Broker core first (P1A): a manual-insurer-assisted quote-to-policy lifecycle with correct broker and insurer boundaries, on a substrate that has already been proven. The P1 page renders the previous plan's broker core until its ticket moves it.</p>
     </div>
     <a class="github-link" href="p1.html">P1 →</a>
   </div>
@@ -221,7 +231,7 @@
 
 <footer>
   <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
-  <p>BizTrust Agentic Engineer Team · Delivery phases · P0 of P0–P3 · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
+  <p>BizTrust Agentic Engineer Team · Delivery phases · P0 of five phases · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
   <a href="#main">Back to top ↑</a>
 </footer>
 

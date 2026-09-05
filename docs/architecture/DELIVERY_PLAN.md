@@ -5,7 +5,7 @@
 | Version | `0.1-draft` |
 | Status | `PLANNING BASELINE — AUTHORITY REQUIRED PER WORK PACKAGE` |
 | Parent | `BIZTRUST-ARCH-001` |
-| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the phase manuals under `phases/` render, and `tests/test_phase_pages.py` binds them to it, until tickets #165 to #170 on the Guide v2 map (#153) move each manual; section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), which the overview renders and the phase-page test reads; sections 8, 9 and 11 stand until a ticket carries them |
+| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the P1, P2 and P3 manuals under `phases/` render, and `tests/test_phase_pages.py` binds them to it, until tickets #167 to #170 on the Guide v2 map (#153) move each manual (the overview and the P0 manual moved under #165 and #166); section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), which the overview renders and the phase-page test reads; sections 8, 9 and 11 stand until a ticket carries them |
 
 ## 1. Naming rule
 
@@ -58,15 +58,7 @@ Architecture acceptance authorizes only the next bounded planning step. It does 
 
 ### P0 mandatory proof
 
-- Tenant A can access authorized Tenant A data.
-- Tenant A cannot read, create, update or delete Tenant B protected data.
-- Missing or invalid organization context is denied.
-- Tampered URL, header, body and query tenant identifiers are denied or ignored safely.
-- Wrong audience, expired token, inactive membership and absent scope are denied.
-- An application-level authorization bypass test remains blocked by RLS.
-- Every outcome produces tenant-safe audit evidence.
-
-No P1 authorization may be issued until this proof passes independently.
+Carried verbatim into [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) section 4 under WP-052, which the P0 manual renders; the seven lines and the rule that no P1 authorization may be issued until the proof passes independently stand there.
 
 ## 4. P1 — Broker core MVP
 
