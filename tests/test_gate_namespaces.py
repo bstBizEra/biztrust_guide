@@ -1,7 +1,7 @@
 """Two gate namespaces exist and must never be confused.
 
-`ENG-G0…ENG-G8` are the Work Package delivery lifecycle. `BT-G0…BT-G6` are BizTrust
-platform capability gates. `DELIVERY_PLAN.md` says of them: "Two gate systems exist and
+`ENG-G0…ENG-G8` are the Work Package delivery lifecycle. `BT-G0…BT-G7` are BizTrust
+platform capability gates (`BT-G7` since PLAN-001 §10 under WP-049; admitted here under WP-051). `DELIVERY_PLAN.md` says of them: "Two gate systems exist and
 must never be confused."
 
 Before #40 the guide used the bare form `G0…G8`, so `G0` meant "Discover" in the guide
@@ -45,7 +45,7 @@ GUIDE = (
 
 BARE = re.compile(r"(?<![-\w])G[0-8]\b")
 LIFECYCLE = re.compile(r"\bENG-G[0-8]\b")
-CAPABILITY = re.compile(r"\bBT-G[0-6]\b")
+CAPABILITY = re.compile(r"\bBT-G[0-7]\b")
 
 
 def read(path: Path) -> str:

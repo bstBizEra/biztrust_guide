@@ -14,8 +14,8 @@ defines in four tables and the pages must reproduce one-to-one, and each id's
 LABEL - the plan's deliverable or capability text - must sit beside it in the
 epics table. That makes the parity check mechanically decidable with no
 threshold and no calibration data - the property the spine test's docstring
-says a check needs before it is worth keeping. The same is true of the seven
-capability gate identifiers in plan §7.
+says a check needs before it is worth keeping. The same is true of the eight
+capability gate identifiers in PLAN-001 §10.
 
 The first version of this module checked identifier SETS only. A fresh-context
 review showed it passed with the entire epics table deleted (the ids survive in
@@ -41,6 +41,7 @@ NEGATIVE CONTROLS, run by hand before this shipped
   * Delete the whole epics <section> on p0.html  -> test_every_phase_page_has_its_spine FAILS
   * Swap the P0.7 and P0.11 labels               -> test_epic_labels_match_the_plan FAILS
   * Leave BT-G5 only in overview's <title>       -> test_overview_carries_every_gate FAILS
+  * Remove BT-G7 from overview.html              -> test_overview_carries_every_gate FAILS (run 2026-09-06 under WP-051)
   * Add a `P1.14` that the plan does not have    -> test_epic_ids_match_the_plan FAILS
   * Put `P2.4` on p3.html                        -> test_epic_ids_match_the_plan FAILS
   * Remove BT-G5 from overview.html              -> test_overview_carries_every_gate FAILS

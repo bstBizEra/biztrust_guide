@@ -283,7 +283,7 @@ Rows `BT-G0` to `BT-G6` are the previous plan's section 7 verbatim; `BT-G7` is n
 | `BT-G6 Tenant Ready` | A second independent tenant provisions without a core-code fork | Tenant #2 provisioning and isolation proof |
 | `BT-G7 Production Ready` | The whole system is shown to be operable: every item of section 10.3's Gate E list has revision-bound evidence, and `BT-G6` is recorded | The Gate E evidence set, an independent production-readiness review, and the security risk owner's dated record |
 
-In the `BT-G2` and `BT-G3` rows, "P1" and "P2" are the previous plan's phase names; in this plan they are P1A and P1B. The rows are kept verbatim so that they match the manuals until the overview ticket moves them. The `BT-G3` row, kept verbatim, names P1B's proof; where P1C's proof sits inside Gate C is the P1 manual ticket's ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)).
+In the `BT-G2` and `BT-G3` rows, "P1" and "P2" are the previous plan's phase names; in this plan they are P1A and P1B. The rows are kept verbatim so that the phase pages, which still name these gates as their exit gates, match them. The `BT-G3` row, kept verbatim, names P1B's proof; where P1C's proof sits inside Gate C is the P1 manual ticket's ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)).
 
 The `BT-G7` row adds to the roadmap's Gate E four things the roadmap does not state, and they are this plan's proposals: revision binding of the evidence (`AGENTS.md` section 9); `BT-G6` recorded (the map's charting decision 3); an independent production-readiness review and the security risk owner's dated record (the hub's Definition of Done, whose last item is an independent review, and the previous plan's section 7 waiver rule, which names a human risk owner).
 
@@ -355,7 +355,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ## 14. What this document does not yet carry
 
-- **The previous plan's section 7** remains the gate table the manuals render and `tests/test_phase_pages.py` reads (exactly `BT-G0` to `BT-G6`) until the overview ticket ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) moves it; section 10 here is the record of the gates going forward, and the two differ by `BT-G7` and the labels only.
+- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)); the overview renders section 10 and `tests/test_phase_pages.py` reads it. The four phase pages still render the previous plan's epics and exit gates until their tickets move them.
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
 - **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.
