@@ -14,7 +14,7 @@ Two gate systems exist and must never be confused:
 | Namespace | Purpose | Examples |
 |---|---|---|
 | `ENG-G0…ENG-G8` | Lifecycle gate applied to every Work Package | Discover, define, architect, plan, build, assure, release, operate, learn |
-| `BT-G0…BT-G6` | BizTrust platform capability milestone | Architecture ready through tenant ready |
+| `BT-G0…BT-G7` | BizTrust platform capability milestone | Architecture ready through production ready; the table is `BIZTRUST-PLAN-001.md` section 10 |
 
 `P0…P3` are delivery phases, not approval states. A phase may contain many Work Packages, each moving through the `ENG-G*` lifecycle.
 

@@ -364,7 +364,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 ## 15. Sources
 
 - The operator's roadmap draft, sections 1 to 8, 11 to 15, as transcribed at [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md).
-- [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1 and 3 to 11; its section 7 gate rows are quoted verbatim in section 10.
+- [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1 and 3 to 11; the gate rows its section 7 held until WP-051 are quoted verbatim in section 10.
 - The guide's hub, `index.html`, section 10 (the eight-item Definition of Done and the assurance metrics) and sections 11 and 12 (security engineering and production operations), as rendered at the commit this document cites.
 - Research on the Guide v2 map: [#161](https://github.com/bstBizEra/biztrust_guide/issues/161) for the definitions the P3 gate rests on, [#162](https://github.com/bstBizEra/biztrust_guide/issues/162) for store release, [#163](https://github.com/bstBizEra/biztrust_guide/issues/163) for reconciliation statuses, [#164](https://github.com/bstBizEra/biztrust_guide/issues/164) for the compliance track.
 - [`FOUNDATION_SEQUENCE.md`](FOUNDATION_SEQUENCE.md), [`ADR_REGISTER.md`](ADR_REGISTER.md), [`DOMAIN_MODEL.md`](DOMAIN_MODEL.md) section 1, [`BIZTRUST-ARCH-001.md`](BIZTRUST-ARCH-001.md) sections 5 and 17.

@@ -14,10 +14,12 @@
     "Ticket #165 resolved by this branch: phases/overview.html rewritten to PLAN-001 with a new five-phases section, the eight-gate table with labels beside identifiers, the authorizations per phase, the executive interpretation, a label stop condition, and the transition note per phase page.",
     "tests/test_phase_pages.py: gates from PLAN-001 section 10, regex BT-G[0-7], the seven-gate assertion now eight; tests/test_gate_namespaces.py: capability regex BT-G[0-7]; DELIVERY_PLAN.md section 7 retired to a pointer; PLAN-001's transition sentences updated.",
     "index.html: Engineering Guide v2.0-draft in the top bar and footer, the gate range BT-G0 to BT-G7, the phase-manuals callout's link text; README.md's phases row.",
-    "badf/ re-anchored: NS-044 repointed at the manuals, DEC-053 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at the manuals, DEC-053 appended, this checkpoint written.",
+    "Review pass: one blocking and eight should-fix findings adopted, among them verbatim gate cells with additions in small print, the hub's and README's rendering sentences, the old plan's section 1 row, the state file's claim about the phase pages, and the stop condition's wording; the hub's roadmap section and Continuous Operations sentence recorded as a new ticket."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-050.",
+    "The hub's 90-day mobilization section still speaks the previous plan's phases, and the hub says nothing about Continuous Operations; both are ticket #190 on map #153, not this package.",
     "After merge: #165 closed with a resolution comment; the map's decision line appended.",
     "Map #153: the manuals #166 to #170, then #171 the catalogue and tests, then the showcase tickets."
   ],
@@ -28,6 +30,7 @@
     "docs/AGENT_CONTINUITY.md",
     "tests/test_phase_pages.py",
     "tests/test_gate_namespaces.py",
+    "docs/architecture/SOURCE_RECONCILIATION.md",
     "docs/architecture/DELIVERY_PLAN.md",
     "docs/architecture/BIZTRUST-PLAN-001.md",
     "badf/current-state.json",
@@ -49,9 +52,10 @@
   ],
   "observations": [
     "tests/test_phase_pages.py's exit-gate expectations per phase page (p1 BT-G2, p2 BT-G3, p3 BT-G4 to BT-G6) are unchanged because the pages are unchanged; each manual ticket moves its own expectation.",
-    "The overview's gate rows quote PLAN-001 section 10.2's three columns; the fourth column, the proposed recorder, is the track's own and now carries BT-G7's recorder as the security risk owner with the production-readiness reviewer.",
+    "The overview's gate rows quote PLAN-001 section 10.2's three columns verbatim after the review pass, with the track's additions (the slice that produces BT-G0's evidence; independent execution of BT-G1's) in small print beneath the cell and the label in small print beneath the identifier; the fourth column, the proposed recorder, is the track's own and now carries BT-G7's recorder as the security risk owner with the production-readiness reviewer.",
     "The overview does not name an epic identifier anywhere, which test_overview_names_no_epic requires; the epic identifier rule is described in prose with group letters only.",
-    "docs/AGENT_CONTINUITY.md's sentence naming the capability namespace as BT-G0 to BT-G6 moved to BT-G7 with PLAN-001 section 10 as the table. Validation ran 2026-09-06 in an LF worktree cut from origin/main at b90c510 on Windows 11 with Python 3.13."
+    "docs/AGENT_CONTINUITY.md's sentence naming the capability namespace as BT-G0 to BT-G6 moved to BT-G7 with PLAN-001 section 10 as the table. Validation ran 2026-09-06 in an LF worktree cut from origin/main at b90c510 on Windows 11 with Python 3.13.",
+    "Two commits: the first stopped at a corrupted anchor after the overview, the phase-page test's gate source and badf/; the second carried the hub, README, both plans, the continuity doc and the namespace test; this checkpoint was written before the first commit and its completed list describes the head, not the sequence."
   ],
   "decisions": [
     "DEC-053: the overview renders PLAN-001; the tests read PLAN-001 for gates and admit BT-G7; section 7 of the previous plan is a pointer; the hub reads v2.0-draft."
