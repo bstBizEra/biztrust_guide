@@ -12,11 +12,12 @@
   },
   "completed": [
     "Ticket #156 resolved by this branch: PLAN-001 sections 10 to 13 inserted (gates and labels; stream entry conditions; tracks; Definition of Done), the tail renumbered to 14 and 15, the header and section 1 and 8 cross-references updated; DELIVERY_PLAN.md's supersession row and the index row updated; no epic or gate row of the previous plan changed.",
-    "badf/ re-anchored: NS-044 repointed at #157, DEC-051 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #157, DEC-051 appended, this checkpoint written.",
+    "Review pass: seventeen findings adopted, among them the Definition of Done count (seventeen, not eighteen), the BT-G7 additions marked as this plan's proposals, the verbatim-row caveat, stream conditions gated on BT-G7 and Production v1.0, and three citations corrected."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-048.",
-    "After merge: #156 closed with a resolution comment; the map's Not yet specified loses the P3 epics and tracks entries that are now sharp.",
+    "After merge: #156 closed with a resolution comment; the map's Not yet specified P3 entry is narrowed to per-epic proofs, which the P3 manual ticket carries.",
     "Map #153: #157 next, then the overview manual #165 (which moves the gate table and the seven-gate assertion together)."
   ],
   "files_changed": [
@@ -43,7 +44,7 @@
   "observations": [
     "tests/test_phase_pages.py asserts that DELIVERY_PLAN.md section 7 lists exactly BT-G0 to BT-G6 and its GATE regex matches [0-6] only; BT-G7 in PLAN-001 is invisible to it, and BT-G7 in DELIVERY_PLAN.md section 7 would not fail it either but would put the eighth gate where the manuals do not render it.",
     "tests/test_gate_namespaces.py's capability regex is BT-G[0-6]; when BT-G7 reaches the guide surface under #165, that regex and the disjointness test must widen in the same package.",
-    "The hub's Definition of Done is rendered as an eight-checkbox grid on index.html and on seven stage pages; changing the item count would touch eight pages, which is why the eight stand and the roadmap's items sit beneath them.",
+    "The hub's eight Definition of Done items render on index.html only; the stage pages reuse the dod-grid class for their own checklists. The eight stand because the hub's list is the guide's stated Definition of Done, not because other pages render it.",
     "Hand check at the head: the seven BT-G0 to BT-G6 rows in PLAN-001 section 10.2 are character-identical to DELIVERY_PLAN.md section 7, which still lists exactly those seven; PLAN-001 sections run 0 to 15. Validation ran 2026-09-06 in an LF worktree cut from origin/main at 8992a7d on Windows 11 with Python 3.13."
   ],
   "decisions": [
@@ -122,8 +123,8 @@
   },
   "declared_non_coverage": [
     "The stream entry conditions and the per-phase track cells are the agent's proposals from the roadmap's lists; no gate owner or review seat has read them.",
-    "BT-G7's requirement adds an independent review and a dated record that the roadmap's Gate E did not state; the addition is marked as the research's consequence, not the roadmap's text.",
-    "The Definition of Done mapping was checked by reading the hub's eight items and the roadmap's eighteen; no test binds PLAN-001 section 13 to index.html.",
+    "BT-G7's requirement adds four things the roadmap's Gate E did not state (revision binding, BT-G6 recorded, an independent review, the risk owner's dated record); PLAN-001 section 10.2 marks them as this plan's proposals with their sources in the charter, the map and the hub.",
+    "The Definition of Done mapping was checked by reading the hub's eight items and the roadmap's seventeen; no test binds PLAN-001 section 13 to index.html.",
     "The three source documents the roadmap cites remain absent (#154)."
   ]
 }

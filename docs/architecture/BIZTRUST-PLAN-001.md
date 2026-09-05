@@ -7,7 +7,7 @@
 | Parent | `BIZTRUST-ARCH-001` |
 | Supersedes | [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) `0.1-draft`, in part: the phase partition and the epic homes (part one, [#155](https://github.com/bstBizEra/biztrust_guide/issues/155)) and the gate table (part two, [#156](https://github.com/bstBizEra/biztrust_guide/issues/156)). Not its decomposition rule, backlog or exit criteria, which stand until a ticket carries them |
 | Source | The operator's roadmap, [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md), 2026-09-05, cited below by its section numbers; and `DELIVERY_PLAN.md` v0.1, cited by its section numbers |
-| Map | [Engineering Guide v2.0 map, issue #153](https://github.com/bstBizEra/biztrust_guide/issues/153); this document resolves ticket [#155](https://github.com/bstBizEra/biztrust_guide/issues/155) |
+| Map | [Engineering Guide v2.0 map, issue #153](https://github.com/bstBizEra/biztrust_guide/issues/153); this document resolves tickets [#155](https://github.com/bstBizEra/biztrust_guide/issues/155) and [#156](https://github.com/bstBizEra/biztrust_guide/issues/156) |
 | Decided under | Part one: `BIZTRUST-GUIDE-WP-048`, issue [#181](https://github.com/bstBizEra/biztrust_guide/issues/181). Part two: `BIZTRUST-GUIDE-WP-049`, issue [#183](https://github.com/bstBizEra/biztrust_guide/issues/183) |
 
 Nothing in this document is accepted, and nothing it names is implemented. It is the proposed partition of the delivery work between the architecture contract and production, written so that every epic the previous plan defined keeps a home and every new epic cites where it came from. Acceptance is the architecture authority's at `BT-G0`; implementation of any phase needs a Work Package with explicit, expiring authority, which this repository cannot grant (`AGENTS.md` sections 1 and 12).
@@ -264,7 +264,7 @@ The previous plan's section 1 rule stands: two gate systems exist and must never
 | D | Financial Integrity Proven | `BT-G4` and `BT-G5` | P2 |
 | E | Production Ready | `BT-G7`, with `BT-G6` judged inside it | P3 |
 
-`BT-G6 Tenant Ready` keeps its identifier and its meaning because invariant candidate INV-011 (a second tenant onboards without a core-code fork) depends on it; it is recorded before or together with `BT-G7`, never skipped because the label E does not name it.
+`BT-G6 Tenant Ready` keeps its identifier and its meaning because invariant candidate INV-011 (a second tenant onboards without a core-code fork) depends on it; it is recorded before or together with `BT-G7`, never skipped because the label E does not name it. It moves from closing the previous plan's P3 to being judged at `BT-G7`.
 
 ### 10.2 The gate table
 
@@ -281,15 +281,17 @@ Rows `BT-G0` to `BT-G6` are the previous plan's section 7 verbatim; `BT-G7` is n
 | `BT-G6 Tenant Ready` | A second independent tenant provisions without a core-code fork | Tenant #2 provisioning and isolation proof |
 | `BT-G7 Production Ready` | The whole system is shown to be operable: every item of section 10.3's Gate E list has revision-bound evidence, and `BT-G6` is recorded | The Gate E evidence set, an independent production-readiness review, and the security risk owner's dated record |
 
-In the `BT-G3` and `BT-G4` rows, "P2" and "P3" are the previous plan's phase names; in this plan those phases are P1B and P2. The rows are kept verbatim so that they match the manuals until the overview ticket moves them.
+In the `BT-G2` and `BT-G3` rows, "P1" and "P2" are the previous plan's phase names; in this plan they are P1A and P1B. The rows are kept verbatim so that they match the manuals until the overview ticket moves them. The `BT-G3` row, kept verbatim, names P1B's proof; where P1C's proof sits inside Gate C is the P1 manual ticket's ([#167](https://github.com/bstBizEra/biztrust_guide/issues/167)).
 
-Failure at any gate blocks dependent authorisation. A waiver requires a named human risk owner, expiry, compensating controls and recorded dissent (previous plan, section 7). A gate is recorded by a human with the authority the contract names for it; a passing test suite records nothing.
+The `BT-G7` row adds to the roadmap's Gate E four things the roadmap does not state, and they are this plan's proposals: revision binding of the evidence (`AGENTS.md` section 9); `BT-G6` recorded (the map's charting decision 3); an independent production-readiness review and the security risk owner's dated record (the hub's Definition of Done, whose last item is an independent review, and the previous plan's section 7 waiver rule, which names a human risk owner).
+
+Failure at any gate blocks dependent authorization. A waiver requires a named human risk owner, expiry, compensating controls and recorded dissent (previous plan, section 7). A gate is recorded by a human; which human is the gate owner's record to name and never inferred (`AGENTS.md` section 4); a passing test suite records nothing.
 
 ### 10.3 What each label requires
 
 Restated from the roadmap so that a manual or a showcase page can cite one place; each list is a proposal until the gate's owner accepts it.
 
-**Gate A, `BT-G0`** (roadmap section 3): the architecture can answer who owns each datum; which tenant owns each record; who may perform each operation; which module owns each state transition; what the authoritative insurance state is; what the authoritative financial state is; how a quote becomes bound coverage; how money becomes premium; how commission is calculated and posted; how a carrier integrates; how Tenant #2 onboards without a fork; how cross-tenant isolation is mechanically proved; how failures are recovered; how a transaction is reconstructed from evidence. These are the contract's section 17 exit criteria in the roadmap's words.
+**Gate A, `BT-G0`** (roadmap section 3): the architecture can answer who owns each datum; which tenant owns each record; who may perform each operation; which module owns each state transition; what the authoritative insurance state is; what the authoritative financial state is; how a quote becomes bound coverage; how money becomes premium; how commission is calculated and posted; how a carrier integrates; how Tenant #2 onboards without a fork; how cross-tenant isolation is mechanically proved; how failures are recovered; how a transaction is reconstructed from evidence. They correspond to, and are fewer than, the contract's seventeen section 17 exit criteria; the contract's list governs.
 
 **Gate B, `BT-G1`** (roadmap section 4): the chain authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence is mechanically demonstrated, and the P0 mandatory proof of the previous plan's section 3 passes independently of the implementer.
 
@@ -297,26 +299,26 @@ Restated from the roadmap so that a manual or a showcase page can cite one place
 
 **Gate D, `BT-G4` and `BT-G5`** (roadmap section 6): the trace customer, insurance transaction, invoice, payment, provider confirmation, ledger, commission, insurer payable, settlement, reconciliation, policy evidence, is proven, and these failure cases are proven handled: duplicate payment; duplicated callback; provider timeout; missing webhook; eventual confirmation; refund duplication; incorrect currency; ledger mismatch; reconciliation mismatch; carrier settlement difference.
 
-**Gate E, `BT-G7` with `BT-G6`** (roadmap section 7): revision-bound evidence exists for security, tenant isolation, insurance end-to-end, financial reconciliation, data migration, performance, observability, backup restore, disaster recovery, rollback, incident response, release controls, secrets, mobile release, operational documentation, runbooks, on-call and escalation, and compliance evidence; the production-readiness review is executed by someone other than the implementers; the security risk owner records the gate with a date. Three definitions in this list have no primary source and are local decisions the P3 manual must label: the incident severity scale, "rolling deployment", and "rollback" outside the blue-green case (research [#161](https://github.com/bstBizEra/biztrust_guide/issues/161)). Store releases have no rollback at all; the evidence for mobile release is a halted rollout and a shipped fix (research [#162](https://github.com/bstBizEra/biztrust_guide/issues/162)).
+**Gate E, `BT-G7` with `BT-G6`** (roadmap section 7): revision-bound evidence exists for security, tenant isolation, insurance end-to-end, financial reconciliation, data migration, performance, observability, backup restore, disaster recovery, rollback, incident response, release controls, secrets, mobile release, operational documentation, runbooks, on-call and escalation, and compliance evidence; the production-readiness review is executed by someone other than the implementers; the security risk owner records the gate with a date. Three definitions P3 rests on have no primary source and are local decisions the P3 manual must label: the incident severity scale, "rolling deployment", and "rollback" outside the blue-green case (research [#161](https://github.com/bstBizEra/biztrust_guide/issues/161)). Store releases have no rollback at all; the evidence for mobile release is a halted rollout and a shipped fix (research [#162](https://github.com/bstBizEra/biztrust_guide/issues/162)).
 
 ## 11. Expansion streams: entry conditions
 
-Each stream of section 8 opens only when its entry condition is recorded; none has an order among the others, and none is authorised by this plan. Proposed conditions:
+Each stream of section 8 opens only when `BT-G7` is recorded, Production v1.0 is released, and its own entry condition below is recorded; none is ordered among the others except as its condition names another; none is authorised by this plan. Proposed conditions:
 
 | Stream | Entry condition | Decision it waits on |
 |---|---|---|
-| E1 Tenant Scale | `BT-G6` recorded, and a third tenant's arrangement profiled under S01's template | ADR-011 |
+| E1 Tenant Scale | `BT-G6` recorded, and a third tenant's authority profile under S01 | ADR-011 |
 | E2 Embedded Insurance | `BT-G7` recorded, and a partner contract that names the API surface it needs | ADR-005, ADR-009 |
 | E3 Integration Scale | A counterparty (insurer, payment provider or bank) with a documented API and a signed sandbox agreement | ADR-009 |
-| E4 Workflow Scale | Workflow volume or fault evidence from P1B and P2 showing the P0 runtime choice insufficient | ADR-010's extraction trigger |
-| E5 Enterprise Isolation | A tenant's regulatory or contractual requirement for a dedicated schema or database, recorded by the legal seat | ADR-004's dedicated-tier trigger; ADR-019 |
-| E6 Advanced Brokerage | Twelve months of P1B operating data on one tenant, or a second tenant's need recorded | — |
+| E4 Workflow Scale | Workflow volume or fault evidence from P1B and P2 showing the P0 runtime choice insufficient | ADR-001's extraction criteria; ADR-010 |
+| E5 Enterprise Isolation | A tenant's regulatory or contractual requirement for a dedicated schema or database, recorded by the legal seat | The contract's section 18 dedicated-tenant trigger; ADR-004; ADR-019 |
+| E6 Advanced Brokerage | P1B operating data on one tenant covering a full renewal cycle (a measurement window, not a schedule), or a second tenant's need recorded | — |
 | E7 Intelligence | The data-governance track's owner, classification and consent rows exist for every dataset a model would read | ADR-019; the compliance track |
 | E8 Ecosystem | E2 open and at least one partner live | — |
 
 ## 12. Cross-cutting tracks
 
-The roadmap's section 8 names eight tracks that run through every phase. What each requires, per phase, is proposed here so that a Work Package in any phase can be checked against its track; the guide's hub already carries the security and reliability tracks as sections 11 and 12, and this table cites them rather than restating them.
+The roadmap's section 8 names eight tracks that run through every phase. What each requires, per phase, is proposed here so that a Work Package in any phase can be checked against its track; the guide's hub already carries the security track as its section 11 and the operating half of the observability track as its section 12, and this table cites them rather than restating them.
 
 | Track | Architecture | P0 | P1 | P2 | P3 |
 |---|---|---|---|---|---|
@@ -333,7 +335,7 @@ Observability is implemented with each feature, never retrofitted in P3 (roadmap
 
 ## 13. Definition of Done
 
-The guide's hub carries an eight-item Definition of Done for a Work Package: acceptance criteria pass; contracts and docs updated; negative tests included; threat model reviewed; telemetry implemented; rollback validated; evidence manifest signed; independent review complete. The roadmap's section 11 lists eighteen items. They reconcile as follows, and the eight stand as the Work Package Definition of Done, with the roadmap's items as what each of the eight must show:
+The guide's hub carries an eight-item Definition of Done for a Work Package: acceptance criteria pass; contracts and docs updated; negative tests included; threat model reviewed; telemetry implemented; rollback validated; evidence manifest signed; independent review complete. The roadmap's section 11 lists seventeen items. They reconcile as follows, and the eight stand as the Work Package Definition of Done, with the roadmap's items as what each of the eight must show:
 
 | Guide item | Roadmap items it carries |
 |---|---|
@@ -346,7 +348,7 @@ The guide's hub carries an eight-item Definition of Done for a Work Package: acc
 | Evidence manifest signed | Evidence generated |
 | Independent review complete | Independent review |
 
-One roadmap item is not a Work Package item: **gate passed**. Gates close phases, not packages (section 10), so a package is done when its eight items are shown, and a phase is closed when its gate's owner records it. Putting the gate inside the package's definition would let a package claim a phase.
+One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a gate closes a phase, not a package (section 10): a package is done when its eight items are shown, and a phase is closed when its gate's owner records it, so putting the gate inside the package's definition would let a package claim a phase. Read as `ENG-Gn`, passing the stage gate is the lifecycle the eight items feed, not a ninth item. On either reading it is not a package item.
 
 
 ## 14. What this document does not yet carry
@@ -360,7 +362,7 @@ One roadmap item is not a Work Package item: **gate passed**. Gates close phases
 
 ## 15. Sources
 
-- The operator's roadmap draft, sections 1 to 7, 13, 14 and 15, as transcribed at [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md).
+- The operator's roadmap draft, sections 1 to 8, 11 to 15, as transcribed at [`../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md`](../research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md).
 - [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) v0.1, sections 1 and 3 to 11; its section 7 gate rows are quoted verbatim in section 10.
 - The guide's hub, `index.html`, section 10 (the eight-item Definition of Done and the assurance metrics) and sections 11 and 12 (security engineering and production operations), as rendered at the commit this document cites.
 - Research on the Guide v2 map: [#161](https://github.com/bstBizEra/biztrust_guide/issues/161) for the definitions the P3 gate rests on, [#162](https://github.com/bstBizEra/biztrust_guide/issues/162) for store release, [#163](https://github.com/bstBizEra/biztrust_guide/issues/163) for reconciliation statuses, [#164](https://github.com/bstBizEra/biztrust_guide/issues/164) for the compliance track.

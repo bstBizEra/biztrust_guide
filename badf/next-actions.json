@@ -110,7 +110,7 @@
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
       "action": "Work the Guide v2 map #153 one ticket per session: #155 and #156 are resolved (PLAN-001 parts one and two); next is #157 P0 scope (P0.13 control-plane web after the security proof; mobile identity to P1A; a design ticket on #128), then the manuals #165 to #170 one page per ticket, each moving its page off DELIVERY_PLAN.md v0.1 under the phase-page test, the overview first since it carries the gate table. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
       "prerequisites": [
-        "docs/architecture/BIZTRUST-PLAN-001.md v1.0-draft with sections 1 to 15 (WP-048, WP-049)",
+        "docs/architecture/BIZTRUST-PLAN-001.md v1.0-draft with sections 0 to 15 (WP-048, WP-049)",
         "For the overview manual: tests/test_phase_pages.py's seven-gate assertion and DELIVERY_PLAN.md section 7 move in the same package"
       ],
       "evidence_required": [
