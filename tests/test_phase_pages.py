@@ -2,7 +2,7 @@
 """Each phase page is a rendering of one plan section, named by EPIC_SOURCES, and must stay one.
 
 `phases/` renders the delivery plan for the published site: the overview and P0 from
-BIZTRUST-PLAN-001.md, P1 to P3 from DELIVERY_PLAN.md v0.1 until each moves. The plan is
+BIZTRUST-PLAN-001.md, P3 from DELIVERY_PLAN.md v0.1 until it moves. The plan is
 the source; the pages are a second rendering. The risk that shape carries is the one
 issue #32 measured: a rendering that nothing checks against its source drifts, and
 drifts silently, because the page keeps looking finished. This module is the check.
@@ -49,6 +49,8 @@ NEGATIVE CONTROLS, run by hand before this shipped
   * Swap P0.7 and P0.11 labels, section-scoped    -> test_epic_labels_match_the_plan FAILS (re-run 2026-09-06 under WP-052)
   * Remove EVERY P1B.4 from p1.html                -> test_epic_ids_match_the_plan FAILS (run 2026-09-06 under WP-053)
   * Put P1A.1 on p2.html                           -> test_epic_ids_match_the_plan FAILS (run 2026-09-06 under WP-053)
+  * Remove EVERY P2E.1 from p2.html                -> test_epic_ids_match_the_plan FAILS (run 2026-09-06 under WP-054)
+  * Drop BT-G5 from p2.html's gate section         -> test_each_phase_page_names_its_exit_gate FAILS (run 2026-09-06 under WP-054)
   * Add a `P1.14` that the plan does not have    -> test_epic_ids_match_the_plan FAILS
   * Put `P2.4` on p3.html                        -> test_epic_ids_match_the_plan FAILS
   * Remove BT-G5 from overview.html              -> test_overview_carries_every_gate FAILS
@@ -71,13 +73,13 @@ PLAN = ROOT / "docs/architecture/DELIVERY_PLAN.md"
 GATE_PLAN = ROOT / "docs/architecture/BIZTRUST-PLAN-001.md"
 # Each phase page renders one section of one plan. P0 moved to PLAN-001 section 4 under
 # WP-052 (its thirteen rows are identical in both plans); P1 moved to PLAN-001 section 5 under
-# WP-053, whose ids carry a sub-phase letter (P1A.n, P1B.n, P1C.n); P2 and P3 still render the
-# previous plan's sections 5 and 6 and move one ticket at a time. A manual ticket moves the page, this
+# WP-053, whose ids carry a sub-phase letter (P1A.n, P1B.n, P1C.n); P2 moved to PLAN-001 section 6
+# under WP-054 (P2A.n to P2F.n); P3 still renders the previous plan's section 6 until its ticket. A manual ticket moves the page, this
 # row, and the page's exit-gate expectation together.
 EPIC_SOURCES: dict[int, tuple[Path, str, str]] = {
     0: (GATE_PLAN, "\n## 4. P0", "\n## 5. P1"),
     1: (GATE_PLAN, "\n## 5. P1", "\n## 6. P2"),
-    2: (PLAN, "\n## 5. P2", "\n## 6. P3"),
+    2: (GATE_PLAN, "\n## 6. P2", "\n## 7. P3"),
     3: (PLAN, "\n## 6. P3", "\n## 7. "),
 }
 
@@ -259,7 +261,7 @@ class TestParityWithThePlan(unittest.TestCase):
         self.assertEqual(plan_gates(), on_page, "overview.html and PLAN-001 §10 disagree on the gate set")
 
     def test_each_phase_page_names_its_exit_gate(self) -> None:
-        expected = {"p0.html": {"BT-G1"}, "p1.html": {"BT-G2", "BT-G3"}, "p2.html": {"BT-G3"},
+        expected = {"p0.html": {"BT-G1"}, "p1.html": {"BT-G2", "BT-G3"}, "p2.html": {"BT-G4", "BT-G5"},
                     "p3.html": {"BT-G4", "BT-G5", "BT-G6"}}
         for name, gates in expected.items():
             with self.subTest(page=name):

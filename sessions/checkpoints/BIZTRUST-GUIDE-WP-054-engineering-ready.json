@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-054-001",
+  "created_at": "2026-09-05T20:25:06Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-054",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #168 on the Guide v2 map: rewrite phases/p2.html as Payment and Finance, rendered from PLAN-001 section 6, with the nine finance rows of the previous manual carried cell for cell under P2A.1 to P2F.1 and grouped by the roadmap's six capability groups, the ten never-collapsed records, the transaction flow, the reconciliation statuses mapped onto FLOWS section 12A as a proposal, the primary-source facts of the reconciliation research, the ten failure cases of Gate D as tests, and an exit-gate section naming BT-G4 and BT-G5 as label D; point the phase-page test's P2 row at PLAN-001 section 6; update every sentence that counted the pages still on the previous plan.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-054-p2-manual-v2",
+    "baseline_commit": "051656f0823f7b19c1525eae13f2782ebd8ee2f6"
+  },
+  "completed": [
+    "Ticket #168 resolved by this branch: phases/p2.html rewritten as Payment and Finance from PLAN-001 section 6 with nine rows in six groups, the ten records, the transaction flow, the status mapping, the research facts, the ten failure cases, a nine-step order, the two-gate exit section and the transition notes.",
+    "tests/test_phase_pages.py: P2 reads PLAN-001 section 6; the exit-gate expectation for p2.html is BT-G4 and BT-G5; two negative controls recorded.",
+    "Transition sentences on the hub, README, overview, both plans and the P1 page updated; the hub's P2 link text; the overview's BT-G4 and BT-G5 rows reach the P2 page.",
+    "badf/ re-anchored: NS-044 repointed at #169, DEC-056 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-053.",
+    "After merge: #168 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #169 P3 next, which retires the duplicated finance page and the previous plan's sections 3 to 6."
+  ],
+  "files_changed": [
+    "phases/p2.html",
+    "phases/p1.html",
+    "phases/overview.html",
+    "index.html",
+    "README.md",
+    "tests/test_phase_pages.py",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-054-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The P2 page carries nine letter-bearing identifiers and the P3 page carries the eleven P3.n identifiers of the previous plan; the per-page foreign-epic check passes because the letters make P2A.n and P3.n different identifiers.",
+    "The exit-gate section must name only BT-G4 and BT-G5, so BT-G6 appears nowhere on the page: PLAN-001 section 10 moves it to be judged at BT-G7, which is the P3 page's to render.",
+    "The nine rows' cells are the previous P3 page's cells verbatim; the only change is the identifier. The previous P3 page's P3.10 and P3.11 rows are not carried and are named in prose without identifiers, since a P3.n identifier on the P2 page would be a foreign epic.",
+    "The reconciliation research lives on branch research/reconciliation-standards, not on main; the page links the file at its SHA, as the ticket's resolution comment does."
+  ],
+  "decisions": [
+    "DEC-056: the P2 manual renders PLAN-001 section 6 with the previous finance rows under letter-bearing identifiers; the status mapping and the failure-case placement are proposals; BT-G4 and BT-G5 as label D; the P3 page's duplication is declared until it moves."
+  ],
+  "assumptions": [
+    "The wayfinder invocation with no arguments is a chat instruction to work the next frontier ticket; it adopts nothing and authorises nothing.",
+    "The status mapping, the failure-case owners and the execution order are the track's proposals; no design exists for them."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_053",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A phase page's epics table differs from the plan section EPIC_SOURCES names for it.",
+      "The P2 page or any record says a gate has passed, a capability exists, or a journal is accounting advice.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered P2 page was not viewed in a browser; its rows, sections, gates and links were checked by the tests and the validator.",
+    "The status mapping, the failure-case owners and the group capabilities' placement are the track's reading; no engineering design exists for them.",
+    "The P3 page's duplication of P2's nine rows under old identifiers stands until #169; a reader comparing the two pages sees the same nine rows twice.",
+    "The research's twelve unverified or unverifiable items are not resolved here; the page names the class and points at the research's section 8."
+  ]
+}
