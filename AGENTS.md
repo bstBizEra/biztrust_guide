@@ -163,3 +163,19 @@ Stop immediately when:
 
 This repository may document future BizTrust architecture, but documentation must not claim that a capability is implemented, secure, compliant or production-ready unless linked evidence proves that claim.
 
+
+## Agent skills
+
+Configuration for the mattpocock engineering skills reached through `/setup-matt-pocock-skills`: `/triage` and `/code-review` read it by name; `/wayfinder`, `/to-tickets`, `/to-spec`, `/domain-modeling`, `/grill-with-docs` and `/improve-codebase-architecture` rely on the tracker and layout it records. Nothing here loosens sections 1 to 12; where the two disagree, sections 1 to 12 win.
+
+### Issue tracker
+
+Issues are GitHub issues in `bstBizEra/biztrust_guide`, worked through Work Package tickets. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`); a triage label never substitutes for Work Package authority. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: root `CONTEXT.md` and `docs/adr/`, both created lazily, with `docs/architecture/ADR_REGISTER.md` as the decision register. See `docs/agents/domain.md`.
