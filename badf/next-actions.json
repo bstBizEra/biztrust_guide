@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-054",
-  "updated_at": "2026-09-05T20:25:06Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-055",
+  "updated_at": "2026-09-05T20:56:05Z",
   "actions": [
     {
       "id": "NS-040",
@@ -108,19 +108,19 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165, #166, #167 and #168 are resolved; the overview and the P0, P1 and P2 pages render PLAN-001. Next are #169 P3 (Production, from PLAN-001 section 7, ids P3A.n to P3J.n, exit gates BT-G7 with BT-G6 judged inside it) and #170 operations. #169 moves the last page, its EPIC_SOURCES row and its exit-gate expectation together, and retires the previous plan's sections 3 to 6 as PLAN-001 section 0 says. #190 the hub roadmap section waits on #170. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157 and #165 to #169 are resolved; the overview and all four phase manuals render PLAN-001 and the previous plan's phase sections are retired. Next is #170 Continuous Operations and the expansion streams (a reference page or an overview section; entry conditions per stream; the two moved epics inside E1 and E2), then #190 the hub roadmap section, which waits on #170. #171 catalogue and tests, #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
       "prerequisites": [
-        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview and gate tests on PLAN-001 (WP-051), the P0, P1 and P2 manuals on PLAN-001 sections 4 to 6 (WP-052 to WP-054)",
-        "For a manual: its PLAN-001 section carries the epics the page will render, with labels the page can quote verbatim"
+        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview and gate tests on PLAN-001 (WP-051), the four manuals on PLAN-001 sections 4 to 7 (WP-052 to WP-055)",
+        "For #170: PLAN-001 sections 8 and 11 carry the streams and their entry conditions"
       ],
       "evidence_required": [
         "The ticket's resolution comment, the ticket closed, one line appended to #153 Decisions so far",
         "For a landed record: the PR's review record, tests OK with the phase-page test still passing, badf/ re-anchored"
       ],
       "stop_conditions": [
-        "A change to DELIVERY_PLAN.md's epic rows while any manual still renders it",
+        "A change to DELIVERY_PLAN.md v0.1's standing sections (1, 2, 8 to 11) without a ticket that carries them",
         "A record says a phase is accepted, authorised or implemented",
-        "An identifier of the form P1.n, P2.n or P3.n is used with PLAN-001's meaning while DELIVERY_PLAN.md v0.1 stands"
+        "An identifier of the form P1.n, P2.n or P3.n is used with PLAN-001's meaning; those identifiers are the previous plan's and live only in PLAN-001 section 9"
       ],
       "fallback": "Leave PLAN-001 as the record of intent beside the previous plan; the manuals keep rendering v0.1."
     },

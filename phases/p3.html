@@ -3,15 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P3 · Financial and integration · BizTrust Agentic Engineer Team Guide</title>
-<meta name="description" content="Phase P3 of the BizTrust delivery plan: eleven epics closing the insurance-to-money-to-insurer loop with attributable, reconcilable records, and proving a second tenant onboards without a fork — what the agent builds, and what a human must see before recording BT-G4, BT-G5 and BT-G6.">
+<title>P3 · Production · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Phase P3 of the BizTrust delivery plan, Production: ten epics from environments to incident management, the definitions they rest on with their sources named, the three local definitions labelled as such, and what a human must see before recording BT-G6 and BT-G7.">
 <link rel="icon" href="../assets/unitrust-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles.css">
-<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}
-.dod-grid h3{grid-column:1/-1;margin:.75rem 0 .1rem;font-size:.8rem}</style>
+<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -20,7 +19,7 @@
 <header class="topbar">
   <a class="brand" href="../index.html">
     <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
-    <span class="brand-copy"><strong>Delivery phases</strong><small>P3 · Financial and integration platform</small></span>
+    <span class="brand-copy"><strong>Delivery phases</strong><small>P3 · Production</small></span>
   </a>
   <div class="top-actions">
     <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
@@ -30,192 +29,211 @@
 </header>
 
 <aside class="sidebar" id="sidebar">
-  <p class="nav-label">P3 · Financial and integration</p>
+  <p class="nav-label">P3 · Production</p>
   <nav id="sectionNav">
     <a href="#entry"><span>01</span> Entry criteria</a>
     <a href="#epics"><span>02</span> Epics to Work Packages</a>
     <a href="#order"><span>03</span> Execution order</a>
     <a href="#code"><span>04</span> What the agent codes</a>
     <a href="#monitor"><span>05</span> What the human monitors</a>
-    <a href="#gate"><span>06</span> Exit gates · BT-G4 to BT-G6</a>
-    <a href="#horizon"><span>07</span> After P3</a>
+    <a href="#gate"><span>06</span> Exit gate · BT-G7 with BT-G6 (E)</a>
+    <a href="#after"><span>07</span> After P3</a>
     <a href="#stop"><span>08</span> Stop conditions</a>
   </nav>
   <div class="sidebar-card">
     <span class="status-dot"></span>
-    <div><strong>P3 of P0–P3</strong><small>Enters at BT-G3 · exits at BT-G4, BT-G5, BT-G6</small></div>
+    <div><strong>P3 of five phases</strong><small>Enters at BT-G4 and BT-G5 (label D) · exits at BT-G7, with BT-G6 judged inside it (label E)</small></div>
   </div>
 </aside>
 
 <main id="main">
 
-<section id="p3-intro" data-search="P3 financial integration payment ledger commission settlement reconciliation adapters partner API tenant packs">
-  <div class="section-heading"><span>P3</span><div><p>Delivery phases · P3</p><h2>Financial and integration platform</h2></div></div>
-  <p class="lede">P3 closes the loop from insurance to money to insurer with records that are attributable and reconcilable, and ends by proving that a second independent tenant provisions without a core-code fork. It is the phase where a wrong model is most expensive, because the records it creates are the ones an auditor reads.</p>
-  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DELIVERY_PLAN.md">DELIVERY_PLAN.md §6</a>, with the payment, client-money, payment-to-policy and journal flows from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §12–§14</a> and the financial and integration boundaries from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">ARCH-001 §13–§14</a>.</p>
+<section id="p3-intro" data-search="P3 production environments pipeline release engineering observability reliability SLI SLO disaster recovery mobile production security operations incident management">
+  <div class="section-heading"><span>P3</span><div><p>Delivery phases · P3</p><h2>Production</h2></div></div>
+  <p class="lede">P3 is not primarily feature development. Its objective is to prove that the whole system can be operated: from working software, through production engineering, to a reliable service. Every epic here produces evidence that a human reads before recording the last gate, and the phase ends only when the production-readiness review is done by someone other than the people who built the thing being reviewed.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">BIZTRUST-PLAN-001.md §7</a>, whose ten rows are new in that plan from the roadmap's section 7, with the definitions the epics rest on from the map's research: <a href="https://github.com/bstBizEra/biztrust_guide/blob/b174a9a1000df7daf98be5a26d6f37f17ee6d81b/docs/research/guide-v2/release-and-reliability.md">release engineering, reliability and disaster recovery</a> and <a href="https://github.com/bstBizEra/biztrust_guide/blob/f82ea892d1b5d10a5a01fdad4d39716f8a380ad0/docs/research/guide-v2/mobile-release.md">mobile release pipelines</a>, each cited to its section where this page uses it. This is the last phase page to move, so every phase manual now renders PLAN-001, and the previous plan's phase sections are retired to pointers.</p>
   <div class="invariant">
     <span>THE RULE THIS PHASE EXISTS TO ENFORCE</span>
-    <p>Payment state cannot invent coverage state — INV-020. Posted ledger records are immutable; corrections are reversals or compensating entries — INV-008. Client-money and office-money balances, movements and reconciliations stay distinguishable under the approved regime — INV-021. And the examples in the architecture are conceptual until jurisdiction and accounting review approve a chart of accounts: nothing here is accounting advice.</p>
+    <p>A gate is recorded by a human on revision-bound evidence; a passing pipeline records nothing. A backup is not evidence, a restore is. A deployment is not a release until the service objectives it must meet exist and are measured. And three definitions this phase uses have no primary source: the incident severity scale, rolling deployment, and rollback outside the blue-green case. Each is a local decision on this page and is labelled one, as PLAN-001 section 7 requires.</p>
   </div>
 </section>
 
-<section id="entry" data-search="entry criteria BT-G3 ADR-014 client money regime ADR-008 ADR-009 ADR-012 ADR-018 chart of accounts provider selection">
+<section id="entry" data-search="entry criteria BT-G4 BT-G5 label D SLI SLO before release gate RPO RTO MTD design input local definitions">
   <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
   <div class="three-col">
     <article>
-      <h3>BT-G3 is recorded</h3>
-      <p>The lifecycle passed its failure scenarios. P3 posts money against workflows that have already been shown to survive duplicates and conflicts; it does not add durability to them.</p>
+      <h3>BT-G4 and BT-G5 (label D) are recorded</h3>
+      <p>The money reconciles and the adapters survive fault injection. P3 operates a system whose financial and integration evidence already exists; it does not produce that evidence, and it does not build features to fill gaps the earlier gates should have found.</p>
     </article>
     <article>
-      <h3>The money regime is decided, by qualified people</h3>
-      <p>ADR-014 answers, per tenant arrangement, whose money the intermediary holds, when premium counts as received by the insurer, who bears transit risk, which accounts are segregated and when commission may be withdrawn. The contract marks it <code>JURISDICTION_DEPENDENT</code>. Read its row in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a>; until that row reads <code>ACCEPTED</code> with the legal and finance seats recorded, a generic premium journal is not evidence.</p>
+      <h3>Service objectives before any release gate</h3>
+      <p>An SLI is the measure, an SLO is the target on it, and the error budget is the rate at which the SLO may be missed; the SRE book couples release velocity to that budget and the workbook requires a written budget policy with actions and owners. P3 cannot define a release gate before it defines its indicators and objectives, so P3F.1 is a precondition of P3C.1, not a parallel epic (release research, decision-relevant facts, first).</p>
     </article>
     <article>
-      <h3>The ledger, adapter and idempotency ADRs are accepted</h3>
-      <p>ADR-008 (immutable double-entry subledger), ADR-009 (adapters), ADR-012 (idempotent financial and binding mutations) and ADR-018 (premium conditions and non-payment without payment systems inventing cover). Provider selections — insurer, payment provider, bank — are on the deliberately-deferred list and each arrives as its own ADR.</p>
+      <h3>Recovery objectives are a design input</h3>
+      <p>Recovery point and recovery time are two numbers, and the second is bounded by a third, the maximum tolerable downtime; NIST places backup and recovery strategy in the development phase of the lifecycle, not after launch. P3G.1 states all three per system, with the source of the downtime figure (release research, definitions table and readiness-review section).</p>
     </article>
   </div>
 </section>
 
-<section id="epics" data-search="epics P3.1 P3.11 invoice payment intent adapter webhook refund chargeback subledger commission settlement reconciliation SDK partner API tenant pack">
-  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Eleven epics, three gates</h2></div></div>
+<section id="epics" data-search="epics P3A P3B P3C P3D P3E P3F P3G P3H P3I P3J environments pipeline release observability reliability SLI SLO disaster recovery mobile security operations incident">
+  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Ten epics, one per capability group</h2></div></div>
+  <p class="section-intro">Each row is decomposed into Work Packages by the <a href="../stages/plan.html#anatomy">Plan stage</a>. The plan gives one epic per roadmap group and sources each to the roadmap's section 7; the previous plan had no production phase, so nothing here is carried from an older page. The labels are the plan's; the other four columns are this track's reading.</p>
   <div class="table-wrap">
     <table>
       <caption>P3 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
       <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
       <tbody>
-        <tr><td><strong>P3.1</strong><small>Invoice and premium due</small></td><td>Invoices derived from the policy representation and pinned versions; premium due as a fact with an effective date</td><td><code>modules/billing/</code></td><td>An invoice reproduces from its sources; a version change does not alter a posted invoice</td><td>INV-006; ADR-020</td></tr>
-        <tr><td><strong>P3.2</strong><small>Payment intent, attempt and allocation</small></td><td>The payment state machine; provider state, operational state, allocation state and ledger state as separately attributable dimensions</td><td><code>modules/payment/</code></td><td>Every transition tested; allocation never exceeds cleared funds</td><td>FLOWS §12, §12A; ADR-012</td></tr>
-        <tr><td><strong>P3.3</strong><small>Payment adapter and signed webhook handling</small></td><td>The first adapter behind the boundary: signature verification, deduplication by provider event identity, retries, timeouts, error translation — and the source payload retained as evidence</td><td><code>modules/integration/payment/</code></td><td>A replayed, tampered or out-of-order webhook cannot repeat or invent a mutation</td><td>ADR-009; FLOWS §13; INV-009, INV-010</td></tr>
-        <tr><td><strong>P3.4</strong><small>Refund, reversal and chargeback</small></td><td>Reversal paths that leave the original fact intact and post compensating entries; the compensation policy that decides hold, void or refund when payment succeeds and binding fails</td><td><code>modules/payment/</code>, <code>modules/ledger/</code></td><td>No refund precedes its authorization under the accepted regime; no original record is edited</td><td>ADR-014, ADR-018; INV-008</td></tr>
-        <tr><td><strong>P3.5</strong><small>Immutable double-entry insurance subledger</small></td><td>Posting-rule versions, balanced journal drafts, atomic rejection on imbalance, append-only posting, client-money and office-money as distinct custody classes</td><td><code>modules/ledger/</code></td><td>Balanced journals; an unbalanced draft is rejected whole; a posted record cannot be updated or deleted at the database level</td><td>ADR-008; FLOWS §14; INV-008, INV-021</td></tr>
-        <tr><td><strong>P3.6</strong><small>Versioned broker and agent commission</small></td><td>Commission calculation retaining agreement and rule version, basis, rate, gross and net, tax and fee components, amount and beneficiary, effective date and calculation time, source references</td><td><code>modules/commission/</code></td><td>A historical commission recomputes to the same figure from its retained inputs</td><td>ARCH-001 §13; ADR-020 for clawback</td></tr>
-        <tr><td><strong>P3.7</strong><small>Insurer settlement and remittance</small></td><td>Settlement items from posted journals; remittance states from not-due through confirmed and disputed, with insurer evidence</td><td><code>modules/settlement/</code></td><td>A settlement cannot complete while a required difference remains unowned</td><td>FLOWS §12A, §14</td></tr>
-        <tr><td><strong>P3.8</strong><small>Bank/provider/ledger reconciliation</small></td><td>Three reconciliation controls, separately: bank versus client-money ledger; client-money ledger versus insurer statement or account-current; commission earned versus received — each with matched, timing-difference, unexplained and resolved states</td><td><code>modules/reconciliation/</code></td><td>Each control detects a planted difference and reports it; drift is a telemetry signal, a breach is a blocked transition</td><td>FLOWS §12A; ADR-014; INV-021</td></tr>
-        <tr><td><strong>P3.9</strong><small>Insurer and payment Adapter SDKs</small></td><td>The adapter contract as a package: mapping to the canonical model, retry and signature policy, contract tests a provider adapter must pass</td><td><code>packages/adapter-sdk/</code></td><td>A second adapter passes the same contract tests without touching the domain core</td><td>ADR-009; INV-010</td></tr>
-        <tr><td><strong>P3.10</strong><small>Partner API and versioned webhooks</small></td><td>The partner contract family under <code>openapi/biztrust-partner-api.yaml</code>; outbound webhooks versioned and signed; a breaking-change policy in CI</td><td><code>openapi/</code>, <code>modules/partner/</code></td><td>Contract lint and compatibility tests; a breaking change fails CI</td><td>ADR-005; INV-012</td></tr>
-        <tr><td><strong>P3.11</strong><small>Tenant Pack validation foundation</small></td><td>Schema, signing and compatibility validation for tenant-specific configuration — extension without forks or unrestricted code</td><td><code>modules/tenancy/packs/</code></td><td>Tenant #2 provisions and isolates through a pack; no core-code branch exists for either tenant</td><td>ADR-011; INV-011</td></tr>
+        <tr><td><strong>P3A.1</strong><small>Environment architecture and controlled promotion: local, development, test, staging, pre-production, production</small></td><td>Six environments as configuration of one artifact, promotion between them recorded and reproducible, no direct developer access to production for deployment</td><td><code>infra/environments/</code></td><td>The same artifact promotes through every environment unchanged; a promotion has a record with who, what and when</td><td>Roadmap section 7, P3A; SAMM Secure Deployment A-1 (release research)</td></tr>
+        <tr><td><strong>P3B.1</strong><small>The canonical pipeline: lint, unit, build, dependency and secret scanning, SAST, contract and integration tests, tenant security tests, artifact, staging, end-to-end, DAST, performance and resilience, release evidence, authorisation, production</small></td><td>The pipeline as the roadmap's sequence, hermetic builds, the build failing on a predefined security baseline and on vulnerable dependencies, DAST at deploy with stop-or-reverse, signature verification before deploy, a release-evidence step that binds every result to the revision</td><td><code>.github/workflows/</code>, <code>infra/pipeline/</code></td><td>A change that fails any step cannot reach production by any path; the evidence set for a revision is complete and retrievable</td><td>Roadmap section 7, P3B; SAMM Secure Build A-2, A-3, B-1 to B-3 and Secure Deployment A-2, A-3; ASVS V15 for the product's own dependency requirements (release research)</td></tr>
+        <tr><td><strong>P3C.1</strong><small>Release engineering: feature flags, canary, rolling and blue-green deployment, rollback, database and API compatibility, mobile compatibility matrix</small></td><td>Canary with a control and an evaluation; blue-green with rollback as the router reversal; feature flags that roll out from zero and revert independently; rolling deployment and rollback under the local definitions below; expand-and-contract migrations; the mobile compatibility matrix</td><td><code>infra/release/</code>, <code>packages/flags/</code></td><td>A canary that fails its evaluation never expands; a blue-green rollback restores the previous instance within its objective; every flag reverts alone</td><td>Roadmap section 7, P3C; SRE Workbook ch. 16 and SRE Book ch. 8 and 27 (release research); the <a href="../stages/release.html#rollback">Release stage</a></td></tr>
+        <tr><td><strong>P3D.1</strong><small>Observability at production scale: every meaningful transaction reconstructable through log, metric, trace and audit event</small></td><td>The P0 telemetry baseline scaled: one correlation identity from the mobile client through the gateway, insurance, payment, provider, ledger and policy workflow, with a dashboard signal and an alert where the roadmap asks for one</td><td><code>services/observability/</code></td><td>A named transaction is reconstructed end to end from telemetry alone, without the database</td><td>Roadmap section 7, P3D; ARCH-001 §15; the <a href="../stages/operate.html#telemetry">Operate stage's telemetry floor</a></td></tr>
+        <tr><td><strong>P3E.1</strong><small>Reliability controls: scaling, queueing, retries, circuit breakers, dead-letter handling, replication, backup, tested restore, failover, graceful degradation</small></td><td>The roadmap's control list, each as a tested behaviour; backups whose restore is exercised automatically and continuously; provider degradation handled as a graceful mode, not an outage</td><td><code>infra/reliability/</code>, <code>services/worker/</code></td><td>Each control has a fault-injection test; a restore from backup media on an alternate platform succeeds and is recorded</td><td>Roadmap section 7, P3E; SRE Book ch. 26 and NIST SP 800-34 Rev. 1 §3.5.1 (release research); FLOWS §16</td></tr>
+        <tr><td><strong>P3F.1</strong><small>Service-level indicators and objectives for the initial indicator set</small></td><td>The roadmap's twelve initial indicators measured, an objective on each, and the error budget policy that names what happens and who acts when a budget is spent</td><td><code>services/observability/slo/</code></td><td>Every indicator has a measured value and a target; the budget policy is written and has an owner</td><td>Roadmap section 7, P3F; SRE Book ch. 3 and 4, SRE Workbook ch. 2 (release research); the <a href="../stages/operate.html#objectives">Operate stage's service objectives</a></td></tr>
+        <tr><td><strong>P3G.1</strong><small>Disaster recovery: recovery point and time objectives, tested</small></td><td>Recovery point, recovery time and maximum tolerable downtime per system, a recovery plan, and the exercise that proves it, at least annually and on an alternate platform</td><td><code>docs/runbooks/dr/</code>, <code>infra/dr/</code></td><td>A restore record, not a backup job log; the measured recovery time inside the objective, the objective inside the tolerable downtime</td><td>Roadmap section 7, P3G; NIST SP 800-34 Rev. 1 §3.2.1 and §3.5 (release research); the <a href="../stages/operate.html#recovery">Operate stage's recovery section</a></td></tr>
+        <tr><td><strong>P3H.1</strong><small>Mobile production: build, internal test, beta, store review, production, monitoring; minimum version and forced upgrade</small></td><td>Both store pipelines as documented by their operators, the regulated-financial prerequisites in the evidence list before the first reviewed build, minimum-version enforcement as app logic on both platforms, forced update where the platform offers it, and halt-and-ship-forward as the reversal, since neither store reverts installed devices</td><td><code>apps/mobile-core/release/</code></td><td>A halted rollout and a shipped fix, recorded; a build below the minimum version cannot act; crash-free sessions measured</td><td>Roadmap section 7, P3H; mobile research, pipeline tables and decision-relevant facts</td></tr>
+        <tr><td><strong>P3I.1</strong><small>Security operations: continuous detection across authentication, tenancy, privilege, API, payment, dependencies, secrets, drift</small></td><td>Detections for the roadmap's ten signals, each with a test that plants the condition and an owner who receives the alert; dependency and secret findings on a remediation clock the product's own requirements define</td><td><code>services/security-ops/</code></td><td>Each planted condition is detected and routed; a finding past its remediation time frame blocks release</td><td>Roadmap section 7, P3I; ASVS 15.1.1 and 15.2.1 (release research); the <a href="../stages/operate.html#vuln">Operate stage's vulnerability section</a></td></tr>
+        <tr><td><strong>P3J.1</strong><small>Incident management: detect, triage, contain, restore, investigate, correct, postmortem, prevent; a severity scale</small></td><td>The roadmap's eight-step loop as runbooks, on-call and escalation, a blameless postmortem for every trigger the SRE book names, and the severity scale under the local definition below</td><td><code>docs/runbooks/incidents/</code></td><td>A rehearsed incident runs the loop end to end and produces a postmortem with follow-up actions owned</td><td>Roadmap section 7, P3J; SRE Book ch. 14 and 15, NIST SP 800-61 Rev. 3 (release research); the <a href="../stages/operate.html#incident">Operate stage's incident section</a></td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<section id="order" data-search="execution order P3 ledger first invoice payment adapter refunds commission settlement reconciliation partner API tenant packs">
-  <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>The ledger before anything that posts to it</h2></div></div>
-  <p class="section-intro">The plan lists the eleven epics unordered. This order is the track's proposal: the ledger first, because every later epic posts to it.</p>
+<section id="order" data-search="execution order P3 environments pipeline observability SLO reliability restore release security operations incidents mobile readiness review">
+  <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>Measure before you release, restore before you promise</h2></div></div>
+  <p class="section-intro">PLAN-001 lists the ten epics unordered. This order is the track's proposal, and two of its dependencies are the research's: objectives before a release gate, and a tested restore before any recovery claim.</p>
   <ol class="migration-steps">
-    <li><b>P3.5 — the subledger.</b> Posting rules, balanced drafts, atomic rejection, append-only. Every later epic posts here; a ledger designed after the payment code will be shaped by the payment code.</li>
-    <li><b>P3.1 — invoices</b>, the first source transactions the ledger receives.</li>
-    <li><b>P3.2 — payment state</b>, with the four dimensions separate from the first migration.</li>
-    <li><b>P3.3 with P3.9 — the first adapter and the boundary it lives behind.</b> Build the SDK contract from the first adapter, then prove it with a second. The payment-to-policy safety workflow is exercised here: a callback that arrives before authority evidence waits, retries or escalates, and never activates cover.</li>
-    <li><b>P3.4 — refunds, reversals, chargebacks.</b> Compensating entries against a ledger that already refuses edits.</li>
-    <li><b>P3.6 — commission</b>, with its retained inputs, and clawback under ADR-020.</li>
-    <li><b>P3.7 — settlement and remittance.</b></li>
-    <li><b>P3.8 — the three reconciliations</b>, each proven by a planted difference. Then <code>BT-G4</code>.</li>
-    <li><b>P3.10 — the partner API and webhooks</b>, on adapters and contracts that already pass fault injection. With P3.3 and P3.9, <code>BT-G5</code>.</li>
-    <li><b>P3.11 — tenant packs</b>, and the proof that Tenant #2 provisions without a fork. <code>BT-G6</code>.</li>
+    <li><b>P3A.1 — environments.</b> Six of them, one artifact, promotion recorded. Nothing else in P3 can be proven without a production-like target to prove it on.</li>
+    <li><b>P3B.1 — the pipeline.</b> The roadmap's sequence, with the build failing on the security baseline and on vulnerable dependencies, and the release-evidence step first: every later epic's proof rides in it.</li>
+    <li><b>P3D.1 — observability.</b> The correlation identity through every hop, before the indicators that will read it exist.</li>
+    <li><b>P3F.1 — indicators, objectives, budget policy.</b> Measured, targeted, owned. This is the step the release gate waits for.</li>
+    <li><b>P3E.1 — reliability controls</b>, each fault-injected, and the continuous restore test switched on.</li>
+    <li><b>P3G.1 — disaster recovery.</b> The three numbers per system and the exercise on an alternate platform. The evidence is the restore record.</li>
+    <li><b>P3C.1 — release engineering</b>, now that objectives exist to evaluate a canary against and a budget exists to halt on.</li>
+    <li><b>P3I.1 — security operations</b>, on a pipeline that already fails on findings and telemetry that already carries the signals.</li>
+    <li><b>P3J.1 — incident management</b>, rehearsed against a planted incident, with the severity scale labelled local.</li>
+    <li><b>P3H.1 — mobile production</b>, last among the epics because its store review is the one gate whose duration is not the platform's, and its prerequisites belong in the evidence list weeks before the first reviewed build.</li>
+    <li><b>The tenant proof and the review.</b> Tenant #2 provisions without a fork and the P0 proof passes against both, recorded as <code>BT-G6</code>; then the production-readiness review by someone other than the implementers, and the security risk owner's dated record: <code>BT-G7</code>.</li>
   </ol>
 </section>
 
-<section id="code" data-search="payment to policy safety workflow signature deduplicate authority compensation client money dimensions custody allocation remittance commission reconciliation idempotency">
-  <div class="section-heading"><span>04</span><div><p>What the agent codes</p><h2>Money that cannot invent cover</h2></div></div>
-  <p class="section-intro">The safety workflow is the P3 equivalent of P0's bypass test: the single sequence every reviewer walks. It is rendered here as the steps a callback goes through; the modules it asks may refuse at every step.</p>
-  <ol class="migration-steps">
-    <li><b>Verify the provider signature and deduplicate the event</b> by the provider's own identifier before anything else reads it.</li>
-    <li><b>Emit <code>PaymentConfirmed</code></b> as a fact about the payment. It says nothing about cover.</li>
-    <li><b>Query the binding module</b> for authority and coverage-confirmation state.</li>
-    <li><b>If authoritative confirmation is missing: wait, retry or escalate.</b> No coverage transition. The premium is held under the regime ADR-014 accepted, not applied to a cover that does not exist.</li>
-    <li><b>If authority evidence and the effective period are valid:</b> request policy registration or activation from the policy module; on <code>PolicyCoverageChanged</code>, request an approved journal posting from the ledger.</li>
-    <li><b>If payment succeeded and binding failed:</b> the approved compensation policy decides hold, void or refund. The workflow does not invent a financial outcome.</li>
-  </ol>
+<section id="code" data-search="canonical pipeline SAMM ASVS SAST DAST dependency scan canary blue-green feature flag rolling deployment rollback local definition severity SEV-1 SEV-4 SLI initial indicators RPO RTO MTD mobile store review halt ship forward forced update biometric">
+  <div class="section-heading"><span>04</span><div><p>What the agent codes</p><h2>Definitions with their sources, and three without</h2></div></div>
+  <p class="section-intro">P3's failure signature is a word used without a definition: a "rollback" that turns out to be an edit in production, a "severity" nobody can assign consistently, a "DR test" that was a backup job. The table below gives each term the definition its source gives it, and marks the three the research found no source for.</p>
   <div class="table-wrap">
     <table>
-      <caption>Client-money and reconciliation dimensions — rendered from FLOWS.md §12A; each tracked separately under the accepted regime</caption>
-      <thead><tr><th>Dimension</th><th>Examples</th><th>Authority or source</th></tr></thead>
+      <caption>Definitions P3 builds to — sourced ones in the source's words via the release and mobile research; local ones labelled LOCAL_DECISION, as PLAN-001 section 7 requires</caption>
+      <thead><tr><th>Term</th><th>Definition</th><th>Source</th></tr></thead>
       <tbody>
-        <tr><td>External movement</td><td>initiated, authorized, captured, cleared, reversed</td><td>Bank or payment provider</td></tr>
-        <tr><td>Custody and risk class</td><td>client risk, insurer risk, office money, other approved class</td><td>Governing law and the operative agreement</td></tr>
-        <tr><td>Allocation</td><td>unallocated, partially allocated, fully allocated, reallocated</td><td>Payment and ledger rules</td></tr>
-        <tr><td>Insurer remittance</td><td>not due, due, submitted, confirmed, disputed</td><td>Settlement plus insurer evidence</td></tr>
-        <tr><td>Commission</td><td>unearned, earned, accrued, received, paid, clawed back</td><td>Commission agreement and rule version</td></tr>
-        <tr><td>Reconciliation</td><td>matched, timing difference, unexplained difference, resolved</td><td>Reconciliation owner and evidence</td></tr>
+        <tr><td>Canary</td><td>A partial and time-limited deployment of a change and its evaluation; the part receiving the change is the canary, the remainder the control</td><td>SRE Workbook ch. 16</td></tr>
+        <tr><td>Blue-green</td><td>Two instances, one serving and one ready to serve; rollback is a trivial reversal of the router change; twice the resources</td><td>SRE Workbook ch. 16</td></tr>
+        <tr><td>Feature flag</td><td>A framework that rolls a feature out gradually from zero to all users and reverts each change independently and immediately on serious bugs</td><td>SRE Book ch. 27</td></tr>
+        <tr><td>Rolling deployment</td><td><code>LOCAL_DECISION</code> · Replacing the serving version with the new one in successive subsets of instances, the indicators checked between subsets, both versions serving together until the last subset. The nearest sourced pattern is the SRE book's rollout to successive clusters; no named source defines the term</td><td>This page; release research, unverified items</td></tr>
+        <tr><td>Rollback</td><td><code>LOCAL_DECISION</code> outside blue-green · Returning production to the previously known-good release artifact and its compatible configuration by redeploying that artifact, never by editing the running one; data changes are rolled forward by a compensating migration. The sources use the word without defining it</td><td>This page; SRE Book ch. 8 and Workbook ch. 16 for the usage</td></tr>
+        <tr><td>SLI, SLO, error budget</td><td>A carefully defined quantitative measure of some aspect of the level of service; a target value or range for that measure; a rate at which the objectives can be missed, with a written policy naming actions and owners</td><td>SRE Book ch. 3 and 4; SRE Workbook ch. 2</td></tr>
+        <tr><td>RPO, RTO, MTD</td><td>The point in time to which data can be recovered given the most recent backup; the maximum time a resource can be unavailable before unacceptable impact, normally shorter than the maximum tolerable downtime; the RPO is not part of the MTD</td><td>NIST SP 800-34 Rev. 1 §3.2.1</td></tr>
+        <tr><td>Tested restore</td><td>Recovery of recent state actually performed, automated and run continuously; the plan test includes recovery on an alternate platform from backup media, at least annually</td><td>SRE Book ch. 26; NIST SP 800-34 Rev. 1 §3.5.1</td></tr>
+        <tr><td>Postmortem</td><td>A written record of an incident, its impact, the actions taken, the root causes and the follow-up actions to prevent recurrence; blameless; triggered by user-visible downtime beyond a threshold, any data loss, on-call intervention such as a rollback, resolution time above a threshold, or a monitoring failure</td><td>SRE Book ch. 15; SRE Workbook ch. 10</td></tr>
+        <tr><td>Severity scale</td><td><code>LOCAL_DECISION</code> · The roadmap's four names with local criteria: SEV-1, customer-visible outage, any data loss, or cover or money integrity at risk; SEV-2, customer-visible degradation, or a second team needed; SEV-3, internal impact, or unsolved after an hour of concentrated analysis; SEV-4, minor, no user impact. The criteria borrow the SRE book's declaration questions and NIST's categorisation factors; no named source defines a scale</td><td>This page; roadmap section 7, P3J for the names; SRE Book ch. 14 and NIST SP 800-61 Rev. 3 for the factors</td></tr>
       </tbody>
     </table>
   </div>
+  <div class="definition-list">
+    <div><span>The pipeline cites two authorities for two things</span><p>SAMM describes the pipeline: SAST in the build, the build failing on a predefined security baseline, a dependency bill of materials through build failure on vulnerable dependencies, DAST at deploy with stop-or-reverse on criticality, signature verification before deploy. ASVS describes the product and says it does not dictate how the application is built; its dependency requirements 15.1.1, 15.1.2, 15.2.1 and 15.2.4 are what the product must satisfy. Cite SAMM for a pipeline step and ASVS for a product requirement, never the reverse (release research, decision-relevant facts, fifth).</p></div>
+    <div><span>Running a tool is not a gate</span><p>ASVS warns that automated SAST and DAST cover only the simpler requirements and that "testable using automation" is not the same as running an off-the-shelf tool. The pipeline's security steps are evidence for the security risk owner; they do not record a gate (release research, ASVS section).</p></div>
+    <div><span>The twelve initial indicators</span><p>API availability, authentication success and failure, tenant authorization denial rate, quote latency, insurer integration success, payment success rate, policy binding latency, webhook backlog, reconciliation exceptions, claim workflow latency, error rate, mobile crash-free sessions (roadmap section 7, P3F). Each gets a measured value and an objective before any release gate is defined.</p></div>
+    <div><span>Mobile: the store is the last gate and it is not ours</span><p>Apple's review is mostly under a day and Google's runs hours to a week or more; Apple allows one version per platform under review at a time, so a hotfix replaces a pending release. Gradual rollout exists on both stores and rollback on neither: the reversal is halting the rollout and shipping forward, with server-side flags as the real revert. Forced update is Android-only and consent-based; minimum-version enforcement is app logic on both. The regulated-financial prerequisites, a legal-entity submitter, a working demo account, licence documents, the Data safety declaration and the closed-test requirement, belong in P3H.1's evidence list, not in launch week (mobile research, decision-relevant facts).</p></div>
+    <div><span>Biometric unlock is a data-binding decision</span><p>Both platforms return only success or failure and never biometric data; the documented pattern binds keychain or keystore material to the current biometric set so that an enrolment change invalidates it. That is the mobile identity foundation's design, the fourteenth epic of P1A; P3H.1 proves it survives the store pipeline (mobile research, biometric section).</p></div>
+  </div>
   <ul class="check-list">
-    <li><strong>Provider payloads never become domain schemas.</strong> The adapter maps them to the canonical model and retains the source as immutable evidence under retention policy</li>
-    <li><strong>No hidden offset between client and office money</strong>, no allocation beyond cleared funds, no settlement completion with an unowned difference — each is a database-level constraint or an atomic rejection, not a report</li>
-    <li><strong>Every financial mutation is idempotent under retry and concurrency</strong> — key scope, retention, replay response and race behaviour are ADR-012's evidence, and P3's tests</li>
-    <li><strong>Historical figures recompute from retained inputs.</strong> A commission or a journal that cannot be reproduced from what was stored is a number, not a record</li>
-    <li><strong>A tenant pack is configuration under a schema, signed and version-checked.</strong> It is not a plugin, not a script, and not a branch</li>
+    <li><strong>Every gate item is bound to a revision.</strong> The release-evidence step of P3B.1 is where AGENTS.md section 9's binding happens; an item with evidence and no revision is not on the list</li>
+    <li><strong>Deployments are performed by computers, not humans</strong>, from reproducible, hermetic, automated builds of small self-contained artifacts (SRE Workbook ch. 16 and SRE Book ch. 8, via the release research)</li>
+    <li><strong>A local definition is labelled wherever it is used</strong> — in a runbook, a test name, an alert, a postmortem field — never only on this page</li>
+    <li><strong>A restore that was not performed is not evidence</strong>, and a recovery time that was not measured is not an objective met</li>
+    <li><strong>No tenant-specific branch, directory or flag appears</strong> in anything P3 ships; tenant differences are configuration, and the tenant pack that validates them is the first item of expansion stream E1, not a P3 epic</li>
   </ul>
 </section>
 
-<section id="monitor" data-search="human monitors P3 finance accounting reviewer legal ADR-014 provider selection reconciliation drift BT-G4 BT-G5 BT-G6 stop signals">
-  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Between BT-G3 and tenant ready</h2></div></div>
-  <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P3 adds these — and more of them are reserved to qualified reviewers than in any other phase.</p>
+<section id="monitor" data-search="human monitors P3 SLO acceptance error budget owner DR exercise sign-off production readiness review security risk owner BT-G6 BT-G7 stop signals">
+  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Between label D and label E</h2></div></div>
+  <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P3 adds these, and the last two are the only ones that end the phase.</p>
   <div class="table-wrap">
     <table>
       <caption>Authorizations reserved to a human in P3 — the plan names none of these roles; the Who column is proposed</caption>
       <thead><tr><th>Authorization</th><th>Who (proposed)</th><th>Must have seen first</th></tr></thead>
       <tbody>
-        <tr><td>Acceptance of ADR-014 and the chart of accounts</td><td>Qualified legal and finance reviewers for the operating jurisdiction, then the architecture authority</td><td>The tenant's money-regime profile from slice S01; the funds-flow scenarios; the three reconciliation obligations</td></tr>
-        <tr><td>Each provider selection</td><td>Architecture authority, with security and the business sponsor</td><td>Its own ADR: capability, licence, sandbox evidence, exit strategy</td></tr>
-        <tr><td><code>BT-G4</code> Financial Ready</td><td>Finance and accounting reviewer, with release authority</td><td>Balanced journals; each reconciliation detecting a planted difference; a historical commission recomputed</td></tr>
-        <tr><td><code>BT-G5</code> Integration Ready</td><td>Security risk owner, with the integration owner</td><td>Provider sandbox and fault-injection evidence: replayed, tampered and out-of-order webhooks; adapter contract tests passed by two adapters</td></tr>
-        <tr><td><code>BT-G6</code> Tenant Ready</td><td>Architecture authority</td><td>Tenant #2 provisioned through a pack, isolated by the P0 proof re-run against both tenants, with no tenant-specific branch in the repository</td></tr>
+        <tr><td>Acceptance of the objectives and the error budget policy</td><td>Business sponsor, with SRE</td><td>Every indicator measured for long enough to set a target on; the policy's actions and owners named</td></tr>
+        <tr><td>Acceptance of the recovery objectives per system</td><td>Business sponsor, with the security risk owner</td><td>The maximum tolerable downtime each recovery time derives from, and its business source</td></tr>
+        <tr><td>The disaster-recovery exercise's sign-off</td><td>SRE, with the security risk owner</td><td>The restore record on an alternate platform, with the measured time against the objective</td></tr>
+        <tr><td>The three local definitions</td><td>Architecture authority, with SRE</td><td>The definitions on this page, and that each is labelled local wherever it is used</td></tr>
+        <tr><td><code>BT-G6</code> Tenant Ready, judged inside label E</td><td>Architecture authority</td><td>Tenant #2 provisioned without a core-code fork, isolated by the P0 proof re-run against both tenants</td></tr>
+        <tr><td><code>BT-G7</code> Production Ready (label E)</td><td>Security risk owner, with the production-readiness reviewer</td><td>The Gate E evidence set, every item revision-bound; the review executed by someone other than the implementers; <code>BT-G6</code> recorded</td></tr>
       </tbody>
     </table>
   </div>
   <div class="definition-list">
-    <div><span>Stop signal: a payment callback activated cover</span><p>The exact failure INV-020 names. The fix is not a check in the callback; it is the workflow that should have been between them.</p></div>
-    <div><span>Stop signal: a posted journal was edited</span><p>An <code>UPDATE</code> or <code>DELETE</code> that succeeds against a posted record means the ledger is a table, not a ledger.</p></div>
-    <div><span>Stop signal: client and office money offset each other</span><p>A convenient net figure that hides which money paid for what. Under most regimes it is also the finding an auditor is looking for.</p></div>
-    <div><span>Stop signal: a provider's status value appears in the domain model</span><p>The adapter boundary has been crossed; replacing that provider now means a schema migration.</p></div>
-    <div><span>Stop signal: a branch, directory or flag named after a tenant</span><p>That is the fork <code>BT-G6</code> exists to rule out. Tenant differences live in packs.</p></div>
-    <div><span>Daily, then weekly</span><p>Reconciliation drift as telemetry, read by the reconciliation owner; the state of each of the three controls; provider sandbox test results after any adapter change.</p></div>
+    <div><span>Stop signal: a release went out with no objective to judge it by</span><p>A canary with nothing to evaluate against is a deployment with a delay. The fix is P3F.1, not a longer delay.</p></div>
+    <div><span>Stop signal: a "DR test" that was a backup</span><p>A job that wrote a backup proved that a backup was written. The evidence P3G.1 asks for is a restore record with a measured time.</p></div>
+    <div><span>Stop signal: a rollback that edited production</span><p>A configuration change made in place to "get back" to the last good state is not a rollback under the local definition; it is a new, unrecorded release.</p></div>
+    <div><span>Stop signal: a severity assigned from the roadmap's names alone</span><p>SEV-1 to SEV-4 are names; without the local criteria on this page they mean whatever the assigner meant, and the postmortem cannot be compared with the last one.</p></div>
+    <div><span>Stop signal: a store submission surprised by its prerequisites</span><p>A rejection for a missing demo account, licence document or declaration is a planning failure P3H.1's evidence list exists to prevent.</p></div>
+    <div><span>Weekly</span><p>Error budget consumed per objective; the restore test's last successful run; the pipeline's security findings past their remediation time frame; whether any expansion-stream item, a partner API, a tenant pack, a new adapter, has appeared in a P3 branch.</p></div>
   </div>
 </section>
 
-<section id="gate" data-search="exit gates BT-G4 financial ready BT-G5 integration ready BT-G6 tenant ready checklist">
-  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gates · BT-G4, BT-G5, BT-G6</h2></div></div>
-  <p class="section-intro">Three gates, three record-keepers. Each is recorded separately, and the phase is not complete until all three are.</p>
+<section id="gate" data-search="exit gate BT-G7 production ready BT-G6 tenant ready label E evidence list checklist readiness review risk owner">
+  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gate · BT-G7 Production Ready, with BT-G6 judged inside it (label E)</h2></div></div>
+  <p class="section-intro">Label E is one gate with another judged inside it. <code>BT-G6</code> keeps its identifier and meaning because the invariant that a second tenant onboards without a fork depends on it, and it is recorded before or together with <code>BT-G7</code>, never skipped because the label does not name it. The eighteen evidence items are the roadmap's Gate E, restated in PLAN-001 section 10.3 as a proposal until the gate's owner accepts it; the four items after them are PLAN-001 section 10.2's own additions to the roadmap, and are labelled the plan's proposals there.</p>
   <div class="dod-grid">
-    <h3>BT-G4 · Financial Ready</h3>
-    <label><input type="checkbox" disabled> Every journal balances; an unbalanced draft is rejected whole, and the rejection is recorded</label>
-    <label><input type="checkbox" disabled> A posted record cannot be updated or deleted at the database level</label>
-    <label><input type="checkbox" disabled> All three reconciliations detect a planted difference and report matched, timing, unexplained and resolved states</label>
-    <label><input type="checkbox" disabled> A historical commission recomputes to the same figure from retained inputs</label>
-    <label><input type="checkbox" disabled> Client-money and office-money custody classes are distinct in every balance and movement</label>
-    <h3>BT-G5 · Integration Ready</h3>
-    <label><input type="checkbox" disabled> Replayed, tampered and out-of-order provider events cannot repeat or invent a mutation</label>
-    <label><input type="checkbox" disabled> Two adapters pass the same SDK contract tests without touching the domain core</label>
-    <label><input type="checkbox" disabled> A breaking change to the partner API fails CI</label>
     <h3>BT-G6 · Tenant Ready</h3>
-    <label><input type="checkbox" disabled> Tenant #2 provisions through a pack, and the P0 proof passes against both tenants</label>
+    <label><input type="checkbox" disabled> Tenant #2 provisions without a core-code fork, and the P0 proof passes against both tenants</label>
     <label><input type="checkbox" disabled> No tenant-specific branch, directory or code path exists</label>
-    <label><input type="checkbox" disabled> The end-to-end evidence traces one activity through indication or offer, payment, authority-supported confirmation, policy representation, ledger, commission, settlement and reconciliation</label>
+    <h3>BT-G7 · Production Ready — Gate E's eighteen items, each with revision-bound evidence</h3>
+    <label><input type="checkbox" disabled> Security</label>
+    <label><input type="checkbox" disabled> Tenant isolation</label>
+    <label><input type="checkbox" disabled> Insurance end-to-end</label>
+    <label><input type="checkbox" disabled> Financial reconciliation</label>
+    <label><input type="checkbox" disabled> Data migration</label>
+    <label><input type="checkbox" disabled> Performance</label>
+    <label><input type="checkbox" disabled> Observability</label>
+    <label><input type="checkbox" disabled> Backup restore — a restore record, not a backup log</label>
+    <label><input type="checkbox" disabled> Disaster recovery — the measured recovery time inside its objective</label>
+    <label><input type="checkbox" disabled> Rollback — under the local definition, or the blue-green reversal</label>
+    <label><input type="checkbox" disabled> Incident response — a rehearsed loop and its postmortem</label>
+    <label><input type="checkbox" disabled> Release controls</label>
+    <label><input type="checkbox" disabled> Secrets</label>
+    <label><input type="checkbox" disabled> Mobile release — a halted rollout and a shipped fix</label>
+    <label><input type="checkbox" disabled> Operational documentation</label>
+    <label><input type="checkbox" disabled> Runbooks</label>
+    <label><input type="checkbox" disabled> On-call and escalation</label>
+    <label><input type="checkbox" disabled> Compliance evidence</label>
+    <h3>PLAN-001's four additions</h3>
+    <label><input type="checkbox" disabled> Every item above is bound to a source revision, as AGENTS.md section 9 requires</label>
+    <label><input type="checkbox" disabled> <code>BT-G6</code> is recorded</label>
+    <label><input type="checkbox" disabled> The production-readiness review was executed by someone other than the implementers, covering architecture and dependencies, instrumentation and monitoring, emergency response, capacity, change management and performance</label>
+    <label><input type="checkbox" disabled> The security risk owner has recorded <code>BT-G7</code> with a date</label>
   </div>
 </section>
 
-<section id="horizon" data-search="after P3 horizon uncommitted P4 claims depth partner scale isolation tiers analytics AI operate learn">
-  <div class="section-heading"><span>07</span><div><p>After P3</p><h2>The horizon is uncommitted, on purpose</h2></div></div>
-  <p class="section-intro">The plan names what may expand after P3 — claims and renewal depth, partner scale, additional isolation tiers, analytics, AI assistance — and says in the same sentence that they are roadmap candidates until business value, risk, dependencies and authority are defined. They must not be labelled P4 through P9, because a number implies a sequencing commitment that has not been reviewed.</p>
+<section id="after" data-search="after P3 continuous operations measure learn improve expand expansion streams E1 E8 operate learn production v1.0">
+  <div class="section-heading"><span>07</span><div><p>After P3</p><h2>Continuous Operations, and eight streams with no phase number</h2></div></div>
+  <p class="section-intro">After <code>BT-G7</code> is recorded and Production v1.0 is released, Continuous Operations runs: measure, learn, improve, expand. PLAN-001 section 8 converts the roadmap's later proposals into eight expansion streams, E1 Tenant Scale to E8 Ecosystem, with entry conditions in section 11 and no phase number, which is what the previous plan's horizon required. The two epics the previous plan placed after finance, the partner API and the tenant pack, are the first items of E2 and E1. Where Continuous Operations and the streams are rendered in this guide is the operations ticket's decision on the Guide v2 map.</p>
   <div class="callout">
     <strong>Production is not a phase</strong>
-    <p>After <code>BT-G6</code> the platform is not finished; it is operated. Every package that ships from then on still runs the full lifecycle, and the <a href="../stages/operate.html">Operate</a> and <a href="../stages/learn.html">Learn</a> stages run continuously against the service objectives, the telemetry floor and the promotion bar those pages define. The phase track ends here; the stage track does not end.</p>
+    <p>After <code>BT-G7</code> the platform is not finished; it is operated. Every package that ships from then on still runs the full lifecycle, and the <a href="../stages/operate.html">Operate</a> and <a href="../stages/learn.html">Learn</a> stages run continuously against the service objectives, the telemetry floor and the promotion bar those pages define. The phase track ends here; the stage track does not end.</p>
   </div>
 </section>
 
-<section id="stop" data-search="stop conditions halt P3 callback cover journal edited offset provider schema tenant fork accounting advice">
+<section id="stop" data-search="stop conditions halt P3 release without objectives backup as DR unlabelled local definition tenant fork stream scope feature work">
   <div class="section-heading"><span>08</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
   <ul class="cross-list">
-    <li>ADR-014 is not accepted by qualified legal and finance review for the operating jurisdiction — there is no regime to post under</li>
-    <li>A payment callback, or any payment state, changes coverage state</li>
-    <li>A posted ledger record is edited or deleted, by any path</li>
-    <li>Client money and office money are offset, netted or held in one class</li>
-    <li>A provider's payload or status vocabulary reaches a domain schema</li>
-    <li>Anything tenant-specific appears as code rather than as a validated pack</li>
+    <li>A release gate is defined before the indicators and objectives it judges by exist</li>
+    <li>A backup job is presented as disaster-recovery evidence, or a recovery objective is stated without the tolerable downtime it derives from</li>
+    <li>Rolling deployment, rollback or a severity level is used without the local definition and its label</li>
+    <li>A pipeline step records a gate, or a gate is recorded on a green pipeline without a human</li>
+    <li>Anything tenant-specific appears as code; a partner API, a tenant pack or a new adapter appears inside a P3 package</li>
+    <li>Feature work is scheduled into P3 to fill a gap an earlier gate should have found</li>
+    <li>The production-readiness review is executed by the people who built what it reviews</li>
     <li>Work after P3 is numbered as a phase</li>
   </ul>
   <div class="next-action">
@@ -232,7 +250,7 @@
 
 <footer>
   <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
-  <p>BizTrust Agentic Engineer Team · Delivery phases · P3 of P0–P3 · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
+  <p>BizTrust Agentic Engineer Team · Delivery phases · P3 of five phases · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
   <a href="#main">Back to top ↑</a>
 </footer>
 

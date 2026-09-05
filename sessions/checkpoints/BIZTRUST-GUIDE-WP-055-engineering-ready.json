@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-055-001",
+  "created_at": "2026-09-05T20:56:05Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-055",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #169 on the Guide v2 map: rewrite phases/p3.html as Production, rendered from PLAN-001 section 7, with the ten epics, the definitions each rests on cited to the release and mobile research, the three definitions with no primary source labelled local decisions, the canonical pipeline with SAMM cited for its steps and ASVS for the product, the twelve initial indicators, an execution order that puts objectives before the release gate and a tested restore before any recovery claim, and an exit-gate section naming BT-G7 with BT-G6 judged inside it as label E; point the phase-page test's P3 row at PLAN-001 section 7 and remove its reading of the previous plan; retire DELIVERY_PLAN.md v0.1's sections 3 to 6 to a pointer; update every sentence that said a page still renders the previous plan.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-055-p3-manual-v2",
+    "baseline_commit": "cf4eac1027445591b728df13145dfb090ae7f576"
+  },
+  "completed": [
+    "Ticket #169 resolved by this branch: phases/p3.html rewritten as Production from PLAN-001 section 7 with ten rows, a ten-row definitions table with three LOCAL_DECISION entries, the pipeline's two authorities, the twelve indicators, the mobile facts, an eleven-step order, the two-gate exit section with Gate E's eighteen items and PLAN-001's four additions, an After P3 section pointing at PLAN-001 section 8, and stop conditions.",
+    "tests/test_phase_pages.py: P3 reads PLAN-001 section 7; the previous plan's path is gone from the test; the exit-gate expectation for p3.html is BT-G6 and BT-G7; two negative controls recorded.",
+    "docs/architecture/DELIVERY_PLAN.md: sections 3 to 6 retired to one pointer naming where each part lives and the commit holding the text; the header row says which sections stand.",
+    "Transition sentences on the hub, README, overview, PLAN-001 and the P2 page updated; the overview's BT-G6 and BT-G7 rows reach the P3 page; the hub's P3 link text.",
+    "badf/ re-anchored: NS-044 repointed at #170 with its stop conditions reworded for a retired plan, DEC-057 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-054.",
+    "After merge: #169 closed with a resolution comment; the map's decision line appended with its title link.",
+    "Map #153: #170 Continuous Operations next; #190 after it."
+  ],
+  "files_changed": [
+    "phases/p3.html",
+    "phases/p2.html",
+    "phases/overview.html",
+    "index.html",
+    "README.md",
+    "tests/test_phase_pages.py",
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-055-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The exit-gate section must name only BT-G6 and BT-G7, so BT-G4 and BT-G5 appear in the entry criteria and the sidebar only.",
+    "Every phase page now carries letter-bearing identifiers except P0, whose thirteen rows keep P0.n by PLAN-001's epic id rule; the previous plan's P1.n to P3.n identifiers live only in PLAN-001 section 9's mapping table, which the test never reads.",
+    "The retired sections' text is recoverable at cf4eac1; the pointer names that commit so a reader of the v0.1 file can find it.",
+    "The research files the page cites are on research/release-and-reliability at b174a9a and research/mobile-release at f82ea89; the mobile research's resolution said the file lands with this package or its own, and this package links it at SHA instead, leaving the import to a ticket of its own."
+  ],
+  "decisions": [
+    "DEC-057: the P3 manual renders PLAN-001 section 7 with three labelled local definitions; the test drops the previous plan; DELIVERY_PLAN.md v0.1's phase sections retire to a pointer."
+  ],
+  "assumptions": [
+    "The wayfinder invocation and 'proceed next steps on information and evidence' are chat instructions to work the next frontier ticket; they adopt nothing and authorise nothing.",
+    "The three local definitions, the failure signatures, the execution order and the rows' four unsourced columns are the track's proposals; the local definitions are reserved to the architecture authority with SRE on the page."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_054",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A phase page's epics table differs from the plan section EPIC_SOURCES names for it.",
+      "The P3 page or any record says a gate has passed, a capability exists, or a local definition is a standard's.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered P3 page was not viewed in a browser; its rows, sections, gates and links were checked by the tests and the validator.",
+    "The rows' build, landing, proof and source cells, the three local definitions and the execution order are the track's reading; no engineering design exists for them.",
+    "The research files remain on their branches; a reader following the page's links reads them at a fixed SHA, and the research's own unverified items (four in the release file, a list in the mobile file) are not resolved here.",
+    "DELIVERY_PLAN.md v0.1's sections 1, 2, 8, 9, 10 and 11 stand unchanged, including section 2's execution chain, which still draws the previous four-phase names; carrying them is not this ticket's question."
+  ]
+}

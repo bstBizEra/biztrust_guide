@@ -14,7 +14,7 @@ Nothing in this document is accepted, and nothing it names is implemented. It is
 
 ## 0. Relation to the previous plan
 
-`DELIVERY_PLAN.md` v0.1 defined four phases, P0 to P3, and 46 epics. The P3 manual under `phases/` still renders that file, and `tests/test_phase_pages.py` fails if it disagrees with it; the overview and the P0, P1 and P2 manuals render this document. So this document does not overwrite it. Until the manuals are rewritten under tickets [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#170](https://github.com/bstBizEra/biztrust_guide/issues/170), the previous plan remains the record the manuals render, and this document is the record of where the partition is going. Section 9 maps every epic from the one to the other. When the last manual moves, the previous plan's sections 3 to 6 are retired and this document takes the file's place.
+`DELIVERY_PLAN.md` v0.1 defined four phases, P0 to P3, and 46 epics. The overview and the four phase manuals under `phases/` render this document since the manuals moved under tickets [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#169](https://github.com/bstBizEra/biztrust_guide/issues/169), and `tests/test_phase_pages.py` fails if a page disagrees with the section named for it. The previous plan's sections 3 to 6 are retired to a pointer since the last manual moved (WP-055); its sections 1, 2 and 8 to 11 stand, and section 9 here maps every epic from the one to the other.
 
 ## 1. Naming rule
 
@@ -190,7 +190,7 @@ The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant
 | P3I.1 | Security operations: continuous detection across authentication, tenancy, privilege, API, payment, dependencies, secrets, drift | Roadmap section 7, P3I |
 | P3J.1 | Incident management: detect, triage, contain, restore, investigate, correct, postmortem, prevent; a severity scale | Roadmap section 7, P3J |
 
-The definitions these epics rest on are sourced in the map's research: release engineering, reliability and disaster recovery ([#161](https://github.com/bstBizEra/biztrust_guide/issues/161)) and mobile release pipelines ([#162](https://github.com/bstBizEra/biztrust_guide/issues/162)). Three findings bind this table: neither store offers a rollback for a released build, so P3H.1 plans on halting a rollout and shipping forward; the SRE sources define rollback for blue-green as a reversal of the routing change but give no standalone definition of rollback or of rolling deployment, so P3C.1 defines both locally and cites the workbook for blue-green; and no current standard defines an incident severity scale, so P3J.1's scale is a local decision and must be labelled one. Gate E's evidence list is part two's.
+The definitions these epics rest on are sourced in the map's research: release engineering, reliability and disaster recovery ([#161](https://github.com/bstBizEra/biztrust_guide/issues/161)) and mobile release pipelines ([#162](https://github.com/bstBizEra/biztrust_guide/issues/162)). Three findings bind this table: neither store offers a rollback for a released build, so P3H.1 plans on halting a rollout and shipping forward; the SRE sources define rollback for blue-green as a reversal of the routing change but give no standalone definition of rollback or of rolling deployment, so P3C.1 defines both locally and cites the workbook for blue-green; and no current standard defines an incident severity scale, so P3J.1's scale is a local decision and must be labelled one. Gate E's evidence list is section 10.3's; the P3 manual renders it with the three local definitions labelled (WP-055, [#169](https://github.com/bstBizEra/biztrust_guide/issues/169)).
 
 ## 8. Continuous Operations and the expansion streams
 
@@ -367,7 +367,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ## 14. What this document does not yet carry
 
-- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)); the overview renders section 10 and `tests/test_phase_pages.py` reads it. The P0, P1 and P2 pages render sections 4 to 6 here; the P3 page still renders the previous plan's epics and exit gates until its ticket moves it.
+- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)), and its sections 3 to 6 are a pointer to sections 3 to 7 and 9 here since WP-055 ([#169](https://github.com/bstBizEra/biztrust_guide/issues/169)); the overview renders section 10, the four phase pages render sections 4 to 7, and `tests/test_phase_pages.py` reads them.
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
 - **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.
