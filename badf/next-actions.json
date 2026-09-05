@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-052",
-  "updated_at": "2026-09-05T19:41:38Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-053",
+  "updated_at": "2026-09-05T20:02:48Z",
   "actions": [
     {
       "id": "NS-040",
@@ -108,9 +108,9 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165 and #166 are resolved; the overview and the P0 manual render PLAN-001. Next are #167 P1, #168 P2, #169 P3 and #170 operations, one page per ticket. A P1 to P3 manual ticket must move the page, its EPIC_SOURCES row in tests/test_phase_pages.py (to a PLAN-001 section whose ids carry group letters, so the EPIC regex widens for that phase), and the page's exit-gate expectation together. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver; #190 the hub roadmap section waits on #167 and #170.",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165, #166 and #167 are resolved; the overview, P0 and P1 pages render PLAN-001. Next are #168 P2 (Payment and Finance, from PLAN-001 section 6, ids P2A.n to P2F.n, exit gates BT-G4 and BT-G5), #169 P3 (Production, section 7, ids P3A.n to P3J.n, exit gates BT-G6 and BT-G7) and #170 operations. Each moves its page, its EPIC_SOURCES row and its exit-gate expectation together. #190 the hub roadmap section waits on #170 now that #167 is done. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
       "prerequisites": [
-        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview and gate tests on PLAN-001 (WP-051), the P0 manual on PLAN-001 section 4 (WP-052)",
+        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview and gate tests on PLAN-001 (WP-051), the P0 and P1 manuals on PLAN-001 sections 4 and 5 (WP-052, WP-053)",
         "For a manual: its PLAN-001 section carries the epics the page will render, with labels the page can quote verbatim"
       ],
       "evidence_required": [
