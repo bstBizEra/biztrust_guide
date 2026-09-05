@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P1 · Broker core · BizTrust Agentic Engineer Team Guide</title>
-<meta name="description" content="Phase P1 of the BizTrust delivery plan: thirteen epics delivering a manual-insurer-assisted quote-to-policy lifecycle with correct broker and insurer boundaries — what the agent builds, the vertical slice that orders it, and what a human must see before recording BT-G2.">
+<title>P1 · Insurance · BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="Phase P1 of the BizTrust delivery plan, Insurance: one macro-phase in three sub-phases, P1A broker core, P1B professional brokerage lifecycle, P1C product engine and digital insurance — thirty-two epics, the authority boundaries they must keep, and what a human must see before recording BT-G2 and BT-G3.">
 <link rel="icon" href="../assets/unitrust-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <header class="topbar">
   <a class="brand" href="../index.html">
     <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
-    <span class="brand-copy"><strong>Delivery phases</strong><small>P1 · Broker core MVP</small></span>
+    <span class="brand-copy"><strong>Delivery phases</strong><small>P1 · Insurance</small></span>
   </a>
   <div class="top-actions">
     <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">◐</button>
@@ -29,101 +29,144 @@
 </header>
 
 <aside class="sidebar" id="sidebar">
-  <p class="nav-label">P1 · Broker core</p>
+  <p class="nav-label">P1 · Insurance</p>
   <nav id="sectionNav">
     <a href="#entry"><span>01</span> Entry criteria</a>
     <a href="#epics"><span>02</span> Epics to Work Packages</a>
     <a href="#order"><span>03</span> Execution order</a>
     <a href="#code"><span>04</span> What the agent codes</a>
     <a href="#monitor"><span>05</span> What the human monitors</a>
-    <a href="#gate"><span>06</span> Exit gate · BT-G2</a>
+    <a href="#gate"><span>06</span> Exit gate · BT-G2 and BT-G3 (C)</a>
     <a href="#stop"><span>07</span> Stop conditions</a>
   </nav>
   <div class="sidebar-card">
     <span class="status-dot"></span>
-    <div><strong>P1 of P0–P3</strong><small>Enters at BT-G1 · exits at BT-G2</small></div>
+    <div><strong>P1 of five phases</strong><small>Enters at BT-G1 (label B) · exits at BT-G2 and BT-G3 (label C)</small></div>
   </div>
 </aside>
 
 <main id="main">
 
-<section id="p1-intro" data-search="P1 broker core MVP quote to policy bind authority insurer broker boundary">
-  <div class="section-heading"><span>P1</span><div><p>Delivery phases · P1</p><h2>Broker core MVP</h2></div></div>
-  <p class="lede">P1 delivers a manual-insurer-assisted quote-to-policy lifecycle with correct broker and insurer boundaries. Automation of insurer APIs is not required. Correct state, evidence and ownership are — and they are what the gate measures.</p>
-  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DELIVERY_PLAN.md">DELIVERY_PLAN.md §4</a>, with the lifecycle and state machines from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §1, §6, §8 and §9</a> and the conceptual model from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DOMAIN_MODEL.md">DOMAIN_MODEL.md §2</a>.</p>
+<section id="p1-intro" data-search="P1 insurance broker core lifecycle product engine digital insurance bind authority insurer broker boundary">
+  <div class="section-heading"><span>P1</span><div><p>Delivery phases · P1</p><h2>Insurance</h2></div></div>
+  <p class="lede">P1 builds broker-native insurance operations as one macro-phase in three controlled sub-phases: P1A, a broker core that is usable before any insurer exposes an API; P1B, the professional brokerage lifecycle of placement, servicing, claims advocacy and renewal; P1C, a product engine that makes insurance products versioned configuration, and the straight-through digital model that runs on it. Automation of insurer APIs is not required. Correct state, evidence and ownership are — and they are what the two gates measure.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">BIZTRUST-PLAN-001.md §5</a>, whose P1A and P1B rows are the previous plan's broker core and lifecycle phases renumbered and whose P1C rows come from the roadmap, with the lifecycle and state machines from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">FLOWS.md §1, §2 and §6 to §11</a> and the conceptual model from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/DOMAIN_MODEL.md">DOMAIN_MODEL.md §2</a>. The <a href="p2.html">P2 page</a> still renders the previous plan's lifecycle phase, which is P1B here, until its ticket moves it to Payment and Finance.</p>
   <div class="invariant">
     <span>THE RULE THIS PHASE EXISTS TO ENFORCE</span>
-    <p>A bind request records an instruction to seek or exercise authority for cover. Coverage is represented as confirmed only from retained evidence produced by the authority holder for that tenant and product arrangement — INV-005, INV-016 and INV-018. An application role does not grant authority to conclude an insurance contract.</p>
+    <p>A bind request records an instruction to seek or exercise authority for cover. Coverage is represented as confirmed only from retained evidence produced by the authority holder for that tenant and product arrangement — INV-005, INV-016 and INV-018. A broker bind request is not a carrier bind confirmation; a broker policy record is not the insurer's authoritative policy; a broker claim status is not the insurer's adjudication status. An application role does not grant authority to conclude an insurance contract.</p>
   </div>
 </section>
 
-<section id="entry" data-search="entry criteria BT-G1 security ready ADR-013 ADR-017 S01 tenant authority profile accepted">
+<section id="entry" data-search="entry criteria BT-G1 security ready ADR-013 ADR-017 ADR-006 S01 tenant authority profile accepted">
   <div class="section-heading"><span>01</span><div><p>Preconditions</p><h2>Entry criteria</h2></div></div>
   <div class="three-col">
     <article>
-      <h3>BT-G1 is recorded, independently</h3>
+      <h3>BT-G1 (label B) is recorded, independently</h3>
       <p>The security risk owner has recorded Security Ready on a proof run by someone other than its implementer. P1 puts real business records on the substrate; the substrate must already be proven, not promised.</p>
     </article>
     <article>
-      <h3>The authority ADRs are accepted, not blocked</h3>
-      <p>ADR-013 (who may create authoritative cover), ADR-017 (product, wording, rating and quote authority), ADR-006 (product versions), ADR-007 (broker versus insurer facts) and ADR-015 (effective and record time). Read each one's current row in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a>; a row that reads <code>BLOCKED_BY_S01</code> or <code>DRAFT_REQUIRED</code> is not an accepted one, and the binding code cannot be written to it.</p>
+      <h3>The authority and product ADRs are accepted, not blocked</h3>
+      <p>ADR-013 (who may create authoritative cover), ADR-017 (product, wording, rating and quote authority), ADR-006 (product versions, which P1C's engine implements), ADR-007 (broker versus insurer facts) and ADR-015 (effective and record time). Read each one's current row in the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/ADR_REGISTER.md">register</a>; a row that reads <code>BLOCKED_BY_S01</code> or <code>DRAFT_REQUIRED</code> is not an accepted one, and the binding code cannot be written to it.</p>
     </article>
     <article>
       <h3>The pilot tenant's authority profile is accepted</h3>
-      <p>Slice S01 answered, for this tenant and product, whether every bind is <code>REQUEST_ONLY</code> or whether delegated or master-policy authority exists. The binding state machine cannot be built without that answer, and an agent may not infer it.</p>
+      <p>Slice S01 answered, for this tenant and product, whether every bind is <code>REQUEST_ONLY</code> or whether delegated or master-policy authority exists. The binding state machine cannot be built without that answer, and an agent may not infer it. For the straight-through model of P1C the same answer decides whether a certificate is issued by the platform under a master policy or only requested.</p>
     </article>
   </div>
 </section>
 
-<section id="epics" data-search="epics P1.1 P1.13 party client risk submission product version offer comparison recommendation acceptance bind policy register documents portal">
-  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Thirteen epics, one vertical slice</h2></div></div>
+<section id="epics" data-search="epics P1A P1B P1C party client risk submission product version offer comparison recommendation acceptance bind policy register documents portal mobile identity placement market quote revision binding workflow endorsement claims renewal tasks compliance events product engine eligibility pricing straight-through recommendation engine customer mobile agent mobile channel">
+  <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Thirty-two epics in three sub-phases</h2></div></div>
+  <p class="section-intro">Each row is decomposed into Work Packages by the <a href="../stages/plan.html#anatomy">Plan stage</a>. The sub-phases are controlled: P1B opens when P1A's slice runs end to end, and P1C's engine may be built alongside P1B but its straight-through workflow runs only on an accepted authority profile. Identifiers carry the sub-phase letter so that no P1 epic can be mistaken for the previous plan's.</p>
   <div class="table-wrap">
     <table>
-      <caption>P1 epics — what the agent builds, where it lands, what proves it, what it is built against</caption>
+      <caption>P1A · Broker core — the previous plan's first phase, renumbered, plus the mobile identity foundation</caption>
       <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
       <tbody>
-        <tr><td><strong>P1.1</strong><small>Party and client account</small></td><td>Party, client and the tenant-owned record baseline on every aggregate</td><td><code>modules/party/</code>, <code>modules/client/</code></td><td>Ownership and isolation tests on real business records</td><td>DOMAIN_MODEL §6; INV-001</td></tr>
-        <tr><td><strong>P1.2</strong><small>Client 360 and relationship view</small></td><td>A read model over client, risks, submissions and policies — a query, never a second store of truth</td><td><code>modules/client/</code></td><td>Read model reconciles to its sources</td><td>ARCH-001 §9</td></tr>
-        <tr><td><strong>P1.3</strong><small>Risk profile and submission snapshot</small></td><td>The risk, and the immutable snapshot a submission is made from</td><td><code>modules/risk/</code>, <code>modules/submission/</code></td><td>A later risk edit does not alter a prior submission</td><td>DOMAIN_MODEL §5; INV-006</td></tr>
-        <tr><td><strong>P1.4</strong><small>Insurer-product provenance and immutable distribution product version</small></td><td>Insurer product, wording version and rating version as insurer-owned; the tenant's distribution product version as a sourced, immutable representation</td><td><code>modules/distribution/</code></td><td>Historical reproduction: the version a transaction used is retrievable unchanged</td><td>ADR-006, ADR-017; DOMAIN_MODEL §2.1</td></tr>
-        <tr><td><strong>P1.5</strong><small>Submission lifecycle</small></td><td>The submission state machine with a transition table, preconditions and emitted events</td><td><code>modules/submission/</code></td><td>Every transition in the table, and every prohibited one, tested</td><td>FLOWS §5, §6</td></tr>
-        <tr><td><strong>P1.6</strong><small>Manual insurer/delegated offer and revisions; broker indication kept distinct</small></td><td>Three concepts with provenance: a broker indication, an insurer quote, an offer under delegated authority — never one record with a type flag</td><td><code>modules/quote/</code></td><td>An indication cannot be presented as a quote; provenance is on every one</td><td>ADR-017; INV-018; FLOWS §8</td></tr>
-        <tr><td><strong>P1.7</strong><small>Coverage comparison</small></td><td>Comparison across offers on sourced wording versions</td><td><code>modules/quote/</code></td><td>Comparison cites the version it compared</td><td>ADR-006</td></tr>
-        <tr><td><strong>P1.8</strong><small>Broker recommendation and disclosures</small></td><td>The recommendation record and the disclosures it must carry — including whether the intermediary may conclude contracts, which supervisory principles require disclosed</td><td><code>modules/recommendation/</code></td><td>A recommendation without its disclosures cannot be issued</td><td>IAIS ICP 18; ADR-013</td></tr>
-        <tr><td><strong>P1.9</strong><small>Client acceptance evidence</small></td><td>Acceptance as retained evidence with actor, time and what was accepted</td><td><code>modules/recommendation/</code></td><td>Acceptance references the exact recommendation and version</td><td>INV-007</td></tr>
-        <tr><td><strong>P1.10</strong><small>Bind request and authority-supported coverage evidence</small></td><td>The binding state machine; <code>CONFIRMED</code> reachable only with the authority profile reference, source identity, effective period and retained evidence</td><td><code>modules/binding/</code></td><td>A <code>REQUEST_ONLY</code> profile rejects broker-created confirmation; a delegated profile enforces product, territory, limit, period and referral</td><td>ADR-013; FLOWS §9; AUTHORIZATION_BASELINE §8</td></tr>
-        <tr><td><strong>P1.11</strong><small>Broker policy register</small></td><td>The broker's policy representation, referencing the completed bind, the coverage evidence and the sourced versions — never the insurer's record</td><td><code>modules/policy/</code></td><td>Registration fails without a completed bind and evidence</td><td>ADR-007; INV-005</td></tr>
-        <tr><td><strong>P1.12</strong><small>Documents and audit trail</small></td><td>Document storage as evidence, and the audit chain across every transition above</td><td><code>modules/documents/</code>, <code>modules/audit/</code></td><td>Any transaction reconstructed from evidence alone</td><td>ARCH-001 §15; INV-007</td></tr>
-        <tr><td><strong>P1.13</strong><small>Basic broker portal</small></td><td>The minimum experience that drives the slice end to end — built last, against the contracts, not before them</td><td><code>apps/broker/</code></td><td>The portal performs no transition the API refuses</td><td>ADR-005</td></tr>
+        <tr><td><strong>P1A.1</strong><small>Party and client account</small></td><td>Party, client and the tenant-owned record baseline on every aggregate</td><td><code>modules/party/</code>, <code>modules/client/</code></td><td>Ownership and isolation tests on real business records</td><td>DOMAIN_MODEL §6; INV-001</td></tr>
+        <tr><td><strong>P1A.2</strong><small>Client 360 and relationship view</small></td><td>A read model over client, risks, submissions and policies — a query, never a second store of truth</td><td><code>modules/client/</code></td><td>Read model reconciles to its sources</td><td>ARCH-001 §9</td></tr>
+        <tr><td><strong>P1A.3</strong><small>Risk profile and submission snapshot</small></td><td>The risk, and the immutable snapshot a submission is made from</td><td><code>modules/risk/</code>, <code>modules/submission/</code></td><td>A later risk edit does not alter a prior submission</td><td>DOMAIN_MODEL §5; INV-006</td></tr>
+        <tr><td><strong>P1A.4</strong><small>Insurer-product provenance and immutable distribution product version</small></td><td>Insurer product, wording version and rating version as insurer-owned; the tenant's distribution product version as a sourced, immutable representation</td><td><code>modules/distribution/</code></td><td>Historical reproduction: the version a transaction used is retrievable unchanged</td><td>ADR-006, ADR-017; DOMAIN_MODEL §2.1</td></tr>
+        <tr><td><strong>P1A.5</strong><small>Submission lifecycle</small></td><td>The submission state machine with a transition table, preconditions and emitted events</td><td><code>modules/submission/</code></td><td>Every transition in the table, and every prohibited one, tested</td><td>FLOWS §5, §6</td></tr>
+        <tr><td><strong>P1A.6</strong><small>Manual insurer/delegated offer and revisions; broker indication kept distinct</small></td><td>Three concepts with provenance: a broker indication, an insurer quote, an offer under delegated authority — never one record with a type flag</td><td><code>modules/quote/</code></td><td>An indication cannot be presented as a quote; provenance is on every one</td><td>ADR-017; INV-018; FLOWS §8</td></tr>
+        <tr><td><strong>P1A.7</strong><small>Coverage comparison</small></td><td>Comparison across offers on sourced wording versions</td><td><code>modules/quote/</code></td><td>Comparison cites the version it compared</td><td>ADR-006</td></tr>
+        <tr><td><strong>P1A.8</strong><small>Broker recommendation and disclosures</small></td><td>The recommendation record and the disclosures it must carry — including whether the intermediary may conclude contracts, which supervisory principles require disclosed</td><td><code>modules/recommendation/</code></td><td>A recommendation without its disclosures cannot be issued</td><td>IAIS ICP 18; ADR-013</td></tr>
+        <tr><td><strong>P1A.9</strong><small>Client acceptance evidence</small></td><td>Acceptance as retained evidence with actor, time and what was accepted</td><td><code>modules/recommendation/</code></td><td>Acceptance references the exact recommendation and version</td><td>INV-007</td></tr>
+        <tr><td><strong>P1A.10</strong><small>Bind request and authority-supported coverage evidence</small></td><td>The binding state machine; <code>CONFIRMED</code> reachable only with the authority profile reference, source identity, effective period and retained evidence</td><td><code>modules/binding/</code></td><td>A <code>REQUEST_ONLY</code> profile rejects broker-created confirmation; a delegated profile enforces product, territory, limit, period and referral</td><td>ADR-013; FLOWS §9; AUTHORIZATION_BASELINE §8</td></tr>
+        <tr><td><strong>P1A.11</strong><small>Broker policy register</small></td><td>The broker's policy representation, referencing the completed bind, the coverage evidence and the sourced versions — never the insurer's record</td><td><code>modules/policy/</code></td><td>Registration fails without a completed bind and evidence</td><td>ADR-007; INV-005</td></tr>
+        <tr><td><strong>P1A.12</strong><small>Documents and audit trail</small></td><td>Document storage as evidence, and the audit chain across every transition above</td><td><code>modules/documents/</code>, <code>modules/audit/</code></td><td>Any transaction reconstructed from evidence alone</td><td>ARCH-001 §15; INV-007</td></tr>
+        <tr><td><strong>P1A.13</strong><small>Basic broker portal</small></td><td>The minimum experience that drives the slice end to end — built last, against the contracts, not before them; the seed of the broker workstation</td><td><code>apps/broker/</code></td><td>The portal performs no transition the API refuses</td><td>ADR-005</td></tr>
+        <tr><td><strong>P1A.14</strong><small>Mobile identity foundation: secure login, token lifecycle, biometric local unlock, tenant context, secure storage, session expiration, device revocation</small></td><td>The identity and session layer every mobile client of P1C stands on: the organization token on a device, biometric unlock bound to keychain or keystore material, tenant context, secure storage, expiry and device revocation — no insurance function</td><td><code>apps/mobile-core/</code></td><td>A revoked device cannot act; a biometric change invalidates bound material; the P0 negative cases hold from a device</td><td>ADR-002, ADR-003; the mobile release research on the Guide v2 map</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <caption>P1B · Professional brokerage lifecycle — the previous plan's lifecycle phase, renumbered</caption>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P1B.1</strong><small>Placement workspace and insurer panel</small></td><td>The placement state machine; insurer-specific state on each market request, a broker summary on the placement</td><td><code>modules/placement/</code></td><td>Every transition and prohibited transition tested; a multi-request placement summarises correctly</td><td>FLOWS §7; ADR-016 where shares or layers apply</td></tr>
+        <tr><td><strong>P1B.2</strong><small>Market requests and communication evidence</small></td><td>Each request to market as a record with its communications retained as evidence</td><td><code>modules/placement/</code></td><td>Any request reconstructed from evidence; insurer replies are sourced, not typed</td><td>ARCH-001 §15</td></tr>
+        <tr><td><strong>P1B.3</strong><small>Quote revision and coverage matrix</small></td><td>Revisions as new versions with the prior retained; comparison across revisions and wordings</td><td><code>modules/quote/</code></td><td>A superseded revision is retrievable and marked superseded</td><td>FLOWS §8; INV-006</td></tr>
+        <tr><td><strong>P1B.4</strong><small>Durable binding workflow</small></td><td>The P1A binding machine driven by a durable workflow: retries with bounded policy, idempotent activities, versioned workflow code, compensation on partial failure</td><td><code>modules/binding/</code>, <code>services/worker/</code></td><td>Fault injection: delayed, duplicate and conflicting confirmations leave state correct</td><td>ADR-010; FLOWS §9, §16; INV-013</td></tr>
+        <tr><td><strong>P1B.5</strong><small>Policy endorsement and cancellation workflow</small></td><td>Mid-term adjustment and cancellation as historical transactions with effective and recorded time, supersession, and the refund basis and clawback rules the ADR fixes</td><td><code>modules/policy/</code></td><td>Backdated, future-dated and corrected scenarios represented without overwriting history</td><td>ADR-015, ADR-020; INV-017; DOMAIN_MODEL §6</td></tr>
+        <tr><td><strong>P1B.6</strong><small>Claims notification and broker advocacy</small></td><td>The claims flow with <code>broker_claim_status</code> and a sourced <code>insurer_claim_status</code> as separate fields</td><td><code>modules/claims/</code></td><td>Broker status never rewrites or simulates insurer adjudication</td><td>FLOWS §11; INV-005</td></tr>
+        <tr><td><strong>P1B.7</strong><small>Renewal case and market re-engagement</small></td><td>Renewal as a case that re-enters placement, pinned to the versions that will apply</td><td><code>modules/renewal/</code></td><td>Renewal reproduces the expiring transaction's basis and records the new one</td><td>ADR-020; FLOWS §1</td></tr>
+        <tr><td><strong>P1B.8</strong><small>Tasks, diary and SLA controls</small></td><td>Tasks and diary entries with owners and due dates; SLA breach as a signal, never as a state mutation</td><td><code>modules/tasks/</code></td><td>A breached SLA raises a signal and changes no business state</td><td>The hub's production operations track</td></tr>
+        <tr><td><strong>P1B.9</strong><small>Compliance, consent and advice file</small></td><td>The advice file assembled from retained evidence — recommendation, disclosures, acceptance, consent — not re-entered</td><td><code>modules/compliance/</code></td><td>The file is derivable from evidence already held; nothing in it is typed twice</td><td>IAIS ICP 18; ADR-019 where retention applies</td></tr>
+        <tr><td><strong>P1B.10</strong><small>Event infrastructure and workflow operations</small></td><td>The outbox, at-least-once delivery, consumer deduplication by event identity, backlog and retry-age telemetry, workflow versioning in operation</td><td><code>services/worker/</code>, <code>packages/events/</code></td><td>Transport down: outbox retains and alerts; consumer down: redelivery, age monitored; no completed fact dropped</td><td>ARCH-001 §12; FLOWS §15, §16</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <caption>P1C · Product engine and digital insurance — new in PLAN-001, from the roadmap's section 5</caption>
+      <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P1C.1</strong><small>Insurance product engine: product, version, class, risk and question schemas, coverage definition, document templates, payment and commission rules, workflow definition, channel configuration, as versioned configuration</small></td><td>The product as an immutable version of configuration that the workflows read, never a branch in application code; every element of the structure addressable by version</td><td><code>modules/product-engine/</code></td><td>Two products differ by configuration only; a version, once referenced, cannot change</td><td>ADR-006, ADR-011; INV-006</td></tr>
+        <tr><td><strong>P1C.2</strong><small>Eligibility rules and question schemas evaluated per product version</small></td><td>Eligibility as rules evaluated against a question schema, both pinned to the version that asked them</td><td><code>modules/product-engine/</code></td><td>The same answers evaluated against a later version give a traceably different result</td><td>ADR-006; INV-006</td></tr>
+        <tr><td><strong>P1C.3</strong><small>Pricing provider and carrier-rule adapter, keeping a broker indication distinct from an insurer quote</small></td><td>A pricing provider behind the adapter boundary; what it returns is an indication unless the provider is the insurer or a documented delegated authority, in which case it is a quote with provenance</td><td><code>modules/product-engine/</code>, <code>adapters/pricing/</code></td><td>A provider result is labelled by the authority behind it, never by where it was computed</td><td>ADR-009, ADR-017; INV-018</td></tr>
+        <tr><td><strong>P1C.4</strong><small>Straight-through digital insurance workflow: customer input, eligibility, pricing, quote, acceptance, payment hand-off, insurer confirmation, policy or certificate</small></td><td>The straight-through workflow on the same binding machine as P1A.10, with a payment hand-off that returns a fact from P2 and an insurer confirmation that is received, never generated</td><td><code>modules/binding/</code>, <code>services/worker/</code></td><td>Payment state cannot advance cover; a certificate issues only under a recorded master-policy authority</td><td>ADR-013, ADR-018; INV-020; FLOWS §2</td></tr>
+        <tr><td><strong>P1C.5</strong><small>Package recommendation engine, price-driven and coverage-driven</small></td><td>Ranking of eligible product versions by budget or by required benefits, as a product-engine capability, never tenant-specific code</td><td><code>modules/product-engine/</code></td><td>The ranking is reproducible from the versions and inputs it names</td><td>ADR-006, ADR-011</td></tr>
+        <tr><td><strong>P1C.6</strong><small>Customer mobile client: discover, compare, quote, apply, policy, certificate, claims, renewal, notifications</small></td><td>The customer's client on the mobile identity foundation, driving the straight-through workflow through the same contracts the portal uses; payment execution authoritative in P2</td><td><code>apps/customer-mobile/</code></td><td>The client performs no transition the API refuses; a certificate shown is one the record carries</td><td>ADR-005; the mobile release research on the Guide v2 map</td></tr>
+        <tr><td><strong>P1C.7</strong><small>Agent mobile client: prospect onboarding, client verification, quote support, document capture, servicing, policy lookup, claim assistance</small></td><td>The agent's client on the same foundation, with document capture as retained evidence</td><td><code>apps/agent-mobile/</code></td><td>Captured documents are evidence with actor, time and tenant; nothing typed twice</td><td>ADR-005; INV-007</td></tr>
+        <tr><td><strong>P1C.8</strong><small>Channel configuration and insurer-adapter binding per product version</small></td><td>Which channels may sell a version and which insurer adapter serves it, as configuration of the version</td><td><code>modules/product-engine/</code>, <code>adapters/insurer/</code></td><td>A version bound to no adapter cannot reach confirmation; a channel not configured cannot sell it</td><td>ADR-009, ADR-011</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<section id="order" data-search="execution order vertical slice create tenant broker client risk submit offers compare recommend accept bind register">
-  <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>The vertical slice is the order</h2></div></div>
-  <p class="section-intro">The plan's acceptance path is twelve steps. Build them in that order, each as thin as it can be while still being real, and do not widen a step until the one after it runs. A wide P1.1 with no P1.10 behind it is a client database, not a broker core.</p>
+<section id="order" data-search="execution order vertical slice sub-phases P1A P1B P1C create tenant broker client risk submit offers compare recommend accept bind register placement product engine">
+  <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>The vertical slice first, then the lifecycle, then the engine</h2></div></div>
+  <p class="section-intro">The previous plan's acceptance path is twelve steps and remains P1A's; PLAN-001 keeps it and adds the sub-phase order: P1B when the slice runs, P1C's engine alongside P1B, its straight-through workflow last. Build each step as thin as it can be while still being real, and do not widen a step until the one after it runs. A wide P1A.1 with no P1A.10 behind it is a client database, not a broker core.</p>
   <ol class="migration-steps">
     <li><b>Create tenant, create broker user</b> — on the P0 substrate; no new tenancy code. If this needs a change to P0, P0 was not finished.</li>
-    <li><b>Create client</b> — P1.1, with the ownership baseline on the aggregate from the first migration.</li>
-    <li><b>Capture risk</b> — P1.3, and the snapshot rule that makes a submission immutable.</li>
-    <li><b>Select a sourced distribution version</b> — P1.4. This step decides whether provenance is a property of the model or a comment in it; build the insurer-owned side first.</li>
-    <li><b>Submit risk</b> — P1.5, with the transition table tested both ways.</li>
-    <li><b>Record authority offers</b> — P1.6. Three concepts. The temptation is one table with a <code>kind</code> column; that is how an indication becomes a quote in a report.</li>
-    <li><b>Compare and recommend</b> — P1.7, P1.8, with the disclosures.</li>
-    <li><b>Record client acceptance</b> — P1.9.</li>
-    <li><b>Request bind</b> — P1.10, the state machine up to <code>PENDING_CONFIRMATION</code>. Stop and test: nothing so far means insured.</li>
-    <li><b>Record authority-supported cover</b> — P1.10, the <code>CONFIRMED</code> transition and its evidence requirements, per the accepted authority profile.</li>
-    <li><b>Register the broker policy representation</b> — P1.11, referencing the bind, the evidence and the versions.</li>
-    <li><b>Documents, audit, portal</b> — P1.12 alongside every step above; P1.13 last, driven by the contracts. Then the trace, end to end, for <code>BT-G2</code>.</li>
+    <li><b>Create client</b> — P1A.1, with the ownership baseline on the aggregate from the first migration.</li>
+    <li><b>Capture risk</b> — P1A.3, and the snapshot rule that makes a submission immutable.</li>
+    <li><b>Select a sourced distribution version</b> — P1A.4. This step decides whether provenance is a property of the model or a comment in it; build the insurer-owned side first.</li>
+    <li><b>Submit risk</b> — P1A.5, with the transition table tested both ways.</li>
+    <li><b>Record authority offers</b> — P1A.6. Three concepts. The temptation is one table with a <code>kind</code> column; that is how an indication becomes a quote in a report.</li>
+    <li><b>Compare and recommend</b> — P1A.7, P1A.8, with the disclosures.</li>
+    <li><b>Record client acceptance</b> — P1A.9.</li>
+    <li><b>Request bind</b> — P1A.10, the state machine up to <code>PENDING_CONFIRMATION</code>. Stop and test: nothing so far means insured.</li>
+    <li><b>Record authority-supported cover</b> — P1A.10, the <code>CONFIRMED</code> transition and its evidence requirements, per the accepted authority profile.</li>
+    <li><b>Register the broker policy representation</b> — P1A.11, referencing the bind, the evidence and the versions.</li>
+    <li><b>Documents, audit, portal</b> — P1A.12 alongside every step above; P1A.13 last, driven by the contracts. Then the trace, end to end, for <code>BT-G2</code>.</li>
+    <li><b>P1B opens: placement first</b> — P1B.1 and P1B.2, because every later lifecycle transition re-enters placement; then P1B.3 revisions on the quote model P1A left.</li>
+    <li><b>Make binding durable</b> — P1B.4 wraps the P1A.10 machine; its fault-injection suite is the reason P1B has a gate of its own.</li>
+    <li><b>Servicing, claims, renewal</b> — P1B.5, P1B.6, P1B.7 in that order, each on effective and record time, each keeping the broker's status apart from the insurer's.</li>
+    <li><b>Tasks, compliance, events</b> — P1B.8 and P1B.9 alongside; P1B.10 before any consumer depends on delivery guarantees the outbox does not yet give.</li>
+    <li><b>P1C's engine, alongside P1B</b> — P1C.1 first, then P1C.2, P1C.3 and P1C.8 as its rules, pricing and channel faces; P1C.5 once versions exist to rank.</li>
+    <li><b>The mobile foundation, then the clients</b> — P1A.14 before either client; P1C.7 for agents, then P1C.6 for customers, each driving the same contracts as the portal.</li>
+    <li><b>Straight-through last</b> — P1C.4 runs only on an accepted authority profile, with the payment hand-off returning a fact from P2 and the insurer's confirmation received. Then the trace for <code>BT-G3</code>.</li>
   </ol>
 </section>
 
-<section id="code" data-search="binding safety rules state machine CONFIRMED evidence REQUEST_ONLY delegated authority indication quote version snapshot events">
+<section id="code" data-search="binding safety rules state machine CONFIRMED evidence REQUEST_ONLY delegated authority indication quote version snapshot events product engine configuration operating models">
   <div class="section-heading"><span>04</span><div><p>What the agent codes</p><h2>State that cannot lie about authority</h2></div></div>
-  <p class="section-intro">Every state machine in P1 follows the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">contract template</a>: a transition table, preconditions, emitted events, and the failure signature the <a href="../stages/architect.html">Architect stage</a> names — one field asked to carry several independent states. The binding rules below are the ones a reviewer checks first, because they are the ones the whole broker-versus-insurer boundary rests on.</p>
+  <p class="section-intro">Every state machine in P1 follows the <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/FLOWS.md">contract template</a>: a transition table, preconditions, emitted events, and the failure signature the <a href="../stages/architect.html">Architect stage</a> names — one field asked to carry several independent states. The binding rules below are the ones a reviewer checks first, because they are the ones the whole broker-versus-insurer boundary rests on; the product-engine rules follow, because they are how P1C avoids becoming a second application.</p>
   <ul class="check-list">
-    <li><strong><code>REQUESTED</code>, <code>AUTHORITY_RESOLVED</code>, <code>SENT_TO_AUTHORITY</code>, <code>REFERRAL_REQUIRED</code> and <code>PENDING_CONFIRMATION</code> do not mean insured.</strong> No read model, document or portal screen may render them as cover</li>
+    <li><strong><code>REQUESTED</code>, <code>AUTHORITY_RESOLVED</code>, <code>SENT_TO_AUTHORITY</code>, <code>REFERRAL_REQUIRED</code> and <code>PENDING_CONFIRMATION</code> do not mean insured.</strong> No read model, document, portal screen or mobile screen may render them as cover</li>
     <li><strong><code>CONFIRMED</code> requires</strong> the accepted authority-agreement or profile reference, the source identity, effective start and end, recorded time and retained evidence — as mandatory fields, not optional ones</li>
     <li><strong>Under <code>REQUEST_ONLY</code>, only insurer-authoritative evidence can confirm.</strong> A broker user with the <code>binding:confirm</code> permission and no applicable authority profile is denied, and the denial is audited</li>
     <li><strong>Under delegated or master-policy authority</strong>, the command proves product, territory, limit, period and referral constraints before confirmation; outside any one of them the state is <code>REFERRAL_REQUIRED</code></li>
@@ -131,39 +174,51 @@
     <li><strong>Policy registration references</strong> the completed bind order, the coverage evidence and the sourced product and wording versions</li>
     <li><strong>Every transaction pins the versions it used</strong> — product, wording, pricing and commission rule — so it can be reproduced exactly later (INV-006)</li>
     <li><strong>Every material transition emits an event</strong> with the minimum metadata of ARCH-001 §12, including the authority reference when the fact asserts delegated authority</li>
+    <li><strong>A product is configuration, never code.</strong> A tenant that needs a different product gets a different version, not a branch; a version referenced by any transaction is immutable (P1C.1, ADR-006, ADR-011)</li>
+    <li><strong>A price is labelled by the authority behind it.</strong> What the engine computes is an indication; what an insurer or a documented delegated authority returns is a quote; the label follows the source, never the code path (P1C.3, ADR-017)</li>
+    <li><strong>Payment state cannot advance cover.</strong> The straight-through workflow hands off to P2 and receives a fact back; a paid premium with no insurer confirmation is a paid premium, not a policy (P1C.4, INV-020, ADR-018)</li>
+    <li><strong>The broker's status and the insurer's status are two fields</strong> on a claim, a bind and a policy alike; the platform never writes the insurer's (P1B.6, INV-005)</li>
   </ul>
+  <div class="definition-list">
+    <div><span>Two operating models, one core</span><p>Professional brokerage runs risk, market, several quotes, broker advice, bind. Straight-through digital insurance runs customer input, eligibility, pricing, quote, acceptance, payment, insurer confirmation, policy or certificate. They differ by workflow configuration on the product version, not by code (roadmap section 5, adopted by PLAN-001 section 5.3).</p></div>
+    <div><span>Surfaces this phase defines</span><p>The broker workstation grows from P1A.13 across P1A and P1B; the customer and agent mobile clients are P1C.6 and P1C.7 on the foundation of P1A.14; every surface drives the same contracts and performs no transition the API refuses.</p></div>
+  </div>
   <div class="callout">
     <strong>A domain reviewer is not optional in P1</strong>
     <p>The <a href="../stages/build.html#roles">Build stage</a> lists a domain reviewer who must not be skipped because a change looks technical. In P1 every change is domain. The reviewer is someone who has placed insurance, and their review is scenario-based: they walk a bind under this tenant's arrangement and say whether the states mean what the business means.</p>
   </div>
 </section>
 
-<section id="monitor" data-search="human monitors P1 domain UAT practitioner authorization BT-G2 stop signals quote confirmed version">
-  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Between BT-G1 and BT-G2</h2></div></div>
+<section id="monitor" data-search="human monitors P1 domain UAT practitioner authorization BT-G2 BT-G3 stop signals quote confirmed version product">
+  <div class="section-heading"><span>05</span><div><p>What the human monitors</p><h2>Between BT-G1 and the two gates of label C</h2></div></div>
   <p class="section-intro">The <a href="overview.html#monitor">cross-phase obligations</a> apply throughout. P1 adds these.</p>
   <div class="table-wrap">
     <table>
       <caption>Authorizations reserved to a human in P1 — the plan names none of these roles; the Who column is proposed</caption>
       <thead><tr><th>Authorization</th><th>Who (proposed)</th><th>Must have seen first</th></tr></thead>
       <tbody>
-        <tr><td>Each P1 package's implementation grant</td><td>Sponsor</td><td>The step of the vertical slice it delivers, and that the previous step runs</td></tr>
+        <tr><td>Each P1 package's implementation grant</td><td>Sponsor</td><td>The step of the order it delivers, and that the previous step runs</td></tr>
         <tr><td>Acceptance of the tenant authority profile the binding code is written to</td><td>Business authority, with the insurance, legal, finance and architecture seats of slice S01</td><td>Every S01 unknown answered or marked <code>UNKNOWN_BLOCKING</code></td></tr>
-        <tr><td>Domain UAT</td><td>A practitioner with recent placement experience</td><td>The slice walked as scenarios under this tenant's arrangement — not a demo</td></tr>
-        <tr><td><code>BT-G2</code> Broker Core Ready</td><td>Release authority</td><td>The end-to-end trace bound to a revision, the UAT signature, and the domain reviewer's findings closed</td></tr>
+        <tr><td>Domain UAT for P1A</td><td>A practitioner with recent placement experience</td><td>The slice walked as scenarios under this tenant's arrangement — not a demo</td></tr>
+        <tr><td><code>BT-G2</code> Broker Core Ready (label C, first gate)</td><td>Release authority</td><td>The end-to-end trace bound to a revision, the UAT signature, and the domain reviewer's findings closed</td></tr>
+        <tr><td>Opening P1B, and P1C's engine alongside it</td><td>Sponsor</td><td><code>BT-G2</code> recorded; ADR-010 and ADR-006 rows read</td></tr>
+        <tr><td><code>BT-G3</code> Lifecycle Ready (label C, second gate)</td><td>Release authority, with SRE</td><td>The failure-scenario evidence of P1B, the product-version reproduction of P1C, and a straight-through trace under an accepted authority profile</td></tr>
       </tbody>
     </table>
   </div>
   <div class="definition-list">
-    <div><span>Stop signal: something confirms cover from a user action</span><p>A button, a status change or an import that reaches <code>CONFIRMED</code> without authority evidence is the failure this phase exists to prevent, whatever it is called in the interface.</p></div>
+    <div><span>Stop signal: something confirms cover from a user action</span><p>A button, a status change, an import or a payment callback that reaches <code>CONFIRMED</code> without authority evidence is the failure this phase exists to prevent, whatever it is called in the interface.</p></div>
     <div><span>Stop signal: a price the broker computed is labelled a quote</span><p>It is an indication. The label is the defect; the fix is in the model, not the wording.</p></div>
     <div><span>Stop signal: a product version was edited in place</span><p>Every prior transaction that pinned it is now unreproducible. Versions are immutable; changes are new versions.</p></div>
     <div><span>Stop signal: an insurer's status is simulated</span><p>A broker-side record that asserts an insurer decision the insurer never made is a fabricated fact, however convenient for the demo.</p></div>
-    <div><span>Weekly</span><p>Which step of the twelve is in progress; whether the domain reviewer has been in every review; whether any P2 concept — placement workspace, claim, renewal — has appeared in a P1 branch.</p></div>
+    <div><span>Stop signal: a product became code</span><p>A conditional in application code that names a tenant or a product is a fork by another name; P1C exists so that it is configuration.</p></div>
+    <div><span>Weekly</span><p>Which step of the order is in progress and in which sub-phase; whether the domain reviewer has been in every review; whether any P2 concept — an invoice, a payment allocation, a ledger posting, a settlement — has appeared in a P1 branch.</p></div>
   </div>
 </section>
 
-<section id="gate" data-search="exit gate BT-G2 broker core ready trace UAT checklist">
-  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gate · BT-G2 Broker Core Ready</h2></div></div>
+<section id="gate" data-search="exit gate BT-G2 BT-G3 label C broker core ready lifecycle ready trace UAT failure scenarios checklist">
+  <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gates · BT-G2 Broker Core Ready and BT-G3 Lifecycle Ready (label C)</h2></div></div>
+  <p class="section-intro">Label C is two gates. <code>BT-G2</code> closes P1A on the vertical slice; <code>BT-G3</code> closes P1B and P1C on the lifecycle's failure scenarios and the engine's reproduction. Both are recorded by a human; neither is recorded by a passing suite. The roadmap's Gate C list, adopted by PLAN-001 section 10.3, is the last block.</p>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> The vertical slice runs end to end — tenant, broker, client, risk, version, submission, offers, comparison, recommendation, acceptance, bind, authority-supported cover, policy representation — as one trace bound to a source revision</label>
     <label><input type="checkbox" disabled> Every <code>CONFIRMED</code> coverage carries its authority profile or agreement reference, source identity, effective period and retained evidence</label>
@@ -171,26 +226,36 @@
     <label><input type="checkbox" disabled> A broker indication, an insurer quote and a delegated offer are distinct records with provenance</label>
     <label><input type="checkbox" disabled> A transaction's product, wording and pricing versions are reproduced unchanged after the versions have moved on</label>
     <label><input type="checkbox" disabled> Domain UAT is signed by a practitioner, as scenarios under the accepted authority profile</label>
-    <label><input type="checkbox" disabled> No P2 capability was built: no placement workspace, no claim, no renewal, no endorsement</label>
     <label><input type="checkbox" disabled> The release authority has recorded <code>BT-G2</code> with a date</label>
+    <label><input type="checkbox" disabled> Delayed, duplicate and conflicting confirmations, endorsements and renewals were injected and left broker state correct</label>
+    <label><input type="checkbox" disabled> Endorsement, cancellation and renewal are historical transactions with effective and record time, and no prior assertion was overwritten</label>
+    <label><input type="checkbox" disabled> The broker's claim status and the insurer's adjudication status are two fields, and the platform never wrote the second</label>
+    <label><input type="checkbox" disabled> Two products differ by configuration only, and a referenced product version could not be changed</label>
+    <label><input type="checkbox" disabled> A straight-through trace ran under an accepted authority profile with the payment hand-off returning a fact and the insurer's confirmation received, not generated</label>
+    <label><input type="checkbox" disabled> The customer and agent clients performed no transition the API refuses, on the mobile identity foundation</label>
+    <label><input type="checkbox" disabled> Gate C's list is met: authorization, product and version reproducibility, tenant isolation, deterministic state transitions, audit trail, web and mobile coverage, API contracts, documents, insurer-authority separation</label>
+    <label><input type="checkbox" disabled> No P2 capability was built: no invoice, no payment allocation, no ledger posting, no settlement</label>
+    <label><input type="checkbox" disabled> The release authority, with SRE, has recorded <code>BT-G3</code> with a date</label>
   </div>
 </section>
 
-<section id="stop" data-search="stop conditions halt P1 S01 ADR-013 blocked confirm cover simulated scope P2">
+<section id="stop" data-search="stop conditions halt P1 S01 ADR-013 blocked confirm cover simulated scope P2 payment product code">
   <div class="section-heading"><span>07</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
   <ul class="cross-list">
     <li>The tenant authority profile for the pilot tenant is not accepted — the binding machine has no arrangement to implement</li>
     <li>ADR-013 or ADR-017 is still <code>BLOCKED_BY_S01</code> or <code>DRAFT_REQUIRED</code></li>
     <li>Any path reaches <code>CONFIRMED</code> without authority evidence, or renders an earlier state as cover</li>
     <li>An insurer adjudication, acceptance or issuance is simulated on the broker side</li>
-    <li>Scope drifts into P2 — a placement workspace, a claim, a renewal — inside a P1 package</li>
+    <li>A payment callback advances cover state, or a certificate issues under no recorded master-policy authority</li>
+    <li>A product or a tenant appears as a conditional in application code</li>
+    <li>Scope drifts into P2 — an invoice, a payment allocation, a ledger posting, a settlement — inside a P1 package</li>
     <li>A domain reviewer was skipped on a change that touches state, provenance or disclosures</li>
   </ul>
   <div class="next-action">
     <span>NEXT PHASE</span>
     <div>
-      <h3>P2 · Professional brokerage lifecycle</h3>
-      <p>Placement, servicing, claims and renewal as durable workflows — exited only when delayed, duplicate and conflicting external interactions have been exercised without corrupting broker state.</p>
+      <h3>P2 · Payment and Finance</h3>
+      <p>Payment, ledger, commission, settlement and reconciliation, each its own thing — exited only when the money trace and its failure cases have been proven. The P2 page still renders the previous plan's lifecycle phase until its ticket moves it.</p>
     </div>
     <a class="github-link" href="p2.html">P2 →</a>
   </div>
@@ -200,7 +265,7 @@
 
 <footer>
   <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
-  <p>BizTrust Agentic Engineer Team · Delivery phases · P1 of P0–P3 · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
+  <p>BizTrust Agentic Engineer Team · Delivery phases · P1 of five phases · <a href="overview.html">Phase track</a> · <a href="../index.html">Back to the guide</a></p>
   <a href="#main">Back to top ↑</a>
 </footer>
 
