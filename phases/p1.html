@@ -77,7 +77,7 @@
 
 <section id="epics" data-search="epics P1A P1B P1C party client risk submission product version offer comparison recommendation acceptance bind policy register documents portal mobile identity placement market quote revision binding workflow endorsement claims renewal tasks compliance events product engine eligibility pricing straight-through recommendation engine customer mobile agent mobile channel">
   <div class="section-heading"><span>02</span><div><p>Epic to Work Package</p><h2>Thirty-two epics in three sub-phases</h2></div></div>
-  <p class="section-intro">Each row is decomposed into Work Packages by the <a href="../stages/plan.html#anatomy">Plan stage</a>. The sub-phases are controlled: P1B opens when P1A's slice runs end to end, and P1C's engine may be built alongside P1B but its straight-through workflow runs only on an accepted authority profile. Identifiers carry the sub-phase letter so that no P1 epic can be mistaken for the previous plan's.</p>
+  <p class="section-intro">Each row is decomposed into Work Packages by the <a href="../stages/plan.html#anatomy">Plan stage</a>. PLAN-001 calls the sub-phases controlled and orders none of them; this track proposes that P1B opens when P1A's slice runs end to end, and that P1C's engine may be built alongside P1B while its straight-through workflow runs only on an accepted authority profile. Identifiers carry the sub-phase letter so that no P1 epic can be mistaken for the previous plan's.</p>
   <div class="table-wrap">
     <table>
       <caption>P1A · Broker core — the previous plan's first phase, renumbered, plus the mobile identity foundation</caption>
@@ -95,7 +95,7 @@
         <tr><td><strong>P1A.10</strong><small>Bind request and authority-supported coverage evidence</small></td><td>The binding state machine; <code>CONFIRMED</code> reachable only with the authority profile reference, source identity, effective period and retained evidence</td><td><code>modules/binding/</code></td><td>A <code>REQUEST_ONLY</code> profile rejects broker-created confirmation; a delegated profile enforces product, territory, limit, period and referral</td><td>ADR-013; FLOWS §9; AUTHORIZATION_BASELINE §8</td></tr>
         <tr><td><strong>P1A.11</strong><small>Broker policy register</small></td><td>The broker's policy representation, referencing the completed bind, the coverage evidence and the sourced versions — never the insurer's record</td><td><code>modules/policy/</code></td><td>Registration fails without a completed bind and evidence</td><td>ADR-007; INV-005</td></tr>
         <tr><td><strong>P1A.12</strong><small>Documents and audit trail</small></td><td>Document storage as evidence, and the audit chain across every transition above</td><td><code>modules/documents/</code>, <code>modules/audit/</code></td><td>Any transaction reconstructed from evidence alone</td><td>ARCH-001 §15; INV-007</td></tr>
-        <tr><td><strong>P1A.13</strong><small>Basic broker portal</small></td><td>The minimum experience that drives the slice end to end — built last, against the contracts, not before them; the seed of the broker workstation</td><td><code>apps/broker/</code></td><td>The portal performs no transition the API refuses</td><td>ADR-005</td></tr>
+        <tr><td><strong>P1A.13</strong><small>Basic broker portal</small></td><td>The minimum experience that drives the slice end to end — built last, against the contracts, not before them</td><td><code>apps/broker/</code></td><td>The portal performs no transition the API refuses</td><td>ADR-005</td></tr>
         <tr><td><strong>P1A.14</strong><small>Mobile identity foundation: secure login, token lifecycle, biometric local unlock, tenant context, secure storage, session expiration, device revocation</small></td><td>The identity and session layer every mobile client of P1C stands on: the organization token on a device, biometric unlock bound to keychain or keystore material, tenant context, secure storage, expiry and device revocation — no insurance function</td><td><code>apps/mobile-core/</code></td><td>A revoked device cannot act; a biometric change invalidates bound material; the P0 negative cases hold from a device</td><td>ADR-002, ADR-003; the mobile release research on the Guide v2 map</td></tr>
       </tbody>
     </table>
@@ -120,7 +120,7 @@
   </div>
   <div class="table-wrap">
     <table>
-      <caption>P1C · Product engine and digital insurance — new in PLAN-001, from the roadmap's section 5</caption>
+      <caption>P1C · Product engine and digital insurance — new in PLAN-001, from the roadmap's section 5; the labels are the plan's, the other four columns are this track's reading</caption>
       <thead><tr><th>Epic</th><th>The agent builds</th><th>Lands in (candidate)</th><th>Proven by</th><th>Built against</th></tr></thead>
       <tbody>
         <tr><td><strong>P1C.1</strong><small>Insurance product engine: product, version, class, risk and question schemas, coverage definition, document templates, payment and commission rules, workflow definition, channel configuration, as versioned configuration</small></td><td>The product as an immutable version of configuration that the workflows read, never a branch in application code; every element of the structure addressable by version</td><td><code>modules/product-engine/</code></td><td>Two products differ by configuration only; a version, once referenced, cannot change</td><td>ADR-006, ADR-011; INV-006</td></tr>
@@ -138,7 +138,7 @@
 
 <section id="order" data-search="execution order vertical slice sub-phases P1A P1B P1C create tenant broker client risk submit offers compare recommend accept bind register placement product engine">
   <div class="section-heading"><span>03</span><div><p>Execution order</p><h2>The vertical slice first, then the lifecycle, then the engine</h2></div></div>
-  <p class="section-intro">The previous plan's acceptance path is twelve steps and remains P1A's; PLAN-001 keeps it and adds the sub-phase order: P1B when the slice runs, P1C's engine alongside P1B, its straight-through workflow last. Build each step as thin as it can be while still being real, and do not widen a step until the one after it runs. A wide P1A.1 with no P1A.10 behind it is a client database, not a broker core.</p>
+  <p class="section-intro">The previous plan's acceptance path is twelve steps and remains P1A's; PLAN-001 keeps it; the sub-phase order below is this track's proposal, not the plan's: P1B when the slice runs, P1C's engine alongside P1B, its straight-through workflow last, where the roadmap draws the three strictly in sequence. Build each step as thin as it can be while still being real, and do not widen a step until the one after it runs. A wide P1A.1 with no P1A.10 behind it is a client database, not a broker core.</p>
   <ol class="migration-steps">
     <li><b>Create tenant, create broker user</b> — on the P0 substrate; no new tenancy code. If this needs a change to P0, P0 was not finished.</li>
     <li><b>Create client</b> — P1A.1, with the ownership baseline on the aggregate from the first migration.</li>
@@ -180,7 +180,7 @@
     <li><strong>The broker's status and the insurer's status are two fields</strong> on a claim, a bind and a policy alike; the platform never writes the insurer's (P1B.6, INV-005)</li>
   </ul>
   <div class="definition-list">
-    <div><span>Two operating models, one core</span><p>Professional brokerage runs risk, market, several quotes, broker advice, bind. Straight-through digital insurance runs customer input, eligibility, pricing, quote, acceptance, payment, insurer confirmation, policy or certificate. They differ by workflow configuration on the product version, not by code (roadmap section 5, adopted by PLAN-001 section 5.3).</p></div>
+    <div><span>Two operating models, one core</span><p>Professional brokerage runs risk, market, several quotes, broker advice, bind. Straight-through digital insurance runs customer input, eligibility, pricing, quote, acceptance, payment, insurer confirmation, policy or certificate. They differ by workflow configuration on the product version, not by code (roadmap section 5, restated in PLAN-001 section 5.3).</p></div>
     <div><span>Surfaces this phase defines</span><p>The broker workstation grows from P1A.13 across P1A and P1B; the customer and agent mobile clients are P1C.6 and P1C.7 on the foundation of P1A.14; every surface drives the same contracts and performs no transition the API refuses.</p></div>
   </div>
   <div class="callout">
@@ -218,7 +218,7 @@
 
 <section id="gate" data-search="exit gate BT-G2 BT-G3 label C broker core ready lifecycle ready trace UAT failure scenarios checklist">
   <div class="section-heading"><span>06</span><div><p>Transition</p><h2>Exit gates · BT-G2 Broker Core Ready and BT-G3 Lifecycle Ready (label C)</h2></div></div>
-  <p class="section-intro">Label C is two gates. <code>BT-G2</code> closes P1A on the vertical slice; <code>BT-G3</code> closes P1B and P1C on the lifecycle's failure scenarios and the engine's reproduction. Both are recorded by a human; neither is recorded by a passing suite. The roadmap's Gate C list, adopted by PLAN-001 section 10.3, is the last block.</p>
+  <p class="section-intro">Label C is two gates. <code>BT-G2</code> closes P1A on the vertical slice; <code>BT-G3</code> closes P1B and P1C on the lifecycle's failure scenarios and the engine's reproduction. Both are recorded by a human; neither is recorded by a passing suite. The roadmap's Gate C list, restated in PLAN-001 section 10.3 as a proposal until the gate's owner accepts it, is the last block.</p>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> The vertical slice runs end to end — tenant, broker, client, risk, version, submission, offers, comparison, recommendation, acceptance, bind, authority-supported cover, policy representation — as one trace bound to a source revision</label>
     <label><input type="checkbox" disabled> Every <code>CONFIRMED</code> coverage carries its authority profile or agreement reference, source identity, effective period and retained evidence</label>

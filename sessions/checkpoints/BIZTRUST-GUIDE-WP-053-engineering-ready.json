@@ -14,7 +14,8 @@
     "Ticket #167 resolved by this branch: phases/p1.html rewritten as Insurance from PLAN-001 section 5 with three tables (P1A 14, P1B 10, P1C 8), the boundaries, models, surfaces, a nineteen-step order, the two-gate exit section and the transition notes.",
     "tests/test_phase_pages.py: EPIC admits a sub-phase letter; P1 reads PLAN-001 section 5; the exit-gate expectation for p1.html is BT-G2 and BT-G3; two negative controls recorded.",
     "Transition sentences on the hub, README, overview, both plans and the P0 page's cross-reference updated; the hub's P1 link text.",
-    "badf/ re-anchored: NS-044 repointed at #168, DEC-055 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #168, DEC-055 appended, this checkpoint written.",
+    "Review pass: one blocking and four should-fix findings adopted, two nits taken: the P0 page's next-phase card no longer says the P1 page renders the previous plan; P1A.13's cell is verbatim again; the sub-phase order is labelled this track's proposal, with the roadmap's strict sequence named; 'adopted by PLAN-001' became 'restated in'; the P1C caption says which columns are the track's; the overview's BT-G3 row reaches the P1 page; the checkpoint records the validation that ran."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-052.",
@@ -38,19 +39,19 @@
   "validation": [
     {
       "command": "python3 -m unittest discover -s tests",
-      "status": "PENDING_FINAL_RUN",
-      "exit_code": null
+      "status": "PASS",
+      "exit_code": 0
     },
     {
       "command": "python3 scripts/validate_continuity.py",
-      "status": "PENDING_FINAL_RUN",
-      "exit_code": null
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
     "The P1 page carries thirty-two epic identifiers and the P2 page carries the ten P2.n identifiers of the previous plan; the test's per-page foreign-epic check passes because the letters make P1B.n and P2.n different identifiers, which is exactly the identifier rule's purpose.",
     "The exit-gate section must name only BT-G2 and BT-G3, so the entry criteria name BT-G1 and the monitoring table names both gates outside that section.",
-    "The old lifecycle page's rows were reused verbatim for P1B, with one cell changed: P1B.4 now says 'the P1A binding machine' where the old page said 'the P1 binding machine'."
+    "The old pages' rows were reused verbatim for P1A.1 to P1A.13 and P1B.1 to P1B.10, with one cell changed: P1B.4 now says 'the P1A binding machine' where the old page said 'the P1 binding machine'. The review pass reverted a second, undeclared addition to P1A.13."
   ],
   "decisions": [
     "DEC-055: the P1 manual renders PLAN-001 section 5 with letter-bearing identifiers; BT-G2 and BT-G3 as label C; the test admits letters; the P2 page's duplication of P1B is declared until it moves."
@@ -129,6 +130,7 @@
   "declared_non_coverage": [
     "The rendered P1 page was not viewed in a browser; its rows, sections, gates and links were checked by the tests and the validator.",
     "The eight P1C rows' build, landing, proof and source cells are the track's reading of the roadmap and the ADRs; no engineering design exists for them.",
-    "The P2 page's duplication of P1B under old identifiers stands until #168; a reader comparing the two pages sees the same ten rows twice."
+    "The P2 page's duplication of P1B under old identifiers stands until #168; a reader comparing the two pages sees the same ten rows twice.",
+    "The sub-phase order on the page (P1B after the slice, P1C's engine alongside P1B, straight-through last) is this track's proposal; the roadmap sequences P1A, P1B and P1C strictly and PLAN-001 orders none of them."
   ]
 }
