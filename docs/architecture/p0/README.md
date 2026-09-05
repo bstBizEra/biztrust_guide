@@ -8,7 +8,7 @@
 | Parent | [`DELIVERY_PLAN.md`](../DELIVERY_PLAN.md) section 3, and the [P0 manual](../../phases/p0.html) |
 | Decided under | [#130](https://github.com/bstBizEra/biztrust_guide/issues/130), Work Package `BIZTRUST-GUIDE-WP-046` |
 
-This directory holds one engineering design per P0 epic, P0.2 to P0.12, plus the independent security proof. A design says what will be built, how it will be proven, and what it depends on. It does not build anything: P0 implementation waits for `BT-G0` and a Work Package with explicit, expiring authority in a platform repository, which this repository cannot grant (`AGENTS.md` sections 1 and 12).
+This directory holds one engineering design per P0 epic, P0.2 to P0.13, plus the independent security proof. A design says what will be built, how it will be proven, and what it depends on. It does not build anything: P0 implementation waits for `BT-G0` and a Work Package with explicit, expiring authority in a platform repository, which this repository cannot grant (`AGENTS.md` sections 1 and 12).
 
 P0.1 has no design here. It is the architecture contract and ADR-001 to ADR-020, charted on the [ARCH-001A map](https://github.com/bstBizEra/biztrust_guide/issues/91).
 
@@ -32,6 +32,7 @@ docs/architecture/p0/
 ├── P0.10-audit-framework.md
 ├── P0.11-observability-baseline.md
 ├── P0.12-secrets-and-configuration.md
+├── P0.13-control-plane-web.md
 └── P0.SECURITY-PROOF.md                ← the BT-G1 test matrix, verifier and evidence binding
 ```
 
@@ -106,6 +107,6 @@ How the epic becomes one or more Work Packages: each with one bounded outcome, a
 
 ## 6. How the manual and the pack refer to each other
 
-- The manual's twelve-epics section links to this file, and each epic row links to its design when that design reaches `PROPOSED`.
+- The manual's epics section links to this file, and each epic row links to its design when that design reaches `PROPOSED`.
 - A design's status block links to the manual's `#epics` anchor.
 - The manual's status sentences about P0 do not change because designs exist. The manual describes the phase; the pack describes the work; `BT-G0` and `BT-G1` are recorded by humans in neither.

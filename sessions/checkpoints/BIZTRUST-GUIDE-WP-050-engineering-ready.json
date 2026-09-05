@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-050-001",
+  "created_at": "2026-09-05T18:44:52Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-050",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #157 on the Guide v2 map: add P0.13, the control-plane web surface, to DELIVERY_PLAN.md v0.1, PLAN-001 and phases/p0.html in one package so the phase-page test's binding holds, placed after the independent security proof and outside the BT-G1 matrix; move the roadmap's mobile identity group to PLAN-001 as P1A.14; state that P0 carries no insurance function; add a P0.13 design ticket to the P0 design map.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-050-p0-scope",
+    "baseline_commit": "136cb90ffda058b1e901593c4e70ad223f08d8fb"
+  },
+  "completed": [
+    "Ticket #157 resolved by this branch: P0.13 row in DELIVERY_PLAN.md section 3, PLAN-001 section 4 and phases/p0.html's epics table with one label; the manual's heading, intro, search terms and ordering argument moved to thirteen; PLAN-001 section 4's placement paragraph written, P1A.14 added in section 5.1, section 9 counts and section 14 updated; the design pack README lists P0.13.",
+    "Design ticket #185 for P0.13 created on the P0 design map, wired behind the security proof #148 and the tenant-mapping design #139; #157 named the template as a blocker too, but #130 is closed and the edge would be inert.",
+    "badf/ re-anchored: NS-043 and NS-044 repointed, DEC-052 appended, this checkpoint written.",
+    "Review pass: six should-fix and five notes adopted: the manual's P0.13 step moved after the proof with the gate's direction stated, a stop condition added, the intro's ordering sentence corrected, the P1A argument completed, NS-043's counts corrected, the platform-controls mapping made exact, the wiring deviation recorded."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-049.",
+    "After merge: #128's Destination and Not yet specified moved from P0.2 to P0.12 and twelve to P0.2 to P0.13 and thirteen, and #185 noted there, as #157 asked.",
+    "After merge: #157 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #165 next, the overview manual."
+  ],
+  "files_changed": [
+    "docs/architecture/DELIVERY_PLAN.md",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "phases/p0.html",
+    "index.html",
+    "docs/architecture/p0/README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-050-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "tests/test_phase_pages.py compares the manual's <strong>P0.n</strong><small>label</small> rows with DELIVERY_PLAN.md's table rows after whitespace and backtick normalisation and lower-casing; the label is therefore written identically in all three files.",
+    "The manual's data-search attribute, heading and intro named twelve epics; each is a rendering of the plan's count and moves with it.",
+    "The roadmap's section 4 also lists a P0.7 platform-controls group; its items map to P0.2 (initial CI), P0.6 (migration control), P0.8, P0.10, P0.11 and P0.12; security scanning has no P0 row and stays with the hub's security track and P3B.1; no new epic was opened for the group.",
+    "The hub's P0 card and the manual's meta description also counted twelve; both moved to thirteen. Validation ran 2026-09-06 in an LF worktree cut from origin/main at 136cb90 on Windows 11 with Python 3.13."
+  ],
+  "decisions": [
+    "DEC-052: P0.13 after the proof and outside the BT-G1 matrix, in both plans and the manual; mobile identity is P1A.14; P0 carries no insurance function."
+  ],
+  "assumptions": [
+    "The wayfinder invocation is a chat instruction to work the next frontier ticket; it adopts nothing and authorises nothing.",
+    "The control-plane surface's landing place apps/control-plane/ is a candidate named on the manual's row for symmetry with its neighbours; the design ticket decides it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_049",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_phase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "An epic row differs between DELIVERY_PLAN.md and phases/p0.html.",
+      "P0.13 or any P0 record describes an insurance function.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "P0.13's landing place, proof design and negative controls are the design ticket's; the manual's row names a candidate directory and an exit evidence sentence only.",
+    "P1A.14's placement rests on the map's charting decision 4, made on the operator's delegation; the P1 manual ticket may move it to P1C if the first mobile client's slice argues so.",
+    "The rendered P0 manual was not viewed in a browser; the row was checked by the phase-page test and the validator."
+  ]
+}

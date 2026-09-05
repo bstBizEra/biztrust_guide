@@ -54,6 +54,7 @@ Architecture acceptance authorizes only the next bounded planning step. It does 
 | P0.10 | Audit framework | Attributable denial and success evidence |
 | P0.11 | Observability baseline | Logs, metrics and traces linked by request |
 | P0.12 | Secrets/configuration management | Rotation and least-privilege evidence |
+| P0.13 | Control-plane web surface | Tenant selection, member administration and the audit viewer exercised end to end after the independent proof, with no insurance function present |
 
 ### P0 mandatory proof
 
