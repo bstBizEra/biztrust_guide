@@ -120,9 +120,9 @@
       "stop_conditions": [
         "A change to DELIVERY_PLAN.md v0.1's standing sections (1, 2, 8 to 11) without a ticket that carries them",
         "A record says a phase is accepted, authorised or implemented",
-        "An identifier of the form P1.n, P2.n or P3.n is used with PLAN-001's meaning; those identifiers are the previous plan's and live only in PLAN-001 section 9"
+        "An identifier of the form P1.n, P2.n or P3.n is used with PLAN-001's meaning; those identifiers are the previous plan's and appear in PLAN-001 only in the 'was' and 'carries from' columns of sections 5, 6, 8 and 9"
       ],
-      "fallback": "Leave PLAN-001 as the record of intent beside the previous plan; the manuals keep rendering v0.1."
+      "fallback": "Leave every manual at its review head; the previous plan's retired text is in history at cf4eac1 and its standing sections are untouched."
     },
     {
       "id": "NS-033",

@@ -5,7 +5,7 @@
 | Version | `0.1-draft` |
 | Status | `TEMPLATE AND RULES — NO DESIGN ACCEPTED BY THIS FILE` |
 | Map | [P0 design map, issue #128](https://github.com/bstBizEra/biztrust_guide/issues/128) |
-| Parent | [`DELIVERY_PLAN.md`](../DELIVERY_PLAN.md) section 3, and the [P0 manual](../../phases/p0.html) |
+| Parent | [`BIZTRUST-PLAN-001.md`](../BIZTRUST-PLAN-001.md) section 4, and the [P0 manual](../../phases/p0.html) |
 | Decided under | [#130](https://github.com/bstBizEra/biztrust_guide/issues/130), Work Package `BIZTRUST-GUIDE-WP-046` |
 
 This directory holds one engineering design per P0 epic, P0.2 to P0.13, plus the independent security proof. A design says what will be built, how it will be proven, and what it depends on. It does not build anything: P0 implementation waits for `BT-G0` and a Work Package with explicit, expiring authority in a platform repository, which this repository cannot grant (`AGENTS.md` sections 1 and 12).
@@ -36,7 +36,7 @@ docs/architecture/p0/
 └── P0.SECURITY-PROOF.md                ← the BT-G1 test matrix, verifier and evidence binding
 ```
 
-- `P0.NN-<slug>.md`: two-digit epic number, then a slug of at most four words. The number is the epic's number in `DELIVERY_PLAN.md` section 3; the slug may differ from the manual's row title but the number may not.
+- `P0.NN-<slug>.md`: two-digit epic number, then a slug of at most four words. The number is the epic's number in `BIZTRUST-PLAN-001.md` section 4; the slug may differ from the manual's row title but the number may not.
 - Exception: the independent security proof, ticket [#148](https://github.com/bstBizEra/biztrust_guide/issues/148), is `P0.SECURITY-PROOF.md`. It is not an epic; it is the `BT-G1` matrix that the epics' negative controls feed.
 - One design per epic. An epic that needs two documents is an epic that should be two Work Packages; say so in the design's open questions rather than splitting the file.
 - The manual links each epic row to its design once the design exists. A design links back to the manual's `#epics` anchor, to every ADR it depends on by register number, and to every research file it cites by branch and path.

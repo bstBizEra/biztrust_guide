@@ -24,7 +24,7 @@ No agent may silently promote a status. Acceptance requires an explicit authorit
 |---|---|
 | [`BIZTRUST-ARCH-001.md`](BIZTRUST-ARCH-001.md) | Parent architecture contract, invariants, ownership and standards |
 | [`FLOWS.md`](FLOWS.md) | Canonical business, authorization and state-transition flows |
-| [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) | P0–P3 scope, architecture gates and controlled execution order; the record the phase manuals render, superseded in part by PLAN-001 |
+| [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md) | The previous plan: its phase sections and gate table are pointers to PLAN-001 since WP-051 and WP-055; its naming rule, execution chain, decomposition rule, backlog, horizon and exit from planning stand |
 | [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) | The five-phase Architecture-to-Production partition (Architecture, P0 to P3, Continuous Operations), the epic mapping from the previous plan, the gates `BT-G0` to `BT-G7` with their executive labels, the streams' entry conditions, the cross-cutting tracks and the Definition of Done; `PROPOSED` |
 | [`DOMAIN_MODEL.md`](DOMAIN_MODEL.md) | Artifact hierarchy, conceptual ERD, core concepts and snapshot rules |
 | [`AUTHORIZATION_BASELINE.md`](AUTHORIZATION_BASELINE.md) | Candidate roles, capability matrix, approvals and enforcement layers |

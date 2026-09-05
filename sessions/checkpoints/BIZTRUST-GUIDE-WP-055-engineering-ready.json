@@ -15,7 +15,8 @@
     "tests/test_phase_pages.py: P3 reads PLAN-001 section 7; the previous plan's path is gone from the test; the exit-gate expectation for p3.html is BT-G6 and BT-G7; two negative controls recorded.",
     "docs/architecture/DELIVERY_PLAN.md: sections 3 to 6 retired to one pointer naming where each part lives and the commit holding the text; the header row says which sections stand.",
     "Transition sentences on the hub, README, overview, PLAN-001 and the P2 page updated; the overview's BT-G6 and BT-G7 rows reach the P3 page; the hub's P3 link text.",
-    "badf/ re-anchored: NS-044 repointed at #170 with its stop conditions reworded for a retired plan, DEC-057 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #170 with its stop conditions reworded for a retired plan, DEC-057 appended, this checkpoint written.",
+    "Review pass: seven should-fix and four nits adopted: the vertical-slice acceptance and the end-to-end evidence sentence are quoted into PLAN-001 sections 5.5 and 6 so the P1 and P2 checklist items have a record; the pointer and the overview count 46 mapped epics with P0.13 unchanged; the readiness-review areas are cited to the SRE book and labelled the track's; the mobile prerequisites carry the research's qualifiers; the annual attestation is cited to the ISCP template; four stale citations to the retired section corrected; NS-044's fallback made executable and its identifier stop condition made exact; the Gate E glosses and BT-G6 items labelled; MTD defined; three wordings tightened."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-054.",
@@ -31,6 +32,8 @@
     "tests/test_phase_pages.py",
     "docs/architecture/DELIVERY_PLAN.md",
     "docs/architecture/BIZTRUST-PLAN-001.md",
+    "docs/architecture/README.md",
+    "docs/architecture/p0/README.md",
     "badf/current-state.json",
     "badf/next-actions.json",
     "badf/decision-log.jsonl",
@@ -50,7 +53,7 @@
   ],
   "observations": [
     "The exit-gate section must name only BT-G6 and BT-G7, so BT-G4 and BT-G5 appear in the entry criteria and the sidebar only.",
-    "Every phase page now carries letter-bearing identifiers except P0, whose thirteen rows keep P0.n by PLAN-001's epic id rule; the previous plan's P1.n to P3.n identifiers live only in PLAN-001 section 9's mapping table, which the test never reads.",
+    "Every phase page now carries letter-bearing identifiers except P0, whose thirteen rows keep P0.n by PLAN-001's epic id rule; the previous plan's P1.n to P3.n identifiers appear in PLAN-001 only in the 'was' and 'carries from' columns of sections 5, 6, 8 and 9, which the test's row parser never counts because a row is keyed on its first cell.",
     "The retired sections' text is recoverable at cf4eac1; the pointer names that commit so a reader of the v0.1 file can find it.",
     "The research files the page cites are on research/release-and-reliability at b174a9a and research/mobile-release at f82ea89; the mobile research's resolution said the file lands with this package or its own, and this package links it at SHA instead, leaving the import to a ticket of its own."
   ],

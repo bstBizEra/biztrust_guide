@@ -153,6 +153,27 @@ The roadmap's P1 Web list (the broker workstation) is not a new epic: it is the 
 
 From the roadmap's section 5 and the contract's invariant candidates INV-005, INV-016 and INV-022: a broker bind request is not a carrier bind confirmation; a broker policy record is not the insurer's authoritative policy; a broker claim status is not the insurer's adjudication status. These are the same boundary the landing page states as "a request is not a confirmation".
 
+### 5.5 P1A vertical-slice acceptance
+
+Carried verbatim from the previous plan's section 4 under WP-055 ([#169](https://github.com/bstBizEra/biztrust_guide/issues/169)), so that the P1 manual's first twelve execution steps have a record to be held to:
+
+```mermaid
+flowchart TD
+    A[Create tenant] --> B[Create broker user]
+    B --> C[Create client]
+    C --> D[Capture risk]
+    D --> E[Select sourced distribution version]
+    E --> F[Submit risk]
+    F --> G[Record authority offers]
+    G --> H[Compare and recommend]
+    H --> I[Record client acceptance]
+    I --> J[Request bind]
+    J --> K[Record authority-supported cover]
+    K --> L[Register broker policy representation]
+```
+
+Automation of insurer APIs is not required for P1. Correct state, evidence and ownership are required.
+
 ## 6. P2 — Payment and Finance
 
 **Objective** (previous plan, section 6, with the roadmap's section 6 wording): close the insurance-to-money-to-insurer loop with attributable, reconcilable records, so that payment, ledger, commission, settlement and reconciliation are each their own thing. The roadmap's rule that invoice, payment, payment intent, payment attempt, payment allocation, ledger, commission, settlement, reconciliation and refund must never collapse into one object is carried as P2's design constraint.
@@ -171,7 +192,7 @@ The nine finance epics of the previous plan's P3 become P2's epics, grouped by t
 | P2E.1 | Bank/provider/ledger reconciliation | P3.8 |
 | P2F.1 | Insurer and payment Adapter SDKs | P3.9 |
 
-The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant Pack validation foundation, are not P2 work: they are the first items of the expansion streams E2 and E1 in section 8, and section 9 records the move. The end-to-end evidence sentence of the previous plan's section 6 remains P2's exit condition; the P2 manual renders it as the last item of its exit checklist (WP-054, [#168](https://github.com/bstBizEra/biztrust_guide/issues/168)); the failure cases the roadmap's Gate D lists are in section 10.3.
+The previous plan's P3.10, partner API and versioned webhooks, and P3.11, Tenant Pack validation foundation, are not P2 work: they are the first items of the expansion streams E2 and E1 in section 8, and section 9 records the move. The end-to-end evidence sentence of the previous plan's section 6 remains P2's exit condition; the P2 manual renders it as the last item of its exit checklist (WP-054, [#168](https://github.com/bstBizEra/biztrust_guide/issues/168)); the failure cases the roadmap's Gate D lists are in section 10.3. The sentence, carried verbatim from the previous plan's section 6 under WP-055 so that the checklist item has a record to be held to: "End-to-end evidence must trace customer/partner activity through indication/offer, payment, authority-supported coverage confirmation, policy representation, ledger, commission, settlement and reconciliation."
 
 ## 7. P3 — Production
 
@@ -307,7 +328,7 @@ Restated from the roadmap so that a manual or a showcase page can cite one place
 
 **Gate A, `BT-G0`** (roadmap section 3): the architecture can answer who owns each datum; which tenant owns each record; who may perform each operation; which module owns each state transition; what the authoritative insurance state is; what the authoritative financial state is; how a quote becomes bound coverage; how money becomes premium; how commission is calculated and posted; how a carrier integrates; how Tenant #2 onboards without a fork; how cross-tenant isolation is mechanically proved; how failures are recovered; how a transaction is reconstructed from evidence. They correspond to, and are fewer than, the contract's seventeen section 17 exit criteria; the contract's list governs.
 
-**Gate B, `BT-G1`** (roadmap section 4): the chain authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence is mechanically demonstrated, and the P0 mandatory proof of the previous plan's section 3 passes independently of the implementer.
+**Gate B, `BT-G1`** (roadmap section 4): the chain authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence is mechanically demonstrated, and the P0 mandatory proof, section 4 here, passes independently of the implementer.
 
 **Gate C, `BT-G2` and `BT-G3`** (roadmap section 5): the trace tenant, client, risk, submission, placement, quotes, comparison, recommendation, acceptance, bind coordination, carrier confirmation, policy, then endorsement, claim and renewal, is proven with authorisation, product and version reproducibility, tenant isolation, deterministic state transitions, an audit trail, web and mobile coverage, API contracts, documents, and insurer-authority separation.
 

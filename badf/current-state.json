@@ -19,6 +19,8 @@
       "tests/test_phase_pages.py",
       "docs/architecture/DELIVERY_PLAN.md",
       "docs/architecture/BIZTRUST-PLAN-001.md",
+      "docs/architecture/README.md",
+      "docs/architecture/p0/README.md",
       "badf/current-state.json",
       "badf/next-actions.json",
       "badf/decision-log.jsonl",
