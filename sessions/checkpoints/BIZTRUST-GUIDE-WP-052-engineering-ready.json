@@ -14,7 +14,8 @@
     "Ticket #166 resolved by this branch: phases/p0.html renamed Identity and Tenant in title, meta, top bar, sidebar and heading; the lede and intro rendered from PLAN-001 section 4; a capability-groups block under the epics table; Gate B beside BT-G1 in the exit-gate heading and sidebar; the next-phase card names P1 Insurance and the transition.",
     "The P0 mandatory proof moved verbatim into PLAN-001 section 4; DELIVERY_PLAN.md section 3 keeps its table and points at PLAN-001 for the proof.",
     "tests/test_phase_pages.py: EPIC_SOURCES gives each phase one plan section; plan_epics and plan_labels read only inside it; P0 reads PLAN-001 section 4; index.html's P0 link text.",
-    "badf/ re-anchored: NS-044 repointed at #167 with the rule for moving a P1 to P3 manual, DEC-054 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #167 with the rule for moving a P1 to P3 manual, DEC-054 appended, this checkpoint written.",
+    "Review pass: two blocking and nine should-fix findings adopted: the hub, README, overview, both plans' headers and PLAN-001 section 14 now say the P0 page renders PLAN-001 and three pages remain on v0.1; the groups mapping is labelled the track's reading and names every item with no P0 row; the footer, the search terms, the one-primary rule's attribution and the test's prose corrected; DEC-054's attribution and divergence sentences corrected; the negative controls re-run and recorded."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-051.",
@@ -24,6 +25,8 @@
   "files_changed": [
     "phases/p0.html",
     "index.html",
+    "phases/overview.html",
+    "README.md",
     "tests/test_phase_pages.py",
     "docs/architecture/DELIVERY_PLAN.md",
     "docs/architecture/BIZTRUST-PLAN-001.md",
@@ -127,6 +130,6 @@
   "declared_non_coverage": [
     "The rendered P0 manual was not viewed in a browser; its rows, sections and links were checked by the tests and the validator.",
     "The groups-to-epics mapping is the track's reading of the roadmap's section 4; no human has reviewed it.",
-    "The manual's code and monitoring sections still describe the previous plan's wording in places (foundation, security slice); they say nothing false and are not rewritten here."
+    "The manual's intro search terms carried the previous plan's words (foundation, security slice) until the review pass; the code and monitoring sections never did. The groups mapping names, per group, the items no P0 row carries; where they go is the P0 design pack's or P1's, not decided here."
   ]
 }

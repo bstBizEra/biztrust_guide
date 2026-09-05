@@ -5,7 +5,7 @@
 | Version | `0.1-draft` |
 | Status | `PLANNING BASELINE — AUTHORITY REQUIRED PER WORK PACKAGE` |
 | Parent | `BIZTRUST-ARCH-001` |
-| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the phase manuals under `phases/` render, and `tests/test_phase_pages.py` binds them to it, until tickets #165 to #170 on the Guide v2 map (#153) move each manual; section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), which the overview renders and the phase-page test reads; sections 8, 9 and 11 stand until a ticket carries them |
+| Superseded in part | By [`BIZTRUST-PLAN-001.md`](BIZTRUST-PLAN-001.md) `1.0-draft` for the phase partition and the epic homes (its section 9 maps every epic here to its new home). This file remains the record the P1, P2 and P3 manuals under `phases/` render, and `tests/test_phase_pages.py` binds them to it, until tickets #167 to #170 on the Guide v2 map (#153) move each manual (the overview and the P0 manual moved under #165 and #166); section 7 is a pointer to PLAN-001 section 10 since WP-051 (#165), which the overview renders and the phase-page test reads; sections 8, 9 and 11 stand until a ticket carries them |
 
 ## 1. Naming rule
 

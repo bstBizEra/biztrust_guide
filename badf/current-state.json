@@ -13,6 +13,8 @@
     "scope": [
       "phases/p0.html",
       "index.html",
+      "phases/overview.html",
+      "README.md",
       "tests/test_phase_pages.py",
       "docs/architecture/DELIVERY_PLAN.md",
       "docs/architecture/BIZTRUST-PLAN-001.md",

@@ -14,7 +14,7 @@ Nothing in this document is accepted, and nothing it names is implemented. It is
 
 ## 0. Relation to the previous plan
 
-`DELIVERY_PLAN.md` v0.1 defined four phases, P0 to P3, and 46 epics. The phase manuals under `phases/` render that file, and `tests/test_phase_pages.py` fails if they disagree with it. So this document does not overwrite it. Until the manuals are rewritten under tickets [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#170](https://github.com/bstBizEra/biztrust_guide/issues/170), the previous plan remains the record the manuals render, and this document is the record of where the partition is going. Section 9 maps every epic from the one to the other. When the last manual moves, the previous plan's sections 3 to 6 are retired and this document takes the file's place.
+`DELIVERY_PLAN.md` v0.1 defined four phases, P0 to P3, and 46 epics. The P1, P2 and P3 manuals under `phases/` still render that file, and `tests/test_phase_pages.py` fails if they disagree with it; the overview and the P0 manual render this document. So this document does not overwrite it. Until the manuals are rewritten under tickets [#165](https://github.com/bstBizEra/biztrust_guide/issues/165) to [#170](https://github.com/bstBizEra/biztrust_guide/issues/170), the previous plan remains the record the manuals render, and this document is the record of where the partition is going. Section 9 maps every epic from the one to the other. When the last manual moves, the previous plan's sections 3 to 6 are retired and this document takes the file's place.
 
 ## 1. Naming rule
 
@@ -367,7 +367,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ## 14. What this document does not yet carry
 
-- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)); the overview renders section 10 and `tests/test_phase_pages.py` reads it. The four phase pages still render the previous plan's epics and exit gates until their tickets move them.
+- **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)); the overview renders section 10 and `tests/test_phase_pages.py` reads it. The P0 page renders section 4 here; the P1, P2 and P3 pages still render the previous plan's epics and exit gates until their tickets move them.
 - **The Work Package decomposition rule, the recommended backlog and the exit from planning**: the previous plan's sections 8, 9 and 11 stand.
 - **Doctrine and contract family**: [#158](https://github.com/bstBizEra/biztrust_guide/issues/158), which waits on the contract map's waiver.
 - **Canonical naming** (roadmap section 14): the phase names in section 2 adopt it; its use across issues, Work Packages and pages is the overview ticket's ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)) and each manual's.
