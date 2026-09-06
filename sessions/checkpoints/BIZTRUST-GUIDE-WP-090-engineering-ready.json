@@ -49,7 +49,7 @@
   ],
   "assumptions": [
     "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
-    "The revision keeps the design's eight ASSUMED positions unchanged; each names the decision that would reverse it."
+    "The revision keeps the design's eight open questions; questions 2, 4 and 8 have their ASSUMED positions restated by the asks this revision carries, and each still names the decision that would reverse it."
   ],
   "blockers": [
     {
