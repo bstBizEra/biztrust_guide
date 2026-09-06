@@ -17,7 +17,7 @@
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-085.",
-    "After merge: #148 closed with a resolution comment; the map's decision line appended to #128; the asks on P0.2, P0.10 and P0.7 recorded as fog.",
+    "After merge: #148 closed with a resolution comment; the map's decision line appended to #128; the asks on P0.2 and P0.7 recorded as fog.",
     "Map #128: #185 P0.13 is the last ticket; after it the map's frontier is empty and the map hands off to the spec."
   ],
   "files_changed": [
