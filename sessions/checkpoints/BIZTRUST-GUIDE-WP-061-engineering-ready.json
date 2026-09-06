@@ -14,7 +14,8 @@
     "Ticket #160 resolved by this branch: PLAN-001 section 12.1 with the three kinds and their bindings, the nine seats with sources, and the roadmap's councils and agents mapped onto the hub's groups.",
     "index.html's team section: the seats table rendered from 12.1, two definition items on personas and councils, the intro naming lenses, seats and personas, the separation-of-duty rule ending 'an approver is a seat'; search terms updated.",
     "tests/test_team_model.py, written red first, holds the hub's seats to the plan; three negative controls recorded; README names it.",
-    "badf/ re-anchored: NS-044 repointed at #208 and #211, DEC-063 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #208 and #211, DEC-063 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: eight bindings per kind; council members are personas under the owner seat and a lens is a grouping, not a kind; ADR-014 reaches the architecture owner; the contract seats carry #27's qualifiers; SRE by the pages' name with the pages' duties; the administrator's cell sourced to NS-001, NS-003 and NS-004; the hub's items in the hub's definition-list markup, the councils item a pointer to the plan's table, the caption two words; the test locates the seats table by its header row and holds both sides to nine."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 and WP-060.",
@@ -126,6 +127,7 @@
   "declared_non_coverage": [
     "The rendered hub was not viewed in a browser; the table and links were checked by the tests and the validator.",
     "The stage pages' roles were classified by kind from their names and tables, not re-read in full; the phase pages' synonyms were bound in the plan, not edited on the pages.",
-    "No seat is filled; the register is #94's."
+    "No seat is filled; the register is #94's.",
+    "Seat, role, persona and lens are the guide's process vocabulary, not the platform domain; DOMAIN_MODEL.md is the platform's and the guide has no CONTEXT.md, so the four terms are defined only in PLAN-001 section 12.1. The doctrine ticket (#158) is where a guide glossary would be decided."
   ]
 }
