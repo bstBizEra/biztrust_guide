@@ -41,7 +41,7 @@
     }
   ],
   "observations": [
-    "The leak table names the P0.6 design's ownership tests as the checks for eleven of the fifteen leaks; the design adds only a policy lint and a data-access mapping of its own.",
+    "The leak table names the P0.6 design's ownership tests as the checks for nine of the fifteen leaks; the design adds a policy lint, a data-access mapping, and two roles it asks the P0.6 design's next version to list.",
     "The failing baseline is a precondition, not a control: the manual's stop signal says a bypass row that cannot be made to fail has not demonstrated the policy.",
     "Statement pooling is refused as a mode; transaction pooling is the only mode the design is written for, and the pooler remains a measurement."
   ],
