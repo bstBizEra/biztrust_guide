@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-081-001",
+  "created_at": "2026-09-06T09:32:29Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-081",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #142 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.5 design with its nine mandatory sections, the request the command takes and the identifier it is idempotent on, the six check-then-act steps with their roles, the provisioning record with its one-running-run index, partial failure per step and what a rerun does, the acceptance as a test with equal digests and a masked trace diff for INV-011, ten negative controls with one measurement, the evidence contract, candidates pending ADR-002, ADR-003, ADR-001 and ADR-004, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-081-p0-05-provisioning-design",
+    "baseline_commit": "3c1456132926f75d3671311d401a1e4fd580be05"
+  },
+  "completed": [
+    "Ticket #142 resolved by this branch: docs/architecture/p0/P0.05-tenant-provisioning.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.5 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records P0.10 next in the manual's order and the three landed designs that owe a next version, DEC-083 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-080.",
+    "After merge: #142 closed with a resolution comment; the map's decision line appended to #128.",
+    "Map #128: #143 P0.10 next in the manual's order; #144 and #145 unblocked; the security proof #148 after #143."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.05-tenant-provisioning.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-081-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The command is idempotent on the request reference and convergent on the tenant identifier; a name is never a key, since the reference documents no uniqueness for it.",
+    "The design asks three landed designs for a next version: P0.6 to list the run table, P0.12 to admit the provisioning run as a second use of the administrative credential, and P0.4 to count the provisioning status as disabled at the resolver; re-creation and closure as runs go to this design's own later version.",
+    "No per-tenant schema object or database role exists under the proposed tier; the ticket's roles are the organization's."
+  ],
+  "decisions": [
+    "DEC-083: the P0.5 design at PROPOSED; one command, six check-then-act steps, activation last; a provisioning record with one running run per tenant; rerun as recovery, nothing compensated; two tenants run twice with equal digests and an empty masked trace diff."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_080",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "tenant_provisioning": "DESIGN_ONLY_NO_TENANT_PROVISIONED_SYNTHETIC_FIXTURES_ONLY",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design provisions a real tenant, deletes anything, or makes a name a key.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No command was run and no organization was created; the design describes them and the controls that would prove them.",
+    "Logto's self-hosted rate limits and the fate of tokens after organization deletion are unverified.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
