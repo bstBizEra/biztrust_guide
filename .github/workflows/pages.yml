@@ -74,6 +74,19 @@ jobs:
             cp "$page" "_site/$page"
           done
 
+      - name: Verify every tracked asset reached the artifact
+        run: |
+          status=0
+          for asset in $(git ls-files 'assets/*'); do
+            if [ ! -f "_site/$asset" ]; then
+              echo "MISSING FROM ARTIFACT: $asset"
+              status=1
+            fi
+          done
+          echo "--- staged assets ---"
+          find _site/assets -type f | sort
+          exit $status
+
       - name: Verify every tracked page reached the artifact
         run: |
           status=0

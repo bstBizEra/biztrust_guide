@@ -64,7 +64,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | `tests/` | Validator fail-closed suite and cross-page duplicate detector |
 | `sessions/` | Session checkpoints, the recovery procedure's primary input |
 | `assets/` | Brand images referenced by every page |
-| `styles.css` | Responsive UniTrust/BizTrust visual system |
+| `styles.css` | Responsive BizTrust visual system |
 | `script.js` | Navigation, search, theme and copy controls |
 | `AGENTS.md` | Repository-wide agent operating charter |
 | `badf/` | Current state, next actions and decision ledger |

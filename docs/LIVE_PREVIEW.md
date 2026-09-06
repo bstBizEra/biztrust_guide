@@ -198,7 +198,7 @@ Start from the repository root or use `--directory`.
 
 1. Check capitalization; GitHub Pages paths are case-sensitive.
 2. Confirm `styles.css`, `script.js` and `assets/` resolve **from the page's own directory** — beside `index.html` at the root, and one level up (`../styles.css`) from any page in `stages/`.
-3. Use relative links such as `assets/unitrust-icon.png`.
+3. Use relative links such as `assets/biztrust-symbol.svg`.
 4. Run `python3 scripts/validate_continuity.py`.
 
 ### GitHub Pages returns 404
