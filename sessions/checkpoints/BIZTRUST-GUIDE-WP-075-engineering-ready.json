@@ -4,14 +4,14 @@
   "created_at": "2026-09-06T07:59:24Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-075",
   "state": "ENGINEERING_READY",
-  "objective": "Fold research #240 into the P0.12 design at version 0.2, still PROPOSED: the rotation exercise's Logto paragraph as an overlap with the legacy-secret check, control 5's condition and expected outcome with the issued-token fate as the measurement, question 3 recording what the research settled and what stays UNVERIFIED with a new ASSUMED position, every Logto secret created with an expiry, and the Management API credential as a bootstrap-class identity that never lists secrets outside the exercise.",
+  "objective": "Fold research #240 into the P0.12 design at version 0.2, still PROPOSED: the rotation exercise's Logto paragraph as an overlap with the legacy-secret check, control 5's condition and expected outcome with the issued-token fate as the measurement, question 3 recording what the research settled and what stays UNVERIFIED with a new ASSUMED position, every Logto secret created with an expiry, and the Management API credential as an administrative-class identity that never lists secrets outside the exercise.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-075-p0-12-logto-rotation",
     "baseline_commit": "5c082a92a842e704289b4d8fc999bcf57925c9a9"
   },
   "completed": [
-    "P0.12 design revised to version 0.2 from research #240: the Logto rotation as an overlap with the legacy-secret check, control 5 and question 3 revised, every Logto secret with an expiry, the Management API credential as a bootstrap-class identity.",
+    "P0.12 design revised to version 0.2 from research #240: the Logto rotation as an overlap with the legacy-secret check, control 5 and question 3 revised, every Logto secret with an expiry, the Management API credential as an administrative-class identity.",
     "The design pack test holds the revised file to the template unchanged; the P0 manual's link is unchanged.",
     "badf/ re-anchored: NS-043 notes question 3 folded in, DEC-077 appended, this checkpoint written."
   ],
@@ -41,10 +41,10 @@
   ],
   "observations": [
     "The research's finding that listing secrets returns values changes the design's least-privilege table, not only its exercise; that is why the Management API credential has a row of its own.",
-    "The assumption that issued tokens run to their own expiry is the conservative one for the exercise: the old secret is kept until they have."
+    "The assumption that issued tokens run to their own expiry is what the exercise tests on the synthetic tenant; production keeps the overlap until the record exists."
   ],
   "decisions": [
-    "DEC-077: the P0.12 design at 0.2 from research #240; overlap rotation; token fate measured; the Management API credential bootstrap-class."
+    "DEC-077: the P0.12 design at 0.2 from research #240; overlap rotation; token fate measured; the Management API credential administrative-class."
   ],
   "assumptions": [
     "The operator's 'proceed on your call, proposed only' on map #128 covers a revision of a PROPOSED design from its own research ticket."
