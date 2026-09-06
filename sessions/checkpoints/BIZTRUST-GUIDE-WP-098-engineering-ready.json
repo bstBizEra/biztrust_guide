@@ -11,7 +11,7 @@
     "baseline_commit": "55cb96efca145b3300748e4764ef8ab5c5ae6647"
   },
   "completed": [
-    "BIZTRUST-PLAN-001 section 2.1 states the inventory: 64 across the five phases, 51 beyond P0, with the identifiers each figure was counted from.",
+    "BIZTRUST-PLAN-001 section 9.1 states the inventory: 64 across the five phases, 51 beyond P0, with the identifiers each figure was counted from.",
     "Both counting errors recorded: the previous plan's P2.n and P3.n identifiers in the section 9 mapping table, and section 8's header counted as a stream row.",
     "badf/ re-anchored: NS-045 opens the all-phase guide map #296, DEC-100 appended, this checkpoint written."
   ],
@@ -41,7 +41,10 @@
   "observations": [
     "Every wrong figure came from matching an identifier prefix across the whole file rather than inside the section that owns it; the plan's section 9 holds the previous plan's identifiers by design.",
     "The inventory is recorded as a table of identifiers, not a list of totals, so that the next count can be checked rather than trusted.",
-    "The directive asked for the count before any index; this lands first for that reason, ahead of the naming and vocabulary tickets."
+    "The directive asked for the count before any index; this lands first for that reason, ahead of the naming and vocabulary tickets.",
+    "The inventory was first written into section 2 and the suite refused it: the showcase roadmap's parity test reads every row there whose first cell is Architecture or P0 to P3, so an inventory table collided with the phases table. It lives at 9.1, beside the retired identifiers the miscounts came from.",
+    "The ledger was written before that move and named section 2.1 in four places; the review found it, including NS-045's prerequisite, which would have sent the next package's reader to a section that does not exist.",
+    "The build ran the suite before the state script wrote the ledger, so the ledger's own changes were never tested and NS-045 shipped with a priority that collided with NS-033; the review found it. Run the suite after the ledger is written, not only after the document is patched."
   ],
   "decisions": [
     "DEC-100: the canonical inventory is 64 across five phases and 51 beyond P0; Continuous Operations contributes none."
