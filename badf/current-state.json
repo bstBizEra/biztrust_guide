@@ -7,13 +7,12 @@
     "id": "BIZTRUST-GUIDE-WP-089",
     "title": "P0.6 revised to 0.2, the tables, roles and tests six later designs asked the tenancy data model to list, as docs/architecture/p0/P0.06-tenancy-data-model.md - issue #278",
     "state": "ENGINEERING_READY",
-    "objective": "Resolve ticket #269 on the P0 design map under charting decision 9: revise the P0.6 design in place from 0.1 to 0.2 with only the asks six later designs recorded, four more platform-level or tenant-owned tables and two request-and-settings tables, two more roles, the backup path restated, app_role's audit grants, three more ownership tests, and a Changes in 0.2 section naming each ask and its source; keep it PROPOSED; re-anchor badf/ to the revision track.",
+    "objective": "Resolve ticket #269 on the P0 design map under charting decision 9: revise the P0.6 design in place from 0.1 to 0.2 with only the asks six later designs recorded, four more platform-level or tenant-owned tables and two request-and-settings tables, two more roles, the backup path restated, app_role's audit grants, two more ownership tests and one extended, and a Changes in 0.2 section naming each ask and its source; keep it PROPOSED; re-anchor badf/ to the revision track.",
     "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/278",
     "owner_role": "documentation-engineer",
     "scope": [
       "docs/architecture/p0/P0.06-tenancy-data-model.md",
-      "phases/p0.html",
-      "badf/current-state.json",
+        "badf/current-state.json",
       "badf/next-actions.json",
       "badf/decision-log.jsonl",
       "sessions/checkpoints/BIZTRUST-GUIDE-WP-089-engineering-ready.json"

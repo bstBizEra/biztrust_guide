@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T11:56:39Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-089",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #269 on the P0 design map under charting decision 9: revise the P0.6 design in place from 0.1 to 0.2 with only the asks six later designs recorded, four more platform-level or tenant-owned tables and two request-and-settings tables, two more roles, the backup path restated, app_role's audit grants, three more ownership tests, and a Changes in 0.2 section naming each ask and its source; keep it PROPOSED; re-anchor badf/ to the revision track.",
+  "objective": "Resolve ticket #269 on the P0 design map under charting decision 9: revise the P0.6 design in place from 0.1 to 0.2 with only the asks six later designs recorded, four more platform-level or tenant-owned tables and two request-and-settings tables, two more roles, the backup path restated, app_role's audit grants, two more ownership tests and one extended, and a Changes in 0.2 section naming each ask and its source; keep it PROPOSED; re-anchor badf/ to the revision track.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-089-p0-06-v0-2",
@@ -22,7 +22,6 @@
   ],
   "files_changed": [
     "docs/architecture/p0/P0.06-tenancy-data-model.md",
-    "phases/p0.html",
     "badf/current-state.json",
     "badf/next-actions.json",
     "badf/decision-log.jsonl",
@@ -42,7 +41,7 @@
   ],
   "observations": [
     "The revision adds no table, role or test a later design did not ask for; the Changes in 0.2 table is the reviewer's checklist.",
-    "The backup path's restatement is the one change to existing text, and it follows the P0.7 design's finding rather than a new reading of PostgreSQL.",
+    "The backup path's restatement follows the P0.7 design's finding rather than a new reading of PostgreSQL, and leaves the owner's case unverified as that design does; the other changes to existing text are the sentences the new tables and roles made stale.",
     "The remaining six revisions each read the landed designs as they stand, so no blocking edge was wired."
   ],
   "decisions": [
