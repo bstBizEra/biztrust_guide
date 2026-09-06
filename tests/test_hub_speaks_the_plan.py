@@ -16,7 +16,9 @@ invariant). This module makes the two shapes fail.
 Negative controls (run 2026-09-06 under WP-059, on in-memory copies):
   * Put "Authorize P1" back on the hub     -> test_hub_authorises_no_phase FAILS
   * Put "P3.10" on the hub                 -> test_hub_names_no_previous_plan_epic FAILS
-  * Put "P0.11" on the hub                 -> both PASS (allowed by the id rule)
+
+Allowed case, checked the same way:
+  * Put "P0.11" on the hub                 -> both PASS (P0 keeps letterless ids by the plan's id rule)
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -41,10 +43,18 @@ def hub_text(html: str) -> str:
     return re.sub(r"<[^>]+>", " ", text)
 
 
+class TestCorpusIsPresent(unittest.TestCase):
+    """Positive control. Without it both assertions below can pass over nothing."""
+
+    def test_hub_parses_to_text(self) -> None:
+        text = hub_text(HUB.read_text(encoding="utf-8"))
+        self.assertGreater(len(text), 1000, "index.html parsed to almost nothing; the shape changed or the parser is wrong")
+        self.assertIn("Recommended next steps", text, "the next-steps section is not in the parsed text")
+
+
 class TestHubSpeaksThePlan(unittest.TestCase):
     def setUp(self) -> None:
         self.text = hub_text(HUB.read_text(encoding="utf-8"))
-        self.assertGreater(len(self.text), 1000, "index.html parsed to almost nothing; the shape changed")
 
     def test_hub_authorises_no_phase(self) -> None:
         found = sorted(set(AUTHORISE_A_PHASE.findall(self.text)))
