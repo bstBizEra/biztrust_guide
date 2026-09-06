@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-085",
-  "updated_at": "2026-09-06T10:42:26Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-086",
+  "updated_at": "2026-09-06T11:02:08Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Under the map's charting decision 8 (2026-09-06) a design names each ADR it depends on as a DRAFT_REQUIRED dependency instead of waiting on the ADR's ticket. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), P0.6 (WP-077), P0.3 (WP-078), P0.4 (WP-079), P0.7 (WP-080), P0.5 (WP-081), P0.10 (WP-082), P0.8 (WP-083), P0.9 (WP-084), and #146 P0.11 observability baseline, resolved by this branch as docs/architecture/p0/P0.11-observability-baseline.md at PROPOSED. The manual's execution order continues with the security proof (#148, unblocked by P0.7 and P0.10) and P0.13 (#185, after the proof). Eight landed designs owe a next version, on the map's Not yet specified: P0.6, P0.2 (also the observability test job), P0.12 (also the telemetry scrubber as a user of its scan patterns), P0.4, P0.7, P0.10 (also question 4 answered by application_name and its counter exported as a metric), P0.5, and P0.8 (path parameters to scrub, the sampling flag never adopted), as the map's fog comments list them. The secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack each need an ADR row the contract map must add. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review, and is revised under a new version if its ADR decides differently.",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Under the map's charting decision 8 (2026-09-06) a design names each ADR it depends on as a DRAFT_REQUIRED dependency instead of waiting on the ADR's ticket. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), P0.6 (WP-077), P0.3 (WP-078), P0.4 (WP-079), P0.7 (WP-080), P0.5 (WP-081), P0.10 (WP-082), P0.8 (WP-083), P0.9 (WP-084), P0.11 (WP-085), and #148 the independent security proof, resolved by this branch as docs/architecture/p0/P0.SECURITY-PROOF.md at PROPOSED. The manual's execution order ends with P0.13 (#185, unblocked by the proof), the last ticket on the map. Eight landed designs owe a next version, on the map's Not yet specified: P0.6, P0.2 (also the proof's validator in its Validate records job and its suite in the skeleton), P0.12, P0.4, P0.7 (also the baseline run's identifier as a harness output), P0.10 (also the runner's test-held elevation as a reader of platform events), P0.5, P0.8, as the map's fog comments list them. The secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack each need an ADR row the contract map must add. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review, and is revised under a new version if its ADR decides differently.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046); tests/test_p0_design_pack.py holds every design to it",
         "The design's ADRs named with their register status; nothing chosen, nothing ACCEPTED"
