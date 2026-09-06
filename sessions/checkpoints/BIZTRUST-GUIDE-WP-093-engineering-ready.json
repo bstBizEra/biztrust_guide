@@ -40,8 +40,8 @@
     }
   ],
   "observations": [
-    "The revision adds no rule, route or extension a later design did not ask for; the Changes in 0.2 table is the reviewer's checklist.",
-    "The me route is the first platform-level route the document declares beside provisioning, so L2 gained a clause rather than an exception.",
+    "The revision adds no rule, route or extension a later design did not ask for; the Changes in 0.2 table is the reviewer's checklist, and the review pass removed a provisioning route the P0.5 design does not have.",
+    "The me route joins the platform-audit route as the document's platform-level routes, so L2 gained a clause rather than an exception; the review pass corrected the 0.1 text that counted provisioning among them, which the P0.5 design runs as a job.",
     "Two revisions remain, and each reads the landed designs as they stand."
   ],
   "decisions": [
