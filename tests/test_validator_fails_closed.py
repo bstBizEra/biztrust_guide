@@ -423,5 +423,61 @@ class TestResumeDecisionAgreesWithAuthority(ValidatorHarness):
         self.assertEqual(code, 0)
 
 
+class TestMarkdownLinksResolve(ValidatorHarness):
+    """The Markdown link check, added by WP-102.
+
+    Its real negative control is not here: it is this repository at commit a2387dc, where the same
+    check reports exactly 48 links resolving to nothing across all fourteen files of the P0 design
+    pack, and exits 1. These cases hold the parts of the rule that commit does not exercise - the
+    fragment of a page, the heading of a document, and a heading that is there.
+    """
+
+    def write_document(self, body: str, name: str = "docs/wp102-control.md") -> None:
+        (self.root / name).write_text(body, encoding="utf-8", newline="\n")
+
+    def test_a_link_to_nothing_is_not_a_pass(self) -> None:
+        self.write_document("# Control\n\nSee [the missing file](./no-such-file.md).\n")
+        self.assert_fails_closed("link resolves to nothing: ./no-such-file.md")
+
+    def test_a_fragment_no_page_carries_is_not_a_pass(self) -> None:
+        self.write_document("# Control\n\nSee [the manual](../phases/p0.html#no-such-anchor).\n")
+        self.assert_fails_closed("no id 'no-such-anchor' in phases/p0.html")
+
+    def test_a_heading_no_document_carries_is_not_a_pass(self) -> None:
+        self.write_document("# Control\n\nSee [the charter](../AGENTS.md#no-such-heading).\n")
+        self.assert_fails_closed("no heading 'no-such-heading' in AGENTS.md")
+
+    def test_a_heading_that_is_there_passes(self) -> None:
+        """The positive control for the anchor rule. Without it the three above could pass by refusing everything."""
+        self.write_document(
+            "# Control\n\n## A Heading With `code` and **emphasis**\n\n"
+            "See [itself](#a-heading-with-code-and-emphasis).\n"
+        )
+        code, out, _err = self.run_validator()
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
+        self.assertEqual(code, 0)
+
+    def test_a_link_out_of_the_repository_is_not_a_pass(self) -> None:
+        self.write_document("# Control\n\nSee [outside](../../../../etc/passwd).\n")
+        self.assert_fails_closed("link leaves the repository")
+
+    def test_an_external_link_is_not_followed(self) -> None:
+        self.write_document(
+            "# Control\n\nSee [the tracker](https://github.com/bstBizEra/biztrust_guide/issues/310) "
+            "and [mail](mailto:nobody@example.com).\n"
+        )
+        code, out, _err = self.run_validator()
+        self.assertEqual(self.verdicts(out), ["CONTINUITY_VALIDATION=PASS"], "\n".join(out))
+        self.assertEqual(code, 0)
+
+    def test_the_check_cannot_silently_validate_nothing(self) -> None:
+        """Every Markdown document emptied: the count is zero, and zero must not read as clean."""
+        for document in self.root.rglob("*.md"):
+            if ".git" in document.parts:
+                continue
+            document.write_text("# Emptied by a control\n", encoding="utf-8", newline="\n")
+        self.assert_fails_closed("the document link check validated nothing")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

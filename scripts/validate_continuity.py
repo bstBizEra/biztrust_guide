@@ -90,6 +90,26 @@ def as_array(value: object, label: str, errors: list[str]) -> list:
     return value
 
 
+def heading_slug(title: str) -> str:
+    """A Markdown heading's anchor, by the rule GitHub uses.
+
+    Link text replaces its link, backticks and emphasis markers go, what is left is lowercased,
+    everything but a letter, digit, space, hyphen or underscore is dropped, and spaces become
+    hyphens. GitHub also disambiguates a repeated heading with `-1`, `-2`; that is not implemented,
+    because no link in this repository points at a Markdown heading at all. The rule is held by its
+    own tests rather than by the corpus, and this comment is here so the next reader knows which.
+    """
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", title)
+    text = text.replace("`", "").replace("**", "").replace("*", "")
+    text = re.sub(r"[^\w\- ]", "", text.strip().lower())
+    return text.replace(" ", "-")
+
+
+def markdown_headings(source: str) -> set[str]:
+    """Every anchor a Markdown document offers, from its ATX headings."""
+    return {heading_slug(m.group(1)) for m in re.finditer(r"^#{1,6}\s+(.+?)\s*$", source, re.M)}
+
+
 def main() -> int:
     errors: list[str] = []
     checks: list[str] = []
@@ -362,6 +382,71 @@ def main() -> int:
     checks.append(f"html-ids:{total_ids}")
     checks.append(f"html-refs:{total_refs}")
 
+    # Markdown links resolve too. Until this check existed only *.html was followed, and this
+    # repository's normative documents are Markdown: 48 links in the P0 design pack pointed at
+    # nothing from the day the pack was written, and survived a fresh-context review of all
+    # fourteen designs, because a reader reads what a link says rather than where it goes (WP-101).
+    # A fragment is resolved against the ids already parsed above when the target is a page, and
+    # against the target's own headings when it is a document.
+    # Anchored on "](" rather than on a link's label, because every link and image target in
+    # Markdown is preceded by it and a label pattern cannot span the brackets of an image nested
+    # inside a link: `[![badge](image)](target)` matched the image and dropped the target around it.
+    markdown_link = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
+    documents = sorted(
+        document
+        for document in ROOT.rglob("*.md")
+        if document.is_file() and not skip_parts.intersection(document.relative_to(ROOT).parts)
+    )
+    document_headings: dict[Path, set[str]] = {}
+    markdown_refs = 0
+    for document in documents:
+        try:
+            source = document.read_text(encoding="utf-8")
+        except (OSError, ValueError) as exc:
+            errors.append(f"{document.relative_to(ROOT).as_posix()}: cannot read document: {exc}")
+            continue
+        document_headings[document] = markdown_headings(source)
+        here = document.relative_to(ROOT).as_posix()
+        for target in markdown_link.findall(source):
+            split = urlsplit(target)
+            if split.scheme or split.netloc:
+                continue
+            path, fragment = split.path, split.fragment
+            markdown_refs += 1
+            if path:
+                try:
+                    resolved = (document.parent / path).resolve()
+                except (OSError, ValueError) as exc:
+                    errors.append(f"{here}: cannot resolve link {target!r}: {exc}")
+                    continue
+                if not resolved.is_relative_to(ROOT):
+                    errors.append(f"{here}: link leaves the repository: {target}")
+                    continue
+                if not resolved.exists():
+                    errors.append(f"{here}: link resolves to nothing: {target}")
+                    continue
+            else:
+                resolved = document
+            if not fragment:
+                continue
+            if resolved.suffix == ".html":
+                if resolved not in page_ids:
+                    errors.append(f"{here}: link names a fragment of an unreadable page: {target}")
+                elif fragment not in page_ids[resolved]:
+                    errors.append(f"{here}: no id {fragment!r} in {resolved.relative_to(ROOT).as_posix()}: {target}")
+            elif resolved.suffix == ".md":
+                if resolved not in document_headings:
+                    try:
+                        document_headings[resolved] = markdown_headings(resolved.read_text(encoding="utf-8"))
+                    except (OSError, ValueError) as exc:
+                        errors.append(f"{here}: cannot read the document a link names: {exc}")
+                        continue
+                if fragment not in document_headings[resolved]:
+                    errors.append(f"{here}: no heading {fragment!r} in {resolved.relative_to(ROOT).as_posix()}: {target}")
+    if markdown_refs == 0:
+        errors.append("no local link found in any Markdown document: the document link check validated nothing")
+    checks.append(f"markdown-refs:{markdown_refs}")
+
     workflow_path = ROOT / ".github/workflows/pages.yml"
     if workflow_path.is_file():
         workflow = workflow_path.read_text(encoding="utf-8")
@@ -405,7 +490,7 @@ def main() -> int:
     produced = {check.split(":", 1)[0] for check in checks}
     for expected in (
         "required-files", "continuity-actions", "checkpoint",
-        "decisions", "schemas", "html-pages", "pages-workflow",
+        "decisions", "schemas", "html-pages", "markdown-refs", "pages-workflow",
     ):
         if expected not in produced:
             errors.append(f"check did not run: {expected}")

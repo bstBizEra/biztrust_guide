@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-102-001",
+  "created_at": "2026-09-06T18:11:19Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-102",
+  "state": "ENGINEERING_READY",
+  "objective": "Follow the links in Markdown as the validator already follows them in HTML: a local path must exist inside the repository, a fragment naming a page must be an id that page carries, and a fragment naming a document must be a heading it carries. Close the gap the drift survey found, which let 48 broken links live in the design pack for the pack's whole life.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-102-markdown-links",
+    "baseline_commit": "ae5884749166c88726dd7398bc0722f30c8fb3fc"
+  },
+  "completed": [
+    "scripts/validate_continuity.py follows Markdown links: markdown-refs:189 over 43 documents, beside html-refs:922.",
+    "The meta-check requires markdown-refs to have run, so a family that silently skips cannot yield a clean verdict.",
+    "Negative control against a real commit: the same check on this repository at a2387dc reports exactly 48 links resolving to nothing and exits 1.",
+    "Seven cases in tests/test_validator_fails_closed.py hold what that commit does not reach: a missing file, a page fragment no id carries, a document heading none carries, a heading that is there, a path leaving the repository, external links left alone, and every document emptied.",
+    "badf/ records the check: DEC-104 and this checkpoint; NS-045 records the repair, the guard and the rule #316 raised."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #310 closed, one line appended to #296 Decisions so far."
+  ],
+  "files_changed": [
+    "scripts/validate_continuity.py",
+    "tests/test_validator_fails_closed.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-102-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The check reports 189 links, which is the figure an independent walk of the tree found before the check existed; a count that agrees with a count taken another way is worth more than a count that only agrees with itself.",
+    "Every fragment link in the Markdown corpus points at an HTML page, and none at a Markdown heading. The anchor rule is implemented anyway because the ticket asked for it, and is held by its own positive control rather than by the corpus; the code says so where the rule is written.",
+    "The strongest control this repository has produced: not a mutation but a commit. At a2387dc the check fails on 48 real links that lived in the pack from the day it was written.",
+    "The review found the link reader dropping a link that wraps an image: a label pattern cannot span the brackets of `[![badge](image)](target)`, so it read the image and lost the target around it. Harmless in this corpus because both are external, and a broken local link in that shape would have been missed. The reader is anchored on `](` now, which every link and image target follows; it finds one more target and the same 189 local links.",
+    "It also found the resolve call unguarded where the HTML block beside it catches OSError and ValueError. Nothing it threw at the check raised on this platform, but the file's own rule is that an exception becomes a recorded error rather than a traceback with no verdict line, and the new code now keeps that rule rather than relying on the platform.",
+    "Two of the seven cases exercise pure string logic through a subprocess, which the reviewer noted is slower than a unit test would be. They stay: no test in this repository imports the validator, and every case in this harness runs it as a subprocess against a copied tree, which is the property that makes the harness trustworthy."
+  ],
+  "decisions": [
+    "DEC-104: the validator follows Markdown links; markdown-refs is a required check family."
+  ],
+  "assumptions": [
+    "A link's target is what lies between ]( and ), with an optional quoted title after whitespace, and a scheme or a host means the link is external.",
+    "A Markdown anchor is its heading lowercased with punctuation dropped and spaces hyphenated; GitHub's disambiguation of repeated headings is not implemented and nothing in the repository needs it."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "all_phase_guide_map": "OPERATOR_INSTRUCTION_2026_09_06_CONTINUE_ON_THE_TRACK_AS_RECOMMENDED_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_101",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "scripts/validate_continuity.py"
+    ],
+    "stop_if": [
+      "A document is edited to satisfy the check before checking whether the link's target moved."
+    ]
+  },
+  "declared_non_coverage": [
+    "External links are not followed; they need the network and are a different problem.",
+    "A reference in HTML to a Markdown document is not checked, only Markdown's own links; the HTML check resolves paths but this repository's pages do not link Markdown.",
+    "A bare URL written without Markdown link syntax is not read; an image's target is read, like any other.",
+    "The anchor rule does not disambiguate two headings with the same text, which GitHub does with a numeric suffix. docs/research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md carries two headings titled Objective and is a real instance; no link points at either, so nothing is wrong today."
+  ]
+}
