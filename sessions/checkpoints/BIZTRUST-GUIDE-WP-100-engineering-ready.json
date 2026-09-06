@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-100-001",
+  "created_at": "2026-09-06T17:18:26Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-100",
+  "state": "ENGINEERING_READY",
+  "objective": "Hold every ADR citation in docs/architecture/ to docs/architecture/ADR_REGISTER.md, which nothing read until now: the identifier must have a register row, and a status claimed for it must be the register's. The register decides and a document repeats. No document and no register row changes.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-100-adr-citations",
+    "baseline_commit": "be147d300acd2bd2fcb6ba2dd99f8aae13721d3c"
+  },
+  "completed": [
+    "tests/test_adr_citations.py holds every ADR citation under docs/architecture/ to the register: eleven tests, three positive controls, five negative controls, three comparisons.",
+    "Negative controls run against the files: a citation of ADR-021, a claim of ACCEPTED where the register says DRAFT_REQUIRED, and a duplicated register identifier; each failed for its own reason.",
+    "The corpus already agrees: 114 status claims read, none disagreeing, so this is a regression guard and not a repair.",
+    "badf/ records the guard: DEC-102 and this checkpoint; NS-045 names #308, #309 and the tickets the survey graduated."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #309 closed, one line appended to #296 Decisions so far."
+  ],
+  "files_changed": [
+    "tests/test_adr_citations.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-100-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The first reader ran backward from each status and silently missed four claims whose identifier lay beyond its ninety-character window. Counting what a parse does not read, against the raw occurrences, is what found that; a parse that reads only the easy cases passes.",
+    "A three-digit pattern without a word boundary matched ADR-000 out of the ADR-0007 in someone else's example in docs/agents/domain.md. The identifier is bounded now, and the corpus is scoped to docs/architecture/ where this repository's normative documents are.",
+    "Every one of the corpus's 114 claims already agrees with the register, which is worth recording: the rule had been held by hand, by reviewers, and held correctly."
+  ],
+  "decisions": [
+    "DEC-102: ADR citations are held to the register; the register decides and a document repeats."
+  ],
+  "assumptions": [
+    "A status claim is a backticked status word in the same clause as the identifier it follows; a clause ends at a semicolon, a pipe, a full stop or a newline.",
+    "The register's rows are the only place an ADR's status is decided, as its own header states."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "all_phase_guide_map": "OPERATOR_INSTRUCTION_2026_09_06_CONTINUE_ON_THE_TRACK_AS_RECOMMENDED_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_099",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "adr_status_change": "THE_REGISTER_AND_ITS_WORK_PACKAGE_ONLY",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_adr_citations.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "docs/architecture/ADR_REGISTER.md"
+    ],
+    "stop_if": [
+      "A document is edited to satisfy the guard before checking whether the register is the thing that is wrong."
+    ]
+  },
+  "declared_non_coverage": [
+    "Only Markdown under docs/architecture/ is read. The HTML pages cite ADRs too, and none of those citations is checked; that is a gap worth its own ticket.",
+    "A citation with no status claim is checked for existence only; nothing requires a document to state a status at all.",
+    "Nothing checks that an ADR's register row is itself right, or that a design's dependency on an ADR is the correct dependency.",
+    "A status stated in words rather than backticks is not read as a claim."
+  ]
+}
