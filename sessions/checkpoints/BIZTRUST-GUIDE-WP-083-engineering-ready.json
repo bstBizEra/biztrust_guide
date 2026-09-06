@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T10:09:30Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-083",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #144 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.8 design with its nine mandatory sections, the OpenAPI version pinned as ADR-005 proposes and the layout ARCH-001 section 11 draws, the canonical rules each made concrete, authority and provenance as two components on every representation, the error shape under RFC 9457 with what detail never says, versioning and the breaking-change policy, ten lint rules with a fixture each and the CI step, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #144 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.8 design with its nine mandatory sections, the OpenAPI version pinned as ADR-005 proposes and the layout ARCH-001 section 11 draws, the canonical rules each made concrete, authority and provenance as two components on every representation, the error shape under RFC 9457 with what detail never says, versioning and the breaking-change policy, ten lint rules with a fixture each and the CI step, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005, eleven open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-083-p0-08-api-design",
@@ -43,14 +43,14 @@
   "observations": [
     "Every rule of ARCH-001 section 11's canonical list has a contract shape and an enforcement point; the design adds no rule the contract does not name.",
     "The idempotency header follows an expired Internet-Draft, cited as a shape and never as a standard; ADR-012 decides the scope, retention and replay.",
-    "The design asks the P0.2 design's next version for the contract lint job and hands the P0.4 design its tenant segment answer."
+    "The design asks the P0.2 design's next version for the contract lint job, the P0.10 design's for seven reason codes, and hands the P0.4 design its tenant segment answer."
   ],
   "decisions": [
     "DEC-085: the P0.8 design at PROPOSED; openapi 3.2.0 pinned; the canonical rules as contract and middleware; Provenance and Authority on every representation; problem details that never leak; additive change gated by oasdiff; ten lint rules with fixtures."
   ],
   "assumptions": [
-    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
-    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+    "The map's charting decision 8 permits the design to proceed with ADR-005 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's eleven ASSUMED positions are the track's; each names the decision that would reverse it."
   ],
   "blockers": [
     {
