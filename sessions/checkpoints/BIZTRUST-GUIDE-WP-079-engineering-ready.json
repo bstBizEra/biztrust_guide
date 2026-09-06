@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T08:55:39Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-079",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #139 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.4 design with its nine mandatory sections, the mapping on the BizTrust side with a history table, provisioning as the only writer, a BizTrust-side membership record checked on every request, a resolver with five outcomes whose denials are indistinguishable to the caller, the mismatch path with the route's tenant segment compared and never trusted and no other carrier read, the lifecycle, nine negative controls including the ticket's four tests, the evidence contract, candidates pending ADR-002, ADR-003 and ADR-005, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #139 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.4 design with its nine mandatory sections, the mapping on the BizTrust side with a history table, provisioning as the only writer, a BizTrust-side membership record checked on every request, a resolver with five outcomes whose denials share one status, shape and response code, the mismatch path with the route's tenant segment compared and never trusted and no other carrier read, the lifecycle, nine negative controls including the ticket's four tests, the evidence contract, candidates pending ADR-002, ADR-003 and ADR-005, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-079-p0-04-mapping-design",
@@ -42,7 +42,7 @@
   ],
   "observations": [
     "The mapping is one to one and one-directional: nothing in Logto is authority for a BizTrust tenant, and the custom-claims script is recorded as not a candidate.",
-    "The three denials the caller can provoke share one status and shape; the audit record, not the response, carries the reason.",
+    "The three denials the caller can provoke share one status, shape and response code; the audit record, not the response, carries the reason.",
     "The route's tenant segment is a proposal to the P0.8 conventions design; the comparison rule does not depend on which carrier is chosen."
   ],
   "decisions": [
@@ -127,7 +127,7 @@
     ],
     "stop_if": [
       "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
-      "A design reads a tenant identifier from a header, query or body, or lets anything but provisioning write the mapping.",
+      "A design takes a tenant identifier from a header, query or body as input, or lets anything but provisioning write the mapping.",
       "Another session's worktree or uncommitted edit is touched."
     ]
   },
