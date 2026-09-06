@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-057-001",
+  "created_at": "2026-09-06T00:44:19Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-057",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #190 on the Guide v2 map: keep the hub's four day ranges as the mobilization estimate they are, labelled the guide's and not the plan's, and rewrite their bullets to PLAN-001's phases and gates: the architecture slice toward BT-G0 (label A), the P0 slice and its mandatory proof toward BT-G1 (label B), the P1A twelve-step slice toward BT-G2 (the first gate of label C), and the pilot with P1B and P1C opening only on BT-G2 evidence and P2 Payment and Finance waiting on label C and ADR-014; add one sentence on Continuous Operations and the expansion streams, sourced to PLAN-001 sections 8 and 11 and linking the reference page.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-057-hub-roadmap-v2",
+    "baseline_commit": "9592999277b4f52e39108f37c9d0eedb26a840d2"
+  },
+  "completed": [
+    "Ticket #190 resolved by this branch: index.html's First 90 days section keeps its four day ranges, its bullets name PLAN-001's phases and gates with labels, the closing paragraph labels the estimate the guide's, says the ninety days reach BT-G2 at most, and carries the Continuous Operations sentence linking the reference page.",
+    "badf/ re-anchored: NS-044 repointed at #171, DEC-059 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-056.",
+    "After merge: #190 closed with a resolution comment; the map's decision line appended with its title link.",
+    "Map #153: #171 catalogue and tests next; #159 and #160 independent."
+  ],
+  "files_changed": [
+    "index.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-057-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The hub is on tests/test_gate_namespaces.py's surface, so every gate on it must be a BT-G identifier with its label beside it; the section names BT-G0, BT-G1, BT-G2 and BT-G7 and no label without an identifier.",
+    "The KPI band and the nav label '90-day roadmap' are unchanged; the ticket asked about the phases, the gates and one sentence, not the metrics.",
+    "The hub's P0 card (section 08) still calls the slice 'P0 tenant security slice'; that is the slice's name in PLAN-001 section 4 and the P0 manual, not a previous-plan phase name, and is outside this ticket."
+  ],
+  "decisions": [
+    "DEC-059: day ranges kept as the guide's estimate; bullets on PLAN-001's phases and gates; ninety days reach BT-G2 at most; one Continuous Operations sentence linking the reference page."
+  ],
+  "assumptions": [
+    "The wayfinder invocation and 'proceed next steps on information and evidence' are chat instructions to work the next frontier ticket; they adopt nothing and authorise nothing.",
+    "The day ranges and the placement of each gate within them are the guide's estimate, not a plan or a schedule; no gate is recorded."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_056",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_gate_namespaces",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "The hub's roadmap section names a gate the plan does not, or a label without its identifier.",
+      "The hub or any record says a gate has passed, a phase is authorised, or a day range is a commitment.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered hub was not viewed in a browser; the section's gate names and links were checked by the tests and the validator.",
+    "The day ranges are unchanged from the previous section and remain the guide's estimate; no source gives them.",
+    "The KPI band's five metric pairs are untouched and unsourced, as before."
+  ]
+}
