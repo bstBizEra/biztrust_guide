@@ -50,7 +50,7 @@ The showcase's tokens are the handbook's, by DEC-049: the projection reads as th
 - **Colour**: navy `#071a2c` for the strip, the hero and the gate slabs; teal `#10a8a0` for links and focus; amber `#f1b84b` for the strip's rule and markers and the current page in the navigation; lime `#bfdc6a` for the strip's second state and the left rule of the definition and principle blocks; red `#c92f2f` for the strip's third state; paper `#f5f8f9` and white surfaces; the dark scheme swaps ink and paper as the handbook does.
 - **Type**: Inter alone, at the stylesheet's scale: the overview's hero heading at `clamp(2.4rem, 6vw, 4.6rem)` with tight letter-spacing, section headings at `clamp(1.5rem, 3vw, 2.2rem)`, body at 1rem on a 1.6 line height, source lines at 0.74rem in the muted colour. No monospace labels, no capitals as labels, no eyebrow labels above headings.
 - **Layout**: one left-aligned column, 72rem at most; blocks separated by a hairline rule, the block's bottom border; the ledger's two bordered panels are the one card-like element, and they stay the overview's. The overview keeps its hero as the entry's one big moment; the eight projections open with the record line under a plain heading, not a hero.
-- **Components**, all in `showcase.css`, none invented per page: the strip; the mast; the navigation; the record line; the block with its source line; the ledger of what is decided and what remains open, as the overview renders it; the gate slab that closes each phase page, the gate identifier large in the navy block with its label beside it; the engage block that ends a page with what the reader can do. The navigation, the record line and the gate slab are this record's additions to the overview's stylesheet; nothing added restyles an element the overview uses.
+- **Components**, all in `showcase.css`, none invented per page: the strip; the mast; the navigation; the record line; the block with its source line; the table, one rule for every table a projection renders; the ledger of what is decided and what remains open, as the overview renders it; the gate slab that closes each phase page, the gate identifier large in the navy block with its label beside it; the engage block that ends a page with what the reader can do. The navigation, the record line and the gate slab are this record's additions to the overview's stylesheet; nothing added restyles an element the overview uses.
 - **The one bold thing** is the strip. Nothing else moves, glows or fades; no motion that a reader did not cause.
 
 ## 5. How a page is built
@@ -59,6 +59,6 @@ One Work Package per page, against this record. The package prototypes the page 
 
 ## 6. What this record does not decide
 
-- Whether the eight projections need a heading treatment of their own, since they do not use the hero, is decided by the first page package (#173) and recorded here.
+- The eight projections open with their heading as the first block's heading and the record line beneath it; no hero. Decided by the first page package (#173, WP-065).
 - Whether the tokens should be shared with the handbook's `styles.css` by a build step rather than by hand is not decided; the workflow stages `showcase.css` as it stages `styles.css`.
 - The doctrine sentence on the team page waits on #158, which waits on the contract map's waiver.

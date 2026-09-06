@@ -76,6 +76,9 @@ nav.showcase-nav a:hover{border-bottom-color:var(--teal)}
 nav.showcase-nav a[aria-current="page"]{color:var(--ink);font-weight:700;border-bottom-color:var(--amber)}
 nav.showcase-nav span[aria-disabled="true"]{color:var(--muted)}
 p.record{font-size:.86rem;color:var(--muted);margin:.4rem 0 2.2rem}
+main table{width:100%;border-collapse:collapse;font-size:.92rem;margin:1.2rem 0}
+main th,main td{text-align:left;vertical-align:top;padding:.6rem .8rem;border-bottom:1px solid var(--line)}
+main th{font-size:.78rem;color:var(--muted);font-weight:600}
 .gate{background:var(--navy);color:#fff;padding:2rem 1.6rem;margin:2.4rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.6rem;align-items:baseline;border-left:6px solid var(--amber)}
 .gate b{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;line-height:1}
 .gate span{font-size:1.1rem}

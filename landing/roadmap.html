@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="The BizTrust roadmap as its delivery plan records it: five phases from architecture to production, the trust each is designed to establish, the gates a human records to close each, the eight expansion streams that follow Production v1.0, and where the effort stands today.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — The roadmap: five phases to Production v1.0</title>
+  <!-- A projection of BIZTRUST-PLAN-001, the delivery plan's record, for the humans whose decisions gate the delivery.
+       Not a source of truth: the plan and the phase manuals are. Rules: landing/README.md (SHOWCASE-001). Ticket #173 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#today">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html" aria-current="page">Roadmap</a>
+    <span aria-disabled="true">Architecture</span>
+    <span aria-disabled="true">P0 Identity and Tenant</span>
+    <span aria-disabled="true">P1 Insurance</span>
+    <span aria-disabled="true">P2 Payment and Finance</span>
+    <span aria-disabled="true">P3 Production</span>
+    <span aria-disabled="true">Continuous Operations and expansion</span>
+    <span aria-disabled="true">Team and doctrine</span>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="roadmap">
+      <h2>The roadmap: five phases to Production v1.0, and what follows</h2>
+      <p class="record">Projects BIZTRUST-PLAN-001 1.0-draft, sections 2, 8, 10 and 11; read at 94f35ea, 2026-09-06.</p>
+      <p>BizTrust is designed to be delivered in five phases, one after another, each closed by a gate that a named human records on evidence. No phase is authorised as a whole: work inside it is granted one Work Package at a time, after the gate before it is recorded. What each phase is for is a kind of trust, and the order is the order in which that trust would have to exist.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 2 (the five phases) and section 10 (a gate is recorded by a human; failure at any gate blocks dependent authorisation).</p>
+    </section>
+
+    <section class="block" id="phases">
+      <h2>Five phases, each designed to establish one kind of trust</h2>
+      <table class="phases">
+        <thead><tr><th>Phase</th><th>Name</th><th>Strategic purpose</th><th>Trust established</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Architecture</strong></td><td>Design the Foundation</td><td>Create the normative contract from which engineering is authorised</td><td>Trust in the design</td></tr>
+          <tr><td><strong>P0</strong></td><td>Identity and Tenant</td><td>Prove identity, authority and isolation before any insurance data</td><td>Trust in identity, authorisation and tenant isolation</td></tr>
+          <tr><td><strong>P1</strong></td><td>Insurance</td><td>Build broker-native insurance operations</td><td>Trust in the insurance lifecycle</td></tr>
+          <tr><td><strong>P2</strong></td><td>Payment and Finance</td><td>Control money, ledger, commission, settlement and reconciliation</td><td>Trust in financial integrity</td></tr>
+          <tr><td><strong>P3</strong></td><td>Production</td><td>Operate securely and reliably</td><td>Trust in production operation</td></tr>
+        </tbody>
+      </table>
+      <p>After P3 comes Continuous Operations: measure, learn, improve, expand. It is an operating lifecycle, not a sixth phase, and nothing after P3 carries a phase number, because a number would imply a sequencing commitment nobody has reviewed.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 2, the table cell for cell and the paragraph after it.</p>
+    </section>
+
+    <section class="block" id="gates">
+      <h2>The gates a human records, and the labels a presentation may use</h2>
+      <p>Records name gates by identifier, BT-G0 to BT-G7. A presentation such as this page may also use the roadmap's five executive labels, A to E, but never a label without its identifier, because two gates share a label and one gate is judged inside another's.</p>
+      <table class="labels">
+        <thead><tr><th>Label</th><th>Roadmap name</th><th>Identifiers</th><th>Closes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A</strong></td><td>Architecture Ready</td><td>BT-G0</td><td>Architecture</td></tr>
+          <tr><td><strong>B</strong></td><td>Identity and Tenant Proven</td><td>BT-G1</td><td>P0</td></tr>
+          <tr><td><strong>C</strong></td><td>Insurance End-to-End Proven</td><td>BT-G2 and BT-G3</td><td>P1 (P1A at BT-G2; P1B and P1C at BT-G3)</td></tr>
+          <tr><td><strong>D</strong></td><td>Financial Integrity Proven</td><td>BT-G4 and BT-G5</td><td>P2</td></tr>
+          <tr><td><strong>E</strong></td><td>Production Ready</td><td>BT-G7, with BT-G6 judged inside it</td><td>P3</td></tr>
+        </tbody>
+      </table>
+      <p>BT-G6, Tenant Ready, keeps its identifier and its meaning, that a second tenant would onboard without a copy of the platform being made, because an invariant depends on it; it is recorded before or together with BT-G7, never skipped because label E does not name it. Each gate names the evidence that blocks it: for BT-G1, negative tests that prove one tenant cannot reach another; for BT-G2, an end-to-end broker trace and a practitioner's acceptance; for BT-G4, balanced journals and reconciliation evidence; for BT-G7, revision-bound evidence for every item of the production list, an independent readiness review, and the security risk owner's dated record. A passing test suite records nothing; a human does.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 10.1 (the labels table cell for cell and the BT-G6 rule) and section 10.2 (the gate table's requirement and evidence columns for BT-G1, BT-G2, BT-G4 and BT-G7; "a gate is recorded by a human ... a passing test suite records nothing").</p>
+    </section>
+
+    <section class="block" id="asks">
+      <h2>What each label asks for before it can be recorded</h2>
+      <div class="models">
+        <div><b>A, Architecture Ready</b><span>The architecture can answer who owns each datum, which tenant owns each record, who may perform each operation, what the authoritative insurance and financial states are, how a quote becomes bound coverage, how money becomes premium, how a second tenant onboards without a fork, how isolation is proved, how failures are recovered and how a transaction is reconstructed from evidence.</span></div>
+        <div><b>B, Identity and Tenant Proven</b><span>The chain from authenticated identity through validated tenant context, authorised operation and tenant-isolated data access to immutable audit evidence is demonstrated mechanically, and the P0 proof passes independently of the people who built it.</span></div>
+        <div><b>C, Insurance End-to-End Proven</b><span>One trace from tenant to client, risk, submission, placement, quotes, comparison, recommendation, acceptance, bind coordination, carrier confirmation and policy, then endorsement, claim and renewal, with the insurer's authority kept separate from the broker's records throughout.</span></div>
+        <div><b>D, Financial Integrity Proven</b><span>One trace from customer to invoice, payment, provider confirmation, ledger, commission, insurer payable, settlement, reconciliation and policy evidence, and ten failure cases proven handled, among them a duplicate payment, a missing webhook and a carrier settlement difference.</span></div>
+        <div><b>E, Production Ready</b><span>Revision-bound evidence for eighteen things, from security and tenant isolation through backup restore, disaster recovery and rollback to runbooks, on-call and compliance evidence; a readiness review by someone other than the implementers; the security risk owner's dated record.</span></div>
+      </div>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 10.3, each label's list paraphrased in fewer words; the lists themselves are proposals until each gate's owner accepts them.</p>
+    </section>
+
+    <section class="block" id="streams">
+      <h2>After Production v1.0: eight expansion streams, none with a phase number</h2>
+      <table class="streams">
+        <thead><tr><th>Stream</th><th>Capability</th></tr></thead>
+        <tbody>
+          <tr><td><strong>E1 Tenant Scale</strong></td><td>Tenant Pack SDK, white-labelling, product packs</td></tr>
+          <tr><td><strong>E2 Embedded Insurance</strong></td><td>Developer portal, partner APIs, SDKs</td></tr>
+          <tr><td><strong>E3 Integration Scale</strong></td><td>More insurer, payment and bank adapters</td></tr>
+          <tr><td><strong>E4 Workflow Scale</strong></td><td>Event-driven and workflow-engine extraction</td></tr>
+          <tr><td><strong>E5 Enterprise Isolation</strong></td><td>Dedicated schema or database deployment</td></tr>
+          <tr><td><strong>E6 Advanced Brokerage</strong></td><td>Richer claims, renewals, placement analytics</td></tr>
+          <tr><td><strong>E7 Intelligence</strong></td><td>Recommendations, assistants, document intelligence, anomaly detection</td></tr>
+          <tr><td><strong>E8 Ecosystem</strong></td><td>Marketplace, insurer ecosystem, embedded distribution</td></tr>
+        </tbody>
+      </table>
+      <p>Each stream would open only when BT-G7 is recorded, Production v1.0 is released, and the stream's own entry condition is recorded by the decision owner it names; none is ordered among the others except where its condition names another, and none is authorised by the plan. The conditions are on the handbook's <a href="../reference/continuous-operations.html">Continuous Operations page</a>.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 8 (the streams table, cell for cell) and section 11 (entry conditions; "none is authorised by this plan").</p>
+    </section>
+
+    <section class="block" id="interpretation">
+      <h2>The executive interpretation, in one line per phase</h2>
+      <ul>
+        <li>Architecture establishes trust in the design.</li>
+        <li>P0 establishes trust in identity, authorisation and tenant isolation.</li>
+        <li>P1 establishes trust in brokerage operations.</li>
+        <li>P2 establishes trust in money, commissions, settlement and reconciliation.</li>
+        <li>P3 establishes trust in continuous, safe operation.</li>
+      </ul>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 2, last paragraph, which carries the roadmap's section 15 as the executive interpretation.</p>
+    </section>
+
+    <section class="block" id="today">
+      <h2>Where the effort stands today</h2>
+      <div class="today">
+        <div><b>The architecture is being designed</b>The contract is at version 0.1, marked draft for contract freeze; no gate has been recorded, and BT-G0, the first, waits on the freeze.</div>
+        <div><b>Nothing is authorised for implementation</b>Architecture acceptance and platform implementation are both recorded as not granted; the repository holds no application code.</div>
+        <div><b>The plan is a draft</b>PLAN-001 is at 1.0-draft; its phases, gates and streams are proposals until the accepting authority records acceptance at BT-G0.</div>
+        <div><b>The handbook renders the plan</b>Nine engineering stages, five delivery phases and four reference pages are published; every page of them projects a record and says which.</div>
+      </div>
+      <p class="source">Source: the handbook's continuity state, <code>badf/current-state.json</code>, read at 94f35ea on 2026-09-06: architecture acceptance not granted, production platform implementation not granted, plan acceptance not granted until BT-G0; the contract's <code>0.1-draft</code> and the plan's <code>1.0-draft</code> status fields. The strip at the top of this page states those records and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you hold a seat that records a gate</h3><p>The gate table names the evidence that blocks each gate and the phase manuals say what a human must see before recording one. Nothing on this page records anything.</p><a class="btn" href="../phases/overview.html">Read the phase track</a></div>
+        <div><h3>If you want the plan itself</h3><p>PLAN-001 is the record this page projects: sections 2 to 8 for the phases, 10 for the gates, 11 for the streams. Where this page and the plan disagree, the plan is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and records no gate. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>

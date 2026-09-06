@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-065-001",
+  "created_at": "2026-09-06T05:16:44Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-065",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #173 on the Guide v2 map under the showcase record: write landing/roadmap.html as a projection of PLAN-001 sections 2, 8, 10 and 11 in the design voice, with the shell SHOWCASE-001 prescribes, three tables copied cell for cell and held by a test, every section sourced, and a where-it-stands section read from the continuity state; link it from the entry page's navigation; correct the entry page's stale phase count; give showcase tables one rule.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-065-showcase-roadmap",
+    "baseline_commit": "94f35ea90814decbda41154d790bf41fd964ef24"
+  },
+  "completed": [
+    "Ticket #173 resolved by this branch: landing/roadmap.html with eight blocks and the shell; its first draft on prototype/showcase-roadmap, linked from the ticket.",
+    "tests/test_showcase_roadmap.py, written red first (the page did not exist), holds the phases, labels and streams tables to PLAN-001 sections 2, 10.1 and 8; three negative controls recorded; README names it.",
+    "landing/index.html links the roadmap page in its navigation, says five delivery phases, and re-dates its status source; landing/showcase.css gains one rule for showcase tables; landing/README.md records the no-hero decision and the table component; AGENTS.md's page count is twenty-one.",
+    "badf/ re-anchored: the content gate's value counts four reference pages and the showcase entry, NS-044 repointed at #174, DEC-067 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-064.",
+    "After merge: #173 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #174 the architecture page next, then #175 to #180; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/roadmap.html",
+    "landing/index.html",
+    "landing/showcase.css",
+    "landing/README.md",
+    "tests/test_showcase_roadmap.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-065-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "tests/test_showcase_pages.py's navigation check requires the roadmap link to point at a file that exists on every page that links it; the entry page's label becomes a link in the same commit as the page.",
+    "The page names gates by identifier with the label beside it the first time, per PLAN-001 section 10.1; the gate-namespace test scans the root, stages, reference and phases, not landing/, so the rule is held by review here.",
+    "The where-it-stands block reads the continuity state's authority fields, not the strip; the strip's three lines are the overview's, as the showcase record fixes them."
+  ],
+  "decisions": [
+    "DEC-067: the roadmap page as the first projection; no hero; one table rule; the entry's phase count corrected."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #173 and the page is revised to match.",
+    "Paraphrases of the plan's lists are the track's; the source line says which list and that it is paraphrased."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_064",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_roadmap tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table on the page differs from the plan section it copies, or a source line cites a passage that does not say what the section says.",
+      "The page states a gate as passed, a capability as existing, or a decision as accepted.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the tables and the links were checked by the tests and the validator.",
+    "The paraphrased lists (the gates' evidence, each label's asks) are not held by a test; the two-axis review checks them against PLAN-001 sections 10.2 and 10.3.",
+    "The strip and the where-it-stands block are hand-maintained from badf/current-state.json; no test compares them."
+  ]
+}
