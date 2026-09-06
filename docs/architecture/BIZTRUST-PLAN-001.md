@@ -386,6 +386,39 @@ The guide's hub carries an eight-item Definition of Done for a Work Package: acc
 One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a gate closes a phase, not a package (section 10): a package is done when its eight items are shown, and a phase is closed when its gate's owner records it, so putting the gate inside the package's definition would let a package claim a phase. Read as `ENG-Gn`, passing the stage gate is the lifecycle the eight items feed, not a ninth item. On either reading it is not a package item.
 
 
+### 13.1 The Work Package loop against the nine stages
+
+The roadmap's section 9 gives a 24-step loop for every Work Package in every phase and says it extends the guide's nine-stage lifecycle. The mapping below is this plan's proposal, recorded under WP-060 ([#159](https://github.com/bstBizEra/biztrust_guide/issues/159)); the stage count stays nine, because every step has an owning stage. The four steps the ticket named are marked in the table: threat and risk analysis is a gap with a proposed owner (06); independent security review is carried under another name (12); evidence collection is carried by a rule rather than a section (17); feeding knowledge and memory back is carried by records rather than a section (23). The guide renders this table as `reference/work-package-loop.html`, held to it by `tests/test_work_package_loop_page.py`.
+
+| Step | Roadmap step | Stage | Where the stage carries it |
+|---|---|---|---|
+| 01 | Understand | Discover | The problem statement, stated as a problem and not a solution (Discover §03) |
+| 02 | Discover | Discover | The baseline, the stakeholders and the constraints (Discover §04 to §06) |
+| 03 | Research | Discover | Evidence sources and their reliability (Discover §07); the map's research tickets on research branches |
+| 04 | Define | Define | Requirements that can be unmet, and acceptance criteria kept distinct from them (Define §03, §04) |
+| 05 | Design | Architect | The freeze discipline, ADRs and systems of record (Architect §03, §05, §06) |
+| 06 | Threat / Risk Analysis | Architect | Not named on any stage page. The hub's lifecycle summary assigns the threat model to Architect and the Definition of Done requires it reviewed; Define carries the data classification and the risk tier (Define §05, §06). A gap; this track proposes an Architect section |
+| 07 | Plan | Plan | Work Package anatomy and criteria that can fail (Plan §03, §04) |
+| 08 | Work Package Decomposition | Plan | Decomposition (Plan §06) |
+| 09 | Implement | Build | Change discipline and building to contract (Build §03, §06) |
+| 10 | Self-Test | Build | The commands Plan specified are run and their output quoted before the peer reviewer reads the diff (Build §08) |
+| 11 | Independent Code Review | Build | The reviewer roles the exit gate requires (Build §07, §08) |
+| 12 | Security Review | Assure | Carried under another name: Assure's security reviewer, who owns layer 4 for any change touching authentication, tenancy or data access (Assure §05) |
+| 13 | Contract / Integration Test | Assure | Layers L2 unit and integration and L3 contract tests (Assure §02) |
+| 14 | Debug | Build | Carried inside Build: a failing check is fixed within the package under the change discipline, which allows no adjacent improvements and verifies against the tree that ships (Build §03) |
+| 15 | Regression | Assure | Layers L1 repository validation and L2, and assurance in steady state (Assure §02, §07) |
+| 16 | Web / Mobile E2E | Release | Carried by Release's verification of the deployed thing end to end on its critical path (Release §04); the pipeline's end-to-end step is P3B.1 |
+| 17 | Evidence Collection | Assure | Carried by a rule, not a step: the evidence manifest is Assure's output (Assure §04) and evidence is bound to a revision at every stage under AGENTS.md section 9 |
+| 18 | Gate Evaluation | Every stage | Each stage's exit gate, ENG-G0 to ENG-G8; a phase's capability gate BT-Gn is judged on the phase pages |
+| 19 | Human Authorization if Required | Plan | Authority records (Plan §05); release authority at Release's entry (Release §01); a gate is recorded by a human (PLAN-001 section 10) |
+| 20 | Release | Release | Progressive exposure, verification of the deployed thing and rollback (Release §03 to §05) |
+| 21 | Observe | Operate | Service objectives and the telemetry floor (Operate §03, §04) |
+| 22 | Learn | Learn | Decision quality against outcome quality, defect-escape analysis, the promotion bar (Learn §03 to §05) |
+| 23 | Feed Knowledge / Memory | Learn | Not named as a step: Learn's inputs are escape-ledger entries and decision records, not memory (Learn §01), and the charter's checkpoint and handoff records carry knowledge forward (AGENTS.md sections 6, 7) |
+| 24 | Next Controlled Iteration | Learn | Learn's exit gate returns to Discover (Learn §08); Operate's exit to Learn is continuous (Operate §11) |
+
+Steps 10 to 16 are seven names for what the guide splits across Build, Assure and Release; the roadmap's order inside them is not a sequence the stages impose, since Assure's six layers run together and Release verifies after exposure. Step 18 belongs to no single stage: every stage ends in an `ENG-Gn` exit gate, and the phase gates `BT-Gn` of section 10 are a different namespace (section 1).
+
 ## 14. What this document does not yet carry
 
 - **The previous plan's section 7** is a pointer to section 10 here since WP-051 ([#165](https://github.com/bstBizEra/biztrust_guide/issues/165)), and its sections 3 to 6 are a pointer to sections 3 to 7 and 9 here since WP-055 ([#169](https://github.com/bstBizEra/biztrust_guide/issues/169)); the overview renders section 10, the four phase pages render sections 4 to 7, and `tests/test_phase_pages.py` reads them.
