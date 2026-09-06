@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-078-001",
+  "created_at": "2026-09-06T08:43:53Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-078",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #138 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.3 design with its nine mandatory sections, the one Logto token model the API accepts, a seven-check validation chain with a reason code and an audit call per failure, what a gateway of the researched shape would prove and what the application re-checks regardless, a synthetic lab, ten negative controls, the evidence contract, candidates pending ADR-002, ADR-003 and ADR-005 with the gateway and the token library as questions, nine open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-078-p0-03-token-design",
+    "baseline_commit": "7db99a3826f851f419f909392e7c40db35b8c8ce"
+  },
+  "completed": [
+    "Ticket #138 resolved by this branch: docs/architecture/p0/P0.03-token-validation.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.3 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records P0.4 next in the manual's order and the gateway's missing ADR row, DEC-080 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-077.",
+    "After merge: #138 closed with a resolution comment; the map's decision line appended to #128; the gateway's missing ADR row added to the map's Not yet specified beside the secrets store's.",
+    "Map #128: #139 P0.4 next in the manual's order, then #141 P0.7."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.03-token-validation.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-078-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The gateway is the second technology, after the secrets store, that the register has no ADR row for; the design records what the researched gateway could prove and relies on none of it.",
+    "Controls 8 and 9 measure Logto's issuance-time refusals, which the research reads in source and marks as no versioned guarantee, so the spike's record replaces the research's reading.",
+    "The chain reads no request identifier; the mismatch between a token's organization and the tenant a request is about is P0.4's, as the research's gap 2 says."
+  ],
+  "decisions": [
+    "DEC-080: the P0.3 design at PROPOSED; one token model accepted; a seven-check chain that audits every failure; the gateway's proof never trusted; the gateway a question."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-002 and ADR-003 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's nine ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "New: the register has no ADR for the gateway; the P0.3 design's question 2 asks the contract map to add one and assumes the chain needs no gateway for correctness."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_077",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gateway_selection": "NO_ADR_ROW_NOT_A_CANDIDATE",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design treats anything a gateway forwards as authenticated context, or reads a tenant identifier from a request.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No token was issued or validated; the design describes the chain and the controls that would prove it.",
+    "Key rotation behaviour and tokens after membership removal are UNVERIFIED and left to the spike and to P0.4.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
