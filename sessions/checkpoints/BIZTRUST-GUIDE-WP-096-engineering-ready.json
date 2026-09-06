@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-096-001",
+  "created_at": "2026-09-06T13:31:41Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-096",
+  "state": "ENGINEERING_READY",
+  "objective": "Correct what WP-095 landed: the P0.12 design's administrative-class bullet says four runs read the Management API credential and the credential's own row still refused use outside three, because that package's review pass rewrote the row and reintroduced the old count. The row now says four. Nothing else changes and the version stays 0.3.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-096-p0-12-count",
+    "baseline_commit": "df6115e50afb1a9adbdd68820535b8478ce9c582"
+  },
+  "completed": [
+    "The P0.12 design's credential row counts four runs, matching its administrative-class bullet.",
+    "badf/ records the correction: DEC-098 and this checkpoint."
+  ],
+  "remaining": [
+    "Review of the head commit, then merge.",
+    "After merge: #292 closed."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-096-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The error came from a review pass rewriting a cell whose other half an earlier replacement in the same pass had already changed; the pass's own assertions checked the bullet and not the row.",
+    "A correction under the same version is the right shape here: 0.3's meaning is unchanged, and one cell said it wrongly."
+  ],
+  "decisions": [
+    "DEC-098: the credential's row counts four runs; the version stays 0.3."
+  ],
+  "assumptions": [
+    "The four runs are the ones the bullet lists; no design names a fifth reader of the credential."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_revisions": "MAP_128_CHARTING_DECISION_9_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_095",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "docs/architecture/p0/P0.12-secrets-and-configuration.md"
+    ],
+    "stop_if": [
+      "A correction changes anything but the cell it names."
+    ]
+  },
+  "declared_non_coverage": [
+    "Nothing else in the design was re-read for correctness; this package corrects one cell."
+  ]
+}

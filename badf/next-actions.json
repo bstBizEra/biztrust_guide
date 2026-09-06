@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-095",
-  "updated_at": "2026-09-06T13:16:26Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-096",
+  "updated_at": "2026-09-06T13:31:41Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "The P0 design map #128's revision track is complete on this branch: under its charting decision 9 (2026-09-06) the eight next-version revisions the fog comments recorded were tickets, worked one per Work Package, #268 P0.2 (WP-088), #269 P0.6 (WP-089), #270 P0.4 (WP-090), #271 P0.7 (WP-091), #272 P0.5 (WP-092), #273 P0.8 (WP-093), #274 P0.10 (WP-094) and #275 P0.12 v0.3, resolved by this branch as docs/architecture/p0/P0.12-secrets-and-configuration.md at 0.3. Twelve designs and the security proof stand at PROPOSED, each carrying the asks the others made of it. The map has no open ticket. What remains is the operator's: the five register gaps for the contract map #91, the secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack; the waiver #92; the seats #94; and whether to open the spec the wayfinder hands off to. No agent may accept a design, record a gate or open a platform repository.",
+      "action": "The P0 design map #128's revision track is complete on this branch: under its charting decision 9 (2026-09-06) the eight next-version revisions the fog comments recorded were tickets, worked one per Work Package, #268 P0.2 (WP-088), #269 P0.6 (WP-089), #270 P0.4 (WP-090), #271 P0.7 (WP-091), #272 P0.5 (WP-092), #273 P0.8 (WP-093), #274 P0.10 (WP-094) and #275 P0.12 v0.3 (WP-095). This branch corrects one cell of that last revision: the Management API credential's row in docs/architecture/p0/P0.12-secrets-and-configuration.md counted three runs where the administrative-class bullet above it counts four, and now counts four. The version stays 0.3. Twelve designs and the security proof stand at PROPOSED, each carrying the asks the others made of it. The map has no open ticket. What remains is the operator's: the five register gaps for the contract map #91, the secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack; the waiver #92; the seats #94; and whether to open the spec the wayfinder hands off to. No agent may accept a design, record a gate or open a platform repository.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046); tests/test_p0_design_pack.py holds every design to it",
         "The design's ADRs named with their register status; nothing chosen, nothing ACCEPTED"
