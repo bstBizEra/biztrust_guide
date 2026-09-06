@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T08:16:32Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-076",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #137 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.2 design with its nine mandatory sections, the workspace and layout as the hub draws them, a module registry generated from the contract's capability map as the one source of the boundary rule, five dependency rules, one schema per module with a migration lint, a seven-job CI skeleton with every job a required check and what a violation looks like, the charter and badf/ carried over, the repository administrator as a human role, eight negative controls, the evidence contract, candidates pending ADR-001 and ADR-004 with tool facts cited to their primary pages, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #137 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.2 design with its nine mandatory sections, the workspace and layout from the hub's drawing with the departures listed, a module registry generated from the contract's capability map as the one source of the boundary rule, five dependency rules, one schema per module with a migration lint, a seven-job CI skeleton with every job a required check and what a violation looks like, the charter and badf/ carried over, the repository administrator as a human role, eight negative controls, the evidence contract, candidates pending ADR-001 and ADR-004 with tool facts cited to their primary pages, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-076-p0-02-repository-design",
@@ -18,7 +18,7 @@
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-075.",
     "After merge: #137 closed with a resolution comment; the map's decision line appended to #128.",
-    "Map #128: #140 P0.6 next in the manual's order, then #138, #144, #145 and the designs they unblock."
+    "Map #128: #138 P0.3 next in the manual's order, then #139; #140, #144 and #145 unblocked as well, then the designs they unblock."
   ],
   "files_changed": [
     "docs/architecture/p0/P0.02-repository-and-boundaries.md",
@@ -43,7 +43,7 @@
   "observations": [
     "The registry, not the checker, is the source of the rules; the two candidate checkers both express forbidden dependencies between path patterns, which is why the switch between them is cheap.",
     "The migration lint has no researched tool; the design assumes a script in the pattern of this repository's validator and names it a question.",
-    "The layout is the hub's target repository architecture unchanged, so the guide and the platform repository read alike."
+    "The layout starts from the hub's target repository architecture and lists five departures under the tree, the registry file and the UI under apps/ among them, so the guide and the platform repository read alike where they agree and say where they do not."
   ],
   "decisions": [
     "DEC-078: the P0.2 design at PROPOSED; a registry-generated boundary rule; one schema per module; a seven-check CI skeleton; the charter carried over; the administrator a human role."
