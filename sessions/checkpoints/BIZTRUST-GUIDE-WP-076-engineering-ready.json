@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-076-001",
+  "created_at": "2026-09-06T08:16:32Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-076",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #137 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.2 design with its nine mandatory sections, the workspace and layout as the hub draws them, a module registry generated from the contract's capability map as the one source of the boundary rule, five dependency rules, one schema per module with a migration lint, a seven-job CI skeleton with every job a required check and what a violation looks like, the charter and badf/ carried over, the repository administrator as a human role, eight negative controls, the evidence contract, candidates pending ADR-001 and ADR-004 with tool facts cited to their primary pages, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-076-p0-02-repository-design",
+    "baseline_commit": "c3e255a77b60816e9aa37f566e24fbed86518818"
+  },
+  "completed": [
+    "Ticket #137 resolved by this branch: docs/architecture/p0/P0.02-repository-and-boundaries.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.2 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records the frontier under charting decision 8, DEC-078 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-075.",
+    "After merge: #137 closed with a resolution comment; the map's decision line appended to #128.",
+    "Map #128: #140 P0.6 next in the manual's order, then #138, #144, #145 and the designs they unblock."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.02-repository-and-boundaries.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-076-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The registry, not the checker, is the source of the rules; the two candidate checkers both express forbidden dependencies between path patterns, which is why the switch between them is cheap.",
+    "The migration lint has no researched tool; the design assumes a script in the pattern of this repository's validator and names it a question.",
+    "The layout is the hub's target repository architecture unchanged, so the guide and the platform repository read alike."
+  ],
+  "decisions": [
+    "DEC-078: the P0.2 design at PROPOSED; a registry-generated boundary rule; one schema per module; a seven-check CI skeleton; the charter carried over; the administrator a human role."
+  ],
+  "assumptions": [
+    "The map's charting decision 8, the agent's recommendation under the operator's instruction to continue on the tracks, permits a design to proceed with DRAFT_REQUIRED ADRs named; the operator may reverse it by comment on #128.",
+    "The design's eight ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94. The design names the repository administrator seat as #94's to fill."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_075",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "platform_repository_creation": "NOT_GRANTED_P0_2_A_NEEDS_ITS_OWN_AUTHORITY_RECORD",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A platform repository is created, or any code lands, under this package.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No repository was created; the design describes one and the controls that would prove its boundaries.",
+    "The migration lint and the repository host are questions, not candidates; no tool for the lint was researched.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
