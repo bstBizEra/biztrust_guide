@@ -368,6 +368,45 @@ The roadmap's section 8 names eight tracks that run through every phase. What ea
 
 Observability is implemented with each feature, never retrofitted in P3 (roadmap 8F). No track is a phase, and no track's requirement is met by a document alone; each cell names something a Work Package's evidence must show.
 
+### 12.1 The team: seats, roles and personas
+
+The hub's team topology names an orchestrator and eight groups; the roadmap's section 10 draws an architecture council, a delivery team and an assurance council under human authority and lists thirteen further governed agents; the nine stage manuals each name roles; the phase manuals name who records each gate; and the contract map requires five review seats before anything is accepted ([#27](https://github.com/bstBizEra/biztrust_guide/issues/27), [#94](https://github.com/bstBizEra/biztrust_guide/issues/94)). This subsection reconciles them as this plan's proposal, recorded under WP-061 ([#160](https://github.com/bstBizEra/biztrust_guide/issues/160)); who fills each seat is #94's, not this plan's.
+
+**Three kinds.** A *seat* is a human who holds authority: the seat grants implementation authority per Work Package, records a gate, accepts an ADR or a profile, and may be dissented from on the record. A *role* is a responsibility within one stage, named on that stage's roles table and held by a human or an agent as the stage says (the production-readiness reviewer who co-records BT-G7 with the security risk owner is a role, an independent one); a role holds no authority of its own and acts under a seat's grant. A *persona* is an agent identity under the orchestrator; a persona holds no authority, is granted implementation authority per Work Package by a seat, and never records a gate. The hub's eight groups are *lenses*: a lens is a grouping that seats, roles and personas share, not a fourth kind. The roadmap's section 8H binds every agent by identity, assigned Work Package, authority, permitted tools, evidence requirement, independent review, gate and human authorisation when required; the table says how each kind is bound.
+
+| Kind | Held by | Authority | Bound by (roadmap 8H) |
+|---|---|---|---|
+| Seat | A named human, recorded per seat in the review-seat register (#94) | Grants and records | Identity: a name. Assigned Work Package: the packages it grants, named on their authority records. Authority: grants and records. Permitted tools: none required; a seat's instrument is the record it signs. Evidence: a dated record with reasons and any dissent. Independent review: another seat may dissent, on the record. Gate: the seat records it. Human authorisation: the seat is it. |
+| Role | Whoever the Work Package names to it, human or agent | None of its own | Identity: per Work Package. Assigned Work Package: the one that names it. Authority: none; acts under a seat's grant. Permitted tools: the package's, for whoever holds the role. Evidence: what the stage's outputs require. Independent review: the role that produces is never the role that verifies the same artifact. Gate: feeds the stage's exit gate, never records a capability gate. Human authorisation: requested through the package. |
+| Persona | An agent identity, one hub lens each | None; granted per Work Package by a seat, expiring with it | All eight: identity; assigned Work Package; authority granted, never held; permitted tools per package; evidence bound to a revision; independent review by a different persona or a human; a gate it never records; human authorisation it requests. |
+
+**The seats** are the humans the guide already names, gathered under one name each. The phase pages' *sponsor*, *business sponsor* and *business authority* are one seat; their *architecture authority* is the accountable architecture owner. The hub renders this table, held to it by `tests/test_team_model.py`.
+
+| Seat | Source | Records or accepts |
+|---|---|---|
+| Business authority | #27 seat 1; the phase pages' sponsor and business sponsor are this seat under other names | Implementation grants per Work Package; the tenant authority profile, with the four other contract seats; the objectives and recovery objectives in P3 |
+| Experienced insurance-domain practitioner | #27 seat 2 | Domain UAT for the broker core; co-records BT-G2 |
+| Qualified legal/compliance reviewer for each operating jurisdiction | #27 seat 3 | ADR-014 with the finance seat, then the accountable architecture owner; the compliance track's questions; a dedicated-tenant requirement under E5 |
+| Broker finance/accounting reviewer | #27 seat 4 | BT-G4 with release authority; ADR-014 and the chart of accounts with the legal seat, then the accountable architecture owner |
+| Accountable architecture owner | #27 seat 5; the phase pages' architecture authority is this seat | BT-G0 and BT-G6; acceptance of ADRs, ADR-014 after the legal and finance seats; provider selections; P3's three local definitions |
+| Security risk owner | The previous plan's waiver rule; the phase pages | BT-G1, BT-G5 and BT-G7; waivers, with expiry and dissent recorded |
+| Release authority | The phase pages | BT-G2 and BT-G3; co-records BT-G4 |
+| SRE | The phase pages | Co-records BT-G3; the disaster-recovery exercise's sign-off; the objectives and error budget policy with the business authority |
+| Repository administrator | AGENTS.md; the hub's NS-001, NS-003 and NS-004 | Pages, the governing Work Package issue and protection of main |
+
+**The roadmap's councils and agents** map onto the hub's groups as follows; nothing is renamed on either side.
+
+| Roadmap (section 10) | Hub group | Kind |
+|---|---|---|
+| Human authority | The seats above | Seats |
+| SARCHI / Orchestrator | SARCHI, chief orchestrator | Persona; translates authorised outcomes into Work Packages and never self-grants authority |
+| Architecture Council: principal, insurance, security, data, finance and API architects, product and UX | Architecture, with Product & Domain | Personas, chaired by the accountable architecture owner seat, who accepts what the council proposes; the insurance and finance architects advise the practitioner and finance seats, which sit in the council when it accepts |
+| Delivery Team: backend, web, mobile, integration, database, DevOps and SRE, documentation, observability agents | Engineering; SRE & Operations; Data & Financial Control | Personas |
+| Assurance Council: QA lead, security, compliance, reviewer, release assurance | Independent Council, with Security & Privacy and Quality Engineering | Security, compliance and release assurance are the security risk owner, the legal and compliance reviewer and release authority seats; QA lead and reviewer are the verifier and peer reviewer roles |
+| Thirteen governed agents: research, product and BA, UX, insurance domain, payment, database, API, security, test, compliance, release, SRE, evidence | One group each: Product & Domain (research, product and BA, UX, insurance domain, compliance); Data & Financial Control (payment, database); Architecture (API); Security & Privacy (security); Quality Engineering (test, evidence); SRE & Operations (release, SRE) | Personas |
+
+The hub's separation-of-duty rule follows: the same persona is never the sole author, verifier and approver of a high-impact artifact, and an approver is a seat.
+
 ## 13. Definition of Done
 
 The guide's hub carries an eight-item Definition of Done for a Work Package: acceptance criteria pass; contracts and docs updated; negative tests included; threat model reviewed; telemetry implemented; rollback validated; evidence manifest signed; independent review complete. The roadmap's section 11 lists seventeen items. They reconcile as follows, and the eight stand as the Work Package Definition of Done, with the roadmap's items as what each of the eight must show:

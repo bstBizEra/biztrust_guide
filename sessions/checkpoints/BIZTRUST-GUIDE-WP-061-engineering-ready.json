@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-061-001",
+  "created_at": "2026-09-06T03:51:40Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-061",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #160 on the Guide v2 map: reconcile the hub's topology, the stage pages' roles, the phase pages' recorders, the roadmap's councils and thirteen governed agents, and the contract map's five review seats into three kinds, seats, roles and personas, each bound as the roadmap's section 8H requires; record it as PLAN-001 section 12.1 as the plan's proposal; render the nine seats on the hub's team section held by a test; map the roadmap's councils onto the hub's eight groups without renaming either; leave who fills each seat to #94.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-061-team-model",
+    "baseline_commit": "7170da00bd8213e7a26547d2639692be6958850d"
+  },
+  "completed": [
+    "Ticket #160 resolved by this branch: PLAN-001 section 12.1 with the three kinds and their bindings, the nine seats with sources, and the roadmap's councils and agents mapped onto the hub's groups.",
+    "index.html's team section: the seats table rendered from 12.1, two definition items on personas and councils, the intro naming lenses, seats and personas, the separation-of-duty rule ending 'an approver is a seat'; search terms updated.",
+    "tests/test_team_model.py, written red first, holds the hub's seats to the plan; three negative controls recorded; README names it.",
+    "badf/ re-anchored: NS-044 repointed at #208 and #211, DEC-063 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: eight bindings per kind; council members are personas under the owner seat and a lens is a grouping, not a kind; ADR-014 reaches the architecture owner; the contract seats carry #27's qualifiers; SRE by the pages' name with the pages' duties; the administrator's cell sourced to NS-001, NS-003 and NS-004; the hub's items in the hub's definition-list markup, the councils item a pointer to the plan's table, the caption two words; the test locates the seats table by its header row and holds both sides to nine."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 and WP-060.",
+    "After merge: #160 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #208 and #211 next; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "index.html",
+    "tests/test_team_model.py",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-061-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The hub keeps its eight groups and the orchestrator unchanged; what is added is the seats table and two definition items, so no group is renamed and the catalogue's note that the two role vocabularies are unreconciled now points at 12.1 for the reconciliation by kind.",
+    "The seats table names gates by identifier (BT-G0 to BT-G7) with no label, which the gate-namespace test admits; labels appear on the hub beside identifiers elsewhere.",
+    "The phase pages still say 'sponsor' and 'architecture authority'; 12.1 binds those names to seats rather than editing four pages, and the test holds only the hub's table."
+  ],
+  "decisions": [
+    "DEC-063: seats, roles and personas as PLAN-001 section 12.1; nine seats rendered on the hub and held by a test; the roadmap's councils mapped onto the hub's groups; who fills each seat stays #94's."
+  ],
+  "assumptions": [
+    "/implement was a chat instruction to build the ready ticket on the map; the model is the plan's proposal and nothing is accepted or filled.",
+    "The persona-to-group mapping and the synonym bindings are the track's reading; a seat's holder may move a persona, and #94 may rename a seat when it fills it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94, which fills the nine seats 12.1 names."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_060",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "seat_filling": "NOT_GRANTED_ISSUE_94",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_team_model",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "The hub's seats table differs from PLAN-001 section 12.1.",
+      "Any record names a person in a seat, or says a persona holds authority or recorded a gate.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered hub was not viewed in a browser; the table and links were checked by the tests and the validator.",
+    "The stage pages' roles were classified by kind from their names and tables, not re-read in full; the phase pages' synonyms were bound in the plan, not edited on the pages.",
+    "No seat is filled; the register is #94's.",
+    "Seat, role, persona and lens are the guide's process vocabulary, not the platform domain; DOMAIN_MODEL.md is the platform's and the guide has no CONTEXT.md, so the four terms are defined only in PLAN-001 section 12.1. The doctrine ticket (#158) is where a guide glossary would be decided."
+  ]
+}
