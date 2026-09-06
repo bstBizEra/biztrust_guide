@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-071-001",
+  "created_at": "2026-09-06T06:41:29Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-071",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #179 on the Guide v2 map under the showcase record: write landing/operations.html as a projection of BIZTRUST-PLAN-001 sections 8 and 11, the roadmap's sections 13 and 14, the P3 manual's section 07 and the Continuous Operations reference page in the design voice, with the shell, the streams and entry-conditions tables copied and held by a test, the loop's reading, the carried epics and the conditions in plain words labelled the page's, and no stream ordered, designed, opened or authorised; link it from the seven landed showcase pages.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-071-showcase-operations",
+    "baseline_commit": "e608e4bf2dae5b66d12cded9dabc6b3b87ba75dc"
+  },
+  "completed": [
+    "Ticket #179 resolved by this branch: landing/operations.html with six blocks and the shell; its first draft on prototype/showcase-ops, linked from the ticket.",
+    "tests/test_showcase_operations.py, written red first, holds the streams and entry-conditions tables to PLAN-001 sections 8 and 11 with exactly eight rows each; three negative controls recorded; README names it.",
+    "The overview, roadmap, architecture, P0, P1, P2 and P3 pages link the operations page; AGENTS.md's page count is twenty-seven.",
+    "badf/ re-anchored: NS-044 repointed at #180, DEC-073 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-070.",
+    "After merge: #179 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #180 the team page last; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/operations.html",
+    "landing/index.html",
+    "landing/roadmap.html",
+    "landing/architecture.html",
+    "landing/p0.html",
+    "landing/p1.html",
+    "landing/p2.html",
+    "landing/p3.html",
+    "tests/test_showcase_operations.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-071-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The plan's section 8 sentence carries a cross-reference '(section 10)'; the page restates it without the parenthesis and says so rather than calling it a quote.",
+    "The reference page is a rendering of the plan, not a landing page; the README's section 1 names it as what this page projects, so citing it is within the record's rule.",
+    "The plain-words paragraph restates the conditions table without adding a condition; E6's measurement window and E5's legal seat are kept."
+  ],
+  "decisions": [
+    "DEC-073: the operations page as the seventh projection; both tables copied and held with exactly eight rows; the loop, the carried epics and the conditions in the page's words; no stream ordered, designed, opened or authorised."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #179 and the page is revised to match.",
+    "The plain-words restatements and the loop cells are the track's reading, and the source lines say so."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158 and, through it, the doctrine sentence on the team page."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_070",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "expansion_streams": "NONE_AUTHORISED_BY_PLAN_001_SECTION_11",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_operations tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table on the page differs from the plan's section it copies, or a source line cites a passage that does not say what the section says.",
+      "The page states a stream as open, ordered, designed or authorised, or a gate as recorded.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the tables and the links were checked by the tests and the validator.",
+    "The loop cells, the carried epics' summaries and the plain-words paragraph are the page's; no test holds them.",
+    "The reference page's sections are cited by their numbers as rendered at e608e4b; no test compares this page to the reference page."
+  ]
+}

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="What comes after BizTrust Production v1.0, as the plan records it: Continuous Operations, a loop of measure, learn, improve and expand, and eight expansion streams with no phase number, each waiting on its own entry condition and the decision that records it. None is ordered, designed or authorised by the plan.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — Continuous Operations and the eight expansion streams</title>
+  <!-- A projection of BIZTRUST-PLAN-001 sections 8 and 11, the roadmap's sections 13 and 14, the P3 manual's section 07 and the Continuous Operations reference page, for the humans whose decisions gate the delivery.
+       Not a source of truth: the plan and the reference page are. Rules: landing/README.md (SHOWCASE-001). Ticket #179 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#today">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="p0.html">P0 Identity and Tenant</a>
+    <a href="p1.html">P1 Insurance</a>
+    <a href="p2.html">P2 Payment and Finance</a>
+    <a href="p3.html">P3 Production</a>
+    <a href="operations.html" aria-current="page">Continuous Operations and expansion</a>
+    <span aria-disabled="true">Team and doctrine</span>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="after">
+      <h2>After Production v1.0 the platform would be operated, not finished</h2>
+      <p class="record">Projects BIZTRUST-PLAN-001 1.0-draft, sections 8 and 11, BIZTRUST-ROADMAP-001 operator draft, sections 13 and 14, the P3 manual, section 07, and the Continuous Operations reference page, sections 01 to 06; read at e608e4b, 2026-09-06.</p>
+      <p>The plan's phases end at P3. What follows has no phase number, by rule. The plan's sentence, restated without its cross-reference and with the gate's label: after BT-G7, Production Ready, label E, is recorded and Production v1.0 is released, Continuous Operations runs: measure, learn, improve, expand. The plan's gate table asks, as one of its own proposals, for the security risk owner's dated record at that gate; a gate is recorded by a human, and in the plan's words, which human is the gate owner's record to name and never inferred.</p>
+      <p>The P3 manual says why the numbering stops: after that gate the platform is not finished; it is operated. Every package that ships from then on still runs the full lifecycle, and the operate and learn stages run continuously against the service objectives, the telemetry floor and the promotion bar those stages' pages define. The phase track ends there; the stage track does not end. The roadmap's canonical names give the two things that follow their plain titles: Continuous Operations is measure, learn and improve; the expansion streams are scaling tenants, partners, integrations and intelligence.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 8, first paragraph, for the sentence restated; section 10.1's label table for E, Production Ready, as BT-G7, section 10.2's BT-G7 row and its paragraph on the four additions as this plan's proposals, for the security risk owner's dated record, and its closing paragraph for the sentence on who records a gate, quoted; the P3 manual, <code>phases/p3.html</code> section 07, for the sentences on production not being a phase and the two tracks, restated; the roadmap's section 14, which recommends the canonical names of Continuous Operations and the expansion streams. The first two sentences of the first paragraph are this page's.</p>
+    </section>
+
+    <section class="block" id="loop">
+      <h2>Measure, learn, improve, expand</h2>
+      <p>The plan names the loop in four words and no more. The Continuous Operations reference page reads each word against the handbook's stages so that the loop is not a fifth track to maintain, and marks that reading as the track's, not the plan's. The four cells below restate that reading in this page's words.</p>
+      <div class="models" role="list">
+        <div role="listitem"><b>Measure</b><span>The operate stage's service objectives and telemetry floor, read against the indicators and objectives P3 would have defined. The first number the loop reads is the error budget consumed per objective.</span></div>
+        <div role="listitem"><b>Learn</b><span>The learn stage: postmortems with their follow-up actions owned, and the promotion bar that decides what a package's evidence has earned.</span></div>
+        <div role="listitem"><b>Improve</b><span>A Work Package. Every change after v1.0 still runs the full lifecycle from discovery to learning; Continuous Operations changes what the packages are about, not how one moves.</span></div>
+        <div role="listitem"><b>Expand</b><span>A stream, opened on its recorded entry condition and then delivered as Work Packages like any other capability, under whatever gate its own charter names.</span></div>
+      </div>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 8 for the four words; the Continuous Operations reference page, <code>reference/continuous-operations.html</code> section 02, for the reading of each word against the Operate and Learn stages and the Work Package, which that page marks as the track's reading. The cells are this page's restatement of it.</p>
+    </section>
+
+    <section class="block" id="streams">
+      <h2>Eight streams, no phase number</h2>
+      <p>The original platform architecture had proposed phases P4 to P9 for claims and renewal, a tenant pack kit, a partner API, workflow and event architecture, dedicated tenant isolation and artificial intelligence. The roadmap's section 13 recommends not discarding those capabilities but converting them from phase numbers into streams that follow Production v1.0, because P3 already means Production. The plan carries the eight streams as its section 8, copied here cell for cell; the third column names the two epics of the previous plan that a stream would carry as its first item.</p>
+      <table class="streams">
+        <thead><tr><th>Stream</th><th>Capability</th><th>Carries from the previous plan</th></tr></thead>
+        <tbody>
+          <tr><td>E1 Tenant Scale</td><td>Tenant Pack SDK, white-labelling, product packs</td><td>P3.11 Tenant Pack validation foundation</td></tr>
+          <tr><td>E2 Embedded Insurance</td><td>Developer portal, partner APIs, SDKs</td><td>P3.10 Partner API and versioned webhooks</td></tr>
+          <tr><td>E3 Integration Scale</td><td>More insurer, payment and bank adapters</td><td>—</td></tr>
+          <tr><td>E4 Workflow Scale</td><td>Event-driven and workflow-engine extraction</td><td>—</td></tr>
+          <tr><td>E5 Enterprise Isolation</td><td>Dedicated schema or database deployment</td><td>—</td></tr>
+          <tr><td>E6 Advanced Brokerage</td><td>Richer claims, renewals, placement analytics</td><td>—</td></tr>
+          <tr><td>E7 Intelligence</td><td>Recommendations, assistants, document intelligence, anomaly detection</td><td>—</td></tr>
+          <tr><td>E8 Ecosystem</td><td>Marketplace, insurer ecosystem, embedded distribution</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p>Two of the previous plan's finance-phase epics live on here. The tenant pack validation foundation, which would let a tenant extend the platform through validated, signed configuration without forks or unrestricted code, becomes E1's first item; the partner API with versioned, signed webhooks becomes E2's. The reference page notes what moved with the pack: the gate that proves a second tenant onboards without a fork, BT-G6 Tenant Ready, judged inside label E, no longer requires a pack. The pack is how E1 would make that repeatable at scale, not how P3 proves it once.</p>
+      <p class="source">Source: the roadmap's section 13 for the earlier P4 to P9 proposals, the recommendation not to discard them and their conversion into post-v1 streams; BIZTRUST-PLAN-001 section 8, the stream table, copied cell for cell and held by <code>tests/test_showcase_operations.py</code>, and its sentence that the streams have no phase number as the previous plan required; section 6 for the two epics not being P2 work and section 9 for their placement in E1 and E2; the Continuous Operations reference page, section 05, for what each carried epic was and for its note that BT-G6 no longer requires a pack. The descriptions of the two epics are this page's summary of that section.</p>
+    </section>
+
+    <section class="block" id="conditions">
+      <h2>What each stream would wait on, and who records it</h2>
+      <p>The plan's rule for opening a stream is one sentence: each opens only when BT-G7 is recorded, Production v1.0 is released, and its own entry condition is recorded; none is ordered among the others except as its condition names another; and none is authorised by the plan. The conditions are the plan's proposals, copied here cell for cell; the third column is the decision each waits on: an architecture decision record, a seat's record, a contract trigger or a track, as the plan fills it.</p>
+      <table class="conditions">
+        <thead><tr><th>Stream</th><th>Entry condition</th><th>Decision it waits on</th></tr></thead>
+        <tbody>
+          <tr><td>E1 Tenant Scale</td><td><code>BT-G6</code> recorded, and a third tenant's authority profile under S01</td><td>ADR-011</td></tr>
+          <tr><td>E2 Embedded Insurance</td><td><code>BT-G7</code> recorded, and a partner contract that names the API surface it needs</td><td>ADR-005, ADR-009</td></tr>
+          <tr><td>E3 Integration Scale</td><td>A counterparty (insurer, payment provider or bank) with a documented API and a signed sandbox agreement</td><td>ADR-009</td></tr>
+          <tr><td>E4 Workflow Scale</td><td>Workflow volume or fault evidence from P1B and P2 showing the P0 runtime choice insufficient</td><td>ADR-001's extraction criteria; ADR-010</td></tr>
+          <tr><td>E5 Enterprise Isolation</td><td>A tenant's regulatory or contractual requirement for a dedicated schema or database, recorded by the legal seat</td><td>The contract's section 18 dedicated-tenant trigger; ADR-004; ADR-019</td></tr>
+          <tr><td>E6 Advanced Brokerage</td><td>P1B operating data on one tenant covering a full renewal cycle (a measurement window, not a schedule), or a second tenant's need recorded</td><td>—</td></tr>
+          <tr><td>E7 Intelligence</td><td>The data-governance track's owner, classification and consent rows exist for every dataset a model would read</td><td>ADR-019; the compliance track</td></tr>
+          <tr><td>E8 Ecosystem</td><td>E2 open and at least one partner live</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p>In plain words: tenant scale waits for BT-G6 to be recorded and for a third tenant's authority profile, its tenant authority, jurisdiction and money-regime answers under slice S01; embedded insurance for BT-G7 to be recorded and a partner with a contract that says which interface it needs; integration scale for a counterparty that documents its interface and signs for a sandbox; workflow scale for evidence from P1B's and P2's real volume or real faults that the runtime chosen in P0 is no longer enough; enterprise isolation for a tenant whose regulator or contract demands its own schema or database, recorded by the legal seat; advanced brokerage for a full renewal cycle of operating data on one tenant, or a second tenant's recorded need; intelligence for the data-governance owner, classification and consent rows on every dataset a model would read; and the ecosystem for embedded insurance to be open with one partner live.</p>
+      <p>Two conditions name a gate, and the reference page is careful about what that means: E1 waits on BT-G6 and E2 on BT-G7, which are P3's gates, recorded by their own owners on P3's evidence; a stream's condition cites them as facts it needs, and a stream opening records nothing about them. What gate, if any, would close a stream is the stream's own charter's to say, and no charter exists.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 11, its opening sentence for the rule of opening and the conditions table, copied cell for cell and held by <code>tests/test_showcase_operations.py</code>; the Continuous Operations reference page, section 04, for the two conditions that name a gate and for no charter existing. The plain-words paragraph is this page's restatement of the table.</p>
+    </section>
+
+    <section class="block" id="today">
+      <h2>Where the streams stand</h2>
+      <div class="today">
+        <div><b>No stream is open</b>Every stream waits on BT-G7, Production Ready, label E, and on its own condition. The handbook's continuity state records architecture acceptance and production platform implementation as not granted, and this page's reading is that no stream could have opened before them.</div>
+        <div><b>None is ordered or designed</b>The plan puts the ordering and design of the streams out of its scope until Production v1.0 exists; the reference page orders none and designs none.</div>
+        <div><b>None has a charter</b>What gate closes a stream belongs to a charter each stream would write when it opens; where a stream's packages land is the stream's own. The reference page carries no candidate locations for that reason.</div>
+        <div><b>This page records nothing</b>It projects the plan and the reference page. When either changes, the page is revised to match.</div>
+      </div>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 8 for ordering and design out of the plan's scope until Production v1.0 exists, and section 11 for none of the streams being authorised; the Continuous Operations reference page, sections 05 and 06, for the candidate locations not carried and for what that page does not do; the handbook's continuity state, <code>badf/current-state.json</code>, read at e608e4b on 2026-09-06, whose authority fields record architecture acceptance and production platform implementation as not granted. The sentence that no stream could have opened is this page's reading of those fields. The strip at the top of this page states the overview's three status lines and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you own one of the decisions a stream waits on</h3><p>The conditions table names the decision each stream waits on, an architecture decision record, a seat's record, a contract trigger or a track. Recording that decision, in the record the decision keeps, is what would open a stream; nothing on this page does.</p><a class="btn" href="../reference/continuous-operations.html">Read the Continuous Operations reference</a></div>
+        <div><h3>If you want the records themselves</h3><p>PLAN-001 section 8 is the streams and section 11 their conditions; the roadmap's section 13 is where the streams came from. Where this page and a record disagree, the record is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and records no gate. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>
