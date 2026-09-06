@@ -388,7 +388,10 @@ def main() -> int:
     # fourteen designs, because a reader reads what a link says rather than where it goes (WP-101).
     # A fragment is resolved against the ids already parsed above when the target is a page, and
     # against the target's own headings when it is a document.
-    markdown_link = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
+    # Anchored on "](" rather than on a link's label, because every link and image target in
+    # Markdown is preceded by it and a label pattern cannot span the brackets of an image nested
+    # inside a link: `[![badge](image)](target)` matched the image and dropped the target around it.
+    markdown_link = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
     documents = sorted(
         document
         for document in ROOT.rglob("*.md")
@@ -411,7 +414,11 @@ def main() -> int:
             path, fragment = split.path, split.fragment
             markdown_refs += 1
             if path:
-                resolved = (document.parent / path).resolve()
+                try:
+                    resolved = (document.parent / path).resolve()
+                except (OSError, ValueError) as exc:
+                    errors.append(f"{here}: cannot resolve link {target!r}: {exc}")
+                    continue
                 if not resolved.is_relative_to(ROOT):
                     errors.append(f"{here}: link leaves the repository: {target}")
                     continue

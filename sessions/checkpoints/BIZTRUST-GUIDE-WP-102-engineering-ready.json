@@ -44,7 +44,10 @@
   "observations": [
     "The check reports 189 links, which is the figure an independent walk of the tree found before the check existed; a count that agrees with a count taken another way is worth more than a count that only agrees with itself.",
     "Every fragment link in the Markdown corpus points at an HTML page, and none at a Markdown heading. The anchor rule is implemented anyway because the ticket asked for it, and is held by its own positive control rather than by the corpus; the code says so where the rule is written.",
-    "The strongest control this repository has produced: not a mutation but a commit. At a2387dc the check fails on 48 real links that lived in the pack from the day it was written."
+    "The strongest control this repository has produced: not a mutation but a commit. At a2387dc the check fails on 48 real links that lived in the pack from the day it was written.",
+    "The review found the link reader dropping a link that wraps an image: a label pattern cannot span the brackets of `[![badge](image)](target)`, so it read the image and lost the target around it. Harmless in this corpus because both are external, and a broken local link in that shape would have been missed. The reader is anchored on `](` now, which every link and image target follows; it finds one more target and the same 189 local links.",
+    "It also found the resolve call unguarded where the HTML block beside it catches OSError and ValueError. Nothing it threw at the check raised on this platform, but the file's own rule is that an exception becomes a recorded error rather than a traceback with no verdict line, and the new code now keeps that rule rather than relying on the platform.",
+    "Two of the seven cases exercise pure string logic through a subprocess, which the reviewer noted is slower than a unit test would be. They stay: no test in this repository imports the validator, and every case in this harness runs it as a subprocess against a copied tree, which is the property that makes the harness trustworthy."
   ],
   "decisions": [
     "DEC-104: the validator follows Markdown links; markdown-refs is a required check family."
@@ -78,7 +81,7 @@
   "declared_non_coverage": [
     "External links are not followed; they need the network and are a different problem.",
     "A reference in HTML to a Markdown document is not checked, only Markdown's own links; the HTML check resolves paths but this repository's pages do not link Markdown.",
-    "An image or a bare URL written without Markdown link syntax is not read.",
-    "The anchor rule does not disambiguate two headings with the same text, which GitHub does with a numeric suffix."
+    "A bare URL written without Markdown link syntax is not read; an image's target is read, like any other.",
+    "The anchor rule does not disambiguate two headings with the same text, which GitHub does with a numeric suffix. docs/research/roadmap/BIZTRUST-ROADMAP-001-operator-draft.md carries two headings titled Objective and is a real instance; no link points at either, so nothing is wrong today."
   ]
 }
