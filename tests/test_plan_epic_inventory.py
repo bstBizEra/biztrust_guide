@@ -24,8 +24,9 @@ otherwise collapse into one entry and go unnoticed.
 Positive controls: the readers must find epics in every phase, streams in section 8, a row for every
 phase in 9.1, and both totals.
 
-Negative controls. Four are tests here, on in-memory copies of the plan: an epic added to a phase,
-one identifier written on two rows, a row shown inside a fence, and section 8's header. Three more were
+Negative controls. Six are tests here, on in-memory copies of the plan: an epic added to a phase, one
+identifier written on two rows, a row shown inside a fence, the same for every fence syntax, a fence left
+open, and section 8's header. Three more were
 run by hand against the file under WP-099 on 2026-09-06, each failing for its own reason:
 
   * an epic row added to section 6 and not to 9.1        -> test_every_phase_agrees FAILS, and the totals
@@ -64,7 +65,9 @@ TOTALS = re.compile(r"\*\*(\d+) epics across the five phases, of which (\d+) lie
 # plan grew past it, which is the failure this test is for.
 
 
-FENCE = re.compile(r"^```.*?^```", re.M | re.S)
+FENCE_MARK = r"^ {0,3}(?:```|~~~)"
+FENCE = re.compile(rf"{FENCE_MARK}.*?{FENCE_MARK}[^\n]*$", re.M | re.S)
+FENCE_OPEN = re.compile(FENCE_MARK, re.M)
 
 
 def between(text: str, start: str, end: str) -> str:
@@ -73,11 +76,17 @@ def between(text: str, start: str, end: str) -> str:
     Text rather than a path, so a control can modify the plan before it is read. Fenced blocks go
     because a table row shown as an example inside one is not an epic; the plan already carries a
     fence in section 5.5, and a documentation example in a phase section would otherwise be counted.
+    Backtick and tilde fences both count, indented up to three spaces as CommonMark allows, and a fence
+    left open is named as itself rather than left to surface as a miscount.
     """
     assert start in text, f"no {start!r} in the plan"
     rest = text.split(start, 1)[1]
     assert end in rest, f"no {end!r} after {start!r}"
-    return FENCE.sub("", rest.split(end, 1)[0])
+    stripped = FENCE.sub("", rest.split(end, 1)[0])
+    assert not FENCE_OPEN.search(stripped), (
+        f"a fenced block is opened and not closed between {start!r} and {end!r}; the counts would be read "
+        f"through it, so the plan's fence is the thing to fix, not the count")
+    return stripped
 
 
 def epic_ids(plan: str) -> dict[str, set[str]]:
@@ -179,6 +188,23 @@ class TestTheReaderCanFail(unittest.TestCase):
                          "a table row shown as an example inside a fence was counted as an epic")
         self.assertEqual(epic_rows(plan)["p0"], epic_rows(illustrated)["p0"],
                          "the row counter read inside a fence, so it would disagree with the identifier count")
+
+    def test_every_fence_syntax_is_skipped(self) -> None:
+        plan = plan_text()
+        row = "| P0.1 | An example, not an epic | — |"
+        for opener, closer in (("```text", "```"), ("~~~text", "~~~"), ("   ```text", "   ```")):
+            with self.subTest(fence=opener.strip()):
+                illustrated = plan.replace("\n## 5. ", f"\n{opener}\n{row}\n{closer}\n\n## 5. ", 1)
+                self.assertEqual(epic_rows(plan)["p0"], epic_rows(illustrated)["p0"],
+                                 f"a row inside a {opener.strip()} fence was counted as an epic row")
+
+    def test_a_fence_left_open_says_so(self) -> None:
+        plan = plan_text()
+        broken = plan.replace("\n## 5. ", "\n```text\n| P0.1 | An example | — |\n\n## 5. ", 1)
+        with self.assertRaises(AssertionError) as caught:
+            epic_rows(broken)
+        self.assertIn("opened and not closed", str(caught.exception),
+                      "an unclosed fence must name itself rather than surface as a miscount")
 
     def test_the_streams_header_is_not_a_stream(self) -> None:
         plan = plan_text()

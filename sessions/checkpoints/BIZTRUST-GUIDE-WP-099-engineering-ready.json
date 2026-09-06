@@ -11,7 +11,7 @@
     "baseline_commit": "edd73b1a6eba5f12d254a93b0edb2bdbcf7baa2e"
   },
   "completed": [
-    "tests/test_plan_epic_inventory.py holds section 9.1 to the plan: five positive controls, five negative controls, five comparisons.",
+    "tests/test_plan_epic_inventory.py holds section 9.1 to the plan: sixteen tests, four positive controls, seven negative controls and five comparisons.",
     "Negative controls run by hand as well: an epic added and not recorded, a wrong figure in 9.1, and a total left behind; each failed for its own reason.",
     "tests/showcase_parity.py gains md_row_count, the record-side counterpart of page_row_count, and md_rows is written in terms of it.",
     "badf/ records the guard: DEC-101 and this checkpoint; NS-045 names #300, #303 and #305."
@@ -46,7 +46,8 @@
     "The suite ran after the state script this time, the fault WP-098's review found.",
     "The review found a false positive the controls had not: a table row shown as an example inside a fenced block was counted, because neither reader skipped fences. The guard strips fenced blocks now, with a control of its own.",
     "It also found the row counter hand-rolling what the seam already does on the page side. showcase_parity gains md_row_count and md_rows is written in terms of the same generator, so the two readings cannot drift.",
-    "stream_count was read by no assertion the guard makes; section 8 is now required to hold streams and no epic identifiers, which is the claim Continuous Operations' zero rests on."
+    "stream_count was read by no assertion the guard makes; section 8 is now required to hold streams and no epic identifiers, which is the claim Continuous Operations' zero rests on.",
+    "The confirmation pass found the fence stripping too narrow: a tilde fence, a fence indented up to three spaces, and a fence left unclosed each surfaced as a miscount rather than as themselves. All three syntaxes are stripped now, and an unclosed fence raises with its own message rather than being read through."
   ],
   "decisions": [
     "DEC-101: section 9.1 is held to the plan's own epic rows, counted inside each section, identifiers and rows agreeing."
