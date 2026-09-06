@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-075-001",
+  "created_at": "2026-09-06T07:59:24Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-075",
+  "state": "ENGINEERING_READY",
+  "objective": "Fold research #240 into the P0.12 design at version 0.2, still PROPOSED: the rotation exercise's Logto paragraph as an overlap with the legacy-secret check, control 5's condition and expected outcome with the issued-token fate as the measurement, question 3 recording what the research settled and what stays UNVERIFIED with a new ASSUMED position, every Logto secret created with an expiry, and the Management API credential as an administrative-class identity that never lists secrets outside the exercise.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-075-p0-12-logto-rotation",
+    "baseline_commit": "5c082a92a842e704289b4d8fc999bcf57925c9a9"
+  },
+  "completed": [
+    "P0.12 design revised to version 0.2 from research #240: the Logto rotation as an overlap with the legacy-secret check, control 5 and question 3 revised, every Logto secret with an expiry, the Management API credential as an administrative-class identity.",
+    "The design pack test holds the revised file to the template unchanged; the P0 manual's link is unchanged.",
+    "badf/ re-anchored: NS-043 notes question 3 folded in, DEC-077 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-074.",
+    "After merge: #241 closes with the PR; #240's resolution already names this package as where its findings are fed.",
+    "Every map now waits on a human decision."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-075-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The research's finding that listing secrets returns values changes the design's least-privilege table, not only its exercise; that is why the Management API credential has a row of its own.",
+    "The assumption that issued tokens run to their own expiry is what the exercise tests on the synthetic tenant; production keeps the overlap until the record exists."
+  ],
+  "decisions": [
+    "DEC-077: the P0.12 design at 0.2 from research #240; overlap rotation; token fate measured; the Management API credential administrative-class."
+  ],
+  "assumptions": [
+    "The operator's 'proceed on your call, proposed only' on map #128 covers a revision of a PROPOSED design from its own research ticket."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates every remaining ticket on maps #91, #128 and #153's #158."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_074",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "secrets_store_selection": "NO_ADR_ROW_NOT_A_CANDIDATE",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "The design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A product fact appears without a citation to the research at its commit or an UNVERIFIED mark.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No rotation was run; the fate of issued tokens and the token endpoint's answer for an expired secret remain UNVERIFIED until the exercise records them.",
+    "The design pack test checks structure and vocabulary, not the substance of the revision."
+  ]
+}
