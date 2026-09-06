@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BizTrust's first delivery phase as its plan records it: P0 would prove who did what, under which tenant, with which authority, against which resource, before any insurance data exists. The thirteen epics, the mandatory negative proof in plain words, the audit record every decision writes, and Gate B, which the manual proposes a security risk owner would record.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — P0 Identity and Tenant: the proof before any insurance data</title>
+  <!-- A projection of BIZTRUST-PLAN-001 section 4, its section 10 for the gate, and FLOWS.md section 3, for the humans whose decisions gate the delivery.
+       Not a source of truth: the plan, the flows record and the P0 manual are. Rules: landing/README.md (SHOWCASE-001). Ticket #175 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#today">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="p0.html" aria-current="page">P0 Identity and Tenant</a>
+    <span aria-disabled="true">P1 Insurance</span>
+    <span aria-disabled="true">P2 Payment and Finance</span>
+    <span aria-disabled="true">P3 Production</span>
+    <span aria-disabled="true">Continuous Operations and expansion</span>
+    <span aria-disabled="true">Team and doctrine</span>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="objective">
+      <h2>P0 would prove who did what, under which tenant, with which authority, against which resource</h2>
+      <p class="record">Projects BIZTRUST-PLAN-001 1.0-draft, sections 4, 10 and 12.1, FLOWS.md 0.1-draft, section 3, and the P0 manual, sections 01 and 04 to 07; read at 965cdfe, 2026-09-06.</p>
+      <p>The first phase of the plan builds no insurance. Its objective, in the plan's words, is to prove who performed what, under which tenant, with which authority, against which resource, before any client, policy, claim or premium data exists on the platform. Everything later in the roadmap rests on that proof: a policy record is only trustworthy if the platform can already show, for every request, which person or service acted, for which tenant, with what permission, and on which resource.</p>
+      <p>The plan's label table names the phase's gate BT-G1, Identity and Tenant Proven, label B. The plan's rule for leaving it is one sentence: no P1 authorization may be issued until this proof passes independently. The rest of this page says what the proof is, what would be built to run it, what the evidence looks like, and who records the gate.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 4, the objective paragraph, for the phase's purpose, the absence of any insurance function and the rule that no P1 authorization may be issued until the proof passes independently; section 10.1's label table for B, Identity and Tenant Proven, and section 10.2's gate table, whose row for the gate is headed BT-G1 Security Ready. The second sentence of the first paragraph, that everything later rests on the proof, is this page's reading.</p>
+    </section>
+
+    <section class="block" id="chain">
+      <h2>The sequence every protected request would walk</h2>
+      <p>The flows record draws the tenant authorization sequence as one path with two ways to be refused. A request is refused before any data is touched when its context or authority is invalid, and refused by the database itself when an application check has been bypassed. Either way the refusal is written down. The six steps, in the order the record draws them:</p>
+      <div class="models" role="list">
+        <div role="listitem"><b>1. Logto issues the token</b><span>The user or service requests an API token with organization context and receives a signed token carrying audience, organization and scopes.</span></div>
+        <div role="listitem"><b>2. APISIX admits the request</b><span>The protected request reaches the edge, which passes a validated edge request to the BizTrust API.</span></div>
+        <div role="listitem"><b>3. The API checks the token</b><span>Signature, issuer, audience and expiry are verified before anything else happens.</span></div>
+        <div role="listitem"><b>4. Business authorization resolves the authority</b><span>Tenant, membership, scope and authority are resolved. If any is invalid, the denial is recorded and the caller receives problem details.</span></div>
+        <div role="listitem"><b>5. PostgreSQL enforces isolation</b><span>The API sets a trusted tenant context and executes the command; row-level security allows tenant-owned rows or denies, and a denial is recorded without cross-tenant disclosure.</span></div>
+        <div role="listitem"><b>6. Audit evidence records the outcome</b><span>Denied decisions, isolation denials and successful actions are all recorded before the response returns.</span></div>
+      </div>
+      <p>One rule in the record binds the fourth and fifth steps together: the API must not copy an untrusted tenant identifier from a request header straight into a database session variable. The authenticated organization, the BizTrust tenant it maps to, and the resource being asked for are reconciled first, so that the tenant context the database trusts is one the platform established and not one the caller supplied.</p>
+      <p class="source">Source: FLOWS.md section 3, the tenant authorization sequence, for the participants, the two denial branches and what each branch records; the paragraph beneath it for the rule that an untrusted <code>X-Tenant-ID</code> is never copied directly into a session variable; the sentence after it, on why the rule holds, is this page's reading. The six steps are this page's grouping of that sequence, and the plan's section 10.3 names the same chain for Gate B: authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence.</p>
+    </section>
+
+    <section class="block" id="epics">
+      <h2>Thirteen epics, each with the evidence that closes it</h2>
+      <p>The plan lists P0's work as thirteen epics, each with a deliverable and the exit evidence a reviewer would look for. The table is copied from the plan cell for cell. Twelve are unchanged from the previous plan; the thirteenth, the control-plane web surface, is how a human would exercise the sequence above, and the plan places it after the independent security proof and outside the gate's test matrix, because the matrix proves the substrate and not a screen.</p>
+      <table class="epics">
+        <thead><tr><th>Epic</th><th>Deliverable</th><th>Exit evidence</th></tr></thead>
+        <tbody>
+          <tr><td>P0.1</td><td><code>BIZTRUST-ARCH-001</code> and ADR-001…020</td><td>Authority record and resolved findings</td></tr>
+          <tr><td>P0.2</td><td>Repository and module boundaries</td><td>Build, dependency and boundary tests</td></tr>
+          <tr><td>P0.3</td><td>Logto integration spike</td><td>Token-validation evidence</td></tr>
+          <tr><td>P0.4</td><td>Organization-to-tenant mapping</td><td>Mapping and mismatch tests</td></tr>
+          <tr><td>P0.5</td><td>Tenant provisioning</td><td>Repeatable Tenant A and B provisioning</td></tr>
+          <tr><td>P0.6</td><td>PostgreSQL tenancy model</td><td>Migration and ownership tests</td></tr>
+          <tr><td>P0.7</td><td>RLS enforcement</td><td>Cross-tenant read/write/delete denial</td></tr>
+          <tr><td>P0.8</td><td>API conventions</td><td>Linted OpenAPI baseline</td></tr>
+          <tr><td>P0.9</td><td>Event conventions</td><td>Linted AsyncAPI/event envelope</td></tr>
+          <tr><td>P0.10</td><td>Audit framework</td><td>Attributable denial and success evidence</td></tr>
+          <tr><td>P0.11</td><td>Observability baseline</td><td>Logs, metrics and traces linked by request</td></tr>
+          <tr><td>P0.12</td><td>Secrets/configuration management</td><td>Rotation and least-privilege evidence</td></tr>
+          <tr><td>P0.13</td><td>Control-plane web surface</td><td>Tenant selection, member administration and the audit viewer exercised end to end after the independent proof, with no insurance function present</td></tr>
+        </tbody>
+      </table>
+      <p>The roadmap groups the same work under headings of its own, numbered P0.1 to P0.7. Those are group headings; on this page, as in the plan, an epic number always means the plan's epic. The engineering designs for P0.2 to P0.13 are meant to live in the P0 design pack, which at the time of reading holds the template and rules for those designs and records that no design is accepted by it; P0.1 has no design there, because it is the architecture contract itself.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 4, the epic table, copied cell for cell and held by <code>tests/test_showcase_p0.py</code>; the same section for the origin of the twelve carried epics and the thirteenth, for the placement of P0.13 after the independent proof and outside the BT-G1 matrix, for the roadmap's group headings, and for the P0 design pack as the home of the designs for P0.2 to P0.13; the design pack's own header, <code>docs/architecture/p0/README.md</code>, for its version, <code>0.1-draft</code>, its status line and its note that P0.1 has no design there.</p>
+    </section>
+
+    <section class="block" id="negative">
+      <h2>The negative proof, in plain words</h2>
+      <p>Most software is shown to work by demonstrating what it does. P0 is shown to work by demonstrating what it refuses. The plan carries seven lines of mandatory proof, copied here word for word. Two tenants, A and B, would be provisioned. The first line says A reaches its own data; the other six say that everything else, from a missing token to a tampered identifier to a bypassed application check, is refused and recorded.</p>
+      <ol class="copied proof">
+        <li>Tenant A can access authorized Tenant A data.</li>
+        <li>Tenant A cannot read, create, update or delete Tenant B protected data.</li>
+        <li>Missing or invalid organization context is denied.</li>
+        <li>Tampered URL, header, body and query tenant identifiers are denied or ignored safely.</li>
+        <li>Wrong audience, expired token, inactive membership and absent scope are denied.</li>
+        <li>An application-level authorization bypass test remains blocked by RLS.</li>
+        <li>Every outcome produces tenant-safe audit evidence.</li>
+      </ol>
+      <p>The flows record turns those lines into a minimum matrix of attempts. Each row is one thing an attacker, a bug or a careless integration might do, and each states three expectations: what the API answers, what the database is permitted to do, and what the audit trail must show afterwards. The matrix is copied cell for cell.</p>
+      <table class="matrix">
+        <thead><tr><th>Attempt</th><th>API expectation</th><th>Database expectation</th><th>Audit expectation</th></tr></thead>
+        <tbody>
+          <tr><td>Missing token</td><td>Deny</td><td>No business query</td><td>Authentication failure recorded</td></tr>
+          <tr><td>Expired or malformed token</td><td>Deny</td><td>No business query</td><td>Safe reason code recorded</td></tr>
+          <tr><td>Wrong audience</td><td>Deny</td><td>No business query</td><td>Audience failure recorded</td></tr>
+          <tr><td>Missing organization context</td><td>Deny protected tenant route</td><td>No tenant query</td><td>Context failure recorded</td></tr>
+          <tr><td>Inactive membership</td><td>Deny</td><td>No mutation</td><td>Membership result recorded</td></tr>
+          <tr><td>Tenant A requests Tenant B URL</td><td>Deny</td><td>No Tenant B rows</td><td>Mismatch recorded without data leakage</td></tr>
+          <tr><td>Tenant A injects Tenant B body/header ID</td><td>Deny or ignore untrusted value</td><td><code>WITH CHECK</code> prevents write</td><td>Tampering outcome recorded</td></tr>
+          <tr><td>Application check is bypassed in a test path</td><td>Request cannot expose Tenant B</td><td>RLS denies</td><td>Database denial linked to test</td></tr>
+        </tbody>
+      </table>
+      <p>In plain words, row by row: a request with no token, or a token that has expired or been tampered with, is refused before the platform runs any query on business data, and the refusal is written down with a reason that gives nothing away. A token issued for some other service is refused the same way. A token that carries no organisation cannot open a tenant's routes at all. A member whose membership has been switched off can change nothing. Tenant A asking for Tenant B's address gets a refusal, no row of B's is read, and the record of the refusal contains none of B's data. Tenant A slipping B's identifier into the body or a header of its request has that value ignored or refused, and the database's own write check stops the write even if the application had let it through. And in a test path where the application's check is deliberately switched off, the database refuses on its own and the refusal is traceable to that test.</p>
+      <p>That last row is the one that makes the proof mean something. The manual keeps two failures from passing as successes: a suite whose evidence shows only successes has tested the wrong property, and a bypass test that is absent, skipped or was never seen to fail has not demonstrated the policy.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 4, the mandatory proof block, copied verbatim and held by <code>tests/test_showcase_p0.py</code>; FLOWS.md section 3, the minimum negative proof matrix, copied cell for cell and held by the same test; the P0 manual's section 05 for two of its four stop signals, a green suite with no negative test and a bypass test that is absent, skipped or cannot be made to fail. The framing sentences around the lists and the row-by-row paragraph are this page's own words.</p>
+    </section>
+
+    <section class="block" id="evidence">
+      <h2>What every decision would write down</h2>
+      <p>The proof only counts if the refusals can be read back later by someone who was not there. The P0 manual states what each authorization decision records: the decision itself, the actor, the tenant, the membership, the permission, the resource and its scope, the conditions evaluated, the approval reference, the policy version, the outcome, a reason code, and the request and trace identifiers that tie the record to the logs. It states equally what the record never holds: a raw token, a secret, or a personal datum the decision did not need.</p>
+      <p>Read as a question, that record is the phase's objective: who, under which tenant, with which authority, against which resource, and with what result. The gate below asks for that record on every row of the matrix.</p>
+      <p class="source">Source: the P0 manual, <code>phases/p0.html</code> section 04, the rule that every decision writes the full evidence record and never a raw token, secret or unnecessary personal datum, restated here in this page's words; BIZTRUST-PLAN-001 section 4 for the objective the record answers.</p>
+    </section>
+
+    <section class="block" id="gate">
+      <h2>Gate B would be recorded by a security risk owner, after someone else has run the proof</h2>
+      <p>The plan's gate for P0 is BT-G1 Security Ready, label B, and its condition is that tenant isolation is mechanically proven by the P0 negative-test evidence. The P0 manual adds what turns that evidence from a report into a record, and proposes the seat that would record it: the plan names no role for it, and its own seat table is marked as a proposal.</p>
+      <div class="gate"><b>B</b><span>BT-G1 Security Ready: tenant isolation mechanically proven</span><p>The chain authenticated identity, validated tenant context, authorised operation, tenant-isolated data access, immutable audit evidence is mechanically demonstrated, and the mandatory proof passes independently of the implementer. The security risk owner, the seat the manual proposes, would record the gate having seen the full matrix executed by someone other than the implementer, bound to a source revision, with an audit record for every row.</p></div>
+      <p>The manual's gate section lists the seven proof lines and four further conditions: the proof was executed by someone who did not implement it; the evidence manifest binds the run to a source revision, workflow, environment and tool versions; ADR-002, ADR-003 and ADR-004 are accepted in the register; and the security risk owner has recorded the gate with a date. The manual permits no P1 authorization until every one of them is ticked; the plan's own rule is the sentence quoted at the top of this page, that the proof passes independently.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 10.1, the label table for B, Identity and Tenant Proven; section 10.2, the gate table's BT-G1 row for its requirement and blocking evidence; section 10.3's Gate B paragraph for the chain and for the proof passing independently of the implementer; section 12.1, which the plan marks as its proposal, for the security risk owner as the seat that would record BT-G1; the P0 manual's section 05, whose table says the plan names none of these roles and the Who column is proposed, for what that seat must have seen first, and section 06 for the four conditions beyond the seven lines.</p>
+    </section>
+
+    <section class="block" id="today">
+      <h2>Where P0 stands</h2>
+      <div class="today">
+        <div><b>P0 has not started</b>The manual's first entry condition is that BT-G0 Architecture Ready, label A, is recorded. The handbook's continuity state records architecture acceptance and production platform implementation as not granted.</div>
+        <div><b>The designs are a template</b>The P0 design pack exists at 0.1-draft and states that no design is accepted by it. The design map for P0 is issue #128 on the repository.</div>
+        <div><b>The proof has no runner yet</b>Independent execution needs a person who did not implement the substrate: the plan's separation-of-duty rule is that the same persona is never the sole author, verifier and approver of a high-impact artifact. Who fills each seat is for the review-seat register, issue #94, and not for the plan.</div>
+        <div><b>This page records nothing</b>It projects the plan, the flows record and the manual. When any of them changes, the page is revised to match.</div>
+      </div>
+      <p class="source">Source: the P0 manual's section 01 for BT-G0 as the first entry condition; the handbook's continuity state, <code>badf/current-state.json</code>, read at 965cdfe on 2026-09-06, whose authority fields record production platform implementation and architecture acceptance as not granted; the design pack header for its version, its status line and its map; BIZTRUST-PLAN-001 section 12.1 for the separation-of-duty rule, the seats and #94 as where they are filled. The strip at the top of this page states the overview's three status lines and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you hold the security risk owner seat</h3><p>The manual's sections 05 and 06 say what you would have to see before recording BT-G1, and its section 07 lists the conditions under which you would stop the phase instead. Nothing on this page records anything.</p><a class="btn" href="../phases/p0.html">Read the P0 manual</a></div>
+        <div><h3>If you want the records themselves</h3><p>PLAN-001 section 4 is the phase and its proof; FLOWS.md section 3 is the sequence and the matrix. Where this page and a record disagree, the record is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and records no gate. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>
