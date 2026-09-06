@@ -40,7 +40,7 @@
     }
   ],
   "observations": [
-    "The revision adds no policy, role or rule a later design did not ask for; the Changes in 0.2 table is the reviewer's checklist.",
+    "The revision adds no policy, role or rule a later design did not ask for; the Changes in 0.2 table is the reviewer's checklist, and the review pass corrected question 10, which the first pass left stale.",
     "The platform-level exception is now written per table and per writing role, since the P0.6 design lists five such tables at its own 0.2.",
     "The remaining four revisions each read the landed designs as they stand, so no blocking edge was wired."
   ],
