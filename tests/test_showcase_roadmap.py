@@ -20,58 +20,28 @@ Stdlib only:  python3 -m unittest discover -s tests -v
 
 from __future__ import annotations
 
-import html as html_mod
-import re
 import unittest
 from pathlib import Path
+try:
+    from showcase_parity import section, md_rows, page_table
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import section, md_rows, page_table
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "landing" / "roadmap.html"
 PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
 
 
-def _norm(fragment: str) -> str:
-    s = re.sub(r"<[^>]+>", "", fragment)
-    s = html_mod.unescape(s).replace("`", "").replace("**", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
-
-
-def _plan_section(start: str, end: str) -> str:
-    return PLAN.read_text(encoding="utf-8").split(start, 1)[1].split(end, 1)[0]
-
-
-def _plan_rows(section: str, first_cell_pattern: str) -> dict[str, tuple[str, ...]]:
-    """Rows of the section's table whose first cell fully matches the pattern -> {first: (rest...)}."""
-    out: dict[str, tuple[str, ...]] = {}
-    for line in section.splitlines():
-        cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.strip().startswith("|") else []
-        if len(cells) >= 2 and re.fullmatch(first_cell_pattern, cells[0]) and not re.fullmatch(r"-+", cells[1]):
-            out[_norm(cells[0])] = tuple(_norm(c) for c in cells[1:])
-    return out
-
-
-def _page_rows(table_class: str) -> dict[str, tuple[str, ...]]:
-    html = PAGE.read_text(encoding="utf-8")
-    m = re.search(rf'<table class="{table_class}">.*?<tbody>(.*?)</tbody>', html, re.S)
-    assert m, f"no table of class {table_class} on the page"
-    out: dict[str, tuple[str, ...]] = {}
-    for row in re.finditer(r"<tr>(.*?)</tr>", m.group(1), re.S):
-        cells = [_norm(c) for c in re.findall(r"<td>(.*?)</td>", row.group(1), re.S)]
-        assert cells, f"a row of the {table_class} table has no cells"
-        out[cells[0]] = tuple(cells[1:])
-    return out
-
-
 def plan_phases() -> dict[str, tuple[str, ...]]:
-    return _plan_rows(_plan_section("\n## 2. The five phases", "\n## 3. "), r"Architecture|P[0-3]")
+    return md_rows(section(PLAN, "\n## 2. The five phases", "\n## 3. "), r"Architecture|P[0-3]")
 
 
 def plan_labels() -> dict[str, tuple[str, ...]]:
-    return _plan_rows(_plan_section("\n### 10.1 ", "\n### 10.2 "), r"[A-E]")
+    return md_rows(section(PLAN, "\n### 10.1 ", "\n### 10.2 "), r"[A-E]")
 
 
 def plan_streams() -> dict[str, tuple[str, ...]]:
-    rows = _plan_rows(_plan_section("\n## 8. Continuous Operations", "\n## 9. "), r"E[1-8] .+")
+    rows = md_rows(section(PLAN, "\n## 8. Continuous Operations", "\n## 9. "), r"E[1-8] .+")
     return {k: v[:1] for k, v in rows.items()}  # the page shows the capability column only
 
 
@@ -87,18 +57,18 @@ class TestCorpusIsPresent(unittest.TestCase):
         self.assertTrue(PAGE.is_file(), "landing/roadmap.html is missing")
         for table in ("phases", "labels", "streams"):
             with self.subTest(table=table):
-                self.assertGreaterEqual(len(_page_rows(table)), 1, f"no rows parsed from the {table} table")
+                self.assertGreaterEqual(len(page_table(PAGE, table)), 1, f"no rows parsed from the {table} table")
 
 
 class TestParityWithThePlan(unittest.TestCase):
     def test_phases_match_the_plan(self) -> None:
-        self.assertEqual(plan_phases(), _page_rows("phases"), "the phases table disagrees with PLAN-001 section 2")
+        self.assertEqual(plan_phases(), page_table(PAGE, "phases"), "the phases table disagrees with PLAN-001 section 2")
 
     def test_labels_match_the_plan(self) -> None:
-        self.assertEqual(plan_labels(), _page_rows("labels"), "the labels table disagrees with PLAN-001 section 10.1")
+        self.assertEqual(plan_labels(), page_table(PAGE, "labels"), "the labels table disagrees with PLAN-001 section 10.1")
 
     def test_streams_match_the_plan(self) -> None:
-        self.assertEqual(plan_streams(), _page_rows("streams"), "the streams table disagrees with PLAN-001 section 8")
+        self.assertEqual(plan_streams(), page_table(PAGE, "streams"), "the streams table disagrees with PLAN-001 section 8")
 
 
 if __name__ == "__main__":
