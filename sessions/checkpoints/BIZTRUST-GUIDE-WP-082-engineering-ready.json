@@ -43,7 +43,7 @@
   "observations": [
     "The record keeps the evidence contract's field names, so the baseline and the design read the same; the additions are ARCH-001's and the research's, none invented.",
     "Three register gaps now stand on the map: the secrets store, the gateway, and the audit integrity mechanism; each is a question in its design, not a candidate.",
-    "The design asks the P0.6 design's next version for app_role's insert on the audit tables, the one addition the same-transaction rule needs."
+    "The design asks five landed designs for a next version: P0.6 and P0.12 for app_role's select and insert on the audit tables and the tests, P0.7 for the audit tables as the second exception to its four policies and the savepoint, P0.2 for the migration lint's audit rules, P0.4 for the fail-closed error class."
   ],
   "decisions": [
     "DEC-084: the P0.10 design at PROPOSED; two audit tables under the evidence contract's names; one write contract in the decision's transaction, fail closed; no runtime mutation, a hash chain; the proof as read-back and count."
@@ -67,6 +67,11 @@
       "code": "GATEWAY_ADR_ROW_MISSING",
       "owner_role": "accountable-architecture-owner",
       "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "AUDIT_INTEGRITY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "New; on map #128's Not yet specified; the design's question 2."
     },
     {
       "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
