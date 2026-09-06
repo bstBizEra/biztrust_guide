@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T11:19:19Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-087",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #185 on the P0 design map, the map's last ticket, under the pack's template and the map's charting decision 8: write the P0.13 design with its nine mandatory sections, the surface's place and its one rule, login and tenant selection with the tenant learned from the API, member administration with a BizTrust-side half effective at once and a Logto-side half applied by the identity administration job, security settings and sessions, tenant configuration, the audit viewer as the P0.10 contract, the denial paths as the user sees them, what is never on the surface, ten negative controls with one measurement, the evidence contract, candidates pending ADR-001, ADR-002 and ADR-003, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #185 on the P0 design map, the map's last ticket, under the pack's template and the map's charting decision 8: write the P0.13 design with its nine mandatory sections, the surface's place and its one rule, login and tenant selection with the tenant learned from the API, member administration with a BizTrust-side half effective at once and a Logto-side half applied by the identity administration job, security settings and sessions, tenant configuration, the audit viewer as the P0.10 contract, the denial paths as the user sees them, what is never on the surface, ten negative controls with one measurement, the evidence contract, candidates pending ADR-001, ADR-002 and ADR-003, eleven open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-087-p0-13-control-plane-design",
@@ -49,8 +49,8 @@
     "DEC-089: the P0.13 design at PROPOSED; the control plane a client of the admin API holding no credential and no import; the tenant learned from the API; member administration in two halves with the Logto half applied by the identity administration job; the audit viewer as the P0.10 contract; the denial paths rendered, never worked around."
   ],
   "assumptions": [
-    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
-    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+    "The map's charting decision 8 permits the design to proceed with ADR-001, ADR-002 and ADR-003 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's eleven ASSUMED positions are the track's; each names the decision that would reverse it."
   ],
   "blockers": [
     {
