@@ -12,7 +12,8 @@
   },
   "completed": [
     "Ticket #190 resolved by this branch: index.html's First 90 days section keeps its four day ranges, its bullets name PLAN-001's phases and gates with labels, the closing paragraph labels the estimate the guide's, says the ninety days reach BT-G2 at most, and carries the Continuous Operations sentence linking the reference page.",
-    "badf/ re-anchored: NS-044 repointed at #171, DEC-059 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #171, DEC-059 appended, this checkpoint written.",
+    "Review pass: five should-fix and three nits adopted: the P1B and P1C ordering labelled the P1 manual's proposal; the recorder column labelled the track's; CI and the observability baseline in the P0 range with the pipeline left to P3; the streams sentence reads as a reading; the authority profile a human's record and an entry criterion; DEC-059 cites the P2 manual for ADR-014 and counts three 'toward' ranges; the PR body's test count corrected to 117."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-056.",
@@ -120,6 +121,7 @@
   "declared_non_coverage": [
     "The rendered hub was not viewed in a browser; the section's gate names and links were checked by the tests and the validator.",
     "The day ranges are unchanged from the previous section and remain the guide's estimate; no source gives them.",
-    "The KPI band's five metric pairs are untouched and unsourced, as before."
+    "The KPI band's five metric pairs are untouched and unsourced, as before.",
+    "The hub's next-steps card NS-007 still says 'Authorize P1' for the broker-core slice, which is P1A under PLAN-001; it is outside #190's question and is left to a ticket of its own on the Guide v2 map."
   ]
 }
