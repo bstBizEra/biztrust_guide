@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-098-001",
+  "created_at": "2026-09-06T16:14:56Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-098",
+  "state": "ENGINEERING_READY",
+  "objective": "Record the epic inventory the all-phase guide's indexes will be built from, counted inside each phase's own section by that phase's own identifiers: 64 epics across the five phases, 51 beyond P0, and none in Continuous Operations, which holds eight expansion streams. Record both counting errors that produced the earlier figures. Add nothing else to the plan.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-098-epic-inventory",
+    "baseline_commit": "55cb96efca145b3300748e4764ef8ab5c5ae6647"
+  },
+  "completed": [
+    "BIZTRUST-PLAN-001 section 2.1 states the inventory: 64 across the five phases, 51 beyond P0, with the identifiers each figure was counted from.",
+    "Both counting errors recorded: the previous plan's P2.n and P3.n identifiers in the section 9 mapping table, and section 8's header counted as a stream row.",
+    "badf/ re-anchored: NS-045 opens the all-phase guide map #296, DEC-100 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #303 closed, one line appended to #296 Decisions so far."
+  ],
+  "files_changed": [
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-098-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "Every wrong figure came from matching an identifier prefix across the whole file rather than inside the section that owns it; the plan's section 9 holds the previous plan's identifiers by design.",
+    "The inventory is recorded as a table of identifiers, not a list of totals, so that the next count can be checked rather than trusted.",
+    "The directive asked for the count before any index; this lands first for that reason, ahead of the naming and vocabulary tickets."
+  ],
+  "decisions": [
+    "DEC-100: the canonical inventory is 64 across five phases and 51 beyond P0; Continuous Operations contributes none."
+  ],
+  "assumptions": [
+    "An epic is a row in a phase section's own epic table, identified by that phase's identifier; nothing else in the plan is an epic."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "all_phase_guide_map": "OPERATOR_INSTRUCTION_2026_09_06_CONTINUE_ON_THE_TRACK_AS_RECOMMENDED_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_097",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_phase_pages.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md"
+    ],
+    "stop_if": [
+      "A count is taken from section 9's mapping table, which holds the previous plan's identifiers."
+    ]
+  },
+  "declared_non_coverage": [
+    "The plan's epic contents were not re-read; only the rows were counted and the identifiers recorded.",
+    "No page, showcase or catalogue was changed to carry the inventory; nothing there states an epic total today.",
+    "Nothing here decides how the guide will use these numbers; that waits on the map's naming and vocabulary tickets."
+  ]
+}
