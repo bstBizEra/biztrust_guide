@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-080-001",
+  "created_at": "2026-09-06T09:08:46Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-080",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #141 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.7 design with its nine mandatory sections, the policy shape per table with its rules quoted from the RLS research, the tenant key under each pooling mode with what must be measured, FORCE ROW LEVEL SECURITY and the lint that refuses disabling it, the fifteen documented leak paths each assigned a fate with its check or owner, the application-bypass test as a test-only entry point seen failing before the policies exist, ten negative controls covering the matrix's read, write, delete and bypass rows, the evidence contract, candidates pending ADR-004 and ADR-001, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-080-p0-07-rls-design",
+    "baseline_commit": "9abee032682a411890d3f5180191ddf90a30640a"
+  },
+  "completed": [
+    "Ticket #141 resolved by this branch: docs/architecture/p0/P0.07-rls-enforcement.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.7 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records P0.5 and P0.10 next in the manual's order, DEC-082 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-079.",
+    "After merge: #141 closed with a resolution comment; the map's decision line appended to #128.",
+    "Map #128: #142 P0.5 and #143 P0.10 next in the manual's order; #144 and #145 unblocked; the security proof #148 after #143."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.07-rls-enforcement.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-080-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The leak table names the P0.6 design's ownership tests as the checks for eleven of the fifteen leaks; the design adds only a policy lint and a data-access mapping of its own.",
+    "The failing baseline is a precondition, not a control: the manual's stop signal says a bypass row that cannot be made to fail has not demonstrated the policy.",
+    "Statement pooling is refused as a mode; transaction pooling is the only mode the design is written for, and the pooler remains a measurement."
+  ],
+  "decisions": [
+    "DEC-082: the P0.7 design at PROPOSED; four policies per table reading the row and the key only; every table forced; fifteen leaks each with a fate; the bypass test in a test-only package with a failing baseline."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's eight ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_079",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "bypass_test_baseline": "MUST_BE_SEEN_FAILING_BEFORE_POLICIES_EXIST_OR_THE_PHASE_STOPS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design lets the bypass entry point into a deployable artifact, or drops the failing baseline as a precondition.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No policy was created and no query was run; the design describes them and the controls that would prove them.",
+    "The pooler and its mode are unmeasured; the P0.6 design's control 4 exists for that.",
+    "The timing channel (leak 6) is accepted, not closed; the security proof records the acceptance.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
