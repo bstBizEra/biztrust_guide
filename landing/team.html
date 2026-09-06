@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BizTrust's delivery system as its plan records it, for a reader deciding whether to trust it: who can say yes and who cannot, the nine seats and what each records, how the roadmap's councils and agents map onto the handbook's groups, the twenty-four-step loop every Work Package would run, the Definition of Done, and the doctrine sentence the contract does not yet carry.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — The team and its doctrine: who can say yes</title>
+  <!-- A projection of BIZTRUST-PLAN-001 sections 12.1, 13 and 13.1 and the roadmap's sections 2, 8H, 9, 10 and 11, for the humans whose decisions gate the delivery.
+       Not a source of truth: the plan and the roadmap are. Rules: landing/README.md (SHOWCASE-001). Ticket #180 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#today">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="p0.html">P0 Identity and Tenant</a>
+    <a href="p1.html">P1 Insurance</a>
+    <a href="p2.html">P2 Payment and Finance</a>
+    <a href="p3.html">P3 Production</a>
+    <a href="operations.html">Continuous Operations and expansion</a>
+    <a href="team.html" aria-current="page">Team and doctrine</a>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="kinds">
+      <h2>Whether to trust the delivery system comes down to who can say yes</h2>
+      <p class="record">Projects BIZTRUST-PLAN-001 1.0-draft, sections 12.1, 13 and 13.1, and BIZTRUST-ROADMAP-001 operator draft, sections 2, 8H, 9, 10 and 11; read at 04ae702, 2026-09-06.</p>
+      <p>BizTrust would be built largely by software agents, so the first question a reader should ask is not how good the agents are but what they are allowed to decide. The plan's answer is a model of three kinds. A seat is a human who holds authority: the seat grants implementation authority per Work Package, records a gate, accepts an architecture decision or a tenant's authority profile, and may be dissented from on the record. A role is a responsibility within one stage, held by a human or an agent as the stage says; a role holds no authority of its own and acts under a seat's grant. A persona is an agent identity under the orchestrator; a persona holds no authority, is granted implementation authority per Work Package by a seat, and never records a gate. The handbook's eight groups are lenses that seats, roles and personas share, not a fourth kind.</p>
+      <p>The roadmap binds every agent by eight things, copied here in its order. The plan's table says how each kind is bound by them; for a persona the answer is all eight, with authority granted and never held, evidence bound to a revision, independent review by a different persona or a human, a gate it never records, and human authorisation it requests.</p>
+      <ol class="copied bindings">
+        <li>Identity</li>
+        <li>Assigned Work Package</li>
+        <li>Authority</li>
+        <li>Permitted Tools</li>
+        <li>Evidence Requirement</li>
+        <li>Independent Review</li>
+        <li>Gate</li>
+        <li>Human Authorization when required</li>
+      </ol>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 12.1, the paragraph headed three kinds, for seat, role, persona and lens in the plan's words, and its first table for how a persona is bound; the roadmap's section 8H for the eight bindings, copied name for name and held by <code>tests/test_showcase_team.py</code>. The first sentence of the first paragraph is this page's.</p>
+    </section>
+
+    <section class="block" id="seats">
+      <h2>Nine seats, and what each would record</h2>
+      <p>The seats are the humans the handbook already names, gathered under one name each: the phase manuals' sponsor, business sponsor and business authority are one seat, and their architecture authority is the accountable architecture owner. The table is copied from the plan cell for cell. Who fills each seat is not the plan's to say: the plan leaves that to the review-seat register, issue #94, and marks the whole subsection as its proposal.</p>
+      <table class="seats">
+        <thead><tr><th>Seat</th><th>Source</th><th>Records or accepts</th></tr></thead>
+        <tbody>
+          <tr><td>Business authority</td><td>#27 seat 1; the phase pages' sponsor and business sponsor are this seat under other names</td><td>Implementation grants per Work Package; the tenant authority profile, with the four other contract seats; the objectives and recovery objectives in P3</td></tr>
+          <tr><td>Experienced insurance-domain practitioner</td><td>#27 seat 2</td><td>Domain UAT for the broker core; co-records BT-G2</td></tr>
+          <tr><td>Qualified legal/compliance reviewer for each operating jurisdiction</td><td>#27 seat 3</td><td>ADR-014 with the finance seat, then the accountable architecture owner; the compliance track's questions; a dedicated-tenant requirement under E5</td></tr>
+          <tr><td>Broker finance/accounting reviewer</td><td>#27 seat 4</td><td>BT-G4 with release authority; ADR-014 and the chart of accounts with the legal seat, then the accountable architecture owner</td></tr>
+          <tr><td>Accountable architecture owner</td><td>#27 seat 5; the phase pages' architecture authority is this seat</td><td>BT-G0 and BT-G6; acceptance of ADRs, ADR-014 after the legal and finance seats; provider selections; P3's three local definitions</td></tr>
+          <tr><td>Security risk owner</td><td>The previous plan's waiver rule; the phase pages</td><td>BT-G1, BT-G5 and BT-G7; waivers, with expiry and dissent recorded</td></tr>
+          <tr><td>Release authority</td><td>The phase pages</td><td>BT-G2 and BT-G3; co-records BT-G4</td></tr>
+          <tr><td>SRE</td><td>The phase pages</td><td>Co-records BT-G3; the disaster-recovery exercise's sign-off; the objectives and error budget policy with the business authority</td></tr>
+          <tr><td>Repository administrator</td><td>AGENTS.md; the hub's NS-001, NS-003 and NS-004</td><td>Pages, the governing Work Package issue and protection of main</td></tr>
+        </tbody>
+      </table>
+      <p>Read down the third column and the whole delivery is visible as a sequence of human records. The gates the plan labels A to E, BT-G0 to BT-G7, are recorded by the accountable architecture owner, the security risk owner and the release authority, some with a second seat beside them; the money regime and the chart of accounts are accepted by the legal and finance seats; every Work Package's authority to build comes from the business authority. The seats' sources are the contract map's five review seats, the previous plan's waiver rule, the phase manuals and the repository charter.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 12.1, the paragraph headed the seats and its seat table, copied cell for cell and held by <code>tests/test_showcase_team.py</code>; the same section's opening paragraph for the subsection as the plan's proposal and for #94 as where seats are filled; section 10.1's label table for A to E as BT-G0 to BT-G7. The reading of the third column is this page's.</p>
+    </section>
+
+    <section class="block" id="councils">
+      <h2>The roadmap's councils and agents, mapped onto the handbook's groups</h2>
+      <p>The roadmap draws the team as human authority above an orchestrator, with an architecture council, a delivery team and an assurance council beneath, and a further thirteen governed agents. The handbook draws eight groups under an orchestrator. The plan maps one onto the other without renaming either side, and says of each row which kind it is. The table is copied cell for cell.</p>
+      <table class="councils">
+        <thead><tr><th>Roadmap (section 10)</th><th>Hub group</th><th>Kind</th></tr></thead>
+        <tbody>
+          <tr><td>Human authority</td><td>The seats above</td><td>Seats</td></tr>
+          <tr><td>SARCHI / Orchestrator</td><td>SARCHI, chief orchestrator</td><td>Persona; translates authorised outcomes into Work Packages and never self-grants authority</td></tr>
+          <tr><td>Architecture Council: principal, insurance, security, data, finance and API architects, product and UX</td><td>Architecture, with Product &amp; Domain</td><td>Personas, chaired by the accountable architecture owner seat, who accepts what the council proposes; the insurance and finance architects advise the practitioner and finance seats, which sit in the council when it accepts</td></tr>
+          <tr><td>Delivery Team: backend, web, mobile, integration, database, DevOps and SRE, documentation, observability agents</td><td>Engineering; SRE &amp; Operations; Data &amp; Financial Control</td><td>Personas</td></tr>
+          <tr><td>Assurance Council: QA lead, security, compliance, reviewer, release assurance</td><td>Independent Council, with Security &amp; Privacy and Quality Engineering</td><td>Security, compliance and release assurance are the security risk owner, the legal and compliance reviewer and release authority seats; QA lead and reviewer are the verifier and peer reviewer roles</td></tr>
+          <tr><td>Thirteen governed agents: research, product and BA, UX, insurance domain, payment, database, API, security, test, compliance, release, SRE, evidence</td><td>One group each: Product &amp; Domain (research, product and BA, UX, insurance domain, compliance); Data &amp; Financial Control (payment, database); Architecture (API); Security &amp; Privacy (security); Quality Engineering (test, evidence); SRE &amp; Operations (release, SRE)</td><td>Personas</td></tr>
+        </tbody>
+      </table>
+      <p>The rule that follows, in the plan's words, is the handbook's separation of duty: the same persona is never the sole author, verifier and approver of a high-impact artifact, and an approver is a seat.</p>
+      <p class="source">Source: the roadmap's section 10 for the councils, the orchestrator and the thirteen governed agents; BIZTRUST-PLAN-001 section 12.1, the paragraph headed the roadmap's councils and agents and its table, copied cell for cell and held by <code>tests/test_showcase_team.py</code>, and its closing sentence, quoted, for the separation-of-duty rule.</p>
+    </section>
+
+    <section class="block" id="loop">
+      <h2>The loop every Work Package would run</h2>
+      <p>The roadmap gives one loop for every Work Package in every phase, twenty-four steps from understanding to the next controlled iteration, and says it extends the handbook's nine-stage lifecycle. The plan maps each step onto the stage that owns it and keeps the stage count at nine. The steps are copied here in the roadmap's order.</p>
+      <ol class="copied loop">
+        <li>01 Understand</li>
+        <li>02 Discover</li>
+        <li>03 Research</li>
+        <li>04 Define</li>
+        <li>05 Design</li>
+        <li>06 Threat / Risk Analysis</li>
+        <li>07 Plan</li>
+        <li>08 Work Package Decomposition</li>
+        <li>09 Implement</li>
+        <li>10 Self-Test</li>
+        <li>11 Independent Code Review</li>
+        <li>12 Security Review</li>
+        <li>13 Contract / Integration Test</li>
+        <li>14 Debug</li>
+        <li>15 Regression</li>
+        <li>16 Web / Mobile E2E</li>
+        <li>17 Evidence Collection</li>
+        <li>18 Gate Evaluation</li>
+        <li>19 Human Authorization if Required</li>
+        <li>20 Release</li>
+        <li>21 Observe</li>
+        <li>22 Learn</li>
+        <li>23 Feed Knowledge / Memory</li>
+        <li>24 Next Controlled Iteration</li>
+      </ol>
+      <p>Four steps are worth a reader's attention because the mapping had to say where the handbook carries them. Threat and risk analysis was a gap with a proposed owner until the Architect manual was given a section for it. Security review is carried under another name, as the assurance stage's security reviewer. Evidence collection is carried by a rule rather than a step: evidence is bound to a revision at every stage. Feeding knowledge back is carried by records rather than a step: checkpoints and decision records, not memory. And step 18, gate evaluation, belongs to no single stage, because every stage ends in its own exit gate and the phase gates are a different namespace. The handbook renders the full mapping as its Work Package loop reference page.</p>
+      <p class="source">Source: the roadmap's section 9 for the loop, copied step for step and held by <code>tests/test_showcase_team.py</code>, and its sentence that the loop extends the handbook's lifecycle; BIZTRUST-PLAN-001 section 13.1 for the mapping as the plan's proposal, the stage count staying nine, the four steps it marks (06, 12, 17, 23), step 18's standing, and the reference page that renders the table. The paragraph on the four steps is this page's restatement.</p>
+    </section>
+
+    <section class="block" id="done">
+      <h2>When a Work Package is done, and why a gate is not part of it</h2>
+      <p>The roadmap's rule is that a Work Package never reaches done from code completion alone, and it lists seventeen things that must be true. The handbook's Definition of Done has eight items. The plan reconciles them: the eight stand as the Definition of Done, and the roadmap's items are what each of the eight must show. The table is copied cell for cell.</p>
+      <table class="done">
+        <thead><tr><th>Guide item</th><th>Roadmap items it carries</th></tr></thead>
+        <tbody>
+          <tr><td>Acceptance criteria pass</td><td>Requirements satisfied; code complete; unit tests; deterministic business-rule tests</td></tr>
+          <tr><td>Contracts and docs updated</td><td>Architecture conformant; contract tests; documentation</td></tr>
+          <tr><td>Negative tests included</td><td>Tenant isolation validation; integration tests; web and mobile end-to-end where relevant; migration tested</td></tr>
+          <tr><td>Threat model reviewed</td><td>Security validation</td></tr>
+          <tr><td>Telemetry implemented</td><td>Observability implemented</td></tr>
+          <tr><td>Rollback validated</td><td>Rollback strategy</td></tr>
+          <tr><td>Evidence manifest signed</td><td>Evidence generated</td></tr>
+          <tr><td>Independent review complete</td><td>Independent review</td></tr>
+        </tbody>
+      </table>
+      <p>One roadmap item is deliberately left out: gate passed. The plan's reason is the one a reader deciding whether to trust the system should hold on to. A gate closes a phase, not a package; a package is done when its eight items are shown, and a phase is closed when its gate's owner records it, so putting the gate inside the package's definition would let a package claim a phase. Read as a stage gate instead, passing it is the lifecycle the eight items feed, not a ninth item.</p>
+      <p class="source">Source: the roadmap's section 11 for the rule that done is never code completion alone and for its list; BIZTRUST-PLAN-001 section 13 for the eight items, the reconciliation table, copied cell for cell and held by <code>tests/test_showcase_team.py</code>, and the paragraph on gate passed, restated. The sentence on what a reader should hold on to is this page's.</p>
+    </section>
+
+    <section class="block" id="doctrine">
+      <h2>The doctrine sentence the contract does not yet carry</h2>
+      <p>The showcase record reserves one place on this page for a sentence: the product doctrine, once the architecture contract carries it. The roadmap states the doctrine as its section 2: BizTrust should remain defined as a multi-tenant insurance brokerage, distribution and insurance API platform; it is not primarily an insurer's policy administration system; and the distinction between an insurer core, which holds underwriting authority, risk acceptance, authoritative pricing, policy issuance authority, claims adjudication and insurance liability, and the BizTrust broker core, which holds the client, the risk, placement, comparison, recommendation, binding coordination, the broker's policy record, servicing, claims advocacy, renewal, premium collection, commission, settlement and partner interfaces, should remain architectural, so that BizTrust never appears to be the risk carrier.</p>
+      <p>That is the operator's draft. The doctrine ticket on the Guide v2 map would carry it into the contract's first section, and it waits on the operator's waiver of the contract map's ordering. Until it lands, the contract's own position sentence is the definition of record, as the architecture page says, and this page carries no doctrine sentence of its own.</p>
+      <p class="source">Source: the roadmap's section 2 for the doctrine, its two cores and the sentence on the risk carrier, restated in this page's words; the showcase record, <code>landing/README.md</code> section 1, for the doctrine sentence reserved to this page once the doctrine ticket (#158) lands; that ticket for its dependence on the waiver (#92). The architecture page's definition of record is BIZTRUST-ARCH-001 section 1, cited there.</p>
+    </section>
+
+    <section class="block" id="today">
+      <h2>Where the team stands</h2>
+      <div class="today">
+        <div><b>No seat is named</b>The plan says who fills each seat is the review-seat register's, and the handbook names no person to any seat. Until the register records names, every record the seats table describes has no one to make it.</div>
+        <div><b>No persona holds authority</b>The plan's model gives an agent identity nothing of its own; what it may build is granted per Work Package by a seat and expires with it. The handbook's continuity state records production platform implementation as not granted.</div>
+        <div><b>The doctrine waits on the waiver</b>The doctrine ticket is open and depends on the operator's waiver; the contract's first section is unchanged.</div>
+        <div><b>This page records nothing</b>It projects the plan and the roadmap. When either changes, the page is revised to match.</div>
+      </div>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 12.1 for who fills each seat being #94's and for a persona's authority granted per Work Package and expiring with it; the handbook's hub, <code>index.html</code>, whose team section leaves who fills each seat to the review-seat ticket; the handbook's continuity state, <code>badf/current-state.json</code>, read at 04ae702 on 2026-09-06, whose authority fields record production platform implementation as not granted; the doctrine ticket (#158) and the waiver ticket (#92) for their standing. The strip at the top of this page states the overview's three status lines and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you would hold a seat</h3><p>The seats table says what your record would be and where it would be kept. The review-seat register is where a name would be recorded, and the handbook's team section is where the seats sit beside the groups.</p><a class="btn" href="../index.html#team">Read the handbook's team section</a></div>
+        <div><h3>If you want the records themselves</h3><p>PLAN-001 section 12.1 is the team model, section 13 the Definition of Done and 13.1 the loop mapping; the roadmap's sections 2, 9, 10 and 11 are where the doctrine, the loop, the councils and the roadmap's list come from. Where this page and a record disagree, the record is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and records no gate. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>

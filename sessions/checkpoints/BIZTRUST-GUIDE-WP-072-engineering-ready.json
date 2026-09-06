@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-072-001",
+  "created_at": "2026-09-06T06:51:18Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-072",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #180 on the Guide v2 map under the showcase record: write landing/team.html as a projection of BIZTRUST-PLAN-001 sections 12.1, 13 and 13.1 and the roadmap's sections 2, 8H, 9, 10 and 11 in the design voice, with the shell, the seats, councils and Definition of Done tables and the bindings and loop lists copied and held by a test, the three kinds, the reading of the seats, the four mapped steps and the doctrine restated in plain words labelled the page's, and the doctrine sentence's place reserved until #158 lands; link it from the eight landed showcase pages, completing the showcase.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-072-showcase-team",
+    "baseline_commit": "04ae702392f290573ac2ba8ae91cb61272fac537"
+  },
+  "completed": [
+    "Ticket #180 resolved by this branch: landing/team.html with seven blocks and the shell; its first draft on prototype/showcase-team, linked from the ticket.",
+    "tests/test_showcase_team.py, written red first, holds the seats, councils and Definition of Done tables to PLAN-001 and the bindings and loop lists to the roadmap; three negative controls recorded; README names it.",
+    "The eight landed showcase pages link the team page; every label in the showcase navigation is now a link; AGENTS.md's page count is twenty-eight.",
+    "badf/ re-anchored: NS-044 marks the showcase complete and the doctrine sentence as what remains, DEC-074 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-071.",
+    "After merge: #180 closed with a resolution comment; the map's decision line appended; the map's Not yet specified and frontier reviewed for what remains (the doctrine sentence under #158, the operator's tickets).",
+    "When #158 lands: revise the team page's doctrine block to carry the contract's sentence, under its own package."
+  ],
+  "files_changed": [
+    "landing/team.html",
+    "landing/index.html",
+    "landing/roadmap.html",
+    "landing/architecture.html",
+    "landing/p0.html",
+    "landing/p1.html",
+    "landing/p2.html",
+    "landing/p3.html",
+    "landing/operations.html",
+    "tests/test_showcase_team.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-072-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The three plan tables are located by their header rows, as the hub's team-model test locates the seats table, so a new table in section 12.1 does not shift them.",
+    "The roadmap's 8H fence joins its items with '+' lines and the loop fence with arrows; the parser drops both joiners.",
+    "The doctrine block restates the roadmap's section 2 and says the contract does not yet carry it; when #158 lands the block, its source line and the README's section 1 cell are the places to revise."
+  ],
+  "decisions": [
+    "DEC-074: the team page as the last projection; three tables and two lists copied and held; the kinds, the seats' reading, the four steps and the doctrine in the page's words; the contract's doctrine sentence reserved, not invented."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #180 and the page is revised to match.",
+    "The showcase record's reservation of the doctrine sentence to this page is read as: carry no sentence until the contract carries one."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates #158 and through it the doctrine sentence on the team page."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94. The team page names #94 as where every seat would be filled."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_071",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "doctrine_sentence_in_contract": "WAITS_ON_ISSUE_158_WHICH_WAITS_ON_ISSUE_92",
+    "review_seats": "FILLED_ONLY_BY_ISSUE_94_REGISTER",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_team tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table or list on the page differs from the record it copies, or a source line cites a passage that does not say what the section says.",
+      "The page names a person to a seat, states a persona as holding authority, or carries a doctrine sentence the contract does not.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the tables, the lists and the links were checked by the tests and the validator.",
+    "The three kinds, the seats' reading, the four steps' paragraph and the doctrine restatement are the page's; no test holds them.",
+    "No test holds the doctrine block to #158's standing; when that ticket closes the block is revised by hand under its own package."
+  ]
+}
