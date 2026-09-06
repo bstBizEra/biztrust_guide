@@ -228,7 +228,7 @@ After `BT-G7` (section 10) is recorded and Production v1.0 is released, Continuo
 | E7 Intelligence | Recommendations, assistants, document intelligence, anomaly detection | — |
 | E8 Ecosystem | Marketplace, insurer ecosystem, embedded distribution | — |
 
-Entry conditions are in section 11; ordering and design of the streams are out of this plan's scope until Production v1.0 exists.
+Entry conditions are in section 11; ordering and design of the streams are out of this plan's scope until Production v1.0 exists. The guide renders this section and section 11 as `reference/continuous-operations.html`, held to both by `tests/test_continuous_operations_page.py` (WP-056, [#170](https://github.com/bstBizEra/biztrust_guide/issues/170)).
 
 ## 9. Epic mapping: previous plan to this plan
 

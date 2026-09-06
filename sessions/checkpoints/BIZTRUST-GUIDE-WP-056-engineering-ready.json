@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-056-001",
+  "created_at": "2026-09-06T00:28:15Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-056",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #170 on the Guide v2 map: decide that Continuous Operations and the eight expansion streams are a reference page, not an overview section, and write reference/continuous-operations.html rendered from PLAN-001 sections 8 and 11 cell for cell, with the loop read onto the Operate and Learn stages, the entry condition and decision owner per stream, the two epics the previous plan placed after finance carried into E1 and E2 as their first items, and a limits section; bind the page to the plan with a test; link it from the overview's Continuous Operations row and the P3 manual's After section; name it in README and PLAN-001 section 8.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-056-continuous-operations",
+    "baseline_commit": "c27523b8625e5380b09fe2c545dd63a4a7204596"
+  },
+  "completed": [
+    "Ticket #170 resolved by this branch: reference/continuous-operations.html with six sections: the decision for a page, the loop read onto Operate and Learn, the eight streams from PLAN-001 section 8, the entry conditions from section 11, the two carried epics, and limits.",
+    "tests/test_continuous_operations_page.py: both tables held to PLAN-001 cell for cell; the page may name no gate sections 8 and 11 do not; the overview and the P3 manual must link the page; three negative controls recorded.",
+    "The overview's Continuous Operations row and the P3 manual's After section link the page; README names the page and the test; PLAN-001 section 8 names the rendering.",
+    "badf/ re-anchored: NS-044 repointed at #190, DEC-058 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-055.",
+    "After merge: #170 closed with a resolution comment; the map's decision line appended with its title link.",
+    "Map #153: #190 the hub's roadmap section next; #171 after it."
+  ],
+  "files_changed": [
+    "reference/continuous-operations.html",
+    "tests/test_continuous_operations_page.py",
+    "phases/overview.html",
+    "phases/p3.html",
+    "README.md",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-056-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The page carries the previous plan's identifiers P3.10 and P3.11 in the streams table's third column because PLAN-001 section 8's cells do, and the test holds the cell verbatim; no phase-page test scans reference/, and the identifiers are used with the previous plan's meaning, which NS-044's stop condition allows.",
+    "The page names BT-G6 and BT-G7 only, which are the gates sections 8 and 11 name; the test asserts that subset so a later edit cannot make the page cite a gate the plan's stream sections do not.",
+    "The deploy workflow stages every tracked *.html, so the page is published with the guide without a workflow change."
+  ],
+  "decisions": [
+    "DEC-058: a reference page from PLAN-001 sections 8 and 11, held by a test; the overview keeps one linked row; the carried epics are E1's and E2's first items."
+  ],
+  "assumptions": [
+    "The wayfinder invocation and 'proceed next steps on information and evidence' are chat instructions to work the next frontier ticket; they adopt nothing, authorise nothing and open no stream.",
+    "The loop's reading onto the Operate and Learn stages, the reasons for a page, and the sentence on what moved with the tenant pack are the track's proposals."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_055",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "stream_opening": "NOT_GRANTED_BY_THIS_PLAN",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_continuous_operations_page",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "The page's tables differ from PLAN-001 sections 8 and 11.",
+      "The page or any record says a stream is open, a condition is met, or a gate has passed.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; its tables, links and gate names were checked by the test and the validator.",
+    "The reasons for a page, the loop's reading onto the stages, and the note on what moved with the tenant pack are the track's proposals; no stream has a charter, an order or a design.",
+    "The hub still says nothing about Continuous Operations; that is #190's, which this package repoints NS-044 at."
+  ]
+}
