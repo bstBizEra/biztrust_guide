@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-073-001",
+  "created_at": "2026-09-06T07:22:25Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-073",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #147 on the P0 design map under the pack's template: write the P0.12 design with its nine mandatory sections, where secrets live and how the application reads them, the rotation exercise for the PostgreSQL application role and the Logto client secret as a measured procedure, least-privilege roles and evidence, what may never be in Git, negative controls seen failing, the evidence contract, the researched store options as findings and not candidates because no ADR row exists, open questions with assumptions, and a three-package cut; link it from the P0 manual's row; hold every design to the template by a test.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-073-p0-12-secrets-design",
+    "baseline_commit": "fe467b68f8bd519e67cdeaa5c0307b53ea95aa68"
+  },
+  "completed": [
+    "Ticket #147 resolved by this branch: docs/architecture/p0/P0.12-secrets-and-configuration.md at PROPOSED with the template's nine sections.",
+    "tests/test_p0_design_pack.py, written red first, holds every design in the pack to the README's headings, status vocabulary, no-choices rule and the manual's link; four negative controls recorded.",
+    "The P0 manual's P0.12 row links the design on GitHub; README names the test.",
+    "badf/ re-anchored: NS-043 records the map's frontier as empty for agents, DEC-075 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-072.",
+    "After merge: #147 closed with a resolution comment; the map's decision line appended to #128; the design's question 1 noted on map #128's Not yet specified as the secrets-store ADR the contract map must add.",
+    "Map #128: no agent-workable ticket remains until the #92 waiver unblocks map #91's ADR tickets."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "phases/p0.html",
+    "tests/test_p0_design_pack.py",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-073-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The pack forbids a candidate without an ADR row and the register has none for a secrets store; the design records the four researched options as findings and asks for the row.",
+    "The rotation exercise's step 4 measures open-session behaviour because the research marked it UNVERIFIED against PostgreSQL's ALTER ROLE page.",
+    "The design pack test reads the nine headings and six statuses from the README, so a template change re-derives the test's expectations by itself."
+  ],
+  "decisions": [
+    "DEC-075: the P0.12 design at PROPOSED; the store as a question, not a candidate; the exercise measured, not cited; the template held by a test."
+  ],
+  "assumptions": [
+    "The operator's 'proceed on your call, proposed only' on map #128 covers this design as a proposal; the operator may react on #147 and the design is revised.",
+    "The design's eight ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; now also gates every remaining P0 epic design through map #91's ADR tickets."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "New: the register has no ADR for the secrets store; the design's question 1 asks the contract map to add one; the design proceeds on an assumed Vault-shaped store."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_072",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "secrets_store_selection": "NO_ADR_ROW_NOT_A_CANDIDATE",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_p0_design_pack tests.test_phase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A real client, policy, claim or premium datum appears in a design.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No rotation was run; the design describes the exercise and its measurement, and the record it would produce does not exist.",
+    "The Logto client secret rotation mechanics are UNVERIFIED (question 3); no research covers them.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}

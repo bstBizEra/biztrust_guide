@@ -102,6 +102,7 @@ Recorded here because none of it was written down, and each is a constraint on a
 | `tests/test_showcase_p2.py` | Holds `landing/p2.html`'s epic table to PLAN-001 section 6 and its five copied lists (concepts, trace, settlement, statuses, failure cases) to the roadmap's section 6 |
 | `tests/test_showcase_p3.py` | Holds `landing/p3.html`'s epic table to PLAN-001 section 7 and its four copied lists (environments, pipeline, incident loop, Gate E evidence) to the roadmap's section 7 |
 | `tests/test_showcase_team.py` | Holds `landing/team.html`'s seats, councils and Definition of Done tables to PLAN-001 sections 12.1 and 13 and its bindings and loop lists to the roadmap's sections 8H and 9 |
+| `tests/test_p0_design_pack.py` | Holds every design under `docs/architecture/p0/` to the pack's README: nine mandatory sections in order, a proposable status, candidates never choices, and the P0 manual's link to each PROPOSED design |
 | `tests/test_showcase_pages.py` | Holds every page under `landing/` to `landing/README.md`'s shell: the navigation's nine labels in order, the strip, the wordmark, the shared stylesheet, no tenant mark, a source line per section, a record line per projection |
 | `tests/test_hub_next_steps_match_roadmap.py` | Holds the hub's next-steps cards to `docs/NEXT_STEPS.md`'s headings, id for id and title for title |
 | `tests/test_team_model.py` | Holds the hub's seats table to PLAN-001 section 12.1 row for row |
