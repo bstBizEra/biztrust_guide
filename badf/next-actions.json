@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-087",
-  "updated_at": "2026-09-06T11:19:19Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-088",
+  "updated_at": "2026-09-06T11:45:49Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "The P0 design map #128 is fully resolved on this branch: under its charting decision 8 (2026-09-06) every design names each ADR it depends on as a DRAFT_REQUIRED dependency. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), P0.6 (WP-077), P0.3 (WP-078), P0.4 (WP-079), P0.7 (WP-080), P0.5 (WP-081), P0.10 (WP-082), P0.8 (WP-083), P0.9 (WP-084), P0.11 (WP-085), the security proof (WP-086), and #185 P0.13 control-plane web surface, resolved by this branch as docs/architecture/p0/P0.13-control-plane-web.md at PROPOSED, the map's last ticket. The map's frontier is empty: the wayfinder's rule is that a cleared map hands off to /to-spec, which collapses the map's linked decisions into a buildable plan; whether to open that spec is the operator's call, since P0 implementation waits for BT-G0 and a platform repository. Eight landed designs owe a next version, on the map's Not yet specified: P0.6, P0.2, P0.12, P0.4, P0.7, P0.10, P0.5, P0.8, as the map's fog comments list them, now with P0.13's asks: P0.2 (the control plane's import rule and outbound allow-list), P0.4 (the pending_identity status, the me route's answer), P0.5 (the identity administration job as its command family's extension), P0.6 (the tenant settings and administration request tables), P0.8 (the me route), P0.12 (the job as a third use of the administrative credential). The secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack each need an ADR row the contract map must add. Each design is revised under a new version if its ADR decides differently.",
+      "action": "Work the P0 design map #128's revision track: under its charting decision 9 (2026-09-06) the eight next-version revisions the fog comments recorded are tickets, worked one per Work Package in this order, each bumping a landed design's version and carrying only the asks later designs recorded: #268 P0.2 v0.2, resolved by this branch as docs/architecture/p0/P0.02-repository-and-boundaries.md at 0.2; then #269 P0.6 v0.2, #270 P0.4 v0.2, #271 P0.7 v0.2, #272 P0.5 v0.2, #273 P0.8 v0.2, #274 P0.10 v0.2, #275 P0.12 v0.3. Every design and the proof stay PROPOSED. The five register gaps, the secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack, stay on Not yet specified for the contract map #91; the hand-off to a spec stays the operator's call. Each revision lands by one Work Package PR after fresh-context review.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046); tests/test_p0_design_pack.py holds every design to it",
         "The design's ADRs named with their register status; nothing chosen, nothing ACCEPTED"
