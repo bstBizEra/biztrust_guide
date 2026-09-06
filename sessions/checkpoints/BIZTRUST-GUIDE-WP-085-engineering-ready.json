@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T10:42:26Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-085",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #146 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.11 design with its nine mandatory sections, the identifiers that join the three signals and how they travel, the HTTP and database conventions adopted by name and level with the platform's own attribute namespace, the log record's shape, four metrics, sampling, what is forbidden and where it is enforced, the collector topology as a question, database-side corroboration through application_name, the proof as a test that reconstructs one request from its identifier alone, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005 and ADR-004, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #146 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.11 design with its nine mandatory sections, the identifiers that join the three signals and how they travel, the HTTP and database conventions adopted by name and level with the platform's own attribute namespace, the log record's shape, four metrics, sampling, what is forbidden and where it is enforced, the collector topology as a question, database-side corroboration through application_name, the proof as a test that reconstructs one request from its identifier alone, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005 and ADR-004, eleven open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-085-p0-11-observability-design",
@@ -42,15 +42,15 @@
   ],
   "observations": [
     "No actor identifier rides in any signal; the actor is in the audit record, found by the request identifier, because the conventions' identity attributes are PII at Development stability.",
-    "Five register gaps now stand on the map: the secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack; each is a question in its design, not a candidate.",
-    "The design answers the P0.10 design's question 4 with application_name and asks that design's next version to record it."
+    "The register gaps on the map are the secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack; each is a question in its design, not a candidate.",
+    "The design answers the P0.10 design's question 4 with application_name on the server's error lines and asks that design's next version to record it; the sampling rule is an ask on the P0.8 design."
   ],
   "decisions": [
     "DEC-087: the P0.11 design at PROPOSED; the trace-id and the biztrust.* attributes joining three signals; the conventions adopted by name; no actor, header, body or secret in a signal; sampling the API's own; application_name into the server log; one request reconstructed from its identifier."
   ],
   "assumptions": [
     "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
-    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+    "The design's eleven ASSUMED positions are the track's; each names the decision that would reverse it."
   ],
   "blockers": [
     {
