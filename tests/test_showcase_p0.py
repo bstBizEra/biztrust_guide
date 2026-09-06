@@ -64,7 +64,7 @@ def _page_table(table_class: str) -> dict[str, tuple[str, ...]]:
 
 
 def _page_list(list_class: str) -> list[str]:
-    m = re.search(rf'<ol class="{list_class}">(.*?)</ol>', PAGE.read_text(encoding="utf-8"), re.S)
+    m = re.search(rf'<ol class="copied {list_class}">(.*?)</ol>', PAGE.read_text(encoding="utf-8"), re.S)
     assert m, f"no list of class {list_class} on the page"
     return [_norm(item) for item in re.findall(r"<li>(.*?)</li>", m.group(1), re.S)]
 
@@ -82,6 +82,7 @@ def plan_proof() -> list[str]:
 
 
 def flows_matrix() -> dict[str, tuple[str, ...]]:
+    # every row but the header row, whose first cell is "Attempt"; the separator row is skipped by _md_rows
     return _md_rows(_section(FLOWS, "\n### Minimum negative proof matrix", "\n## 4. "), r"(?!Attempt$).+")
 
 
@@ -98,7 +99,7 @@ class TestCorpusIsPresent(unittest.TestCase):
         for table in ("epics", "matrix"):
             with self.subTest(table=table):
                 self.assertGreaterEqual(len(_page_table(table)), 1)
-        self.assertGreaterEqual(len(_page_list("copied proof")), 1)
+        self.assertGreaterEqual(len(_page_list("proof")), 1)
 
 
 class TestParityWithTheRecords(unittest.TestCase):
@@ -106,7 +107,7 @@ class TestParityWithTheRecords(unittest.TestCase):
         self.assertEqual(plan_epics(), _page_table("epics"), "the epic table disagrees with PLAN-001 section 4")
 
     def test_proof_matches_the_plan(self) -> None:
-        self.assertEqual(plan_proof(), _page_list("copied proof"), "the mandatory proof disagrees with PLAN-001 section 4")
+        self.assertEqual(plan_proof(), _page_list("proof"), "the mandatory proof disagrees with PLAN-001 section 4")
 
     def test_matrix_matches_the_flows_record(self) -> None:
         self.assertEqual(flows_matrix(), _page_table("matrix"), "the negative proof matrix disagrees with FLOWS.md section 3")
