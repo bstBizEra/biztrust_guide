@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-097",
-  "updated_at": "2026-09-06T14:33:13Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-098",
+  "updated_at": "2026-09-06T16:14:56Z",
   "actions": [
     {
       "id": "NS-040",
@@ -125,9 +125,32 @@
       "fallback": "Leave every manual at its review head; the previous plan's retired text is in history at cf4eac1 and its standing sections are untouched."
     },
     {
-      "id": "NS-033",
+      "id": "NS-045",
       "primary": false,
       "priority": 7,
+      "owner_role": "documentation-engineer",
+      "authority": "OPERATOR_INSTRUCTION_2026_09_06_CONTINUE_ON_THE_TRACK_AS_RECOMMENDED_PROPOSED_ONLY",
+      "action": "Work the all-phase Engineer Guide map #296 one ticket per session. It carries the operator's directive BIZTRUST-GUIDE-DIR-ALL-PHASES-001 towards a guide covering Architecture, P0, P1A, P1B, P1C, P2, P3 and Continuous Operations at proposal strength: one root wayfinder document, six sub-phase designs, a narrow P1 CONTEXT.md, and every later phase NOT_YET_CHARTERED. #300, the epic inventory and the status of Continuous Operations, is resolved by this branch. Open: #297 the operator posts the directive, so the guide has a source a reader can open; #298 how the guide names a technology with no ADR row, the gateway among them; #299 the directive's phase transitions expressed as entry criteria of BT-G0 to BT-G7; #301 whether maps stay issues; #302 one status vocabulary or three axes, and how a design resting on ASSUMED decisions says so. Five of the nine ADRs P1 rests on are BLOCKED_BY_S01, so a P1A design would rest on an ASSUMED spine.",
+      "prerequisites": [
+        "docs/architecture/BIZTRUST-PLAN-001.md section 9.1 for any count; the ADR register for any technology named",
+        "The directive posted by the operator before any document cites it as authority (#297)"
+      ],
+      "evidence_required": [
+        "The ticket's resolution comment, the ticket closed, one line appended to #296 Decisions so far",
+        "For a landed document: the PR's review record and badf/ re-anchored"
+      ],
+      "stop_conditions": [
+        "A guide document names a technology as chosen when its ADR row is a question or missing",
+        "A gate is recorded, or a gate name is invented beside BT-G0 to BT-G7",
+        "An ASSUMED decision is written as though #93 had answered it",
+        "The directive is treated as authority before it is posted in the repository"
+      ],
+      "fallback": "Leave the map's frontier as it stands; nothing on it is time-critical before BT-G0."
+    },
+    {
+      "id": "NS-033",
+      "primary": false,
+      "priority": 8,
       "owner_role": "documentation-engineer",
       "authority": "WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52",
       "action": "Reapply issue #52 item 3 as form (iii), DEC-033: computed.next_action.requires names, per fixture and in that fixture's own function, the observed.* and asserted.* keys the ACTION consumes; computed.freshness stays what the DERIVATION consumed and no sealed field moves. build.py reads the rule from the schema as it does for item 2.",

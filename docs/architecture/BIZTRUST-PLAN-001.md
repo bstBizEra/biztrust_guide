@@ -40,7 +40,7 @@ After the roadmap's section 1, with the purposes of P0 and P2 drawn from its sec
 | P2 | Payment and Finance | Control money, ledger, commission, settlement and reconciliation | Trust in financial integrity |
 | P3 | Production | Operate securely and reliably | Trust in production operation |
 
-After P3, **Continuous Operations** (measure, learn, improve, expand) is an operating lifecycle, not a build phase, and the expansion streams of section 8 are named there. The previous plan's section 10 said post-P3 work must not be labelled P4 to P9 because that would imply an unreviewed sequencing commitment; the streams keep that rule by carrying no phase number.
+After P3, **Continuous Operations** (measure, learn, improve, expand) is an operating lifecycle, not a build phase, and the expansion streams of section 8 are named there. The canonical epic inventory, and what each phase's epics are counted from, is section 9.1. The previous plan's section 10 said post-P3 work must not be labelled P4 to P9 because that would imply an unreviewed sequencing commitment; the streams keep that rule by carrying no phase number.
 
 The executive interpretation is the roadmap's section 15: architecture establishes trust in the design; P0 in identity, authorisation and tenant isolation; P1 in brokerage operations; P2 in money, commissions, settlement and reconciliation; P3 in continuous, safe operation.
 
@@ -284,6 +284,33 @@ Every one of the previous plan's 46 epics, once:
 | P3.11 | Tenant Pack validation foundation | E1 | Moved to an expansion stream; first item of E1 |
 
 Counts: 12 unchanged, 13 renumbered, 19 moved within the production-critical plan (10 to P1B, 9 to P2), 2 moved to expansion streams; 46 in all. New in this plan: 8 epics in P1C, 10 in P3, `P0.13` and `P1A.14`, 20 in all.
+
+### 9.1 The canonical epic inventory
+
+Counted inside each phase's own section, by that phase's own epic identifiers. Every index, denominator,
+percentage and ticket total the guide states is built from this table.
+
+| Phase | Epics | Identifiers |
+|---|---|---|
+| The architecture phase | 0 | Produces `BIZTRUST-ARCH-001` and the ADR register; its output is carried as `P0.1` rather than as epics of its own |
+| P0 | 13 | `P0.1` to `P0.13` |
+| P1A | 14 | `P1A.1` to `P1A.14` |
+| P1B | 10 | `P1B.1` to `P1B.10` |
+| P1C | 8 | `P1C.1` to `P1C.8` |
+| P2 | 9 | `P2A.1` to `P2A.4`, then `P2B.1`, `P2C.1`, `P2D.1`, `P2E.1` and `P2F.1` |
+| P3 | 10 | `P3A.1` to `P3J.1`, one each |
+| Continuous Operations | 0 | Eight expansion streams, `E1` to `E8`, in section 8 |
+
+**64 epics across the five phases, of which 51 lie beyond P0.**
+
+Continuous Operations contributes none. Section 2 already reads it as an operating lifecycle rather than a
+build phase, and a stream such as `E3 Integration Scale` or `E7 Intelligence` has no completion state, so it
+cannot sit in a denominator.
+
+Two counting errors are recorded here because both were made and neither is visible in the total. The
+previous plan's `P2.n` and `P3.n` identifiers appear in this plan only in the **Was** column of the table
+above; counted as this plan's epics they give 10 and 11 where the true figures are 9 and 10. And section 8's
+table holds eight stream rows, not nine: the ninth line is the table's own header.
 
 ## 10. Gates
 
