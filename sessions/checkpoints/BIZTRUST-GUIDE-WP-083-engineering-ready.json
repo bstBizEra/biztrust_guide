@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-083-001",
+  "created_at": "2026-09-06T10:09:30Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-083",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #144 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.8 design with its nine mandatory sections, the OpenAPI version pinned as ADR-005 proposes and the layout ARCH-001 section 11 draws, the canonical rules each made concrete, authority and provenance as two components on every representation, the error shape under RFC 9457 with what detail never says, versioning and the breaking-change policy, ten lint rules with a fixture each and the CI step, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-083-p0-08-api-design",
+    "baseline_commit": "e4903523e94504d754cd3f06296edf71bc7e20bd"
+  },
+  "completed": [
+    "Ticket #144 resolved by this branch: docs/architecture/p0/P0.08-api-conventions.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.8 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records P0.9 next in the manual's order and the contract lint job and tenant segment as asks on P0.2 and P0.4, DEC-085 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-082.",
+    "After merge: #144 closed with a resolution comment; the map's decision line appended to #128; the asks on P0.2 and P0.4 recorded as fog.",
+    "Map #128: #145 P0.9 next in the manual's order; #146 P0.11 and #148 the security proof unblocked."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.08-api-conventions.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-083-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "Every rule of ARCH-001 section 11's canonical list has a contract shape and an enforcement point; the design adds no rule the contract does not name.",
+    "The idempotency header follows an expired Internet-Draft, cited as a shape and never as a standard; ADR-012 decides the scope, retention and replay.",
+    "The design asks the P0.2 design's next version for the contract lint job and hands the P0.4 design its tenant segment answer."
+  ],
+  "decisions": [
+    "DEC-085: the P0.8 design at PROPOSED; openapi 3.2.0 pinned; the canonical rules as contract and middleware; Provenance and Authority on every representation; problem details that never leak; additive change gated by oasdiff; ten lint rules with fixtures."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_082",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "api_contract": "DESIGN_ONLY_NO_CONTRACT_FILE_CREATED_PLACEHOLDER_HOST_ONLY",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design lets a request body carry a tenant identifier, or names a linter or gateway as chosen.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No contract file was created and no linter was run; the design describes them and the controls that would prove them.",
+    "RFC 6585's 428 status was not read on this pass and is marked UNVERIFIED; the business families' documents are P1's and later.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
