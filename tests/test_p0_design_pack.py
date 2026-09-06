@@ -8,14 +8,6 @@ contents README 4.1 names, a status from the vocabulary that no agent may set to
 form "we use X" (a design names candidates, never choices), and, for a design at PROPOSED, a link
 from the P0 manual's epic row to the design on GitHub, as the README's section 6 requires.
 
-One rule here is not the README's. A design that writes "those N nouns" or "these N nouns" is
-pointing back at a set it has already counted, so a different count of that same noun in the same
-file contradicts it rather than counting a second set. WP-096 corrected exactly that: the P0.12
-design said four runs read a credential and refused its use "outside those three runs". The blanket
-form of the rule is false -- one design legitimately counts two packages and four packages, another
-seven rules and two rules -- so only the back-reference is held. There is no allow-list: a design
-whose back-reference cannot agree should name its set instead of counting it.
-
 Positive controls: the README must yield nine mandatory headings and six status words; at least one
 design must exist once the first has landed (before that the design tests skip, not pass).
 
@@ -24,8 +16,6 @@ Negative controls (run 2026-09-06 under WP-073, on in-memory copies of P0.12):
   * Set the status to ACCEPTED                          -> test_status_is_proposable FAILS
   * Write "we use OpenBao" in the candidates section    -> test_no_technology_is_chosen FAILS
   * Drop the manual's link to the design                -> test_manual_links_each_proposed_design FAILS
-  * P0.12 as it stood at df6115e, before WP-096          -> test_back_references_agree_with_what_they_count FAILS
-    ("those three runs" against "four runs read it"; run under WP-097, 2026-09-06)
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -51,27 +41,6 @@ def readme_headings() -> list[str]:
 def readme_statuses() -> list[str]:
     block = README.read_text(encoding="utf-8").split("## 3. Status vocabulary", 1)[1].split("```", 2)[1]
     return re.findall(r"^([A-Z_]+)\s", block, re.M)
-
-
-NUMBER_WORDS = ("one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|"
-                "fifteen|sixteen|seventeen|eighteen|nineteen|twenty")
-BACK_REFERENCE = re.compile(rf"\b(?:those|these)\s+({NUMBER_WORDS})\s+([a-z][a-z-]+)\b", re.I)
-
-
-def counts_of(text: str, noun: str) -> set[str]:
-    """Every number word this text attaches to `noun`, lowercased."""
-    return {m.group(1).lower() for m in re.finditer(rf"\b({NUMBER_WORDS})\s+{re.escape(noun)}\b", text, re.I)}
-
-
-def disagreeing_back_references(text: str) -> list[tuple[str, str, set[str]]]:
-    """Each 'those N nouns' whose noun this text also counts differently: (number, noun, other counts)."""
-    found = []
-    for m in BACK_REFERENCE.finditer(text):
-        number, noun = m.group(1).lower(), m.group(2).lower()
-        others = counts_of(text, noun) - {number}
-        if others:
-            found.append((number, noun, others))
-    return found
 
 
 def designs() -> list[Path]:
@@ -129,14 +98,6 @@ class TestEveryDesignObeysTheTemplate(unittest.TestCase):
                 self.assertIsNone(re.search(r"\bwe (use|chose|choose|will use|are using)\b", text, re.I), f"{p.name}: a design names candidates, never choices")
                 controls = text.split("## Negative controls", 1)[1].split("\n## ", 1)[0]
                 self.assertGreaterEqual(len([l for l in controls.splitlines() if l.startswith("| ") and not l.startswith("| #") and not l.startswith("|---")]), 1, f"{p.name}: no negative control row (README 4.5)")
-
-    def test_back_references_agree_with_what_they_count(self) -> None:
-        for p in designs():
-            with self.subTest(design=p.name):
-                for number, noun, others in disagreeing_back_references(p.read_text(encoding="utf-8")):
-                    self.fail(f"{p.name}: 'those {number} {noun}' points back at a set this design counts as "
-                              f"{' and '.join(sorted(others))}; one of them is wrong, or the back-reference should "
-                              f"name its set rather than count it")
 
     def test_manual_links_each_proposed_design(self) -> None:
         manual = MANUAL.read_text(encoding="utf-8")

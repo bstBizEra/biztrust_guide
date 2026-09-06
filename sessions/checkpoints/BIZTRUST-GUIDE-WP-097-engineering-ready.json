@@ -11,8 +11,8 @@
     "baseline_commit": "bb6a1f3d20f748ad1c487a70a0c4c3bfea81f1e2"
   },
   "completed": [
-    "tests/test_p0_design_pack.py holds every design to the back-reference rule; the module docstring records the negative control.",
-    "Negative control run: the test fails on the P0.12 design as it stood at df6115e and passes on main.",
+    "tests/test_p0_design_self_consistency.py holds every design to the back-reference rule, with markdown normalised away first.",
+    "Negative controls run: the rule fails on the P0.12 design as it stood at df6115e, and on the same text with the noun backticked; both pass on main.",
     "badf/ records the guard: DEC-099 and this checkpoint; NS-043 names WP-096 and WP-097."
   ],
   "remaining": [
@@ -20,7 +20,7 @@
     "After merge: #294 closed."
   ],
   "files_changed": [
-    "tests/test_p0_design_pack.py",
+    "tests/test_p0_design_self_consistency.py",
     "badf/current-state.json",
     "badf/next-actions.json",
     "badf/decision-log.jsonl",
@@ -36,12 +36,18 @@
       "command": "python3 scripts/validate_continuity.py",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_p0_design_self_consistency.py",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
     "The rule that would have caught the most is false; the rule that is true catches this defect and nothing else. Probing both against the pack before writing either is what separated them.",
     "Two back-references stand in the pack at bb6a1f3, in the P0.12 and P0.13 designs, and both agree with their file, so the test guards live text rather than a hypothetical.",
-    "This test reads no rule from the pack README, unlike the five beside it; the docstring says so, and the README is unchanged because no agent may add a rule to it here."
+    "The rule went into its own module after review: tests/test_p0_design_pack.py says it reads its rules from the pack README, and this rule is not one of them.",
+    "The first form of the rule could not see 'those three `runs`', and this pack backticks its names throughout; the review found it, and the text is normalised before it is read."
   ],
   "decisions": [
     "DEC-099: the back-reference rule is held for every design; the blanket rule is not; no allow-list."
@@ -75,6 +81,7 @@
   "declared_non_coverage": [
     "Only back-references are held. A design may still contradict itself in a way no mechanical rule sees, and the reading of 2026-09-06 does not rerun.",
     "Numerals, ranges and counts spelled across a sentence are not read.",
-    "Nothing here checks whether any count is correct, only whether one design counts one set two ways."
+    "Nothing here checks whether any count is correct, only whether one design counts one set two ways.",
+    "A noun of more than one word is read as its first word only, so 'these two service accounts' is held on 'service'."
   ]
 }
