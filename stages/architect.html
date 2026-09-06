@@ -36,9 +36,10 @@
     <a href="#invariants"><span>04</span> Invariant criteria</a>
     <a href="#adr"><span>05</span> ADR discipline</a>
     <a href="#ownership"><span>06</span> Systems of record</a>
-    <a href="#roles"><span>07</span> Roles</a>
-    <a href="#gate"><span>08</span> Exit gate</a>
-    <a href="#stop"><span>09</span> Stop conditions</a>
+    <a href="#threat"><span>07</span> Threat and risk analysis</a>
+    <a href="#roles"><span>08</span> Roles</a>
+    <a href="#gate"><span>09</span> Exit gate</a>
+    <a href="#stop"><span>10</span> Stop conditions</a>
   </nav>
   <div class="sidebar-card">
     <span class="status-dot"></span>
@@ -102,6 +103,7 @@
         <tr><td><strong>Rollback strategy</strong></td><td>How the decision is reversed if it is wrong</td><td>It is written as "revert the commit" for a schema change</td></tr>
         <tr><td><strong>ADRs</strong></td><td>Why, and what was rejected</td><td>They are written for decisions nobody contested</td></tr>
         <tr><td><strong>Deferred-decision register</strong></td><td>What was deferred, and what would trigger revisiting it</td><td>A silent gap and a deliberate deferral read identically six months later</td></tr>
+        <tr><td><strong>Threat model</strong></td><td>Which trust boundaries exist, what could cross each, and what answers it</td><td>A threat names no answering invariant, control or owned accepted risk</td></tr>
       </tbody>
     </table>
   </div>
@@ -187,15 +189,41 @@
   </div>
 </section>
 
+<section id="threat" data-search="threat model risk analysis trust boundary tenant isolation authority boundary money accepted risk security reviewer tier owed">
+  <div class="section-heading"><span>07</span><div><p>What could go wrong</p><h2>Threat and risk analysis</h2></div></div>
+  <p class="section-intro">The <a href="../index.html">guide's hub</a> lists the threat model among this stage's outputs and its Definition of Done requires it reviewed; <a href="define.html#classification">Define</a> hands this stage a data classification and a <a href="define.html#risk">risk tier</a> that feed it. A threat model is useful on the same terms as an invariant: only where each threat names what answers it. One that lists what could go wrong and stops is a worry, not an artifact.</p>
+  <div class="split">
+    <article>
+      <h3>What it covers, for this platform</h3>
+      <ul class="check-list">
+        <li><strong>The trust chain.</strong> Identity, edge validation, tenant context, authorization, data access, audit &mdash; each hop is a boundary, and each boundary is a place a request can arrive without the property the next hop assumes</li>
+        <li><strong>Tenant isolation.</strong> Every path by which one tenant's data could reach another's session, including a request whose tenant identifier, token audience or organization context was manipulated</li>
+        <li><strong>The authority boundary.</strong> Every record that could be presented as a confirmation it is not: a broker's request shown as an insurer's acceptance, an indication shown as a quote, a representation shown with the authority of the original</li>
+        <li><strong>Money.</strong> Every path by which payment state could reach coverage state, a posted record could be edited, or client money and office money could be netted</li>
+      </ul>
+      <p>These four are this guide's reading of the architecture pack's boundaries; the security reviewer may add one. Secrets and supply chain are threats too, and belong to the guide's <a href="../index.html#security">security engineering</a> section and the pipeline rather than to this model.</p>
+    </article>
+    <article>
+      <h3>The rule, and when it is owed</h3>
+      <ul class="check-list">
+        <li><strong>Every threat names its answer</strong> &mdash; an invariant with its check, a control with its evidence, or an accepted risk with a named owner and a revisit trigger. A threat with none of the three fails the output</li>
+        <li><strong>Owed for any package that crosses a trust boundary</strong> or touches identity, tenancy, the authority boundary or money, whatever its tier; which tiers owe it for the package as a whole is the <a href="../reference/risk-tiers.html#schedule">risk-tier schedule</a>'s to say, not this manual's</li>
+        <li><strong>Refreshed when a boundary moves</strong>; a model written for the boundaries of an earlier freeze answers threats that no longer exist and misses the ones that do</li>
+      </ul>
+      <p>The architect drafts it. The security reviewer reviews it and may not have drafted it; the domain reviewer checks the authority-boundary threats against how the business is actually done. It is accepted with the architecture, by the accepting authority, and enters the exit gate as one item below.</p>
+    </article>
+  </div>
+</section>
+
 <section id="roles" data-search="roles architect reviewer authority accept">
-  <div class="section-heading"><span>07</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
+  <div class="section-heading"><span>08</span><div><p>Who does what</p><h2>Roles in this stage</h2></div></div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Role</th><th>Does</th><th>Must not</th></tr></thead>
       <tbody>
         <tr><td><strong>Architect</strong></td><td>Drafts the contract, invariants and ADRs; names what is deferred</td><td>Accept their own architecture, or begin implementation from it</td></tr>
         <tr><td><strong>Domain reviewer</strong></td><td>Checks the model against how the business actually works, including the awkward cases</td><td>Approve a model whose vocabulary they had to guess at</td></tr>
-        <tr><td><strong>Security reviewer</strong></td><td>Owns tenancy, identity and data-access commitments</td><td>Accept an invariant with no detection mechanism</td></tr>
+        <tr><td><strong>Security reviewer</strong></td><td>Owns tenancy, identity and data-access commitments; reviews the threat model</td><td>Accept an invariant with no detection mechanism, or a threat with no answer, or a threat model they drafted</td></tr>
         <tr><td><strong>Accepting authority</strong></td><td>Records acceptance of the frozen architecture, with a date</td><td>Be inferred from absence of objection</td></tr>
       </tbody>
     </table>
@@ -203,7 +231,7 @@
 </section>
 
 <section id="gate" data-search="exit gate architecture frozen plan authorized">
-  <div class="section-heading"><span>08</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
+  <div class="section-heading"><span>09</span><div><p>Transition</p><h2>Exit gate</h2></div></div>
   <p class="section-intro">Architect exits to Plan when every condition holds. Acceptance is recorded explicitly; a stage does not advance because nobody objected.</p>
   <div class="dod-grid">
     <label><input type="checkbox" disabled> Every invariant names the check that would catch its violation</label>
@@ -214,11 +242,12 @@
     <label><input type="checkbox" disabled> Rollback is described in terms the change actually permits</label>
     <label><input type="checkbox" disabled> A named role has recorded acceptance of the architecture, with a date</label>
     <label><input type="checkbox" disabled> Nothing in the contract asserts a capability exists that does not</label>
+    <label><input type="checkbox" disabled> The threat model names each trust boundary and, for every threat, the invariant, control or owned accepted risk that answers it</label>
   </div>
 </section>
 
 <section id="stop" data-search="stop conditions halt ambiguous authority constraint discovered">
-  <div class="section-heading"><span>09</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
+  <div class="section-heading"><span>10</span><div><p>Halt</p><h2>Stop conditions</h2></div></div>
   <ul class="cross-list">
     <li>No role is authorized to accept the architecture being written</li>
     <li>A constraint surfaces that would invalidate a decision already frozen</li>
@@ -226,6 +255,7 @@
     <li>The contract asserts a capability is implemented, secure or production-ready without linked evidence</li>
     <li>Two systems claim authority over the same datum and neither will yield</li>
     <li>Implementation has already begun and is defining the architecture in practice</li>
+    <li>A threat is answered by the sentence that it is unlikely, with no owner recorded for accepting it</li>
   </ul>
   <div class="next-action">
     <span>NEXT STAGE</span>
