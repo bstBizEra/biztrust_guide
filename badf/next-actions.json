@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-055",
-  "updated_at": "2026-09-05T20:56:05Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-056",
+  "updated_at": "2026-09-06T00:28:15Z",
   "actions": [
     {
       "id": "NS-040",
@@ -108,10 +108,10 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157 and #165 to #169 are resolved; the overview and all four phase manuals render PLAN-001 and the previous plan's phase sections are retired. Next is #170 Continuous Operations and the expansion streams (a reference page or an overview section; entry conditions per stream; the two moved epics inside E1 and E2), then #190 the hub roadmap section, which waits on #170. #171 catalogue and tests, #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver.",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165 to #170 are resolved; the overview and the four manuals render PLAN-001 and reference/continuous-operations.html renders its sections 8 and 11. Next is #190 the hub's roadmap section at v2.0 (its First 90 days still speaks the previous plan's phases) with one Continuous Operations sentence linking the reference page; then #171 catalogue and tests after the re-partition. #159 loop mapping and #160 team model are independent; #158 doctrine waits on the #92 waiver; #172 to #180 the showcase wait on the records.",
       "prerequisites": [
-        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview and gate tests on PLAN-001 (WP-051), the four manuals on PLAN-001 sections 4 to 7 (WP-052 to WP-055)",
-        "For #170: PLAN-001 sections 8 and 11 carry the streams and their entry conditions"
+        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview, four manuals and the operations page on PLAN-001 (WP-051 to WP-056)",
+        "For #190: PLAN-001 sections 2, 8 and 10 carry the phases, the loop and the gates the hub's day ranges would cite"
       ],
       "evidence_required": [
         "The ticket's resolution comment, the ticket closed, one line appended to #153 Decisions so far",

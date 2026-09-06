@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Continuous Operations &middot; BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="What runs after BizTrust Production v1.0: the Continuous Operations loop, the eight expansion streams with no phase number, the entry condition each waits on, and where the two epics the previous plan placed after finance now sit.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery phases</strong><small>Reference &middot; Continuous Operations</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">&#9689;</button>
+    <a class="github-link" href="../phases/overview.html">&larr; Phase track</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Reference &middot; Continuous Operations</p>
+  <nav id="sectionNav">
+    <a href="#why"><span>01</span> Why a reference page</a>
+    <a href="#loop"><span>02</span> The loop</a>
+    <a href="#streams"><span>03</span> The eight streams</a>
+    <a href="#conditions"><span>04</span> Entry conditions</a>
+    <a href="#carried"><span>05</span> The two carried epics</a>
+    <a href="#limits"><span>06</span> What this does not do</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Reference</strong><small>Not a stage, not a phase &middot; a lookup</small></div>
+  </div>
+</aside>
+
+<main id="main">
+<section id="ops-intro" data-search="continuous operations measure learn improve expand expansion streams E1 E8 after production v1.0 no phase number">
+  <div class="section-heading"><span>REF</span><div><p>Reference &middot; not a stage</p><h2>Continuous Operations and the expansion streams</h2></div></div>
+  <p class="lede">After <code>BT-G7</code> is recorded and Production v1.0 is released, the platform is not finished; it is operated. Continuous Operations is that operating lifecycle: measure, learn, improve, expand. The expansion it allows is eight streams, each opening on a recorded condition of its own, none on a date, and none carrying a phase number.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">BIZTRUST-PLAN-001.md</a> sections 8 and 11, which restate the roadmap's section 13 and propose an entry condition per stream. The two tables below are held to those sections by a test; where they disagree, the plan is right and this page is a defect. The <a href="../phases/overview.html#phases">phase overview</a> carries one row for Continuous Operations and links here; the <a href="../phases/p3.html#after">P3 manual</a> ends here.</p>
+  <div class="invariant">
+    <span>THE RULE THIS PAGE EXISTS TO KEEP</span>
+    <p>Nothing after P3 carries a phase number. A stream opens only when <code>BT-G7</code> is recorded, Production v1.0 is released, and the stream's own entry condition is recorded by the decision owner it names; none is ordered among the others except as its condition names another, and none is authorised by the plan. The previous plan said post-P3 work must not be labelled P4 to P9 because a number implies an unreviewed sequencing commitment; the streams keep that rule by carrying no number at all.</p>
+  </div>
+</section>
+
+<section id="why" data-search="why reference page not overview section decision ticket 170 phase number lookup">
+  <div class="section-heading"><span>01</span><div><p>The decision</p><h2>Why a reference page, not an overview section</h2></div></div>
+  <p class="section-intro">The operations ticket on the Guide v2 map asked whether Continuous Operations and the streams are a section of the phase overview or a page under <code>reference/</code>. This page is the answer, and the reasons are this track's, not the plan's.</p>
+  <div class="definition-list">
+    <div><span>The overview is a rendering of five phases</span><p>Its phases table is held to PLAN-001 sections 2 to 8 by a test, and its rule is that nothing after P3 is a phase. Eight stream rows with entry conditions beside five phase rows would put the streams where a reader expects phases, which is the misreading the rule exists to prevent. The overview keeps one row for Continuous Operations and links here.</p></div>
+    <div><span>A lookup has a shape the guide already uses</span><p>The <a href="artifact-catalogue.html">artifact catalogue</a> and the <a href="risk-tiers.html">risk-tier schedule</a> are cross-page lookups that the manuals cite rather than restate. The streams are the same kind of thing: the P3 manual, the hub and the overview each need one place to point at, and a page is a place.</p></div>
+    <div><span>Entry conditions are proposals with decision owners</span><p>Each condition names an ADR or a seat that records it. A table of proposals waiting on eight different owners belongs beside the other lookups, not inside the manual of a phase whose gate has its own owner.</p></div>
+  </div>
+</section>
+
+<section id="loop" data-search="loop measure learn improve expand operate stage learn stage service objectives telemetry promotion">
+  <div class="section-heading"><span>02</span><div><p>The loop</p><h2>Measure, learn, improve, expand</h2></div></div>
+  <p class="section-intro">PLAN-001 section 8 names the loop in four words and no more. How the guide's stage manuals carry each word is this track's reading, offered so that the loop is not a fifth track to maintain.</p>
+  <div class="definition-list">
+    <div><span>Measure</span><p>The <a href="../stages/operate.html#objectives">Operate stage's service objectives</a> and <a href="../stages/operate.html#telemetry">telemetry floor</a>, read against the indicators and objectives the P3 manual's P3F.1 defined. Error budget consumed per objective is the first number the loop reads.</p></div>
+    <div><span>Learn</span><p>The <a href="../stages/learn.html">Learn stage</a>: postmortems with follow-up actions owned, and the promotion bar that decides what a package's evidence has earned.</p></div>
+    <div><span>Improve</span><p>A Work Package. Every change after v1.0 still runs the full lifecycle from Discover to Learn; Continuous Operations changes what the packages are about, not how one moves.</p></div>
+    <div><span>Expand</span><p>A stream below, opened on its recorded condition and then delivered as Work Packages like any other capability, under whatever gate its own charter names.</p></div>
+  </div>
+</section>
+
+<section id="streams" data-search="eight expansion streams tenant scale embedded insurance integration scale workflow scale enterprise isolation advanced brokerage intelligence ecosystem carries previous plan">
+  <div class="section-heading"><span>03</span><div><p>The streams</p><h2>Eight streams, no phase number</h2></div></div>
+  <p class="section-intro">Rendered from PLAN-001 section 8, cell for cell. The roadmap's section 13 converted the earlier P4 to P9 proposals into these streams so that P3 could mean Production without discarding the capabilities; the third column names the two epics of the previous plan that a stream carries as its first item.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>The expansion streams — PLAN-001 section 8; held to it by a test</caption>
+      <thead><tr><th>Stream</th><th>Capability</th><th>Carries from the previous plan</th></tr></thead>
+      <tbody>
+        <tr><td><strong>E1</strong><small>Tenant Scale</small></td><td>Tenant Pack SDK, white-labelling, product packs</td><td>P3.11 Tenant Pack validation foundation</td></tr>
+        <tr><td><strong>E2</strong><small>Embedded Insurance</small></td><td>Developer portal, partner APIs, SDKs</td><td>P3.10 Partner API and versioned webhooks</td></tr>
+        <tr><td><strong>E3</strong><small>Integration Scale</small></td><td>More insurer, payment and bank adapters</td><td>&mdash;</td></tr>
+        <tr><td><strong>E4</strong><small>Workflow Scale</small></td><td>Event-driven and workflow-engine extraction</td><td>&mdash;</td></tr>
+        <tr><td><strong>E5</strong><small>Enterprise Isolation</small></td><td>Dedicated schema or database deployment</td><td>&mdash;</td></tr>
+        <tr><td><strong>E6</strong><small>Advanced Brokerage</small></td><td>Richer claims, renewals, placement analytics</td><td>&mdash;</td></tr>
+        <tr><td><strong>E7</strong><small>Intelligence</small></td><td>Recommendations, assistants, document intelligence, anomaly detection</td><td>&mdash;</td></tr>
+        <tr><td><strong>E8</strong><small>Ecosystem</small></td><td>Marketplace, insurer ecosystem, embedded distribution</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="conditions" data-search="entry conditions per stream BT-G6 BT-G7 third tenant authority profile partner contract counterparty sandbox workflow volume dedicated schema renewal cycle data governance partner live decision owner">
+  <div class="section-heading"><span>04</span><div><p>Entry conditions</p><h2>What each stream waits on, and who records it</h2></div></div>
+  <p class="section-intro">Rendered from PLAN-001 section 11, cell for cell. Every condition is a proposal until the decision owner in the third column records it; the plan authorises none of the streams, and this page records no condition as met.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>Entry conditions — PLAN-001 section 11; held to it by a test</caption>
+      <thead><tr><th>Stream</th><th>Entry condition</th><th>Decision it waits on</th></tr></thead>
+      <tbody>
+        <tr><td><strong>E1</strong><small>Tenant Scale</small></td><td><code>BT-G6</code> recorded, and a third tenant's authority profile under S01</td><td>ADR-011</td></tr>
+        <tr><td><strong>E2</strong><small>Embedded Insurance</small></td><td><code>BT-G7</code> recorded, and a partner contract that names the API surface it needs</td><td>ADR-005, ADR-009</td></tr>
+        <tr><td><strong>E3</strong><small>Integration Scale</small></td><td>A counterparty (insurer, payment provider or bank) with a documented API and a signed sandbox agreement</td><td>ADR-009</td></tr>
+        <tr><td><strong>E4</strong><small>Workflow Scale</small></td><td>Workflow volume or fault evidence from P1B and P2 showing the P0 runtime choice insufficient</td><td>ADR-001's extraction criteria; ADR-010</td></tr>
+        <tr><td><strong>E5</strong><small>Enterprise Isolation</small></td><td>A tenant's regulatory or contractual requirement for a dedicated schema or database, recorded by the legal seat</td><td>The contract's section 18 dedicated-tenant trigger; ADR-004; ADR-019</td></tr>
+        <tr><td><strong>E6</strong><small>Advanced Brokerage</small></td><td>P1B operating data on one tenant covering a full renewal cycle (a measurement window, not a schedule), or a second tenant's need recorded</td><td>&mdash;</td></tr>
+        <tr><td><strong>E7</strong><small>Intelligence</small></td><td>The data-governance track's owner, classification and consent rows exist for every dataset a model would read</td><td>ADR-019; the compliance track</td></tr>
+        <tr><td><strong>E8</strong><small>Ecosystem</small></td><td>E2 open and at least one partner live</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Two conditions name a gate, and it is not the stream's gate</strong>
+    <p>E1 waits on <code>BT-G6</code> and E2 on <code>BT-G7</code>. Those are P3's gates, recorded by their own owners on P3's evidence; a stream's condition cites them as facts it needs, and a stream opening records nothing about them. What gate, if any, closes a stream is the stream's own charter's to say, and no charter exists.</p>
+  </div>
+</section>
+
+<section id="carried" data-search="carried epics tenant pack validation foundation partner API versioned webhooks first item E1 E2 previous plan P3.10 P3.11 BT-G6 without a pack">
+  <div class="section-heading"><span>05</span><div><p>The carried epics</p><h2>Two epics the previous plan placed after finance</h2></div></div>
+  <p class="section-intro">The previous plan's finance and integration phase ended with a partner API and a Tenant Pack validation foundation. PLAN-001 section 9 moves them out of the production-critical plan into E2 and E1 as each stream's first item. What each was on the previous P3 manual is carried below from that page's rows at the WP-054 merge, so the capability is not lost with the identifier; how it is delivered inside its stream is the stream's to decide when it opens.</p>
+  <div class="definition-list">
+    <div><span>E1's first item &middot; Tenant Pack validation foundation</span><p>Schema, signing and compatibility validation for tenant-specific configuration &mdash; extension without forks or unrestricted code; proven when a tenant provisions and isolates through a pack with no core-code branch for either tenant; built against ADR-011 and INV-011. Note what moved with it: <code>BT-G6</code> Tenant Ready no longer requires a pack. The P3 manual's two <code>BT-G6</code> items ask that Tenant #2 provisions without a core-code fork and that no tenant-specific code path exists; the pack is how E1 makes that repeatable at scale, not how P3 proves it once.</p></div>
+    <div><span>E2's first item &middot; Partner API and versioned webhooks</span><p>The partner contract family under <code>openapi/biztrust-partner-api.yaml</code>; outbound webhooks versioned and signed; a breaking-change policy in CI; proven by contract lint and compatibility tests where a breaking change fails CI; built against ADR-005 and INV-012. E2's condition asks for a partner contract that names the API surface it needs, so the first Work Package of E2 is scoped by a partner, not by the previous plan's row.</p></div>
+  </div>
+</section>
+
+<section id="limits" data-search="what this does not do no ordering no design no authorisation tracks hub sentence charter">
+  <div class="section-heading"><span>06</span><div><p>Limits</p><h2>What this page does not do</h2></div></div>
+  <ul class="cross-list">
+    <li>It orders no stream and designs none; PLAN-001 section 8 puts both out of the plan's scope until Production v1.0 exists</li>
+    <li>It records no condition as met and no stream as open; each condition's decision owner does that, in the record the ADR or seat keeps</li>
+    <li>It does not carry the cross-cutting tracks of PLAN-001 section 12, which run through the phases and are not streams</li>
+    <li>It does not say what gate closes a stream; no stream has a charter yet, and a charter is where that belongs</li>
+    <li>It is not the hub's sentence on Continuous Operations; the hub's roadmap section at v2.0 is its own ticket on the Guide v2 map, and may link here</li>
+  </ul>
+</section>
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team &middot; Reference &middot; Continuous Operations &middot; <a href="../phases/overview.html">Phase track</a> &middot; <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top &uarr;</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
