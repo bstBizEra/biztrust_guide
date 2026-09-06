@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BizTrust's production phase as its plan records it: P3 would prove that the whole system can be operated, from working software to reliable service. Objectives before release gates, the ten epics, the canonical pipeline, the operating controls in plain words, three words the sources do not define, and Gate E, the eighteen items of evidence a security risk owner would record.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — P3 Production: from working software to reliable service</title>
+  <!-- A projection of BIZTRUST-PLAN-001 section 7, its sections 10 and 12.1 for the gate and its seats, the roadmap's section 7 and the P3 manual, for the humans whose decisions gate the delivery.
+       Not a source of truth: the plan, the roadmap and the P3 manual are. Rules: landing/README.md (SHOWCASE-001). Ticket #178 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#today">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="p0.html">P0 Identity and Tenant</a>
+    <a href="p1.html">P1 Insurance</a>
+    <a href="p2.html">P2 Payment and Finance</a>
+    <a href="p3.html" aria-current="page">P3 Production</a>
+    <span aria-disabled="true">Continuous Operations and expansion</span>
+    <span aria-disabled="true">Team and doctrine</span>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="objective">
+      <h2>P3 would prove that the whole system can be operated, from working software to reliable service</h2>
+      <p class="record">Projects BIZTRUST-PLAN-001 1.0-draft, sections 7, 10 and 12.1, BIZTRUST-ROADMAP-001 operator draft, section 7, and the P3 manual, sections 01, 02 and 04 to 08; read at 7c19afc, 2026-09-06.</p>
+      <p>The last phase builds almost no features. Its objective, in the plan's words, is to prove that the whole system can be operated, from working software to reliable service. The roadmap says the same from the other side: P3 is not primarily feature development, and, citing its own engineering roadmap, it defines P3 as the transition from a working application to an operationally sustainable service. The previous plan had no production phase; two P0 epics, the observability baseline and secrets management, laid the baselines that P3 would scale.</p>
+      <p>The plan's label table gives the phase one executive label, E, Production Ready, and one gate, BT-G7 Production Ready, with a second, BT-G6 Tenant Ready, judged inside it. The manual's first entry condition is that the previous phase's two gates, BT-G4 and BT-G5, label D, are recorded, and its reason sets the phase's boundary: P3 operates a system whose financial and integration evidence already exists; it does not produce that evidence, and it does not build features to fill gaps the earlier gates should have found.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 7, the objective paragraph, for the phase's purpose, the previous plan's lack of a production phase and P0.11 and P0.12 as the baselines; the roadmap's section 7 opening for its first sentence, quoted, and its last, restated with its attribution; section 4's epic table for the names of P0.11 and P0.12; section 10.1's label table for E, Production Ready, BT-G7 and BT-G6 judged inside it; the P3 manual, <code>phases/p3.html</code> section 01, for label D recorded as the first entry condition and the sentence quoted from it. The first sentence of the first paragraph is this page's.</p>
+    </section>
+
+    <section class="block" id="order">
+      <h2>Measure before you release, restore before you promise</h2>
+      <p>The manual puts two things before any release gate, and they are entry conditions rather than epics to run in parallel. The first is the service objectives. An indicator is the measure, an objective is the target on it, and the error budget is the rate at which the objective may be missed; in the manual's reading of its sources, release velocity is coupled to that budget and a written budget policy names actions and owners. A release gate cannot be defined before the indicators and objectives it would judge by exist, so the objectives epic is a precondition of the release-engineering epic. The manual's first stop signal is the failure the order prevents: a release that went out with no objective to judge it by, where a canary with nothing to evaluate against is a deployment with a delay.</p>
+      <p>The second is recovery. Recovery point and recovery time are two numbers, and the second is bounded by a third, the maximum tolerable downtime that the business would have to state; the manual's source for those numbers places backup and recovery strategy in development, not after launch, and the manual asks that all three be stated per system with the source of the downtime figure. The roadmap's own sentence is the shortest form: a backup is not considered a DR control until restore has been tested.</p>
+      <p class="source">Source: the P3 manual's section 01 for the two entry conditions, the definitions of indicator, objective and error budget, P3F.1 as a precondition of P3C.1, and the three recovery numbers with their placement in the lifecycle; its section 05 for the stop signal on a release with no objective; the roadmap's section 7, P3G, for the sentence quoted. The paragraphing and the phrase about what the business would have to state are this page's.</p>
+    </section>
+
+    <section class="block" id="epics">
+      <h2>Ten epics, one per capability group</h2>
+      <p>The plan lists P3's work as ten epics, one for each of the roadmap's capability groups, from environments to incident management. The table is copied from the plan cell for cell; the plan's source column names the roadmap block each epic comes from.</p>
+      <table class="epics">
+        <thead><tr><th>Epic</th><th>Capability</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>P3A.1</td><td>Environment architecture and controlled promotion: local, development, test, staging, pre-production, production</td><td>Roadmap section 7, P3A</td></tr>
+          <tr><td>P3B.1</td><td>The canonical pipeline: lint, unit, build, dependency and secret scanning, SAST, contract and integration tests, tenant security tests, artifact, staging, end-to-end, DAST, performance and resilience, release evidence, authorisation, production</td><td>Roadmap section 7, P3B</td></tr>
+          <tr><td>P3C.1</td><td>Release engineering: feature flags, canary, rolling and blue-green deployment, rollback, database and API compatibility, mobile compatibility matrix</td><td>Roadmap section 7, P3C</td></tr>
+          <tr><td>P3D.1</td><td>Observability at production scale: every meaningful transaction reconstructable through log, metric, trace and audit event</td><td>Roadmap section 7, P3D; P0.11</td></tr>
+          <tr><td>P3E.1</td><td>Reliability controls: scaling, queueing, retries, circuit breakers, dead-letter handling, replication, backup, tested restore, failover, graceful degradation</td><td>Roadmap section 7, P3E</td></tr>
+          <tr><td>P3F.1</td><td>Service-level indicators and objectives for the initial indicator set</td><td>Roadmap section 7, P3F</td></tr>
+          <tr><td>P3G.1</td><td>Disaster recovery: recovery point and time objectives, tested</td><td>Roadmap section 7, P3G</td></tr>
+          <tr><td>P3H.1</td><td>Mobile production: build, internal test, beta, store review, production, monitoring; minimum version and forced upgrade</td><td>Roadmap section 7, P3H</td></tr>
+          <tr><td>P3I.1</td><td>Security operations: continuous detection across authentication, tenancy, privilege, API, payment, dependencies, secrets, drift</td><td>Roadmap section 7, P3I</td></tr>
+          <tr><td>P3J.1</td><td>Incident management: detect, triage, contain, restore, investigate, correct, postmortem, prevent; a severity scale</td><td>Roadmap section 7, P3J</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 7, the epic table, copied cell for cell and held by <code>tests/test_showcase_p3.py</code>; the P3 manual's section 02 heading for the count of ten and the one-per-group rule.</p>
+    </section>
+
+    <section class="block" id="pipeline">
+      <h2>The path a change would take to production</h2>
+      <p>The roadmap draws two ladders. Environments, whose promotion the roadmap says should be controlled and reproducible, and the canonical pipeline. Both are copied step for step; that a change would pass the whole pipeline before the last environment is this page's reading of the second ladder.</p>
+      <div class="pair">
+        <div>
+          <h3>Environments</h3>
+          <ol class="copied environments">
+            <li>LOCAL</li>
+            <li>DEV</li>
+            <li>TEST</li>
+            <li>STAGING</li>
+            <li>PRE-PRODUCTION</li>
+            <li>PRODUCTION</li>
+          </ol>
+        </div>
+        <div>
+          <h3>The canonical pipeline</h3>
+          <ol class="copied pipeline">
+            <li>Change</li>
+            <li>Lint / Static Analysis</li>
+            <li>Unit Tests</li>
+            <li>Build</li>
+            <li>Dependency Scan</li>
+            <li>Secret Scan</li>
+            <li>SAST</li>
+            <li>Contract Tests</li>
+            <li>Integration Tests</li>
+            <li>Tenant Security Tests</li>
+            <li>Artifact Generation</li>
+            <li>Staging</li>
+            <li>E2E</li>
+            <li>DAST / Security Gate</li>
+            <li>Performance / Resilience</li>
+            <li>Release Evidence</li>
+            <li>Authorization</li>
+            <li>Production</li>
+          </ol>
+        </div>
+      </div>
+      <p>One step in the pipeline is not a machine's. Authorization sits between the release evidence and production, and the manual's stop conditions say what it may not be: a pipeline step that records a gate, or a gate recorded on a green pipeline without a human. The pipeline produces evidence; a person reads it.</p>
+      <p class="source">Source: the roadmap's section 7, P3A for the environment ladder and its sentence on controlled, reproducible promotion, and P3B for the canonical pipeline, both copied step for step and held by <code>tests/test_showcase_p3.py</code>; the P3 manual's section 08 for the stop condition on a pipeline step recording a gate. The reading of the authorization step and of the pipeline as a whole is this page's.</p>
+    </section>
+
+    <section class="block" id="controls">
+      <h2>What operating the system would mean, in plain words</h2>
+      <p>The groups the epic table lists after the pipeline, less the objectives already covered above, are the controls a reliable service would run on. Each is described here in this page's words from the roadmap's lists and the manual's definitions; the roadmap's own lists are longer than these summaries.</p>
+      <div class="models" role="list">
+        <div role="listitem"><b>Release engineering</b><span>Feature flags that roll a change out gradually and revert it alone; a canary that serves part of the traffic for a bounded time and is judged against the rest; blue-green, where two instances stand ready and rollback is a reversal of the routing; rolling deployment and rollback under definitions the manual has to supply itself; and compatibility of the database, the APIs and the mobile clients across a release.</span></div>
+        <div role="listitem"><b>Observability</b><span>Every meaningful transaction would produce a log, a metric, a trace and an audit event, with a dashboard signal and an alert when needed, so that one activity can be reconstructed by correlation from the mobile client through APISIX, insurance, payment, the provider, the ledger and the policy workflow.</span></div>
+        <div role="listitem"><b>Reliability</b><span>Scaling out, queueing, retries with backoff, circuit breakers, dead-letter processing, database replication, backup with restore actually tested, failover, handling of a degraded provider, and graceful degradation.</span></div>
+        <div role="listitem"><b>Disaster recovery</b><span>A recovery point and a recovery time per system, the recovery time derived from a tolerable downtime the business states and the recovery point separate from it, and a restore performed on an alternate platform with the time measured against the objective; a backup log is not that record.</span></div>
+        <div role="listitem"><b>Mobile production</b><span>Developer build, internal test, quality assurance, beta, store review, production and crash and performance monitoring; a minimum supported version and a forced security upgrade. Neither store offers a rollback for a released build, so the evidence is a halted rollout and a fix shipped forward.</span></div>
+        <div role="listitem"><b>Security operations</b><span>Continuous detection of abnormal authentication, cross-tenant anomalies, privilege escalation, API abuse, payment anomalies, suspicious refund activity, fraud indicators, vulnerable dependencies, exposed secrets and configuration drift.</span></div>
+        <div role="listitem"><b>Incident management</b><span>A loop the roadmap draws in eight steps, copied below, with a severity scale whose four names the roadmap gives and whose criteria the manual has to supply.</span></div>
+      </div>
+      <ol class="copied incident">
+        <li>Detect</li>
+        <li>Triage</li>
+        <li>Contain</li>
+        <li>Restore</li>
+        <li>Investigate</li>
+        <li>Correct</li>
+        <li>Postmortem</li>
+        <li>Prevent Recurrence</li>
+      </ol>
+      <p class="source">Source: the roadmap's section 7, P3C to P3J, for the lists each summary draws on, and its P3J loop, copied step for step and held by <code>tests/test_showcase_p3.py</code>; the P3 manual's section 04 for the definitions of canary, blue-green, feature flag, tested restore and the recovery numbers in its sources' words; BIZTRUST-PLAN-001 section 7 for the store finding that no rollback exists for a released build and section 10.3 for the evidence being a halted rollout and a shipped fix; the manual's section 04 for the recovery point not being part of the tolerable downtime. The summaries, and the grouping of the controls, are this page's.</p>
+    </section>
+
+    <section class="block" id="definitions">
+      <h2>Three words the sources do not define</h2>
+      <p>The plan records that its production epics rest on definitions sourced by the map's research, and that the research found no primary source for three of them: the incident severity scale, rolling deployment, and rollback outside the blue-green case. The plan's rule is that each is a local decision and must be labelled one; the manual labels each where it defines it, and its definitions are proposals until the seat the manual names accepts them.</p>
+      <p>In plain words, the manual's local definitions say: a rolling deployment replaces the serving version in successive subsets of instances, checking the indicators between subsets, with both versions serving until the last subset; a rollback returns production to the previous known-good release artifact and its compatible configuration by redeploying that artifact, never by editing what is running, with data changes rolled forward by a compensating migration; and a severity is assigned from written criteria, because the roadmap's four names alone mean whatever the assigner meant. The manual's stop signals name the failures: a rollback that edited production, and a severity assigned from the names alone.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 7, the paragraph after the epic table, for the three findings and the rule that each local definition is labelled; the P3 manual's section 04 for the definitions of rolling deployment and rollback marked as local decisions, restated here in this page's words, and its section 05 for the three local definitions as an authorisation reserved to a human and for the two stop signals named.</p>
+    </section>
+
+    <section class="block" id="gate">
+      <h2>Gate E is eighteen items of evidence, and a review by people who did not build it</h2>
+      <p>The roadmap says Gate E should be much stricter than a deployment that succeeded, and recommends requiring evidence for a list of areas before production is declared; only then, in its words, BizTrust Production v1.0 = RELEASED. The eighteen items are copied here in the roadmap's order.</p>
+      <ol class="copied evidence">
+        <li>Security</li>
+        <li>Tenant Isolation</li>
+        <li>Insurance E2E</li>
+        <li>Financial Reconciliation</li>
+        <li>Data Migration</li>
+        <li>Performance</li>
+        <li>Observability</li>
+        <li>Backup Restore</li>
+        <li>Disaster Recovery</li>
+        <li>Rollback</li>
+        <li>Incident Response</li>
+        <li>Release Controls</li>
+        <li>Secrets</li>
+        <li>Mobile Release</li>
+        <li>Operational Documentation</li>
+        <li>Runbooks</li>
+        <li>On-call/Escalation</li>
+        <li>Compliance Evidence</li>
+      </ol>
+      <div class="gate"><b>E</b><span>BT-G7 Production Ready, with BT-G6 Tenant Ready judged inside it</span><p>Revision-bound evidence exists for every item of the list; the production-readiness review is executed by someone other than the implementers; the security risk owner records the gate with a date: that is the plan's Gate E as it proposes it, until the gate's owner accepts it. BT-G6 is recorded before or together with it, never skipped because the label does not name it: a second tenant provisions without a core-code fork, the P0 proof passes against both tenants, and no tenant-specific branch, directory or code path exists.</p></div>
+      <p>The plan adds four things to the roadmap's gate and labels them its proposals: every item bound to a source revision; BT-G6 recorded; a production-readiness review executed by someone other than the implementers; and the security risk owner's dated record. The manual proposes the seats: the security risk owner with the production-readiness reviewer for BT-G7, and the architecture authority for BT-G6; the plan's seat table, marked as its proposal, has the same two seats, the security risk owner and the accountable architecture owner, on the same two gates.</p>
+      <p class="source">Source: the roadmap's section 7, Gate E, for the list, copied name for name and held by <code>tests/test_showcase_p3.py</code>, its sentence that the gate should be much stricter, its recommendation to require the evidence, and its release line, quoted; BIZTRUST-PLAN-001 section 10.1's label table for E and BT-G6 judged inside BT-G7; section 10.2's BT-G7 row and its paragraph on the four additions as this plan's proposals; section 10.3's Gate E paragraph for the slab's first sentences; the P3 manual's section 06 for BT-G6 recorded before or together with BT-G7 and its two BT-G6 items, restated; its section 05, whose table says the plan names none of these roles and the Who column is proposed, for the two seats; section 12.1's seat table, which the plan marks as its proposal, for the security risk owner on BT-G7 and the accountable architecture owner on BT-G6.</p>
+    </section>
+
+    <section class="block" id="today">
+      <h2>Where P3 stands</h2>
+      <div class="today">
+        <div><b>P3 has not started</b>Its first entry condition is label D recorded, the two gates that close P2. The handbook's continuity state records architecture acceptance and production platform implementation as not granted.</div>
+        <div><b>Nothing is operated</b>The charter describes this repository as a documentation and deployment surface that grants no authority to implement the platform; so there is no service here to operate, which is this page's reading of that sentence. The objectives, the recovery numbers and the local definitions are the manual's proposals for when there is.</div>
+        <div><b>Production is a gate, not a date</b>The manual's stop conditions include recording a gate on a green pipeline without a human and executing the readiness review by the people who built what it reviews. The seat the manual proposes for the gate's dated record is the security risk owner, and which human records a gate is, in the plan's words, the gate owner's record to name and never inferred.</div>
+        <div><b>This page records nothing</b>It projects the plan, the roadmap and the manual. When any of them changes, the page is revised to match.</div>
+      </div>
+      <p class="source">Source: the P3 manual's section 01 for its entry conditions; the handbook's continuity state, <code>badf/current-state.json</code>, read at 7c19afc on 2026-09-06, whose authority fields record architecture acceptance and production platform implementation as not granted; the repository charter, <code>AGENTS.md</code> section 1, for the repository as a documentation and deployment surface that grants no implementation authority; the P3 manual's section 08 for the two stop conditions named and section 05 for the security risk owner as the proposed seat; BIZTRUST-PLAN-001 section 10.2 for the sentence that which human records a gate is the gate owner's record to name and never inferred. The strip at the top of this page states the overview's three status lines and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you hold the security risk owner seat, or would run the service</h3><p>The manual's section 05 says what each seat would have to see before recording BT-G7 or BT-G6, and its section 04 holds the definitions, three of them local, that every one of those records would use. Nothing on this page records anything.</p><a class="btn" href="../phases/p3.html">Read the P3 manual</a></div>
+        <div><h3>If you want the records themselves</h3><p>PLAN-001 section 7 is the phase, its epics and its three findings; the roadmap's section 7 is where the ladders, the lists and Gate E come from. Where this page and a record disagree, the record is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and records no gate. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>
