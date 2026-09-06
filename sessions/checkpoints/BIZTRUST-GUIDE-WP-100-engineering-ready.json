@@ -42,10 +42,11 @@
   "observations": [
     "The first reader ran backward from each status and silently missed four claims whose identifier lay beyond its ninety-character window. Counting what a parse does not read, against the raw occurrences, is what found that; a parse that reads only the easy cases passes.",
     "A three-digit pattern without a word boundary matched ADR-000 out of the ADR-0007 in someone else's example in docs/agents/domain.md. The identifier is bounded now, and the corpus is scoped to docs/architecture/ where this repository's normative documents are.",
-    "Every one of the corpus's 114 claims already agrees with the register, which is worth recording: the rule had been held by hand, by reviewers, and held correctly.",
+    "Every one of the corpus's 116 claims already agrees with the register, which is worth recording: the rule had been held by hand, by reviewers, and held correctly.",
     "The review found the status vocabulary hand-kept and wrong twice over: it omitted IN_REVIEW and DEPRECATED, so a document claiming either would have been read as making no claim, and it included DRAFT, which is the design pack's word and not a status an ADR may hold. The vocabulary is read from the register's own block now.",
     "It also found the clause model truncating real claims: any full stop ended a clause, so 'ADR-005 OpenAPI 3.2 for contract-first HTTP APIs' ended inside the version number and that claim was never checked. A full stop ends a clause only when it ends a sentence, and two controls hold it.",
-    "The positive controls' floors were slack enough that a document silently failing to parse would still pass; they are set near the real figures now, eighteen identifiers and a hundred claims against twenty and a hundred and sixteen."
+    "The positive controls' floors were slack enough that a document silently failing to parse would still pass; they are set near the real figures now, eighteen identifiers and a hundred claims against twenty and a hundred and sixteen.",
+    "The confirmation pass found this checkpoint still saying 114 where the branch now reads 116, and current-state and the decision log still describing the reader before the fix. That is the same staleness the WP-098 review found: a ledger written before the change it describes."
   ],
   "decisions": [
     "DEC-102: ADR citations are held to the register; the register decides and a document repeats."
@@ -82,6 +83,9 @@
     "A citation with no status claim is checked for existence only; nothing requires a document to state a status at all.",
     "Nothing checks that an ADR's register row is itself right, or that a design's dependency on an ADR is the correct dependency.",
     "A status stated in words rather than backticks is not read as a claim.",
-    "A status stated in a sentence after the one naming the identifier is not read as a claim; the clause ends at the sentence."
+    "A status stated in a sentence after the one naming the identifier is not read as a claim; the clause ends at the sentence.",
+    "A full stop immediately followed by a bold-close marker does not end a clause, so a claim may be read from the sentence after it. That is deliberate, because one real claim in the P0.10 design sits there; the reviewer checked all 198 such places in the corpus and none carries a second status, but the conflation is possible in principle.",
+    "Two identifiers written together take the same status, which is what the corpus means today; nothing stops a future sentence pairing two identifiers whose statuses differ. Guarding that is speculative until such a sentence exists.",
+    "Any all-capital word added inside the register's vocabulary fence would be read as a status word, whether or not it is one."
   ]
 }
