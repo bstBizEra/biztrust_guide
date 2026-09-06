@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Work Package loop &middot; BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="The roadmap's 24-step loop for every BizTrust Work Package, mapped onto the guide's nine stages: which stage owns each step, where that stage carries it, the four steps no stage page names, and why the stage count stays nine.">
+<link rel="icon" href="../assets/unitrust-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>td small{color:var(--muted);font-size:.62rem;display:block;margin-top:.25rem}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Reference &middot; Work Package loop</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">&#9689;</button>
+    <a class="github-link" href="../index.html">&larr; Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Reference &middot; Work Package loop</p>
+  <nav id="sectionNav">
+    <a href="#why"><span>01</span> Why a reference page</a>
+    <a href="#mapping"><span>02</span> The mapping</a>
+    <a href="#unnamed"><span>03</span> Four steps no stage names</a>
+    <a href="#limits"><span>04</span> What this does not do</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Reference</strong><small>Not a stage &middot; a lookup</small></div>
+  </div>
+</aside>
+
+<main id="main">
+<section id="loop-intro" data-search="work package loop 24 steps nine stages roadmap section 9 mapping ENG-G threat risk analysis security review evidence collection feed knowledge memory">
+  <div class="section-heading"><span>REF</span><div><p>Reference &middot; not a stage</p><h2>The Work Package loop against the nine stages</h2></div></div>
+  <p class="lede">The roadmap gives every Work Package in every phase the same 24-step loop, from Understand to Next Controlled Iteration, and says it extends the guide's nine-stage lifecycle. This page says which stage owns each step and where that stage carries it, so that the loop and the stages are one process described twice, not two processes.</p>
+  <p class="section-intro">Rendered from <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">BIZTRUST-PLAN-001.md</a> section 13.1, which records the mapping as the plan's proposal from the roadmap's section 9. The table is held to that section by a test, and every stage citation on it is held to a section the stage page displays under that number. The stage count stays nine: every step has an owning stage.</p>
+  <div class="invariant">
+    <span>THE RULE THIS PAGE EXISTS TO KEEP</span>
+    <p>A step of the loop is not a stage, and a stage is not a step. The nine stages are how a Work Package moves from <code>ENG-G0</code> to <code>ENG-G8</code>; the loop is the roadmap's list of what happens on the way. Where a step has no section of its own, the page says which rule or record carries it, and where nothing does, it says so and proposes an owner. It adds no tenth stage and no gate.</p>
+  </div>
+</section>
+
+<section id="why" data-search="why reference page not stage sections spine duplication test nine stages decision ticket 159">
+  <div class="section-heading"><span>01</span><div><p>The decision</p><h2>Why a reference page, not nine stage sections</h2></div></div>
+  <p class="section-intro">The loop ticket on the Guide v2 map asked whether the steps the stages do not carry explicitly become stage sections or a reference page. This page is the answer, and the reasons are this track's, not the plan's.</p>
+  <div class="definition-list">
+    <div><span>The mapping is one table, and belongs in one place</span><p>Twenty-four steps across nine stages read as a lookup. Split into nine sections, one per stage, each would restate the same rule about what a step is, and the guide's duplication test holds the stage pages a hair under its threshold on purpose; nine near-identical sections would trip it, and rightly.</p></div>
+    <div><span>Three of the four unnamed steps are already carried</span><p>Debug, evidence collection and feeding knowledge back are each carried by an existing rule or record: Build's change discipline, the charter's evidence requirements, the charter's checkpoint and handoff. A section for each would restate the rule where it already lives. The page links the rule instead.</p></div>
+    <div><span>The one gap gets a proposal, not a section written here</span><p>Threat and risk analysis is named on no stage page, though the hub assigns the threat model to Architect and the Definition of Done requires it reviewed. That is the Architect manual's gap to close, on its own ticket, so that the section is written by the manual's rules and not squeezed into a lookup.</p></div>
+  </div>
+</section>
+
+<section id="mapping" data-search="mapping table step roadmap stage where discover define architect plan build assure release operate learn">
+  <div class="section-heading"><span>02</span><div><p>The mapping</p><h2>Twenty-four steps, nine stages</h2></div></div>
+  <p class="section-intro">Rendered from PLAN-001 section 13.1 row for row. A stage citation such as Build &sect;03 names the section the stage page displays under that number; the link goes there.</p>
+  <div class="table-wrap">
+    <table>
+      <caption>The roadmap's loop against the stages &mdash; PLAN-001 section 13.1; held to it by a test</caption>
+      <thead><tr><th>Step</th><th>Roadmap step</th><th>Stage</th><th>Where the stage carries it</th></tr></thead>
+      <tbody>
+        <tr><td><strong>01</strong></td><td>Understand</td><td>Discover</td><td>The problem statement, stated as a problem and not a solution (<a href="../stages/discover.html#problem">Discover &sect;03</a>)</td></tr>
+        <tr><td><strong>02</strong></td><td>Discover</td><td>Discover</td><td>The baseline, the stakeholders and the constraints (<a href="../stages/discover.html#baseline">Discover &sect;04</a> to <a href="../stages/discover.html#constraints">&sect;06</a>)</td></tr>
+        <tr><td><strong>03</strong></td><td>Research</td><td>Discover</td><td>Evidence sources and their reliability (<a href="../stages/discover.html#evidence">Discover &sect;07</a>); the map's research tickets on research branches</td></tr>
+        <tr><td><strong>04</strong></td><td>Define</td><td>Define</td><td>Requirements that can be unmet, and acceptance criteria kept distinct from them (<a href="../stages/define.html#writing">Define &sect;03</a>, <a href="../stages/define.html#versus">&sect;04</a>)</td></tr>
+        <tr><td><strong>05</strong></td><td>Design</td><td>Architect</td><td>The freeze discipline, ADRs and systems of record (<a href="../stages/architect.html#freeze">Architect &sect;03</a>, <a href="../stages/architect.html#adr">&sect;05</a>, <a href="../stages/architect.html#ownership">&sect;06</a>)</td></tr>
+        <tr><td><strong>06</strong></td><td>Threat / Risk Analysis</td><td>Architect</td><td>Not named on any stage page. The hub's lifecycle summary assigns the threat model to Architect and the Definition of Done requires it reviewed; Define carries the data classification and the risk tier (<a href="../stages/define.html#classification">Define &sect;05</a>, <a href="../stages/define.html#risk">&sect;06</a>). A gap; this track proposes an Architect section</td></tr>
+        <tr><td><strong>07</strong></td><td>Plan</td><td>Plan</td><td>Work Package anatomy and criteria that can fail (<a href="../stages/plan.html#anatomy">Plan &sect;03</a>, <a href="../stages/plan.html#criteria">&sect;04</a>)</td></tr>
+        <tr><td><strong>08</strong></td><td>Work Package Decomposition</td><td>Plan</td><td>Decomposition (<a href="../stages/plan.html#decompose">Plan &sect;06</a>)</td></tr>
+        <tr><td><strong>09</strong></td><td>Implement</td><td>Build</td><td>Change discipline and building to contract (<a href="../stages/build.html#discipline">Build &sect;03</a>, <a href="../stages/build.html#contracts">&sect;06</a>)</td></tr>
+        <tr><td><strong>10</strong></td><td>Self-Test</td><td>Build</td><td>The implementing agent's own checks under the change discipline, before the reviewer's (<a href="../stages/build.html#discipline">Build &sect;03</a>, <a href="../stages/build.html#gate">&sect;08</a>)</td></tr>
+        <tr><td><strong>11</strong></td><td>Independent Code Review</td><td>Build</td><td>The reviewer roles the exit gate requires (<a href="../stages/build.html#roles">Build &sect;07</a>, <a href="../stages/build.html#gate">&sect;08</a>)</td></tr>
+        <tr><td><strong>12</strong></td><td>Security Review</td><td>Assure</td><td>The security reviewer among Assure's roles (<a href="../stages/assure.html#roles">Assure &sect;05</a>)</td></tr>
+        <tr><td><strong>13</strong></td><td>Contract / Integration Test</td><td>Assure</td><td>Layers L2 unit and integration and L3 contract tests (<a href="../stages/assure.html#layers">Assure &sect;02</a>)</td></tr>
+        <tr><td><strong>14</strong></td><td>Debug</td><td>Build</td><td>Not named as a step on any stage page; a failed check returns the package to Build's change discipline (<a href="../stages/build.html#discipline">Build &sect;03</a>)</td></tr>
+        <tr><td><strong>15</strong></td><td>Regression</td><td>Assure</td><td>Layers L1 repository validation and L2, and assurance in steady state (<a href="../stages/assure.html#layers">Assure &sect;02</a>, <a href="../stages/assure.html#steady">&sect;07</a>)</td></tr>
+        <tr><td><strong>16</strong></td><td>Web / Mobile E2E</td><td>Release</td><td>Not named as a layer; the deployed thing is verified end to end on its critical path (<a href="../stages/release.html#smoke">Release &sect;04</a>), and the pipeline's end-to-end step is P3B.1</td></tr>
+        <tr><td><strong>17</strong></td><td>Evidence Collection</td><td>Assure</td><td>The evidence manifest is Assure's output (<a href="../stages/assure.html#evidence">Assure &sect;04</a>); collecting evidence is every stage's obligation under AGENTS.md section 9, not a step of its own</td></tr>
+        <tr><td><strong>18</strong></td><td>Gate Evaluation</td><td>Every stage</td><td>Each stage's exit gate, ENG-G0 to ENG-G8; a phase's capability gate BT-Gn is judged on the phase pages</td></tr>
+        <tr><td><strong>19</strong></td><td>Human Authorization if Required</td><td>Plan</td><td>Authority records (<a href="../stages/plan.html#authority">Plan &sect;05</a>); release authority at Release's entry (<a href="../stages/release.html#entry">Release &sect;01</a>); a gate is recorded by a human (PLAN-001 section 10)</td></tr>
+        <tr><td><strong>20</strong></td><td>Release</td><td>Release</td><td>Progressive exposure, verification of the deployed thing and rollback (<a href="../stages/release.html#exposure">Release &sect;03</a> to <a href="../stages/release.html#rollback">&sect;05</a>)</td></tr>
+        <tr><td><strong>21</strong></td><td>Observe</td><td>Operate</td><td>Service objectives and the telemetry floor (<a href="../stages/operate.html#objectives">Operate &sect;03</a>, <a href="../stages/operate.html#telemetry">&sect;04</a>)</td></tr>
+        <tr><td><strong>22</strong></td><td>Learn</td><td>Learn</td><td>Decision quality against outcome quality, defect-escape analysis, the promotion bar (<a href="../stages/learn.html#decision">Learn &sect;03</a> to <a href="../stages/learn.html#promotion">&sect;05</a>)</td></tr>
+        <tr><td><strong>23</strong></td><td>Feed Knowledge / Memory</td><td>Learn</td><td>Not named as a step; Learn reads memory as an input (<a href="../stages/learn.html#entry">Learn &sect;01</a>) and the charter's checkpoint and handoff records carry knowledge forward (AGENTS.md sections 6, 7)</td></tr>
+        <tr><td><strong>24</strong></td><td>Next Controlled Iteration</td><td>Learn</td><td>Learn's exit gate returns to Discover (<a href="../stages/learn.html#gate">Learn &sect;08</a>); Operate's exit to Learn is continuous (<a href="../stages/operate.html#gate">Operate &sect;11</a>)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="definition-list">
+    <div><span>Seven names for three stages</span><p>Steps 10 to 16 are seven names for what the guide splits across Build, Assure and Release. The roadmap's order inside them is not a sequence the stages impose: Assure's six layers run together, and Release verifies after exposure.</p></div>
+    <div><span>Step 18 belongs to no single stage</span><p>Every stage ends in an <code>ENG-Gn</code> exit gate, and that is the gate evaluation the loop names. The phase gates <code>BT-Gn</code> are a different namespace, judged on the phase pages and recorded by a human.</p></div>
+  </div>
+</section>
+
+<section id="unnamed" data-search="four steps threat risk analysis security review evidence collection feed knowledge memory gap proposal architect section">
+  <div class="section-heading"><span>03</span><div><p>The unnamed steps</p><h2>Four steps no stage page names, and what carries each</h2></div></div>
+  <p class="section-intro">The ticket named four steps the stages do not carry explicitly. On reading the pages, one of them is carried under another name, two are carried by rules and records rather than sections, and one is a gap.</p>
+  <div class="definition-list">
+    <div><span>Independent security review &middot; carried, under another name</span><p>Assure's roles table names a security reviewer, and Assure's exit gate is what the review feeds. The loop's word "independent" is the charter's: independent review is the last of the eight Definition of Done items, and Build's exit gate is not satisfiable without its reviewer roles. Nothing is missing; the name differs.</p></div>
+    <div><span>Evidence collection &middot; carried by a rule, not a step</span><p>The evidence manifest is Assure's output, and every stage's evidence is bound to a revision under AGENTS.md section 9. Making collection a step would suggest evidence is gathered once, at one point, which is the failure the charter's rule exists to prevent.</p></div>
+    <div><span>Feed knowledge and memory &middot; carried by records</span><p>Learn reads memory as an input and grades decisions against outcomes; what it learns is carried forward by the charter's checkpoint and handoff records and by each map's Decisions-so-far. A Learn section on memory would describe those records; the page links them.</p></div>
+    <div><span>Threat and risk analysis &middot; a gap</span><p>No stage page names a threat model. The hub's lifecycle summary lists it among Architect's outputs and the Definition of Done requires it reviewed; Define carries the data classification and the risk tier that feed it. This track proposes a section on the Architect manual, written by that manual's rules, on its own ticket on the Guide v2 map.</p></div>
+  </div>
+</section>
+
+<section id="limits" data-search="what this does not do no tenth stage no new gate no stage page changed roadmap order">
+  <div class="section-heading"><span>04</span><div><p>Limits</p><h2>What this page does not do</h2></div></div>
+  <ul class="cross-list">
+    <li>It adds no tenth stage and no gate; the nine stages and the two gate namespaces stand</li>
+    <li>It changes no stage page; where a stage carries a step under another name, the page links the section and leaves the name</li>
+    <li>It does not write the Architect section it proposes; that is the Architect manual's, on its own ticket</li>
+    <li>It does not impose the roadmap's order inside Build, Assure and Release; the stages' own order governs</li>
+    <li>It does not carry the roadmap's team model (section 10) or its cross-cutting tracks; those are PLAN-001 section 12's and the team ticket's</li>
+  </ul>
+</section>
+</main>
+
+<footer>
+  <img src="../assets/unitrust-horizontal.png" alt="UniTrust">
+  <p>BizTrust Agentic Engineer Team &middot; Reference &middot; Work Package loop &middot; <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top &uarr;</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

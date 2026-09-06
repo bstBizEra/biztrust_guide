@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-060-001",
+  "created_at": "2026-09-06T03:28:29Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-060",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #159 on the Guide v2 map: map each of the roadmap's 24 loop steps to the stage that owns it and the section or rule that carries it; name the four steps no stage page carries explicitly and say which is a gap; decide that the mapping is a reference page rendered from a new PLAN-001 section 13.1 and not nine stage sections; keep the stage count at nine; bind the page to the plan and its stage citations to the stage pages with a test; link the page from the overview's axes section and the hub's lifecycle section.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-060-work-package-loop",
+    "baseline_commit": "71383283d16afa1155a7a1a6b344ba61e07e26b8"
+  },
+  "completed": [
+    "Ticket #159 resolved by this branch: PLAN-001 section 13.1 records the 24-row mapping with its four unnamed steps marked; reference/work-package-loop.html renders it with the decision, the mapping, the four steps and limits.",
+    "tests/test_work_package_loop_page.py: rows held to the plan, exactly 24 rows, every stage citation to a displayed section, every stage link to an existing id; three negative controls recorded; README names it.",
+    "The overview's axes section and the hub's lifecycle section link the page; README and AGENTS.md page counts updated.",
+    "badf/ re-anchored: NS-044 repointed at #160, #208 and the Architect ticket, DEC-062 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059.",
+    "After merge: #159 closed with a resolution comment; the map's decision line appended; the Architect threat-model section ticket filed as a child of the map.",
+    "Map #153: #160 and #208 next; #158 waits on #92."
+  ],
+  "files_changed": [
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "reference/work-package-loop.html",
+    "tests/test_work_package_loop_page.py",
+    "phases/overview.html",
+    "index.html",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-060-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The page names ENG-G0 to ENG-G8 and BT-Gn; tests/test_gate_namespaces.py scans reference/*.html and admits both prefixed forms.",
+    "The mapping's 'where' cells carry stage citations in the catalogue's form (Stage §NN); the new test resolves them against displayed section numbers, so a stage page that renumbers fails here rather than silently.",
+    "PLAN-001 section 13.1 is a subsection so that sections 14 and 15 keep their numbers, which pages cite."
+  ],
+  "decisions": [
+    "DEC-062: the loop is PLAN-001 section 13.1 and a reference page; nine stages; four unnamed steps marked, one a gap with an Architect section proposed on its own ticket."
+  ],
+  "assumptions": [
+    "/implement was a chat instruction to build the ready ticket on the map; the mapping is the plan's proposal, labelled so, and nothing is accepted.",
+    "The owning stage per step and the carrying section per stage are this track's reading of the stage pages; a stage page's author may move a step, and the test will say where."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_059",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_work_package_loop_page",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "The page's table differs from PLAN-001 section 13.1, or a stage citation names a section the stage page does not display.",
+      "Any record says a tenth stage exists, a gate has passed, or the mapping is accepted.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; its rows, citations, links and gate names were checked by the tests and the validator.",
+    "The owning stage per step is the track's reading; the stage pages were read by section heading and cited passage, not re-read in full.",
+    "The Architect threat-model section is proposed, not written; the manual's own ticket writes it."
+  ]
+}

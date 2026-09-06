@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-059",
-  "updated_at": "2026-09-06T03:03:46Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-060",
+  "updated_at": "2026-09-06T03:28:29Z",
   "actions": [
     {
       "id": "NS-040",
@@ -108,7 +108,7 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165 to #170 and #190 are resolved and the PLAN-001 rendering tickets (#155 to #157, #165 to #171, #190) have landed, #203 is resolved by this branch, and #158, #159 and #160 remain. The frontier is #159 the 24-step loop against the nine stages and #160 the team model; #158 doctrine waits on the #92 waiver. The showcase (#172 information architecture, then #173 to #180) stays the map's prototype tickets, one page per ticket after its record lands, as the map's Notes record; this track proposes, in a comment on #153, that the eight pages be collapsed through /to-spec after the record tickets close, and nothing changes until a comment on the map adopts it. The hub's v2.0-draft label stays until the map's destination is reached, the record tickets #158 to #160 and the showcase closed (DEC-061, superseding DEC-053's condition, which was met by finding under WP-058).",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165 to #170 and #190 are resolved and the PLAN-001 rendering tickets (#155 to #157, #165 to #171, #190) have landed, #203 has landed, #159 is resolved by this branch, and #158, #160 and #208 remain. The frontier is #160 the team model, #208 the NS numbering, and the Architect threat-model section ticket #159's resolution files; #158 doctrine waits on the #92 waiver. The showcase (#172 information architecture, then #173 to #180) stays the map's prototype tickets, one page per ticket after its record lands, as the map's Notes record; this track proposes, in a comment on #153, that the eight pages be collapsed through /to-spec after the record tickets close, and nothing changes until a comment on the map adopts it. The hub's v2.0-draft label stays until the map's destination is reached, the record tickets #158 to #160 and the showcase closed (DEC-061, superseding DEC-053's condition, which was met by finding under WP-058).",
       "prerequisites": [
         "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview, four manuals, the operations page and the hub's roadmap on PLAN-001 (WP-051 to WP-057), the catalogue checked (WP-058)",
         "For #159 and #160: PLAN-001 sections 12 and 13 and the roadmap's sections 9 and 10"
