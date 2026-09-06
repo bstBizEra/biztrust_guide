@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-069-001",
+  "created_at": "2026-09-06T06:19:22Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-069",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #177 on the Guide v2 map under the showcase record: write landing/p2.html as a projection of BIZTRUST-PLAN-001 section 6, its sections 10 and 12.1 for the gates and their seats, the roadmap's section 6 and the P2 manual in the design voice, with the shell, the epic table and five roadmap lists copied and held by a test, the transaction flow, the safety sequence, the four money concepts and the gate conditions in plain words labelled the page's, and Gate D as two gates with the seats the plan's table and the manual propose; link it from the five landed showcase pages.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-069-showcase-p2",
+    "baseline_commit": "530f7b2d8f1cf20dc4132d659518448423e60782"
+  },
+  "completed": [
+    "Ticket #177 resolved by this branch: landing/p2.html with eight blocks and the shell; its first draft on prototype/showcase-p2, linked from the ticket.",
+    "tests/test_showcase_p2.py, written red first, holds the epic table and five roadmap lists to their records; three negative controls recorded; README names it.",
+    "The overview, roadmap, architecture, P0 and P1 pages link the P2 page; AGENTS.md's page count is twenty-five.",
+    "badf/ re-anchored: NS-044 repointed at #178, DEC-071 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-068.",
+    "After merge: #177 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #178 the P3 page next, then #179 and #180; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/p2.html",
+    "landing/index.html",
+    "landing/roadmap.html",
+    "landing/architecture.html",
+    "landing/p0.html",
+    "landing/p1.html",
+    "tests/test_showcase_p2.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-069-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The roadmap's transaction flow is an ASCII tree with two fan-outs; it is paraphrased, not copied, and the source line says so. Its linear lists are copied.",
+    "The safety workflow's six steps are the page's grouping of the manual's sequence; the manual's step on the policy module's coverage-changed event is kept as the trigger for the journal posting.",
+    "The manual's section 06 marks two gate items as its own additions to the roadmap's Gate D; the page says so rather than attributing them to the roadmap."
+  ],
+  "decisions": [
+    "DEC-071: the P2 page as the fifth projection; the table and five lists copied and held; the flow, the safety sequence, the four money concepts and the gate conditions in the page's words; Gate D as two gates with the proposed seats."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #177 and the page is revised to match.",
+    "The plain-words paragraphs are the track's reading, and the source lines say so; none is accounting advice, as the page itself states."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94. The page names ADR-014's acceptance by the legal and finance seats as P2's unmet entry condition."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_068",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "p1_implementation": "NOT_GRANTED_UNTIL_BT_G1",
+    "p2_implementation": "NOT_GRANTED_UNTIL_BT_G2_AND_BT_G3",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_p2 tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table or list on the page differs from the record it copies, or a source line cites a passage that does not say what the section says.",
+      "The page states a gate as passed, a capability as existing, P2 as authorised or begun, or a journal as accounting advice.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the table, the lists and the links were checked by the tests and the validator.",
+    "The transaction-flow paraphrase, the safety sequence, the plain-words paragraphs and the gate conditions are the page's; no test holds them.",
+    "The ADR register's five status cells were read by hand at 530f7b2; no test compares the page to the register."
+  ]
+}
