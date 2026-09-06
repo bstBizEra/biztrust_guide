@@ -3,8 +3,8 @@
 
 The page carries three tables copied cell for cell from the plan: the five phases (section 2),
 the labels (section 10.1) and the expansion streams (section 8). Each is read from the plan and
-compared with the page after the normalisation the plan-rendering tests share: tags and
-backticks stripped, whitespace collapsed, case folded. The plan is the source; the page is a
+compared with the page after a normalisation copied from the plan-rendering tests, with tags
+dropped and the plan's bold markers stripped as well: backticks stripped, whitespace collapsed, case folded. The plan is the source; the page is a
 projection, and a projection that drifts is the defect issue #32 measured.
 
 Positive controls: the plan must yield five phases, five labels and eight streams; the page must
@@ -40,12 +40,12 @@ def _plan_section(start: str, end: str) -> str:
     return PLAN.read_text(encoding="utf-8").split(start, 1)[1].split(end, 1)[0]
 
 
-def _plan_rows(section: str, first_cell: str) -> dict[str, tuple[str, ...]]:
-    """Rows of the section's table whose first cell matches -> {first: (rest...)}."""
+def _plan_rows(section: str, first_cell_pattern: str) -> dict[str, tuple[str, ...]]:
+    """Rows of the section's table whose first cell fully matches the pattern -> {first: (rest...)}."""
     out: dict[str, tuple[str, ...]] = {}
     for line in section.splitlines():
         cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.strip().startswith("|") else []
-        if len(cells) >= 2 and re.fullmatch(first_cell, cells[0]) and not re.fullmatch(r"-+", cells[1]):
+        if len(cells) >= 2 and re.fullmatch(first_cell_pattern, cells[0]) and not re.fullmatch(r"-+", cells[1]):
             out[_norm(cells[0])] = tuple(_norm(c) for c in cells[1:])
     return out
 
@@ -57,6 +57,7 @@ def _page_rows(table_class: str) -> dict[str, tuple[str, ...]]:
     out: dict[str, tuple[str, ...]] = {}
     for row in re.finditer(r"<tr>(.*?)</tr>", m.group(1), re.S):
         cells = [_norm(c) for c in re.findall(r"<td>(.*?)</td>", row.group(1), re.S)]
+        assert cells, f"a row of the {table_class} table has no cells"
         out[cells[0]] = tuple(cells[1:])
     return out
 

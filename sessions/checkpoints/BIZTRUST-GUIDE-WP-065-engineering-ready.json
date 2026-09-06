@@ -14,7 +14,8 @@
     "Ticket #173 resolved by this branch: landing/roadmap.html with eight blocks and the shell; its first draft on prototype/showcase-roadmap, linked from the ticket.",
     "tests/test_showcase_roadmap.py, written red first (the page did not exist), holds the phases, labels and streams tables to PLAN-001 sections 2, 10.1 and 8; three negative controls recorded; README names it.",
     "landing/index.html links the roadmap page in its navigation, says five delivery phases, and re-dates its status source; landing/showcase.css gains one rule for showcase tables; landing/README.md records the no-hero decision and the table component; AGENTS.md's page count is twenty-one.",
-    "badf/ re-anchored: the content gate's value counts four reference pages and the showcase entry, NS-044 repointed at #174, DEC-067 appended, this checkpoint written."
+    "badf/ re-anchored: the content gate's value counts four reference pages and the showcase entry, NS-044 repointed at #174, DEC-067 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: the counts cited to the P2 and P3 manuals; the record line's sections and the README's row reconciled; the labels' paraphrases keep every item and the gate-table line says it paraphrases; the interpretation set without a present-tense verb; the where-it-stands block's sentences each a record's, with the source naming each record; the first gate mention carries its labels; the engage block's sections corrected; the README's additions list and its meaning of 'label' fixed; the test's names, guard and docstring corrected."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-064.",

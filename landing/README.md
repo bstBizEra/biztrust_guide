@@ -12,7 +12,7 @@ Nine pages, one entry and eight projections, in the order the shared navigation 
 | Navigation label | File | Projects | Ticket |
 |---|---|---|---|
 | Overview | `index.html` | The architecture contract's positioning, the P0 design brief; the entry page, shipped under WP-047 | #131, #132 |
-| Roadmap | `roadmap.html` | PLAN-001 sections 2, 8 and 10 | #173 |
+| Roadmap | `roadmap.html` | PLAN-001 sections 2, 8, 10 and 11 (the streams' entry conditions, which the operations page also projects) | #173 |
 | Architecture | `architecture.html` | ARCH-001 sections 1 and 6, the contract family, the invariants, Gate A | #174 |
 | P0 Identity and Tenant | `p0.html` | PLAN-001 section 4 and the P0 manual | #175 |
 | P1 Insurance | `p1.html` | PLAN-001 section 5 and the P1 manual | #176 |
@@ -40,7 +40,7 @@ In this order, top to bottom:
 - **Every section carries a source line**, visible, last, in the form `Source: <record>, <section or passage>.` A source line cites a passage that exists and says what the section says; a reviewer reads the passage. A section with nothing to cite is not written.
 - **The five tenant questions** stay on the overview, as WP-047 decided; a phase page may point at them but does not restate them.
 - **Numbers are the record's.** A count, a date, a version on a page is copied from the record it cites, never computed on the page.
-- **Names are the records'.** Phases, gates, labels, epics and streams are named as PLAN-001 names them: a gate identifier never appears without its label the first time, and nothing after P3 carries a phase number. Tenant names are used as on the maps and remain withdrawable.
+- **Names are the records'.** Phases, gates, labels, epics and streams are named as PLAN-001 names them: a gate identifier never appears without its executive label, A to E, the first time, and nothing after P3 carries a phase number. Tenant names are used as on the maps and remain withdrawable.
 - **Nothing is generated.** Every page is hand-written, revised when its record changes, and says so in the footer.
 
 ## 4. The visual system
@@ -50,7 +50,7 @@ The showcase's tokens are the handbook's, by DEC-049: the projection reads as th
 - **Colour**: navy `#071a2c` for the strip, the hero and the gate slabs; teal `#10a8a0` for links and focus; amber `#f1b84b` for the strip's rule and markers and the current page in the navigation; lime `#bfdc6a` for the strip's second state and the left rule of the definition and principle blocks; red `#c92f2f` for the strip's third state; paper `#f5f8f9` and white surfaces; the dark scheme swaps ink and paper as the handbook does.
 - **Type**: Inter alone, at the stylesheet's scale: the overview's hero heading at `clamp(2.4rem, 6vw, 4.6rem)` with tight letter-spacing, section headings at `clamp(1.5rem, 3vw, 2.2rem)`, body at 1rem on a 1.6 line height, source lines at 0.74rem in the muted colour. No monospace labels, no capitals as labels, no eyebrow labels above headings.
 - **Layout**: one left-aligned column, 72rem at most; blocks separated by a hairline rule, the block's bottom border; the ledger's two bordered panels are the one card-like element, and they stay the overview's. The overview keeps its hero as the entry's one big moment; the eight projections open with the record line under a plain heading, not a hero.
-- **Components**, all in `showcase.css`, none invented per page: the strip; the mast; the navigation; the record line; the block with its source line; the table, one rule for every table a projection renders; the ledger of what is decided and what remains open, as the overview renders it; the gate slab that closes each phase page, the gate identifier large in the navy block with its label beside it; the engage block that ends a page with what the reader can do. The navigation, the record line and the gate slab are this record's additions to the overview's stylesheet; nothing added restyles an element the overview uses.
+- **Components**, all in `showcase.css`, none invented per page: the strip; the mast; the navigation; the record line; the block with its source line; the table, one rule for every table a projection renders; the ledger of what is decided and what remains open, as the overview renders it; the gate slab that closes each phase page, the gate identifier large in the navy block with its label beside it; the engage block that ends a page with what the reader can do. The navigation, the record line, the table rule and the gate slab are this record's additions to the overview's stylesheet; nothing added restyles an element the overview uses.
 - **The one bold thing** is the strip. Nothing else moves, glows or fades; no motion that a reader did not cause.
 
 ## 5. How a page is built

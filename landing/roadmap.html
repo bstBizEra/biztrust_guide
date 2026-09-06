@@ -67,7 +67,7 @@
 
     <section class="block" id="gates">
       <h2>The gates a human records, and the labels a presentation may use</h2>
-      <p>Records name gates by identifier, BT-G0 to BT-G7. A presentation such as this page may also use the roadmap's five executive labels, A to E, but never a label without its identifier, because two gates share a label and one gate is judged inside another's.</p>
+      <p>Records name gates by identifier, from BT-G0 (label A) to BT-G7 (label E). A presentation such as this page may also use the roadmap's five executive labels, A to E, but never a label without its identifier; two gates share a label, and one gate is judged inside another's.</p>
       <table class="labels">
         <thead><tr><th>Label</th><th>Roadmap name</th><th>Identifiers</th><th>Closes</th></tr></thead>
         <tbody>
@@ -79,19 +79,19 @@
         </tbody>
       </table>
       <p>BT-G6, Tenant Ready, keeps its identifier and its meaning, that a second tenant would onboard without a copy of the platform being made, because an invariant depends on it; it is recorded before or together with BT-G7, never skipped because label E does not name it. Each gate names the evidence that blocks it: for BT-G1, negative tests that prove one tenant cannot reach another; for BT-G2, an end-to-end broker trace and a practitioner's acceptance; for BT-G4, balanced journals and reconciliation evidence; for BT-G7, revision-bound evidence for every item of the production list, an independent readiness review, and the security risk owner's dated record. A passing test suite records nothing; a human does.</p>
-      <p class="source">Source: BIZTRUST-PLAN-001, section 10.1 (the labels table cell for cell and the BT-G6 rule) and section 10.2 (the gate table's requirement and evidence columns for BT-G1, BT-G2, BT-G4 and BT-G7; "a gate is recorded by a human ... a passing test suite records nothing").</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 10.1 (the labels table cell for cell and the BT-G6 rule) and section 10.2 (the gate table's requirement and evidence columns for BT-G1, BT-G2, BT-G4 and BT-G7, paraphrased; "a gate is recorded by a human ... a passing test suite records nothing").</p>
     </section>
 
     <section class="block" id="asks">
       <h2>What each label asks for before it can be recorded</h2>
       <div class="models">
-        <div><b>A, Architecture Ready</b><span>The architecture can answer who owns each datum, which tenant owns each record, who may perform each operation, what the authoritative insurance and financial states are, how a quote becomes bound coverage, how money becomes premium, how a second tenant onboards without a fork, how isolation is proved, how failures are recovered and how a transaction is reconstructed from evidence.</span></div>
+        <div><b>A, Architecture Ready</b><span>The architecture can answer who owns each datum, which tenant owns each record, who may perform each operation, which module owns each state transition, what the authoritative insurance and financial states are, how a quote becomes bound coverage, how money becomes premium, how commission is calculated and posted, how a carrier integrates, how a second tenant onboards without a fork, how isolation is proved, how failures are recovered and how a transaction is reconstructed from evidence; the contract's own exit criteria govern, and are more.</span></div>
         <div><b>B, Identity and Tenant Proven</b><span>The chain from authenticated identity through validated tenant context, authorised operation and tenant-isolated data access to immutable audit evidence is demonstrated mechanically, and the P0 proof passes independently of the people who built it.</span></div>
-        <div><b>C, Insurance End-to-End Proven</b><span>One trace from tenant to client, risk, submission, placement, quotes, comparison, recommendation, acceptance, bind coordination, carrier confirmation and policy, then endorsement, claim and renewal, with the insurer's authority kept separate from the broker's records throughout.</span></div>
+        <div><b>C, Insurance End-to-End Proven</b><span>One trace from tenant to client, risk, submission, placement, quotes, comparison, recommendation, acceptance, bind coordination, carrier confirmation and policy, then endorsement, claim and renewal, proven with authorisation, product and version reproducibility, tenant isolation, deterministic state transitions, an audit trail, web and mobile coverage, API contracts, documents, and the insurer's authority kept separate from the broker's records.</span></div>
         <div><b>D, Financial Integrity Proven</b><span>One trace from customer to invoice, payment, provider confirmation, ledger, commission, insurer payable, settlement, reconciliation and policy evidence, and ten failure cases proven handled, among them a duplicate payment, a missing webhook and a carrier settlement difference.</span></div>
         <div><b>E, Production Ready</b><span>Revision-bound evidence for eighteen things, from security and tenant isolation through backup restore, disaster recovery and rollback to runbooks, on-call and compliance evidence; a readiness review by someone other than the implementers; the security risk owner's dated record.</span></div>
       </div>
-      <p class="source">Source: BIZTRUST-PLAN-001, section 10.3, each label's list paraphrased in fewer words; the lists themselves are proposals until each gate's owner accepts them.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 10.3, each label's list paraphrased in fewer words with every item kept; the counts, ten failure cases and eighteen items, are the P2 and P3 manuals' (phases/p2.html, phases/p3.html); the lists themselves are proposals until each gate's owner accepts them.</p>
     </section>
 
     <section class="block" id="streams">
@@ -116,31 +116,31 @@
     <section class="block" id="interpretation">
       <h2>The executive interpretation, in one line per phase</h2>
       <ul>
-        <li>Architecture establishes trust in the design.</li>
-        <li>P0 establishes trust in identity, authorisation and tenant isolation.</li>
-        <li>P1 establishes trust in brokerage operations.</li>
-        <li>P2 establishes trust in money, commissions, settlement and reconciliation.</li>
-        <li>P3 establishes trust in continuous, safe operation.</li>
+        <li>Architecture: trust in the design.</li>
+        <li>P0: trust in identity, authorisation and tenant isolation.</li>
+        <li>P1: trust in brokerage operations.</li>
+        <li>P2: trust in money, commissions, settlement and reconciliation.</li>
+        <li>P3: trust in continuous, safe operation.</li>
       </ul>
-      <p class="source">Source: BIZTRUST-PLAN-001, section 2, last paragraph, which carries the roadmap's section 15 as the executive interpretation.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001, section 2, last paragraph, which carries the roadmap's section 15 as the executive interpretation; the plan's verb is "establishes", set here as what each phase is for.</p>
     </section>
 
     <section class="block" id="today">
       <h2>Where the effort stands today</h2>
       <div class="today">
-        <div><b>The architecture is being designed</b>The contract is at version 0.1, marked draft for contract freeze; no gate has been recorded, and BT-G0, the first, waits on the freeze.</div>
-        <div><b>Nothing is authorised for implementation</b>Architecture acceptance and platform implementation are both recorded as not granted; the repository holds no application code.</div>
+        <div><b>The architecture is being designed</b>The contract is at version 0.1, marked draft for contract freeze; BT-G0 Architecture Ready, the plan's first gate, is where that freeze would be judged.</div>
+        <div><b>Nothing is authorised for implementation</b>Architecture acceptance and platform implementation are both recorded as not granted, and no application code is recorded in this repository.</div>
         <div><b>The plan is a draft</b>PLAN-001 is at 1.0-draft; its phases, gates and streams are proposals until the accepting authority records acceptance at BT-G0.</div>
         <div><b>The handbook renders the plan</b>Nine engineering stages, five delivery phases and four reference pages are published; every page of them projects a record and says which.</div>
       </div>
-      <p class="source">Source: the handbook's continuity state, <code>badf/current-state.json</code>, read at 94f35ea on 2026-09-06: architecture acceptance not granted, production platform implementation not granted, plan acceptance not granted until BT-G0; the contract's <code>0.1-draft</code> and the plan's <code>1.0-draft</code> status fields. The strip at the top of this page states those records and is revised when they change.</p>
+      <p class="source">Source: the handbook's continuity state, <code>badf/current-state.json</code>, read at 94f35ea on 2026-09-06, whose authority fields record architecture acceptance and production platform implementation as not granted; the latest checkpoint's authority record, plan acceptance not granted until BT-G0; the contract's <code>0.1-draft</code> and the plan's <code>1.0-draft</code> status fields; PLAN-001 section 10.2 for BT-G0 as the gate the freeze is judged at; the overview's status block for the absence of application code. The strip at the top of this page states those records and is revised when they change.</p>
     </section>
 
     <section class="engage" id="engage">
       <h2>What to do with this page</h2>
       <div class="pair">
         <div><h3>If you hold a seat that records a gate</h3><p>The gate table names the evidence that blocks each gate and the phase manuals say what a human must see before recording one. Nothing on this page records anything.</p><a class="btn" href="../phases/overview.html">Read the phase track</a></div>
-        <div><h3>If you want the plan itself</h3><p>PLAN-001 is the record this page projects: sections 2 to 8 for the phases, 10 for the gates, 11 for the streams. Where this page and the plan disagree, the plan is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+        <div><h3>If you want the plan itself</h3><p>PLAN-001 is the record this page projects: sections 2 to 7 for the phases, 10 for the gates, 8 and 11 for the streams. Where this page and the plan disagree, the plan is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
       </div>
     </section>
   </main>
