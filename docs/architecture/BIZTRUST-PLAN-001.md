@@ -427,7 +427,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ### 13.1 The Work Package loop against the nine stages
 
-The roadmap's section 9 gives a 24-step loop for every Work Package in every phase and says it extends the guide's nine-stage lifecycle. The mapping below is this plan's proposal, recorded under WP-060 ([#159](https://github.com/bstBizEra/biztrust_guide/issues/159)); the stage count stays nine, because every step has an owning stage. The four steps the ticket named are marked in the table: threat and risk analysis is a gap with a proposed owner (06); independent security review is carried under another name (12); evidence collection is carried by a rule rather than a section (17); feeding knowledge and memory back is carried by records rather than a section (23). The guide renders this table as `reference/work-package-loop.html`, held to it by `tests/test_work_package_loop_page.py`.
+The roadmap's section 9 gives a 24-step loop for every Work Package in every phase and says it extends the guide's nine-stage lifecycle. The mapping below is this plan's proposal, recorded under WP-060 ([#159](https://github.com/bstBizEra/biztrust_guide/issues/159)); the stage count stays nine, because every step has an owning stage. The four steps the ticket named are marked in the table: threat and risk analysis was a gap with a proposed owner (06) until WP-063 ([#211](https://github.com/bstBizEra/biztrust_guide/issues/211)) gave the Architect manual a section for it; independent security review is carried under another name (12); evidence collection is carried by a rule rather than a section (17); feeding knowledge and memory back is carried by records rather than a section (23). The guide renders this table as `reference/work-package-loop.html`, held to it by `tests/test_work_package_loop_page.py`.
 
 | Step | Roadmap step | Stage | Where the stage carries it |
 |---|---|---|---|
@@ -436,7 +436,7 @@ The roadmap's section 9 gives a 24-step loop for every Work Package in every pha
 | 03 | Research | Discover | Evidence sources and their reliability (Discover §07); the map's research tickets on research branches |
 | 04 | Define | Define | Requirements that can be unmet, and acceptance criteria kept distinct from them (Define §03, §04) |
 | 05 | Design | Architect | The freeze discipline, ADRs and systems of record (Architect §03, §05, §06) |
-| 06 | Threat / Risk Analysis | Architect | Not named on any stage page. The hub's lifecycle summary assigns the threat model to Architect and the Definition of Done requires it reviewed; Define carries the data classification and the risk tier (Define §05, §06). A gap; this track proposes an Architect section |
+| 06 | Threat / Risk Analysis | Architect | Threat and risk analysis (Architect §07), fed by Define's data classification and risk tier (Define §05, §06); a gap until WP-063 gave Architect the section |
 | 07 | Plan | Plan | Work Package anatomy and criteria that can fail (Plan §03, §04) |
 | 08 | Work Package Decomposition | Plan | Decomposition (Plan §06) |
 | 09 | Implement | Build | Change discipline and building to contract (Build §03, §06) |

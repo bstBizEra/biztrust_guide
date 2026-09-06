@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Work Package loop &middot; BizTrust Agentic Engineer Team Guide</title>
-<meta name="description" content="The roadmap's 24-step loop for every BizTrust Work Package, mapped onto the guide's nine stages: which stage owns each step, where that stage carries it, the four steps no stage page names, and why the stage count stays nine.">
+<meta name="description" content="The roadmap's 24-step loop for every BizTrust Work Package, mapped onto the guide's nine stages: which stage owns each step, where that stage carries it, the four steps no stage page named when it was made, and why the stage count stays nine.">
 <link rel="icon" href="../assets/unitrust-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,7 +58,7 @@
   <div class="definition-list">
     <div><span>The mapping is one table, and belongs in one place</span><p>Twenty-four steps across nine stages read as a lookup. Split into nine sections, one per stage, each would restate the same rule about what a step is, and the guide's duplication test holds the stage pages a hair under its threshold on purpose; nine near-identical sections would trip it, and rightly.</p></div>
     <div><span>Three of the four unnamed steps are already carried</span><p>Independent security review under another name, Assure's security reviewer; evidence collection by the charter's evidence rule and Assure's manifest; feeding knowledge back by the charter's checkpoint and handoff records. A section for each would restate the rule where it already lives. The page links the rule instead.</p></div>
-    <div><span>The one gap gets a proposal, not a section written here</span><p>Threat and risk analysis is named on no stage page, though the hub assigns the threat model to Architect and the Definition of Done requires it reviewed. That is the Architect manual's gap to close, on its own ticket, so that the section is written by the manual's rules and not squeezed into a lookup.</p></div>
+    <div><span>The one gap got a section, on its own ticket</span><p>Threat and risk analysis was named on no stage page when this mapping was made, though the hub assigns the threat model to Architect and the Definition of Done requires it reviewed. The Architect manual closed that gap under its own ticket, so that the section was written by the manual's rules and not squeezed into a lookup; this page links it.</p></div>
   </div>
 </section>
 
@@ -75,7 +75,7 @@
         <tr><td><strong>03</strong></td><td>Research</td><td>Discover</td><td>Evidence sources and their reliability (<a href="../stages/discover.html#evidence">Discover &sect;07</a>); the map's research tickets on research branches</td></tr>
         <tr><td><strong>04</strong></td><td>Define</td><td>Define</td><td>Requirements that can be unmet, and acceptance criteria kept distinct from them (<a href="../stages/define.html#writing">Define &sect;03</a>, <a href="../stages/define.html#versus">&sect;04</a>)</td></tr>
         <tr><td><strong>05</strong></td><td>Design</td><td>Architect</td><td>The freeze discipline, ADRs and systems of record (<a href="../stages/architect.html#freeze">Architect &sect;03</a>, <a href="../stages/architect.html#adr">&sect;05</a>, <a href="../stages/architect.html#ownership">&sect;06</a>)</td></tr>
-        <tr><td><strong>06</strong></td><td>Threat / Risk Analysis</td><td>Architect</td><td>Not named on any stage page. The hub's lifecycle summary assigns the threat model to Architect and the Definition of Done requires it reviewed; Define carries the data classification and the risk tier (<a href="../stages/define.html#classification">Define &sect;05</a>, <a href="../stages/define.html#risk">&sect;06</a>). A gap; this track proposes an Architect section</td></tr>
+        <tr><td><strong>06</strong></td><td>Threat / Risk Analysis</td><td>Architect</td><td>Threat and risk analysis (<a href="../stages/architect.html#threat">Architect &sect;07</a>), fed by Define's data classification and risk tier (<a href="../stages/define.html#classification">Define &sect;05</a>, <a href="../stages/define.html#risk">&sect;06</a>); a gap until WP-063 gave Architect the section</td></tr>
         <tr><td><strong>07</strong></td><td>Plan</td><td>Plan</td><td>Work Package anatomy and criteria that can fail (<a href="../stages/plan.html#anatomy">Plan &sect;03</a>, <a href="../stages/plan.html#criteria">&sect;04</a>)</td></tr>
         <tr><td><strong>08</strong></td><td>Work Package Decomposition</td><td>Plan</td><td>Decomposition (<a href="../stages/plan.html#decompose">Plan &sect;06</a>)</td></tr>
         <tr><td><strong>09</strong></td><td>Implement</td><td>Build</td><td>Change discipline and building to contract (<a href="../stages/build.html#discipline">Build &sect;03</a>, <a href="../stages/build.html#contracts">&sect;06</a>)</td></tr>
@@ -110,7 +110,7 @@
     <div><span>Independent security review &middot; carried, under another name</span><p>Assure's roles table names a security reviewer, and Assure's exit gate is what the review feeds. The loop's word "independent" is the charter's: independent review is the last of the eight Definition of Done items, and Build's exit gate is not satisfiable without its reviewer roles. The name differs and the remit is narrower than the loop's step: Assure's reviewer owns layer 4 for changes touching authentication, tenancy or data access, and whether a package outside that remit needs a security review is the risk tier's to say (Define &sect;06).</p></div>
     <div><span>Evidence collection &middot; carried by a rule, not a step</span><p>The evidence manifest is Assure's output, and every stage's evidence is bound to a revision under AGENTS.md section 9. Making collection a step would suggest evidence is gathered once, at one point, which is the failure the charter's rule exists to prevent.</p></div>
     <div><span>Feed knowledge and memory &middot; carried by records</span><p>Learn refuses memory as an input and reads escape-ledger entries and decision records instead, grading decisions against outcomes; what it learns is carried forward by the charter's checkpoint and handoff records and by each map's Decisions-so-far. A Learn section on memory would describe those records; the page links them.</p></div>
-    <div><span>Threat and risk analysis &middot; a gap</span><p>No stage page names a threat model. The hub's lifecycle summary lists it among Architect's outputs and the Definition of Done requires it reviewed; Define carries the data classification and the risk tier that feed it. This track proposes a section on the Architect manual, written by that manual's rules, on its own ticket on the Guide v2 map.</p></div>
+    <div><span>Threat and risk analysis &middot; a gap, now closed</span><p>No stage page named a threat model when this mapping was made, though the hub's lifecycle summary lists it among Architect's outputs and the Definition of Done requires it reviewed. The Architect manual now carries it as <a href="../stages/architect.html#threat">Architect &sect;07</a>: what it covers, when it is owed by risk tier, who drafts and who reviews, and the exit-gate item it feeds; Define's data classification and risk tier still feed it.</p></div>
   </div>
 </section>
 
@@ -119,7 +119,7 @@
   <ul class="cross-list">
     <li>It adds no tenth stage and no gate; the nine stages and the two gate namespaces stand</li>
     <li>It changes no stage page; where a stage carries a step under another name, the page links the section and leaves the name</li>
-    <li>It does not write the Architect section it proposes; that is the Architect manual's, on its own ticket</li>
+    <li>It did not write the Architect section it proposed; the Architect manual did, on its own ticket, and this page only links it</li>
     <li>It does not impose the roadmap's order inside Build, Assure and Release; the stages' own order governs</li>
     <li>It does not carry the roadmap's team model (section 10) or its cross-cutting tracks; those are PLAN-001 section 12's and the team ticket's</li>
   </ul>

@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-063-001",
+  "created_at": "2026-09-06T04:45:05Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-063",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #211 on the Guide v2 map: give the Architect manual a section on threat and risk analysis that says what the threat model is for this platform, what it must cover, when it is owed, who produces and reviews it, and how it enters the exit gate; add the threat model as a gated Architect output with its catalogue row and its exit-gate item; add a threat-model row to the risk-tier schedule; renumber the sections and citations the insertion shifts; close the gap the loop mapping recorded at step 06.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-063-architect-threat-model",
+    "baseline_commit": "040b0c7da2cba8f9c9ba1c9c8b3d03236ec4a7e2"
+  },
+  "completed": [
+    "Ticket #211 resolved by this branch: stages/architect.html section 07 Threat and risk analysis; the threat model as a gated output row, an exit-gate item, and the security reviewer's remit extended; roles, gate and stop renumbered 08 to 10.",
+    "reference/artifact-catalogue.html: a Threat model row in the Architect block with the hub's security directory as its target-layout path; seven Architect gate citations moved from §08 to §09; the target-layout count fifteen.",
+    "reference/risk-tiers.html: a Threat model row in the schedule; PLAN-001 section 13.1 and reference/work-package-loop.html: step 06 cites Architect §07 and the gap language removed.",
+    "Red first: PLAN-001's step 06 citing Architect §07 failed tests/test_work_package_loop_page.py until the section existed; the catalogue test failed until the row existed.",
+    "badf/ re-anchored: NS-044 says the agent-workable frontier is empty and names what waits on the operator, DEC-065 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-062.",
+    "After merge: #211 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #158 waits on #92; #94 fills the seats; the showcase waits on the operator's #153 comment, failing which #172 proceeds as a prototype ticket."
+  ],
+  "files_changed": [
+    "stages/architect.html",
+    "reference/artifact-catalogue.html",
+    "reference/risk-tiers.html",
+    "reference/work-package-loop.html",
+    "docs/architecture/BIZTRUST-PLAN-001.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-063-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The section is inserted after systems of record so that Architect §03, §05 and §06, which the loop mapping cites, keep their numbers; the spine test needs a new eyebrow, 'What could go wrong', which collides with none of the five it keys on.",
+    "tests/test_no_cross_page_duplication.py scans the stage pages; the new section's wording was kept distinct from Assure's isolation layer and the hub's security group, which say related things.",
+    "The Define manual is unchanged: its risk-tier section already points at the schedule as the price list, and the schedule gained the row."
+  ],
+  "decisions": [
+    "DEC-065: the Architect threat-model section, output, gate item, catalogue row and schedule row; the loop mapping's gap closed."
+  ],
+  "assumptions": [
+    "The /loop self-prompt to complete the guide's implementation is a chat instruction to work the next ready ticket under the charter; it adopts nothing and authorises nothing.",
+    "What the threat model must cover is this track's reading of the records' four boundaries; the section says so."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "SHOWCASE_ROUTE_COMMENT_ON_ISSUE_153",
+      "owner_role": "human-reviewer",
+      "resolution": "The operator adopts or declines the /to-spec proposal on #153; until then #172 to #180 are the map's prototype tickets."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_062",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_catalogue_agrees_with_pages tests.test_stage_page_spine tests.test_work_package_loop_page",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "stages/architect.html",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A catalogue citation names an Architect section the page does not display under that number.",
+      "Any record says a threat model exists for the platform, or that the architecture is accepted.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered Architect page, catalogue and schedule were not viewed in a browser; sections, rows, citations and links were checked by the tests and the validator.",
+    "No threat model exists for the platform; the section says what one must contain and when it is owed. ARCH-001 names none, and adding one is the architecture map's work under its waiver.",
+    "The four boundaries the section names are this track's reading of the records; the security risk owner may add or reorder them when a threat model is first written."
+  ]
+}
