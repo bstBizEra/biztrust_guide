@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-091",
-  "updated_at": "2026-09-06T12:32:39Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-092",
+  "updated_at": "2026-09-06T12:42:44Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128's revision track: under its charting decision 9 (2026-09-06) the eight next-version revisions the fog comments recorded are tickets, worked one per Work Package in this order, each bumping a landed design's version and carrying only the asks later designs recorded: #268 P0.2 v0.2 (WP-088), #269 P0.6 v0.2 (WP-089) and #270 P0.4 v0.2 (WP-090), landed; #271 P0.7 v0.2, resolved by this branch as docs/architecture/p0/P0.07-rls-enforcement.md at 0.2; then #272 P0.5 v0.2, #273 P0.8 v0.2, #274 P0.10 v0.2, #275 P0.12 v0.3. Every design and the proof stay PROPOSED. The five register gaps stay on Not yet specified for the contract map #91; the hand-off to a spec stays the operator's call. Each revision lands by one Work Package PR after fresh-context review.",
+      "action": "Work the P0 design map #128's revision track: under its charting decision 9 (2026-09-06) the eight next-version revisions the fog comments recorded are tickets, worked one per Work Package in this order, each bumping a landed design's version and carrying only the asks later designs recorded: #268 P0.2 (WP-088), #269 P0.6 (WP-089), #270 P0.4 (WP-090) and #271 P0.7 (WP-091), landed; #272 P0.5 v0.2, resolved by this branch as docs/architecture/p0/P0.05-tenant-provisioning.md at 0.2; then #273 P0.8 v0.2, #274 P0.10 v0.2, #275 P0.12 v0.3. Every design and the proof stay PROPOSED. The five register gaps stay on Not yet specified for the contract map #91; the hand-off to a spec stays the operator's call. Each revision lands by one Work Package PR after fresh-context review.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046); tests/test_p0_design_pack.py holds every design to it",
         "The design's ADRs named with their register status; nothing chosen, nothing ACCEPTED"
