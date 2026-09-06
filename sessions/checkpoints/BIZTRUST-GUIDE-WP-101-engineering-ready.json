@@ -42,7 +42,9 @@
   "observations": [
     "The error was invisible to every reader because the same string is correct one directory higher: `../../AGENTS.md` resolves from docs/architecture/ and lands on nothing from docs/architecture/p0/. Copying scaffolding down a level is how it spread to all fourteen files.",
     "It survived a fresh-context review of every one of those fourteen designs. A reviewer reads what a link says, not where it goes; only a machine follows every one.",
-    "This is what the drift survey meant by link checking stopping at HTML. The first guard built for that gap found 48 real defects before it had a single test."
+    "This is what the drift survey meant by link checking stopping at HTML. The first guard built for that gap found 48 real defects before it had a single test.",
+    "The review asked whether fourteen PROPOSED designs may be edited without a version moving, and the honest answer is that the pack's README does not say. It names the version field and the status vocabulary and states no rule for when a version moves. That silence is now recorded in DEC-103 and ticketed rather than filled in by this package.",
+    "It also read the P0.12 design's Landed-by row as a precedent for recording a revision that moved no version. That reading is wrong on the facts: WP-075 moved that design from 0.1 to 0.2 in commit c3e255a, and every revised-by entry in the pack accompanies a version change. Omitting this repair from those rows follows the practice rather than breaking it."
   ],
   "decisions": [
     "DEC-103: the pack's links climb three levels; nothing else changes, and no design's version moves."
@@ -76,6 +78,7 @@
     "No prose, status, version or heading changed; only the text between ]( and ).",
     "External links were not checked; they need the network and are a different problem.",
     "Fragments were confirmed to exist in their targets for the eight distinct targets repaired, not for every link in the repository; that belongs to the guard of #310.",
-    "Nothing here stops the mistake recurring. The guard does, and it is blocked on this."
+    "Nothing here stops the mistake recurring. The guard does, and it is blocked on this.",
+    "Whether a link repair should move a version or appear in a Landed-by row is not settled here; the pack's README is silent and the question is opened as its own ticket on the map."
   ]
 }
