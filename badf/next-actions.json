@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-081",
-  "updated_at": "2026-09-06T09:32:29Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-082",
+  "updated_at": "2026-09-06T09:49:53Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Under the map's charting decision 8 (2026-09-06) a design names each ADR it depends on as a DRAFT_REQUIRED dependency instead of waiting on the ADR's ticket. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), P0.6 (WP-077), P0.3 (WP-078), P0.4 (WP-079), P0.7 (WP-080), and #142 P0.5 tenant provisioning, resolved by this branch as docs/architecture/p0/P0.05-tenant-provisioning.md at PROPOSED. The manual's execution order continues with P0.10 audit (#143), unblocked, then P0.8 (#144), P0.9 (#145), P0.11 (#146, after P0.10), the security proof (#148, after P0.7 and P0.10) and P0.13 (#185, after the proof). Five landed designs owe a next version, on the map's Not yet specified: P0.6 (the history and run tables, the backup and provisioning roles, T9, the backup path), P0.2 (the test-package boundary rule), P0.12 (the provisioning run as a second use of the administrative credential), P0.4 (the provisioning status counted as disabled at the resolver, the adoption read admitted), and P0.7 (provisioning_role's privileges on the run table). The secrets store and the gateway each need an ADR row the contract map must add. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review, and is revised under a new version if its ADR decides differently.",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Under the map's charting decision 8 (2026-09-06) a design names each ADR it depends on as a DRAFT_REQUIRED dependency instead of waiting on the ADR's ticket. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), P0.6 (WP-077), P0.3 (WP-078), P0.4 (WP-079), P0.7 (WP-080), P0.5 (WP-081), and #143 P0.10 audit framework, resolved by this branch as docs/architecture/p0/P0.10-audit-framework.md at PROPOSED. The manual's execution order continues with P0.8 (#144) and P0.9 (#145), both unblocked, then P0.11 (#146, unblocked by P0.10), the security proof (#148, unblocked by P0.7 and P0.10) and P0.13 (#185, after the proof). Five landed designs owe a next version, on the map's Not yet specified: P0.6 (the history and run tables, the backup and provisioning roles, T9, the backup path, app_role's insert on the audit tables), P0.2 (the test-package boundary rule), P0.12 (the provisioning run as a second use of the administrative credential), P0.4 (the provisioning status counted as disabled at the resolver, the adoption read admitted), P0.7 (provisioning_role's privileges on the run table). The secrets store, the gateway and the audit integrity mechanism each need an ADR row the contract map must add. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review, and is revised under a new version if its ADR decides differently.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046); tests/test_p0_design_pack.py holds every design to it",
         "The design's ADRs named with their register status; nothing chosen, nothing ACCEPTED"
