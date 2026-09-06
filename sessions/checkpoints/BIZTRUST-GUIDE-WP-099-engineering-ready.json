@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-099-001",
+  "created_at": "2026-09-06T16:34:13Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-099",
+  "state": "ENGINEERING_READY",
+  "objective": "Guard the canonical epic inventory the all-phase guide depends on. tests/test_plan_epic_inventory.py counts each phase inside that phase's own section, by that phase's own identifiers, and holds BIZTRUST-PLAN-001 section 9.1 and its two totals to what it finds. No figure in 9.1 changes and the plan is not edited.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-099-inventory-guard",
+    "baseline_commit": "edd73b1a6eba5f12d254a93b0edb2bdbcf7baa2e"
+  },
+  "completed": [
+    "tests/test_plan_epic_inventory.py holds section 9.1 to the plan: sixteen tests, four positive controls, seven negative controls and five comparisons.",
+    "Negative controls run by hand as well: an epic added and not recorded, a wrong figure in 9.1, and a total left behind; each failed for its own reason.",
+    "tests/showcase_parity.py gains md_row_count, the record-side counterpart of page_row_count, and md_rows is written in terms of it.",
+    "badf/ records the guard: DEC-101 and this checkpoint; NS-045 names #300, #303 and #305."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #305 closed, one line appended to #296 Decisions so far."
+  ],
+  "files_changed": [
+    "tests/test_plan_epic_inventory.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-099-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The first run of the controls proved nothing: they were run as `python -m unittest <module>` from the repository root, which cannot import the module at all, so they failed with an ImportError rather than an assertion. A control must fail for the reason it names, and the way the suite runs it.",
+    "Running the controls found a real hole in the reader: showcase_parity.md_rows keys its result by first cell, so two rows carrying one identifier collapsed into one entry and the count came up short. Identifiers and rows are both counted now, and required to agree.",
+    "The identifier patterns keep an open sub-stream letter, P2[A-Z]? rather than P2[A-F], so a P2G or P3K added tomorrow is counted rather than skipped.",
+    "The suite ran after the state script this time, the fault WP-098's review found.",
+    "The review found a false positive the controls had not: a table row shown as an example inside a fenced block was counted, because neither reader skipped fences. The guard strips fenced blocks now, with a control of its own.",
+    "It also found the row counter hand-rolling what the seam already does on the page side. showcase_parity gains md_row_count and md_rows is written in terms of the same generator, so the two readings cannot drift.",
+    "stream_count was read by no assertion the guard makes; section 8 is now required to hold streams and no epic identifiers, which is the claim Continuous Operations' zero rests on.",
+    "The confirmation pass found the fence stripping too narrow: a tilde fence, a fence indented up to three spaces, and a fence left unclosed each surfaced as a miscount rather than as themselves. All three syntaxes are stripped now, and an unclosed fence raises with its own message rather than being read through."
+  ],
+  "decisions": [
+    "DEC-101: section 9.1 is held to the plan's own epic rows, counted inside each section, identifiers and rows agreeing."
+  ],
+  "assumptions": [
+    "An epic is a row in a phase section's own table whose first cell is that phase's identifier; section 9's mapping table is never a source of counts."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "all_phase_guide_map": "OPERATOR_INSTRUCTION_2026_09_06_CONTINUE_ON_THE_TRACK_AS_RECOMMENDED_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_098",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_plan_epic_inventory.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "docs/architecture/BIZTRUST-PLAN-001.md"
+    ],
+    "stop_if": [
+      "Section 9.1 is edited to satisfy the test; the guard exists to find a disagreement, not to be satisfied."
+    ]
+  },
+  "declared_non_coverage": [
+    "The guard checks counts, never whether an epic belongs to its phase or whether its capability text is right.",
+    "It reads only the plan; no page, showcase or catalogue states an epic total today, and none is checked.",
+    "A phase section renamed or renumbered breaks the readers rather than being followed; the positive controls fail loudly if that happens.",
+    "Section 9.1 also names identifier ranges in prose, such as P3A.1 to P3J.1; nothing checks those strings. A stale range would need the count to be wrong too before this guard noticed."
+  ]
+}

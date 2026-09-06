@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import html as html_mod
 import re
+from collections.abc import Iterator
 from pathlib import Path
 
 JOINERS = ("↓", "↕", "│", "▼", "+", "=")
@@ -42,19 +43,31 @@ def section(path: Path, start: str, end: str) -> str:
     return path.read_text(encoding="utf-8").split(start, 1)[1].split(end, 1)[0]
 
 
-def md_rows(section_text: str, first_cell_pattern: str) -> dict[str, tuple[str, ...]]:
-    """Rows of any table in the section whose first cell fully matches the pattern -> {first: (rest...)}.
+def md_matching_rows(section_text: str, first_cell_pattern: str) -> Iterator[list[str]]:
+    """Each row of any table in the section whose first cell fully matches the pattern, cell by cell.
 
     The header row is excluded by the pattern; the |---| separator row is excluded by its second cell.
     """
-    out: dict[str, tuple[str, ...]] = {}
     for line in section_text.splitlines():
         if not line.strip().startswith("|"):
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if len(cells) >= 2 and re.fullmatch(first_cell_pattern, cells[0]) and not re.fullmatch(r"-+", cells[1]):
-            out[norm(cells[0])] = tuple(norm(c) for c in cells[1:])
-    return out
+            yield cells
+
+
+def md_rows(section_text: str, first_cell_pattern: str) -> dict[str, tuple[str, ...]]:
+    """Those rows keyed by first cell -> {first: (rest...)}. Two rows with one first cell keep the later."""
+    return {norm(cells[0]): tuple(norm(c) for c in cells[1:])
+            for cells in md_matching_rows(section_text, first_cell_pattern)}
+
+
+def md_row_count(section_text: str, first_cell_pattern: str) -> int:
+    """How many such rows there are, duplicates included; what a keyed comparison cannot see.
+
+    The record-side counterpart of `page_row_count`.
+    """
+    return sum(1 for _ in md_matching_rows(section_text, first_cell_pattern))
 
 
 def headed_table(section_text: str, header: str) -> dict[str, tuple[str, ...]]:
