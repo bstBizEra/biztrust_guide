@@ -5,7 +5,7 @@
 | Version | `0.1-draft` |
 | Status | `TEMPLATE AND RULES — NO DESIGN ACCEPTED BY THIS FILE` |
 | Map | [P0 design map, issue #128](https://github.com/bstBizEra/biztrust_guide/issues/128) |
-| Parent | [`BIZTRUST-PLAN-001.md`](../BIZTRUST-PLAN-001.md) section 4, and the [P0 manual](../../phases/p0.html) |
+| Parent | [`BIZTRUST-PLAN-001.md`](../BIZTRUST-PLAN-001.md) section 4, and the [P0 manual](../../../phases/p0.html) |
 | Decided under | [#130](https://github.com/bstBizEra/biztrust_guide/issues/130), Work Package `BIZTRUST-GUIDE-WP-046` |
 
 This directory holds one engineering design per P0 epic, P0.2 to P0.13, plus the independent security proof. A design says what will be built, how it will be proven, and what it depends on. It does not build anything: P0 implementation waits for `BT-G0` and a Work Package with explicit, expiring authority in a platform repository, which this repository cannot grant (`AGENTS.md` sections 1 and 12).
@@ -14,7 +14,7 @@ P0.1 has no design here. It is the architecture contract and ADR-001 to ADR-020,
 
 ## 1. What a design is for
 
-The [P0 manual](../../phases/p0.html#epics) gives each epic a deliverable, a landing place, a proof and what it is built against. That is enough to plan a Work Package and not enough to review one. A design closes the gap: a reviewer reading it can say which interface a change touches, which negative control must be seen failing, which evidence fields the proof must record, and which decision the design is waiting on. A design that cannot answer those four questions is a description, and the status block below says so.
+The [P0 manual](../../../phases/p0.html#epics) gives each epic a deliverable, a landing place, a proof and what it is built against. That is enough to plan a Work Package and not enough to review one. A design closes the gap: a reviewer reading it can say which interface a change touches, which negative control must be seen failing, which evidence fields the proof must record, and which decision the design is waiting on. A design that cannot answer those four questions is a description, and the status block below says so.
 
 ## 2. File naming and layout
 
@@ -66,7 +66,7 @@ A table at the top: version, status (from section 3), epic number and manual row
 
 ### 4.2 Scope and non-scope
 
-What this epic builds and what it deliberately does not. Non-scope names the epic or phase that owns each excluded item, so a gap reads as a decision and not an omission (the Architect stage's rule, [`stages/architect.html#freeze`](../../stages/architect.html#freeze): deferral is an output, not an omission).
+What this epic builds and what it deliberately does not. Non-scope names the epic or phase that owns each excluded item, so a gap reads as a decision and not an omission (the Architect stage's rule, [`stages/architect.html#freeze`](../../../stages/architect.html#freeze): deferral is an output, not an omission).
 
 ### 4.3 Authorization-sequence step
 

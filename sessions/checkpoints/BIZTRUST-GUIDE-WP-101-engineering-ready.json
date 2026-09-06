@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-101-001",
+  "created_at": "2026-09-06T17:54:14Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-101",
+  "state": "ENGINEERING_READY",
+  "objective": "Repair the 48 links in docs/architecture/p0/ that resolve to nothing. Every target exists at the repository root and every fragment resolves in its target; only the depth is wrong, because a design lives three levels below the root and these links climb two. Add one level to each, in the pack only, and change no prose, no status and no version.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-101-pack-link-depth",
+    "baseline_commit": "a2387dc25e1dac5005d731514b5686d384f26ebd"
+  },
+  "completed": [
+    "48 links deepened across all fourteen files of the P0 design pack; no file outside docs/architecture/p0/ changed.",
+    "Every local Markdown link in the repository resolves: 189 local links across 43 tracked files, none unresolvable.",
+    "The diff is link depth and nothing else: each of the 47 changed lines differs from its predecessor only by the added level.",
+    "badf/ records the repair: DEC-103 and this checkpoint; NS-045 records that #310 is blocked on this and why."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #314 closed, #310 unblocked and its guard built, one line appended to #296 Decisions so far."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/ (14 files, link targets only)",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-101-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The error was invisible to every reader because the same string is correct one directory higher: `../../AGENTS.md` resolves from docs/architecture/ and lands on nothing from docs/architecture/p0/. Copying scaffolding down a level is how it spread to all fourteen files.",
+    "It survived a fresh-context review of every one of those fourteen designs. A reviewer reads what a link says, not where it goes; only a machine follows every one.",
+    "This is what the drift survey meant by link checking stopping at HTML. The first guard built for that gap found 48 real defects before it had a single test.",
+    "The review asked whether fourteen PROPOSED designs may be edited without a version moving, and the honest answer is that the pack's README does not say. It names the version field and the status vocabulary and states no rule for when a version moves. That silence is now recorded in DEC-103 and ticketed rather than filled in by this package.",
+    "It also read the P0.12 design's Landed-by row as a precedent for recording a revision that moved no version. That reading is wrong on the facts: WP-075 moved that design from 0.1 to 0.2 in commit c3e255a, and every revised-by entry in the pack accompanies a version change. Omitting this repair from those rows follows the practice rather than breaking it."
+  ],
+  "decisions": [
+    "DEC-103: the pack's links climb three levels; nothing else changes, and no design's version moves."
+  ],
+  "assumptions": [
+    "A link's target is what lies between ]( and ), and a fragment after # belongs to the target rather than the path."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "all_phase_guide_map": "OPERATOR_INSTRUCTION_2026_09_06_CONTINUE_ON_THE_TRACK_AS_RECOMMENDED_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_100",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "docs/architecture/p0/README.md"
+    ],
+    "stop_if": [
+      "The same substitution is applied outside docs/architecture/p0/; `../../` is correct one level higher."
+    ]
+  },
+  "declared_non_coverage": [
+    "No prose, status, version or heading changed; only the text between ]( and ).",
+    "External links were not checked; they need the network and are a different problem.",
+    "Fragments were confirmed to exist in their targets for the eight distinct targets repaired, not for every link in the repository; that belongs to the guard of #310.",
+    "Nothing here stops the mistake recurring. The guard does, and it is blocked on this.",
+    "Whether a link repair should move a version or appear in a Landed-by row is not settled here; the pack's README is silent and the question is opened as its own ticket on the map."
+  ]
+}
