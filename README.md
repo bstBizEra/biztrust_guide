@@ -57,7 +57,7 @@ The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_
 | Path | Purpose |
 |---|---|
 | `index.html` | The guide's hub — overview, lifecycle map and links to the stage and phase manuals |
-| `landing/index.html` | The product landing page: a human-readable projection of the governed architecture for tenant principals and prospective broker tenants, written in the design voice; it claims nothing implemented and is revised when the records change |
+| `landing/` | The showcase: the product landing page as its entry and, as they land, eight projections of the records, written in the design voice; they claim nothing implemented and are revised when the records change. `landing/README.md` is the showcase's record (SHOWCASE-001): the page list, the shared shell, the rules for what a page says, and the visual system in `landing/showcase.css` |
 | `stages/` | Nine stage manuals — the bulk of the guide |
 | `phases/` | Five phase manuals — architecture to production: what agents code and humans monitor per delivery phase. The overview renders `docs/architecture/BIZTRUST-PLAN-001.md`; the P0 page renders its section 4; the P1, P2 and P3 pages render its sections 5 to 7; `tests/test_phase_pages.py` holds each page's epic identifiers to the plan section named for it and gate identifiers to PLAN-001 |
 | `reference/` | Four reference pages — the artifact catalogue, the risk-tier schedule, Continuous Operations with the expansion streams (PLAN-001 sections 8 and 11), and the Work Package loop against the nine stages (PLAN-001 section 13.1): cross-page lookups that the manuals cite rather than restate |
@@ -94,6 +94,7 @@ Recorded here because none of it was written down, and each is a constraint on a
 | `tests/test_validator_fails_closed.py` | Proves the validator cannot fail **open**. A malformed artifact must produce exactly one `CONTINUITY_VALIDATION` line and a non-zero exit — never a traceback and silence, which reads as success. |
 | `tests/test_no_cross_page_duplication.py` | Fails when one stage page restates another instead of linking to it. Threshold `0.70`. **Re-measured on the current nine-page tree: the highest legitimate pair is 0.692 at element level and 0.615 at sentence level — 0.008 of headroom at element level, which is the binding one.** That margin is not a consequence of the guide growing; it was 0.008 from the moment the element pass existed, and simply went unmeasured because only the sentence pass was reported. Deliberate parallels are allowlisted individually with a reason. **Never raise the threshold**, which retires the check silently; if a legitimate pair crosses it, allowlist that pair and record why. |
 | `tests/test_checkpoints_match_schema.py` | Validates every committed checkpoint against `schemas/session-checkpoint.schema.json` with a stdlib checker, and fails if either schema uses a keyword or `format` value the checker does not implement — so a schema edit cannot silently go unenforced. Three checkpoints that predate the check are registered as a ratchet that may only shrink. |
+| `tests/test_showcase_pages.py` | Holds every page under `landing/` to `landing/README.md`'s shell: the navigation's nine labels in order, the strip, the wordmark, the shared stylesheet, no tenant mark, a source line per section, a record line per projection |
 | `tests/test_hub_next_steps_match_roadmap.py` | Holds the hub's next-steps cards to `docs/NEXT_STEPS.md`'s headings, id for id and title for title |
 | `tests/test_team_model.py` | Holds the hub's seats table to PLAN-001 section 12.1 row for row |
 | `tests/test_work_package_loop_page.py` | Holds `reference/work-package-loop.html` to PLAN-001 section 13.1 row for row, and every stage citation on it to a section the stage page displays under that number |
@@ -108,7 +109,7 @@ The validator's exit codes carry meaning: **0** pass · **1** a data defect, the
 
 ## Current delivery state
 
-The guide is nine stage manuals, five phase manuals and four reference pages, plus the `index.html` hub and the product landing page at `landing/index.html`. Documentation actions remain open — see `badf/next-actions.json`.
+The guide is nine stage manuals, five phase manuals and four reference pages, plus the `index.html` hub and the showcase under `landing/`, whose entry is the product landing page. Documentation actions remain open — see `badf/next-actions.json`.
 
 Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph, true when written on 2026-09-02, was merged five minutes after the first deployment had succeeded and then stood for a day. Read deployment state from the two places it actually lives:
 

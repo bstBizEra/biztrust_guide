@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-064-001",
+  "created_at": "2026-09-06T05:03:39Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-064",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #172 on the Guide v2 map: record the showcase's information architecture as landing/README.md, nine pages in a fixed order with the record each projects, the shared shell (strip, mast, navigation, record line, sourced sections, footer), the rules for what a page says, and the visual system; extract the entry page's inline styles into landing/showcase.css, the shared stylesheet every showcase page links, with the shell's components; add the navigation to the entry page with the eight unlanded pages as unlinked labels; stage the stylesheet in the Pages workflow; hold every page under landing/ to the shell with a test.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-064-showcase-record",
+    "baseline_commit": "25516a530923aba37fd347a93153ef6838a97431"
+  },
+  "completed": [
+    "Ticket #172 resolved by this branch: landing/README.md (SHOWCASE-001) with the nine pages in order and the record each projects, the shell, the rules for what a page says, the visual system, how a page is built, and what the record does not decide.",
+    "landing/showcase.css: the entry page's inline styles extracted verbatim and dedented, plus the shell's components (navigation, record line, ledger, gate slab); the entry page links it and carries the navigation with the eight unlanded pages unlinked; its head comment names the record.",
+    ".github/workflows/pages.yml stages and checks landing/showcase.css as it does styles.css.",
+    "tests/test_showcase_pages.py, written red first (the entry page had no navigation and an inline style block), holds every page under landing/ to the shell; three negative controls recorded; README names it and describes landing/ as the showcase.",
+    "badf/ re-anchored: NS-044 names the one-record route the operator adopted and #173 as next, DEC-066 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: the appended ledger rule removed; the README's visual-system numbers made the stylesheet's, its strip wording decided, its record-line commit defined, its engage exception stated, its status line added and its home explained; the overview's footer carries the record facts and the handbook link; the workflow's staging on two lines; the root README no longer calls the records adopted; the test tolerant of attribute order and matching tenant assets case-insensitively."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-063.",
+    "After merge: #172 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #173 the roadmap page next, then #174 to #180 in the README's order; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/README.md",
+    "landing/showcase.css",
+    "landing/index.html",
+    "tests/test_showcase_pages.py",
+    ".github/workflows/pages.yml",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-064-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The entry page's rendered CSS is the former inline block, dedented, in the linked file, followed by the shell's components; the appended ledger rule collided with the overview's own .ledger and restyled its decided-and-open panels, which the two-axis review found and the review pass removed, so nothing appended now restyles an element the overview uses.",
+    "The Pages workflow stages only tracked HTML plus a fixed list of files; without the two added lines the stylesheet would not reach the artifact and every showcase page would render unstyled. The CI verify step checks pages, not stylesheets, so the test -s line is the guard.",
+    "The navigation's unlinked labels keep the validator's reference check true; each page's package replaces its label with a link on every page.",
+    "The hub's, README's and AGENTS.md's page counts do not change: no new HTML page lands here."
+  ],
+  "decisions": [
+    "DEC-066: the showcase's record, shell, rules and visual system in one README and one stylesheet; unlanded pages unlinked; the shell held by a test."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' adopts the one-record route and delegates each page's decisions to its package as proposals; nothing is accepted.",
+    "Every page ticket names its output file and the README's file column matches all eight; the record line's commit is the main commit the projected record was read at, not the page's own."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158 and the team page's doctrine sentence."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_063",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A page under landing/ lacks the shell, links a page that does not exist, or carries a tenant mark.",
+      "A showcase page states a gate as passed, a capability as existing, or a decision as accepted.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The entry page was not viewed in a browser after the extraction; the CSS is the same text in a linked file, checked by reading, the tests and the validator.",
+    "landing/showcase.css's tokens are a copy of styles.css's root; no test compares them.",
+    "The strip is hand-maintained from badf/current-state.json; no test compares them.",
+    "The README's rules on voice and sources are not machine-checked beyond the source line's presence; the two-axis review of each page package checks them.",
+    "The gate slab, the record line and the navigation's styles ship with one consumer, the entry page's navigation; the first page package (#173) is where the other two are first rendered and judged."
+  ]
+}
