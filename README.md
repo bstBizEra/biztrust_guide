@@ -97,6 +97,7 @@ Recorded here because none of it was written down, and each is a constraint on a
 | `tests/test_showcase_architecture.py` | Holds `landing/architecture.html`'s capability map, contract family, exit criteria and invariant identifiers to ARCH-001 sections 6, 17 and 5 and the roadmap's section 3 |
 | `tests/test_showcase_p0.py` | Holds `landing/p0.html`'s epic table and mandatory proof to PLAN-001 section 4 and its negative proof matrix to FLOWS.md section 3 |
 | `tests/test_showcase_roadmap.py` | Holds `landing/roadmap.html`'s phases, labels and streams tables to PLAN-001 sections 2, 10.1 and 8 cell for cell |
+| `tests/test_showcase_p1.py` | Holds `landing/p1.html`'s three epic tables and vertical slice to PLAN-001 section 5 and its two operating-model chains to the roadmap's section 5 |
 | `tests/test_showcase_pages.py` | Holds every page under `landing/` to `landing/README.md`'s shell: the navigation's nine labels in order, the strip, the wordmark, the shared stylesheet, no tenant mark, a source line per section, a record line per projection |
 | `tests/test_hub_next_steps_match_roadmap.py` | Holds the hub's next-steps cards to `docs/NEXT_STEPS.md`'s headings, id for id and title for title |
 | `tests/test_team_model.py` | Holds the hub's seats table to PLAN-001 section 12.1 row for row |
