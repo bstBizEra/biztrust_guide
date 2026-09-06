@@ -14,7 +14,8 @@
     "Ticket #170 resolved by this branch: reference/continuous-operations.html with six sections: the decision for a page, the loop read onto Operate and Learn, the eight streams from PLAN-001 section 8, the entry conditions from section 11, the two carried epics, and limits.",
     "tests/test_continuous_operations_page.py: both tables held to PLAN-001 cell for cell; the page may name no gate sections 8 and 11 do not; the overview and the P3 manual must link the page; three negative controls recorded.",
     "The overview's Continuous Operations row and the P3 manual's After section link the page; README names the page and the test; PLAN-001 section 8 names the rendering.",
-    "badf/ re-anchored: NS-044 repointed at #190, DEC-058 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #190, DEC-058 appended, this checkpoint written.",
+    "Review pass: seven should-fix and three nits adopted: the overview's link moved to the Manual column; the page's first reason cites the test that exists; README's and AGENTS.md's page counts updated; the topbar follows the other reference pages; the carried cells are in the previous manual's words with the omitted location cells named; the E2 inference labelled the track's and left to the stream; the test counts exactly eight rows per table and holds the page's gates equal to the plan's; NS-044 says #170 is resolved by this branch."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-055.",
@@ -27,6 +28,7 @@
     "phases/overview.html",
     "phases/p3.html",
     "README.md",
+    "AGENTS.md",
     "docs/architecture/BIZTRUST-PLAN-001.md",
     "badf/current-state.json",
     "badf/next-actions.json",

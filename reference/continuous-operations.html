@@ -19,11 +19,11 @@
 <header class="topbar">
   <a class="brand" href="../index.html">
     <img src="../assets/unitrust-horizontal.png" alt="UniTrust Broker Insurance">
-    <span class="brand-copy"><strong>Delivery phases</strong><small>Reference &middot; Continuous Operations</small></span>
+    <span class="brand-copy"><strong>Delivery lifecycle</strong><small>Reference &middot; Continuous Operations</small></span>
   </a>
   <div class="top-actions">
     <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">&#9689;</button>
-    <a class="github-link" href="../phases/overview.html">&larr; Phase track</a>
+    <a class="github-link" href="../index.html">&larr; Guide</a>
     <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
   </div>
 </header>
@@ -59,7 +59,7 @@
   <div class="section-heading"><span>01</span><div><p>The decision</p><h2>Why a reference page, not an overview section</h2></div></div>
   <p class="section-intro">The operations ticket on the Guide v2 map asked whether Continuous Operations and the streams are a section of the phase overview or a page under <code>reference/</code>. This page is the answer, and the reasons are this track's, not the plan's.</p>
   <div class="definition-list">
-    <div><span>The overview is a rendering of five phases</span><p>Its phases table is held to PLAN-001 sections 2 to 8 by a test, and its rule is that nothing after P3 is a phase. Eight stream rows with entry conditions beside five phase rows would put the streams where a reader expects phases, which is the misreading the rule exists to prevent. The overview keeps one row for Continuous Operations and links here.</p></div>
+    <div><span>The overview is a rendering of five phases</span><p>Its phases table is rendered from PLAN-001 sections 2 to 8 and its gate set is held to section 10 by a test, and its rule is that nothing after P3 is a phase. Eight stream rows with entry conditions beside five phase rows would put the streams where a reader expects phases, which is the misreading the rule exists to prevent. The overview keeps one row for Continuous Operations and links here.</p></div>
     <div><span>A lookup has a shape the guide already uses</span><p>The <a href="artifact-catalogue.html">artifact catalogue</a> and the <a href="risk-tiers.html">risk-tier schedule</a> are cross-page lookups that the manuals cite rather than restate. The streams are the same kind of thing: the P3 manual, the hub and the overview each need one place to point at, and a page is a place.</p></div>
     <div><span>Entry conditions are proposals with decision owners</span><p>Each condition names an ADR or a seat that records it. A table of proposals waiting on eight different owners belongs beside the other lookups, not inside the manual of a phase whose gate has its own owner.</p></div>
   </div>
@@ -124,10 +124,10 @@
 
 <section id="carried" data-search="carried epics tenant pack validation foundation partner API versioned webhooks first item E1 E2 previous plan P3.10 P3.11 BT-G6 without a pack">
   <div class="section-heading"><span>05</span><div><p>The carried epics</p><h2>Two epics the previous plan placed after finance</h2></div></div>
-  <p class="section-intro">The previous plan's finance and integration phase ended with a partner API and a Tenant Pack validation foundation. PLAN-001 section 9 moves them out of the production-critical plan into E2 and E1 as each stream's first item. What each was on the previous P3 manual is carried below from that page's rows at the WP-054 merge, so the capability is not lost with the identifier; how it is delivered inside its stream is the stream's to decide when it opens.</p>
+  <p class="section-intro">The previous plan's finance and integration phase ended with a partner API and a Tenant Pack validation foundation. PLAN-001 section 9 moves them out of the production-critical plan into E2 and E1 as each stream's first item. What each was on the previous P3 manual is carried below from that page's rows at the WP-054 merge, the build, proof and source cells in that page's words and the location cells named as not carried, so the capability is not lost with the identifier; how it is delivered inside its stream is the stream's to decide when it opens.</p>
   <div class="definition-list">
-    <div><span>E1's first item &middot; Tenant Pack validation foundation</span><p>Schema, signing and compatibility validation for tenant-specific configuration &mdash; extension without forks or unrestricted code; proven when a tenant provisions and isolates through a pack with no core-code branch for either tenant; built against ADR-011 and INV-011. Note what moved with it: <code>BT-G6</code> Tenant Ready no longer requires a pack. The P3 manual's two <code>BT-G6</code> items ask that Tenant #2 provisions without a core-code fork and that no tenant-specific code path exists; the pack is how E1 makes that repeatable at scale, not how P3 proves it once.</p></div>
-    <div><span>E2's first item &middot; Partner API and versioned webhooks</span><p>The partner contract family under <code>openapi/biztrust-partner-api.yaml</code>; outbound webhooks versioned and signed; a breaking-change policy in CI; proven by contract lint and compatibility tests where a breaking change fails CI; built against ADR-005 and INV-012. E2's condition asks for a partner contract that names the API surface it needs, so the first Work Package of E2 is scoped by a partner, not by the previous plan's row.</p></div>
+    <div><span>E1's first item &middot; Tenant Pack validation foundation</span><p>Schema, signing and compatibility validation for tenant-specific configuration &mdash; extension without forks or unrestricted code; proven when Tenant #2 provisions and isolates through a pack and no core-code branch exists for either tenant; built against ADR-011 and INV-011. The row's candidate location, <code>modules/tenancy/packs/</code>, is not carried: where an E1 package lands is E1's. Note what moved with it: <code>BT-G6</code> Tenant Ready no longer requires a pack. The P3 manual's two <code>BT-G6</code> items ask that Tenant #2 provisions without a core-code fork and that no tenant-specific code path exists; the pack is how E1 makes that repeatable at scale, not how P3 proves it once.</p></div>
+    <div><span>E2's first item &middot; Partner API and versioned webhooks</span><p>The partner contract family under <code>openapi/biztrust-partner-api.yaml</code>; outbound webhooks versioned and signed; a breaking-change policy in CI; proven by contract lint and compatibility tests where a breaking change fails CI; built against ADR-005 and INV-012. The row's candidate locations, <code>openapi/</code> and <code>modules/partner/</code>, are not carried: where an E2 package lands is E2's. E2's condition asks for a partner contract that names the API surface it needs; this track reads that as meaning E2's first Work Package is scoped by the partner's contract rather than by the previous plan's row, which is E2's to confirm when it opens.</p></div>
   </div>
 </section>
 

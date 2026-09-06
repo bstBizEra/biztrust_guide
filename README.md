@@ -104,7 +104,7 @@ The validator's exit codes carry meaning: **0** pass · **1** a data defect, the
 
 ## Current delivery state
 
-The guide is nine stage manuals, five phase manuals and two reference pages, plus the `index.html` hub and the product landing page at `landing/index.html`. Documentation actions remain open — see `badf/next-actions.json`.
+The guide is nine stage manuals, five phase manuals and three reference pages, plus the `index.html` hub and the product landing page at `landing/index.html`. Documentation actions remain open — see `badf/next-actions.json`.
 
 Deployment state is deliberately not asserted in this file: a status sentence in a page that cannot expire is the defect class issue #32 records, and an earlier version of this paragraph, true when written on 2026-09-02, was merged five minutes after the first deployment had succeeded and then stood for a day. Read deployment state from the two places it actually lives:
 

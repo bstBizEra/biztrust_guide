@@ -9,7 +9,8 @@ rendering, and a page that drifts from the plan is a defect (issue #32 measured 
 page that restated a record cost).
 
 Two positive controls guard the parsers: the plan must yield exactly E1 to E8 in both
-sections, and the page must parse at least one row per table. Two link checks hold the
+sections, and the page must parse at least one row per table; a row count of exactly eight
+per table catches what a keyed comparison cannot, an extra or duplicated row. Two link checks hold the
 page in the guide: the phase overview's Continuous Operations row and the P3 manual's
 After section must reach it, since the page exists so that both have one place to point.
 
@@ -17,6 +18,8 @@ Negative controls (run 2026-09-06 under WP-056, on in-memory copies):
   * Change E4's capability on the page            -> test_streams_match_the_plan FAILS
   * Drop E8's row from the conditions table        -> test_conditions_match_the_plan FAILS
   * Remove the overview's link                     -> test_overview_and_p3_link_here FAILS
+  * Add an E9 row to the streams table             -> test_each_table_has_exactly_eight_rows FAILS (review pass)
+  * Drop every BT-G6 from the page                 -> test_page_names_exactly_the_gates_the_plan_does FAILS (review pass)
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -96,10 +99,19 @@ class TestParityWithThePlan(unittest.TestCase):
     def test_conditions_match_the_plan(self) -> None:
         self.assertEqual(plan_conditions(), page_rows("conditions"), "the entry-conditions table disagrees with PLAN-001 section 11")
 
-    def test_page_names_no_gate_the_plan_does_not(self) -> None:
+    def test_each_table_has_exactly_eight_rows(self) -> None:
+        """A ninth row, or a duplicate, would pass the dict comparison above; the row count does not."""
+        text = PAGE.read_text(encoding="utf-8")
+        for section_id in ("streams", "conditions"):
+            with self.subTest(table=section_id):
+                m = re.search(rf'<section id="{section_id}".*?<tbody>(.*?)</tbody>', text, re.S)
+                assert m, f"section {section_id} has no tbody"
+                self.assertEqual(8, len(re.findall(r"<tr\b", m.group(1))), f"{section_id}: the table does not have exactly eight rows")
+
+    def test_page_names_exactly_the_gates_the_plan_does(self) -> None:
         gates = set(re.findall(r"\bBT-G[0-9]\b", PAGE.read_text(encoding="utf-8")))
         plan = set(re.findall(r"\bBT-G[0-9]\b", _plan_section("\n## 8. Continuous Operations", "\n## 9. ") + _plan_section("\n## 11. Expansion streams", "\n## 12. ")))
-        self.assertLessEqual(gates, plan, f"the page names gates the plan's sections 8 and 11 do not: {sorted(gates - plan)}")
+        self.assertEqual(plan, gates, f"the page and the plan's sections 8 and 11 name different gates: page {sorted(gates)}, plan {sorted(plan)}")
 
 
 class TestThePageIsReachable(unittest.TestCase):
