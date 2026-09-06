@@ -41,7 +41,7 @@
     }
   ],
   "observations": [
-    "The RLS research reads PostgreSQL 18's documentation; the design cites it by finding number and quotes only what the research quotes.",
+    "The RLS research reads PostgreSQL 18's documentation; the design cites it by finding number and quotes what the research quotes, and cites PostgreSQL's own pages, checked 2026-09-06, for the role attributes, privileges, catalogue flags and configuration functions the research does not carry.",
     "The pooler and its mode are the one thing the design cannot assume: the documentation is silent, so control 4 is a measurement and P0.6-B exists for it.",
     "The manual's execution order puts P0.3 before P0.6; the design pack's order of landing does not change the manual's order of building."
   ],
