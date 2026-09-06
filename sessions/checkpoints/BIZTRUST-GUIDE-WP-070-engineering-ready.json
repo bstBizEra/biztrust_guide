@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-070-001",
+  "created_at": "2026-09-06T06:30:47Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-070",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #178 on the Guide v2 map under the showcase record: write landing/p3.html as a projection of BIZTRUST-PLAN-001 section 7, its sections 10 and 12.1 for the gate and its seats, the roadmap's section 7 and the P3 manual in the design voice, with the shell, the epic table and four roadmap lists copied and held by a test, the entry order, the operating controls, the three local definitions and the gate conditions in plain words labelled the page's, and Gate E with BT-G6 judged inside it and the seats the plan's table and the manual propose; link it from the six landed showcase pages.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-070-showcase-p3",
+    "baseline_commit": "7c19afc7eea685d019e863d68fabb1a993061ee5"
+  },
+  "completed": [
+    "Ticket #178 resolved by this branch: landing/p3.html with nine blocks and the shell; its first draft on prototype/showcase-p3, linked from the ticket.",
+    "tests/test_showcase_p3.py, written red first, holds the epic table and four roadmap lists to their records; three negative controls recorded; README names it.",
+    "The overview, roadmap, architecture, P0, P1 and P2 pages link the P3 page; AGENTS.md's page count is twenty-six.",
+    "badf/ re-anchored: NS-044 repointed at #179, DEC-072 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-069.",
+    "After merge: #178 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #179 the operations page next, then #180; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/p3.html",
+    "landing/index.html",
+    "landing/roadmap.html",
+    "landing/architecture.html",
+    "landing/p0.html",
+    "landing/p1.html",
+    "landing/p2.html",
+    "tests/test_showcase_p3.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-070-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The roadmap's section 7 lists are copied only where linear; the seven control groups' bullet lists are summarised and the source line says the roadmap's lists are longer.",
+    "The roadmap's P3J block has two fences, the loop and the severity names; the test holds the first and the page names the second in prose.",
+    "The absence of a service is sourced to AGENTS.md section 1, not to the overview's status block, so that no landing page is cited as a record."
+  ],
+  "decisions": [
+    "DEC-072: the P3 page as the sixth projection; the table and four lists copied and held; the entry order, the controls, the local definitions and the gate conditions in the page's words; Gate E with BT-G6 inside it and the proposed seats."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #178 and the page is revised to match.",
+    "The plain-words summaries are the track's reading, and the source lines say so."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_069",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "p1_implementation": "NOT_GRANTED_UNTIL_BT_G1",
+    "p2_implementation": "NOT_GRANTED_UNTIL_BT_G2_AND_BT_G3",
+    "p3_implementation": "NOT_GRANTED_UNTIL_BT_G4_AND_BT_G5",
+    "production_declaration": "SECURITY_RISK_OWNER_DATED_RECORD_AT_BT_G7_ONLY",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_p3 tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table or list on the page differs from the record it copies, or a source line cites a passage that does not say what the section says.",
+      "The page states a gate as passed, a capability as existing, P3 as authorised or begun, or production as declared.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the table, the lists and the links were checked by the tests and the validator.",
+    "The control summaries, the local definitions restated and the gate paragraphs are the page's; no test holds them.",
+    "The manual's sections are cited by their numbers as rendered at 7c19afc; no test compares the page to the manual."
+  ]
+}
