@@ -69,18 +69,15 @@ footer a{color:var(--teal-dark)}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{.skip{display:none}.strip{position:static}}
 
-/* ---- the showcase shell, shared by every page under landing/ (landing/README.md section 2 and 4) ---- */
+/* ---- the showcase shell, shared by every page under landing/ (landing/README.md sections 2 and 4). The ledger of what is decided and what remains open is the .ledger above, the overview's; no rule here restyles an element the overview uses. ---- */
 nav.showcase-nav{max-width:72rem;margin:1.2rem auto 0;padding:0 1.5rem;display:flex;flex-wrap:wrap;gap:.35rem 1.4rem;font-size:.86rem;border-bottom:1px solid var(--line);padding-bottom:.9rem}
 nav.showcase-nav a{color:var(--teal-dark);text-decoration:none;border-bottom:2px solid transparent;padding-bottom:.15rem}
 nav.showcase-nav a:hover{border-bottom-color:var(--teal)}
 nav.showcase-nav a[aria-current="page"]{color:var(--ink);font-weight:700;border-bottom-color:var(--amber)}
 nav.showcase-nav span[aria-disabled="true"]{color:var(--muted)}
 p.record{font-size:.86rem;color:var(--muted);margin:.4rem 0 2.2rem}
-.ledger{display:grid;grid-template-columns:8rem 1fr;gap:.5rem 1.2rem;margin:1rem 0}
-.ledger dt{font-weight:700}
-.ledger dd{margin:0}
 .gate{background:var(--navy);color:#fff;padding:2rem 1.6rem;margin:2.4rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.6rem;align-items:baseline;border-left:6px solid var(--amber)}
 .gate b{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;line-height:1}
 .gate span{font-size:1.1rem}
 .gate p{grid-column:1 / -1;margin:.6rem 0 0;color:#d9e8ed}
-@media(max-width:40rem){.ledger{grid-template-columns:1fr}.gate{grid-template-columns:1fr}}
+@media(max-width:40rem){.gate{grid-template-columns:1fr}}

@@ -1,6 +1,7 @@
 # The showcase: rules for the pages under `landing/`
 
 **Record:** SHOWCASE-001 · `0.1-draft` · decided under WP-064 for ticket [#172](https://github.com/bstBizEra/biztrust_guide/issues/172) on the Guide v2 map ([#153](https://github.com/bstBizEra/biztrust_guide/issues/153)), charting decision 6, and the operator's adoption of the one-record route (comment of 2026-09-06 on #153, transcribed).
+**Status:** `PROPOSED` · a draft; nothing here is accepted, and the operator may reverse any rule by a comment on #172 or #153. The operator's adoption comment named `docs/` as the record's home and the ticket named this file; the record lives beside the pages it governs.
 **What it governs:** every page under `landing/`. A page that breaks a rule here is a defect; `tests/test_showcase_pages.py` fails on the structural rules.
 **What it is not:** a source of truth. Every showcase page projects a record in this repository and says which one; when the record changes, the page is revised to match.
 
@@ -26,11 +27,11 @@ A page that has not landed appears in every page's navigation as its label witho
 
 In this order, top to bottom:
 
-1. **The status strip**, above everything, sticky. It states where BizTrust stands in the fewest words the records allow, is hand-maintained from `badf/current-state.json`, and links to the page's "what this means" section where one exists or to the overview's. It is the evidence boundary: nothing above it is a claim, and nothing below it may claim more than it does.
+1. **The status strip**, above everything, sticky. Its three lines are the overview's on every page, "Architecture design stage", "Contract freeze pending", "Implementation not yet authorised", hand-maintained from `badf/current-state.json`; a record changing them changes this record. It links to the page's "what this means" section where one exists or to the overview's. It is the evidence boundary: nothing above it is a claim, and nothing below it may claim more than it does.
 2. **The mast**: the wordmark "BizTrust by BizEra" linking to the page's main content, and the link to the engineering handbook. No tenant mark anywhere under `landing/`; the handbook's header and footer carry UniTrust marks, which is why the showcase shares no chrome with it.
 3. **The navigation**: the nine labels of section 1 in that order, the current page marked, unlanded pages unlinked.
-4. **The record line**, on every page but the overview, directly under the page's heading: which record and sections the page projects, and the commit and date it was read at. The form is fixed: `Projects <record> <version>, sections <n>; read at <short commit>, <date>.` The overview carries the same facts in its footer.
-5. **The body**: sections, each with a heading a reader would use to find it and each ending in a source line.
+4. **The record line**, on every page but the overview, directly under the page's heading: which record and sections the page projects, and the commit and date it was read at. The form is fixed: `Projects <record> <version>, sections <n>; read at <short commit>, <date>.`, where the commit is the seven-character `main` commit at which the projected record was read, not the page's own, and the date is ISO. The overview carries the same facts in its footer.
+5. **The body**: sections of class `block`, each with a heading a reader would use to find it and each ending in a source line. The engage block that ends a page carries none, because it says what the reader can do rather than what a record says.
 6. **The footer**: the projection sentence ("This page is a projection of the governed architecture in bstBizEra/biztrust_guide. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match."), the repository link and the handbook link.
 
 ## 3. The rules for what a page says
@@ -46,10 +47,10 @@ In this order, top to bottom:
 
 The showcase's tokens are the handbook's, by DEC-049: the projection reads as the same house. They live once, in `landing/showcase.css`, which every showcase page links; the tokens in that file are a copy of the handbook's `styles.css` root, and a change there is mirrored by hand (recorded as non-coverage on every showcase package until a test compares them).
 
-- **Colour**: navy `#071a2c` for the strip, the hero and the gate slabs; teal `#10a8a0` for links and focus; amber `#f1b84b` for the strip's rule and markers; lime `#bfdc6a` and red `#c92f2f` only as the strip's states; paper `#f5f8f9` and white surfaces; the dark scheme swaps ink and paper as the handbook does.
-- **Type**: Inter alone. The page heading at 2.6rem weight 800 with tight letter-spacing, section headings at 1.6rem weight 700, body at 1rem on a 1.6 line height, source lines at 0.78rem in the muted colour. No monospace labels, no capitals as labels, no eyebrow labels above headings.
-- **Layout**: one left-aligned column, 72rem at most, sections separated by space rather than rules or cards. The overview keeps its hero as the entry's one big moment; the eight projections open with the record line under a plain heading, not a hero.
-- **Components**, all in `showcase.css`, none invented per page: the strip; the mast; the navigation; the record line; the block with its source line; the ledger row for what is decided and what remains open; the gate slab that closes each phase page, the gate identifier large in the navy block with its label beside it; the engage block that ends a page with what the reader can do.
+- **Colour**: navy `#071a2c` for the strip, the hero and the gate slabs; teal `#10a8a0` for links and focus; amber `#f1b84b` for the strip's rule and markers and the current page in the navigation; lime `#bfdc6a` for the strip's second state and the left rule of the definition and principle blocks; red `#c92f2f` for the strip's third state; paper `#f5f8f9` and white surfaces; the dark scheme swaps ink and paper as the handbook does.
+- **Type**: Inter alone, at the stylesheet's scale: the overview's hero heading at `clamp(2.4rem, 6vw, 4.6rem)` with tight letter-spacing, section headings at `clamp(1.5rem, 3vw, 2.2rem)`, body at 1rem on a 1.6 line height, source lines at 0.74rem in the muted colour. No monospace labels, no capitals as labels, no eyebrow labels above headings.
+- **Layout**: one left-aligned column, 72rem at most; blocks separated by a hairline rule, the block's bottom border; the ledger's two bordered panels are the one card-like element, and they stay the overview's. The overview keeps its hero as the entry's one big moment; the eight projections open with the record line under a plain heading, not a hero.
+- **Components**, all in `showcase.css`, none invented per page: the strip; the mast; the navigation; the record line; the block with its source line; the ledger of what is decided and what remains open, as the overview renders it; the gate slab that closes each phase page, the gate identifier large in the navy block with its label beside it; the engage block that ends a page with what the reader can do. The navigation, the record line and the gate slab are this record's additions to the overview's stylesheet; nothing added restyles an element the overview uses.
 - **The one bold thing** is the strip. Nothing else moves, glows or fades; no motion that a reader did not cause.
 
 ## 5. How a page is built
@@ -58,6 +59,6 @@ One Work Package per page, against this record. The package prototypes the page 
 
 ## 6. What this record does not decide
 
-- The strip's wording is the overview's until a page needs a different one; a page-specific strip is a change to this record.
+- Whether the eight projections need a heading treatment of their own, since they do not use the hero, is decided by the first page package (#173) and recorded here.
 - Whether the tokens should be shared with the handbook's `styles.css` by a build step rather than by hand is not decided; the workflow stages `showcase.css` as it stages `styles.css`.
 - The doctrine sentence on the team page waits on #158, which waits on the contract map's waiver.

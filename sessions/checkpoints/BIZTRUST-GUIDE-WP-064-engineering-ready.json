@@ -15,7 +15,8 @@
     "landing/showcase.css: the entry page's inline styles extracted verbatim and dedented, plus the shell's components (navigation, record line, ledger, gate slab); the entry page links it and carries the navigation with the eight unlanded pages unlinked; its head comment names the record.",
     ".github/workflows/pages.yml stages and checks landing/showcase.css as it does styles.css.",
     "tests/test_showcase_pages.py, written red first (the entry page had no navigation and an inline style block), holds every page under landing/ to the shell; three negative controls recorded; README names it and describes landing/ as the showcase.",
-    "badf/ re-anchored: NS-044 names the one-record route the operator adopted and #173 as next, DEC-066 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 names the one-record route the operator adopted and #173 as next, DEC-066 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: the appended ledger rule removed; the README's visual-system numbers made the stylesheet's, its strip wording decided, its record-line commit defined, its engage exception stated, its status line added and its home explained; the overview's footer carries the record facts and the handbook link; the workflow's staging on two lines; the root README no longer calls the records adopted; the test tolerant of attribute order and matching tenant assets case-insensitively."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-063.",
@@ -47,7 +48,7 @@
     }
   ],
   "observations": [
-    "The entry page's rendered CSS is byte-for-byte the former inline block, dedented, so the page renders as before; the components appended after it are unused on the entry page except the navigation.",
+    "The entry page's rendered CSS is the former inline block, dedented, in the linked file, followed by the shell's components; the appended ledger rule collided with the overview's own .ledger and restyled its decided-and-open panels, which the two-axis review found and the review pass removed, so nothing appended now restyles an element the overview uses.",
     "The Pages workflow stages only tracked HTML plus a fixed list of files; without the two added lines the stylesheet would not reach the artifact and every showcase page would render unstyled. The CI verify step checks pages, not stylesheets, so the test -s line is the guard.",
     "The navigation's unlinked labels keep the validator's reference check true; each page's package replaces its label with a link on every page.",
     "The hub's, README's and AGENTS.md's page counts do not change: no new HTML page lands here."
@@ -57,7 +58,7 @@
   ],
   "assumptions": [
     "The operator's 'proceed as you recommend, self-paced' adopts the one-record route and delegates each page's decisions to its package as proposals; nothing is accepted.",
-    "The eight projections' file names are the tickets' where the tickets name them and the README's pattern where they do not; a page ticket may rename its file by changing the README."
+    "Every page ticket names its output file and the README's file column matches all eight; the record line's commit is the main commit the projected record was read at, not the page's own."
   ],
   "blockers": [
     {
@@ -131,6 +132,7 @@
     "The entry page was not viewed in a browser after the extraction; the CSS is the same text in a linked file, checked by reading, the tests and the validator.",
     "landing/showcase.css's tokens are a copy of styles.css's root; no test compares them.",
     "The strip is hand-maintained from badf/current-state.json; no test compares them.",
-    "The README's rules on voice and sources are not machine-checked beyond the source line's presence; the two-axis review of each page package checks them."
+    "The README's rules on voice and sources are not machine-checked beyond the source line's presence; the two-axis review of each page package checks them.",
+    "The gate slab, the record line and the navigation's styles ship with one consumer, the entry page's navigation; the first page package (#173) is where the other two are first rendered and judged."
   ]
 }

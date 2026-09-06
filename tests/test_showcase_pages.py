@@ -100,16 +100,18 @@ class TestTheShell(unittest.TestCase):
     def test_no_tenant_mark(self) -> None:
         for page in showcase_pages():
             with self.subTest(page=page.name):
-                self.assertNotRegex(page.read_text(encoding="utf-8"), r"unitrust", "a tenant mark on a showcase page")
+                self.assertNotRegex(page.read_text(encoding="utf-8"), r"(?i)unitrust\.(png|svg|jpg)|assets/unitrust", "a tenant mark on a showcase page")
 
     def test_every_block_has_a_source_line(self) -> None:
         for page in showcase_pages():
             with self.subTest(page=page.name):
                 html = page.read_text(encoding="utf-8")
                 problems = []
-                for m in re.finditer(r'<section class="block"[^>]*id="([^"]+)"[^>]*>(.*?)</section>', html, re.S):
-                    if 'class="source"' not in m.group(2):
-                        problems.append(m.group(1))
+                for m in re.finditer(r'<section\b([^>]*)>(.*?)</section>', html, re.S):
+                    attrs, body = m.group(1), m.group(2)
+                    if 'class="block"' in attrs and 'class="source"' not in body:
+                        ident = re.search(r'id="([^"]+)"', attrs)
+                        problems.append(ident.group(1) if ident else "(a block with no id)")
                 self.assertEqual([], problems, f"{page.name}: sections without a source line: {problems}")
 
     def test_record_line_on_every_projection(self) -> None:
