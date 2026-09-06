@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-058-001",
+  "created_at": "2026-09-06T02:41:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-058",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #171 on the Guide v2 map: establish, with evidence, that the artifact catalogue binds artifacts to the nine stage pages only and cites no phase page, gate or epic, so the re-partition under PLAN-001 moves no catalogue row; that the gate-namespace addition BT-G7 landed under WP-051 and the phase-page test moved with each manual under WP-051 to WP-055, so the suite never asserted a partition main did not have; and record the finding on the catalogue's method note so the next reader does not assume the binding the ticket assumed.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-058-catalogue-after-repartition",
+    "baseline_commit": "547c9b9a87c7dfa26a19fdf293221a40d622d334"
+  },
+  "completed": [
+    "Ticket #171 resolved by this branch as a finding: the catalogue cites no phase page, gate or epic (searched for phase, DELIVERY_PLAN, PLAN-001, BT-G, epic, P0, P1: zero occurrences), so no row moves; its method note now records this and names the tests that hold the phase pages.",
+    "Verified from history: tests/test_gate_namespaces.py admitted BT-G7 under WP-051 (0a71751); tests/test_phase_pages.py moved its epic source per page under WP-051 to WP-055; tests/test_continuous_operations_page.py landed with the operations page under WP-056.",
+    "badf/ re-anchored: NS-044 repointed at the frontier (#203, #159, #160), records the track's /to-spec proposal for the showcase as a proposal on #153, and puts the hub's version label to #203; DEC-060 appended; this checkpoint written.",
+    "Review pass: four should-fix and three nits adopted: 'every record ticket has landed' corrected in NS-044 and the state file; the showcase re-route reworded as the track's proposal for comment on #153, without /implement; DEC-053's label condition recorded as met by finding and put to #203; the catalogue sentence names capability gates and epic identifiers exactly, scopes 'every row' to the table, and says 'none in the rows or notes'; the layout count corrected to fourteen rows over twelve directories."
+  ],
+  "remaining": [
+    "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-057.",
+    "After merge: #171 closed with a resolution comment carrying the evidence; the map's decision line appended with its title link.",
+    "Map #153: #203, #159, #160 next in that order; the showcase after the records."
+  ],
+  "files_changed": [
+    "reference/artifact-catalogue.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-058-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The catalogue's new sentence contains no section-number citation, so tests/test_catalogue_agrees_with_pages.py's citation check does not read it; its outputs-set check reads only the rows.",
+    "The catalogue's fourteen target-layout rows cover twelve directories, all in the hub's repository design; PLAN-001 has no layout section, so that count stands. The manuals' 'Lands in (candidate)' cells name directories the hub's tree lacks (adapters/, infra/, docs/runbooks/, packages/flags/); that is pre-existing and outside this ticket.",
+    "The ticket's second half, the test changes, needed no commit here because the charter's rule that HTML tickets move their tests in the same package was followed by every manual ticket."
+  ],
+  "decisions": [
+    "DEC-060: the catalogue binds to stage pages only; no row moves; the finding is recorded on the page; the tests were done with the manuals."
+  ],
+  "assumptions": [
+    "The wayfinder invocation and 'proceed next steps on information and evidence' are chat instructions to work the next frontier ticket; they adopt nothing and authorise nothing.",
+    "A ticket whose premise proves wrong is resolved by recording the finding where the premise would recur, not by inventing the binding it assumed."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_057",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_catalogue_agrees_with_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A catalogue row cites a phase page, a gate or an epic; the method note's claim would then be false and must move first.",
+      "Any record says a gate has passed or a capability exists.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered catalogue was not viewed in a browser; the new list item was checked by the tests and the validator.",
+    "The catalogue's rows, formats, owners and accepters were not re-read against the stage pages beyond what the existing test checks; the ticket asked about the re-partition, not the rows' prose.",
+    "Whether the stage pages should cite PLAN-001 at all (they cite neither plan) is not this ticket's question."
+  ]
+}

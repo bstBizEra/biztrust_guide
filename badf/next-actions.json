@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-057",
-  "updated_at": "2026-09-06T00:44:19Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-058",
+  "updated_at": "2026-09-06T02:41:00Z",
   "actions": [
     {
       "id": "NS-040",
@@ -108,10 +108,10 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165 to #170 are resolved and #190 is resolved by this branch; the hub's roadmap section speaks PLAN-001's phases and gates and links the Continuous Operations page. Next is #171 the artifact catalogue and the tests after the re-partition (catalogue rows that move with the epics; the gate namespace addition already landed under WP-051); then #159 loop mapping and #160 team model, which are independent; #158 doctrine waits on the #92 waiver; #172 to #180 the showcase wait on the records.",
+      "action": "Work the Guide v2 map #153 one ticket per session: #155, #156, #157, #165 to #170 and #190 are resolved and #171 is resolved by this branch; the PLAN-001 rendering tickets (#155 to #157, #165 to #171, #190) have landed and #158, #159 and #160 remain. The frontier is #203 the hub's next-steps card phrase, #159 the 24-step loop against the nine stages, and #160 the team model; #158 doctrine waits on the #92 waiver. The showcase (#172 information architecture, then #173 to #180) stays the map's prototype tickets, one page per ticket after its record lands, as the map's Notes record; this track proposes, in a comment on #153, that the eight pages be collapsed through /to-spec after the record tickets close, and nothing changes until a comment on the map adopts it. DEC-053 tied the hub's v2.0-draft label to the last manual and the catalogue moving; both have happened, the catalogue by finding, and whether the label flips now or waits for #158 and #160 is put to #203, which touches the hub.",
       "prerequisites": [
-        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview, four manuals, the operations page and the hub's roadmap on PLAN-001 (WP-051 to WP-057)",
-        "For #171: the catalogue's phase-page citations and tests/test_catalogue_agrees_with_pages.py's scope"
+        "PLAN-001 sections 0 to 15 (WP-048, WP-049), P0.13 (WP-050), the overview, four manuals, the operations page and the hub's roadmap on PLAN-001 (WP-051 to WP-057), the catalogue checked (WP-058)",
+        "For #159 and #160: PLAN-001 sections 12 and 13 and the roadmap's sections 9 and 10"
       ],
       "evidence_required": [
         "The ticket's resolution comment, the ticket closed, one line appended to #153 Decisions so far",
