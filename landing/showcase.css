@@ -1,5 +1,5 @@
 /* landing/showcase.css: the showcase's tokens and shell. The :root tokens are a copy of the handbook's styles.css root (DEC-049); a change there is mirrored here by hand. Rules: landing/README.md. */
-:root{--navy:#071a2c;--navy-2:#0d2942;--ink:#122638;--muted:#5f7280;--paper:#f5f8f9;--surface:#fff;--line:#dce5e8;--teal:#10a8a0;--teal-dark:#087b78;--lime:#bfdc6a;--amber:#f1b84b;--red:#c92f2f;--strip:2.6rem;--measure:44rem}
+:root{--navy:#071a2c;--navy-2:#0d2942;--ink:#122638;--muted:#5f7280;--paper:#f5f8f9;--surface:#fff;--line:#dce5e8;--teal:#10a8a0;--teal-dark:#087b78;--lime:#bfdc6a;--amber:#f1b84b;--red:#c92f2f;--bt-sky:#a5def3;--bt-mint:#69c6b5;--bt-green:#3db389;--bt-gradient:linear-gradient(90deg,var(--bt-sky) 0%,var(--bt-mint) 50%,var(--bt-green) 100%);--strip:2.6rem;--measure:44rem}
 @media(prefers-color-scheme:dark){:root{--ink:#d7e5e9;--muted:#8da4ae;--paper:#071721;--surface:#0c2230;--line:#173444;--teal-dark:#46b8b0}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--strip) + 1rem)}

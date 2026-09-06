@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-102",
-  "updated_at": "2026-09-06T18:11:19Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-103",
+  "updated_at": "2026-09-06T18:56:24Z",
   "actions": [
     {
       "id": "NS-040",
@@ -172,6 +172,26 @@
         "Oracles are edited by the author who wrote the fixtures"
       ],
       "fallback": "Leave item 3 open and record that the artifact still cannot say what an action consumes."
+    },
+    {
+      "id": "NS-046",
+      "primary": false,
+      "priority": 9,
+      "owner_role": "human-reviewer",
+      "authority": "HUMAN_DECISION_REQUIRED",
+      "action": "The two brand questions WP-103 raised, both the operator's or the artwork owner's. #319: the supplied logoXvText.svg is a working artboard, not a master - construction guide lines, embedded rasters, and an xlink:href to '../Draft_Design of Logo.png' that resolves to nothing - and logoXhText.svg sets 'Biz' and 'Broker Insurance' as live text in Inter, which an SVG loaded through <img> cannot obtain from the host page, so the lockup renders in a fallback face wherever Inter is not installed. Neither is landed. Resolving it means a clean export with the text converted to outlines, not a repair of the supplied files. #320: the reason the showcase shares no chrome with the handbook has gone, so whether the showcase mast should carry the symbol is a SHOWCASE-001 rule change for the operator.",
+      "prerequisites": [
+        "A human reads issues #319 and #320",
+        "For #319, whoever holds the BizTrust artwork can export from the design tool"
+      ],
+      "evidence_required": [
+        "For #319: lockup masters with their text converted to outlines, and a vertical lockup with no construction guides and no external image reference",
+        "For #320: an operator comment on #320 or #172 saying whether the showcase mast carries the mark"
+      ],
+      "stop_conditions": [
+        "An agent edits a supplied SVG master to make it usable, or changes the SHOWCASE-001 mast rule without the operator"
+      ],
+      "fallback": "The handbook keeps the symbol in every slot and the showcase keeps its text wordmark; neither is blocked by these questions."
     }
   ]
 }
