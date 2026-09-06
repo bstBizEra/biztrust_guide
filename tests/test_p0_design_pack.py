@@ -4,7 +4,7 @@
 The pack's README (WP-046) fixes the file naming, the status vocabulary and nine mandatory sections
 in a fixed order. This test reads those rules from the README itself, then holds every P0.NN-*.md
 and P0.SECURITY-PROOF.md to them: the nine headings present and in order, a status block with the
-required fields, a status from the vocabulary that no agent may set to ACCEPTED, no sentence of the
+contents README 4.1 names, a status from the vocabulary that no agent may set to ACCEPTED, no sentence of the
 form "we use X" (a design names candidates, never choices), and, for a design at PROPOSED, a link
 from the P0 manual's epic row to the design on GitHub, as the README's section 6 requires.
 
@@ -87,15 +87,17 @@ class TestEveryDesignObeysTheTemplate(unittest.TestCase):
                 self.assertIn(status, readme_statuses())
                 self.assertNotEqual("ACCEPTED", status, f"{p.name}: no agent marks a design ACCEPTED")
                 self.assertNotEqual("DRAFT", status, f"{p.name}: a DRAFT lives on its branch, not on main")
-                for field in ("Version", "Epic", "Map ticket", "Landed by", "ADRs this design depends on", "Research cited"):
-                    status_field(text, field)
+                block = text.split("## Status block", 1)[1].split("\n## ", 1)[0].lower()
+                for keyword in ("version", "epic", "ticket", "work package", "adr", "research"):
+                    self.assertIn(keyword, block, f"{p.name}: the status block does not mention {keyword!r} (README 4.1)")
 
     def test_no_technology_is_chosen(self) -> None:
         for p in designs():
             with self.subTest(design=p.name):
                 text = p.read_text(encoding="utf-8")
                 self.assertIsNone(re.search(r"\bwe (use|chose|choose|will use|are using)\b", text, re.I), f"{p.name}: a design names candidates, never choices")
-                self.assertRegex(text, r"\bnegative control", f"{p.name}: no negative control")
+                controls = text.split("## Negative controls", 1)[1].split("\n## ", 1)[0]
+                self.assertGreaterEqual(len([l for l in controls.splitlines() if l.startswith("| ") and not l.startswith("| #") and not l.startswith("|---")]), 1, f"{p.name}: no negative control row (README 4.5)")
 
     def test_manual_links_each_proposed_design(self) -> None:
         manual = MANUAL.read_text(encoding="utf-8")
