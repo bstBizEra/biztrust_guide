@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-059-001",
+  "created_at": "2026-09-06T03:03:46Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-059",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #203 on the Guide v2 map: rewrite the hub's NS-007 card so that it authorises the P1A slice per Work Package after BT-G0 (A) and BT-G1 (B), never P1 as a whole; decide that the hub's NS cards are the hub's own mobilization list and NS-007 needs no record in badf/next-actions.json because its authorization is per Work Package under BT-G1 and is recorded then; hold the hub to the plan's voice with a test; keep the hub's v2.0-draft label, re-conditioned on the map's destination.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-059-hub-ns007-card",
+    "baseline_commit": "df938d72cea235840d2b271004f82be1691e333a"
+  },
+  "completed": [
+    "Ticket #203 resolved by this branch: index.html's NS-007 card authorises the P1A slice per Work Package after BT-G0 (A) and BT-G1 (B); the section's search terms updated.",
+    "tests/test_hub_speaks_the_plan.py written red first (it failed on 'Authorize P1' at the baseline), then green; three negative controls recorded; README names it.",
+    "badf/ re-anchored: the state file says which NS-007 its 'unticketed' sentence meant and names the number collision; NS-044 repointed at #159 and #160 and the label condition restated; DEC-061 appended, superseding the label condition in DEC-053 and nothing else; this checkpoint written.",
+    "Review pass from the two-axis code review: the records name which NS-007 the 'unticketed' sentence meant and the number collision; DEC-061's supersedes field emptied and its condition's departure from the ticket's options stated; the test's allow-case separated from the negative controls and its positive control given its own test; the card's labels written as 'label A' and 'label B' like the roadmap section."
+  ],
+  "remaining": [
+    "Fresh-context review of the head commit, then merge, as for WP-029 through WP-058.",
+    "After merge: #203 closed with a resolution comment; the map's decision line appended with its title link.",
+    "Map #153: #159 and #160 next; #158 waits on #92; the showcase route is a proposal on the map."
+  ],
+  "files_changed": [
+    "index.html",
+    "tests/test_hub_speaks_the_plan.py",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-059-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The test reads only the hub's main element and strips tags, so an identifier inside a code element or a data-search attribute is not counted twice; P0.n is allowed because PLAN-001's id rule keeps P0 letterless.",
+    "The hub's label is a version of this guide, not a gate; keeping it draft states nothing about the platform.",
+    "The second test, no letterless previous-plan epic on the hub, is beyond #203's question; it is the other phrase shape the same reviews found (#190) and is declared here as this package's addition."
+  ],
+  "decisions": [
+    "DEC-061: the NS-007 card authorises the P1A slice per package after BT-G0 and BT-G1; the hub's NS cards need no badf record; a test holds the hub's voice; the label stays draft until the map's destination, superseding DEC-053's condition."
+  ],
+  "assumptions": [
+    "/implement was a chat instruction to build the ready ticket on the map; it adopts nothing and authorises nothing.",
+    "The hub's NS card numbers collide with docs/NEXT_STEPS.md's for NS-005 to NS-007 (different items under the same numbers); nothing here renumbers either, and the collision is ticketed as #208."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_058",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_hub_speaks_the_plan",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "The hub authorises a phase by number or names a letterless previous-plan epic.",
+      "The hub's label reads v2.0 while the map's record tickets or showcase are open.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered hub was not viewed in a browser; the card and the search terms were checked by the tests and the validator.",
+    "The other six NS cards were not re-read against their records; NS-001 to NS-006 predate PLAN-001 and are outside #203's question."
+  ]
+}
