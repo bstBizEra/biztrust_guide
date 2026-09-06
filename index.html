@@ -89,9 +89,9 @@
       <blockquote>Human stakeholders own purpose, risk appetite and approval. Agents own bounded execution, transparent reasoning, verification and escalation.</blockquote>
     </section>
 
-    <section id="team" data-search="team topology orchestrator architect developer security qa sre product domain data reviewer">
+    <section id="team" data-search="team topology orchestrator architect developer security qa sre product domain data reviewer seats roles personas lenses councils review seats">
       <div class="section-heading"><span>03</span><div><p>Organization</p><h2>Team topology</h2></div></div>
-      <p class="section-intro">The team is a controlled system of specialized roles. For low-risk work, roles may share an agent runtime; for high-risk decisions, independence is mandatory.</p>
+      <p class="section-intro">The team is a controlled system of specialized roles. For low-risk work, roles may share an agent runtime; for high-risk decisions, independence is mandatory. The eight groups below are lenses; the humans who hold authority are seats; the agents are personas. <a href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">PLAN-001</a> section 12.1 says which is which, how each is bound, and how the roadmap's councils map onto these groups.</p>
       <div class="team-map">
         <article class="team-lead"><div class="role-icon">O</div><h3>SARCHI · Chief Orchestrator</h3><p>Translates authorized outcomes into work packages, routes specialists, controls state transitions and stops on ambiguity.</p><ul><li>Owns execution plan and dependency graph</li><li>Never self-grants authority</li><li>Publishes session checkpoint and handoff</li></ul></article>
         <div class="team-grid">
@@ -105,7 +105,28 @@
           <article><div class="role-icon">C</div><h3>Independent Council</h3><p>Reviews significant decisions through separate architecture, security, QA and domain lenses.</p><small>Ballots · Findings · Dissent</small></article>
         </div>
       </div>
-      <div class="callout"><strong>Separation-of-duty rule</strong><p>The same agent instance must not be the sole author, verifier and approver of a high-impact artifact. At least one independent lens must reproduce the critical evidence.</p></div>
+      <div class="table-wrap">
+        <table>
+          <caption>The seats — humans who hold authority; rendered from PLAN-001 section 12.1 and held to it by a test; who fills each is the review-seat ticket's (#94)</caption>
+          <thead><tr><th>Seat</th><th>Records or accepts</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Business authority</strong></td><td>Implementation grants per Work Package; the tenant authority profile, with the four other contract seats; the objectives and recovery objectives in P3</td></tr>
+            <tr><td><strong>Insurance practitioner</strong></td><td>Domain UAT for the broker core; co-records BT-G2</td></tr>
+            <tr><td><strong>Legal and compliance reviewer for the jurisdiction</strong></td><td>ADR-014 with the finance seat; the compliance track's questions; a dedicated-tenant requirement under E5</td></tr>
+            <tr><td><strong>Finance and accounting reviewer</strong></td><td>BT-G4 with release authority; ADR-014 and the chart of accounts with the legal seat</td></tr>
+            <tr><td><strong>Accountable architecture owner</strong></td><td>BT-G0 and BT-G6; acceptance of ADRs; provider selections; P3's three local definitions</td></tr>
+            <tr><td><strong>Security risk owner</strong></td><td>BT-G1, BT-G5 and BT-G7; waivers, with expiry and dissent recorded</td></tr>
+            <tr><td><strong>Release authority</strong></td><td>BT-G2 and BT-G3; co-records BT-G4</td></tr>
+            <tr><td><strong>SRE lead</strong></td><td>Co-records BT-G3 and the readiness behind BT-G7; the disaster-recovery exercise's sign-off</td></tr>
+            <tr><td><strong>Repository administrator</strong></td><td>Protection of main, Pages and the governing issue</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="definition-list">
+        <div><span>A persona never holds authority</span><p>The orchestrator and the roadmap's delivery and governed agents are personas: each is granted implementation authority per Work Package by a seat, is bound by identity, package, tools, evidence, independent review and gate, and requests human authorisation rather than giving it.</p></div>
+        <div><span>The roadmap's councils are these groups</span><p>Its architecture council is the Architecture and Product &amp; Domain lenses, chaired by the accountable architecture owner; its delivery team is Engineering, SRE &amp; Operations and Data &amp; Financial Control; its assurance council is the Independent Council with Security &amp; Privacy and Quality Engineering, where security, compliance and release assurance are seats and QA lead and reviewer are stage roles.</p></div>
+      </div>
+      <div class="callout"><strong>Separation-of-duty rule</strong><p>The same agent instance must not be the sole author, verifier and approver of a high-impact artifact. At least one independent lens must reproduce the critical evidence, and an approver is a seat.</p></div>
     </section>
 
     <section id="governance" data-search="governance control plane RACI authority risk work package state DRAFT READY AUTHORIZED IN_PROGRESS VALIDATING ENGINEERING_READY ACCEPTED CLOSED canonical state machine">
