@@ -8,12 +8,24 @@ design in the P0 pack names ADRs and their status in prose, the pack's README ma
 no ADR row is a question, not a candidate" a rule that reviews enforced by hand, and a design could have
 cited an ADR that does not exist, or called one `ACCEPTED`, with nothing to notice.
 
-What a citation looks like, and how it is read. The corpus writes an identifier, an optional gloss, then
-a backticked status: "ADR-002 Logto as identity infrastructure, `DRAFT_REQUIRED`", and sometimes one
-status for two identifiers, "ADR-002 and ADR-003, `DRAFT_REQUIRED`". So a claim is read **forward** from
-each identifier to the first backticked status inside the same clause, a clause ending at `;`, `|`, `.`
-or a newline. Reading backward from the status was tried first and silently missed four claims whose
-identifier sat further back than the window; forward is the direction the grammar runs.
+**The vocabulary is the register's, read from the register.** Its "Status vocabulary" block lists the
+eight words an ADR's status may be, and this test reads that block rather than carrying a list of its
+own. A hand-kept list was tried first and was wrong twice over: it omitted `IN_REVIEW` and `DEPRECATED`,
+so a document claiming either would have been read as making no claim at all, and it included `DRAFT`,
+which belongs to the design pack's vocabulary and is not a status an ADR may hold.
+
+**How a claim is read.** The corpus writes an identifier, an optional gloss, then a backticked status:
+"ADR-002 Logto as identity infrastructure, `DRAFT_REQUIRED`", and sometimes one status for two
+identifiers, "ADR-002 and ADR-003, `DRAFT_REQUIRED`". So a claim is read **forward** from each
+identifier to the first backticked status inside the same clause. Reading backward from the status was
+tried first and silently missed four claims whose identifier sat further back than the window; forward
+is the direction the grammar runs.
+
+A clause ends at `;`, `|`, a newline, or a full stop **that ends a sentence** — a full stop followed by
+whitespace or the end of the text. Any full stop was tried first and truncated real claims: the one in
+"ADR-005 OpenAPI 3.2 for contract-first HTTP APIs, `DRAFT_REQUIRED`" ended the clause inside a version
+number, and the corpus is full of version numbers and file names. Those claims were then never checked,
+which is the quietest way for a guard like this to be useless.
 
 Identifiers are matched as `ADR-` and exactly three digits with a word boundary, so a four-digit
 identifier in someone else's example, such as the `ADR-0007` in `docs/agents/domain.md`, is not read as
@@ -23,15 +35,17 @@ which is where this repository's normative documents live.
 A status this test finds disagreeing is a defect in the document, not a value to copy from it. The
 register decides; a document repeats.
 
-Positive controls: the register must yield twenty rows and every one of its statuses; the corpus must
-yield a substantial number of citations and claims. Without these the comparisons pass over nothing,
-which is what a parse that quietly stops working looks like.
+Positive controls: the register must yield its vocabulary and twenty rows, and the corpus must yield at
+least eighteen distinct identifiers and a hundred claims against the hundred and sixteen it holds today.
+Those floors are set close to the real figures on purpose: a floor low enough to survive one document
+failing to parse is a floor that guards nothing.
 
-Negative controls (run 2026-09-07 under WP-100, on in-memory copies):
+Negative controls (run 2026-09-07 under WP-100, on the files and on copies):
   * a citation of an ADR with no register row  -> test_every_cited_adr_exists FAILS
   * a claim of ACCEPTED where the register says DRAFT_REQUIRED -> test_every_claimed_status_is_the_registers FAILS
   * a register identifier written twice        -> test_the_register_is_well_formed FAILS
-  * a claim whose status is not in the register's vocabulary   -> read as no claim, held below
+  * a status in the register's vocabulary but not the test's   -> impossible; the vocabulary is the register's
+  * a full stop inside a version number or a file name         -> must not end a clause, held below
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -46,11 +60,22 @@ ROOT = Path(__file__).resolve().parents[1]
 ARCH = ROOT / "docs" / "architecture"
 REGISTER = ARCH / "ADR_REGISTER.md"
 
-STATUSES = ("DRAFT_REQUIRED", "BLOCKED_BY_S01", "ACCEPTED", "PROPOSED", "DRAFT", "REJECTED", "SUPERSEDED")
 IDENTIFIER = re.compile(r"\bADR-\d{3}\b")
-STATUS = re.compile(rf"`({'|'.join(STATUSES)})`")
 REGISTER_ROW = re.compile(r"^\| (ADR-\d{3}) \|[^|]*\| `([A-Z_0-9]+)` \|", re.M)
-CLAUSE_END = re.compile(r"[;|.\n]")
+VOCABULARY_WORD = re.compile(r"^([A-Z_0-9]+)$", re.M)
+# A clause ends at a semicolon, a pipe, a newline, or a full stop that ends a sentence. Not at the
+# full stop in `0.3` or in `P0.12-secrets-and-configuration.md`.
+CLAUSE_END = re.compile(r"[;|\n]|\.(?=\s|$)")
+
+
+def register_text() -> str:
+    return REGISTER.read_text(encoding="utf-8")
+
+
+def vocabulary(text: str) -> list[str]:
+    """The status words the register's own 'Status vocabulary' block lists."""
+    block = text.split("## Status vocabulary", 1)[1].split("```", 2)[1]
+    return VOCABULARY_WORD.findall(block)
 
 
 def register(text: str) -> dict[str, str]:
@@ -63,12 +88,13 @@ def register_identifiers(text: str) -> list[str]:
     return [m.group(1) for m in REGISTER_ROW.finditer(text)]
 
 
-def claims(text: str) -> list[tuple[str, str, str]]:
+def claims(text: str, statuses: list[str]) -> list[tuple[str, str, str]]:
     """Each (identifier, claimed status, the clause it was read from) in this document."""
+    status_re = re.compile(rf"`({'|'.join(statuses)})`")
     found = []
     for m in IDENTIFIER.finditer(text):
         clause = CLAUSE_END.split(text[m.end():], maxsplit=1)[0]
-        s = STATUS.search(clause)
+        s = status_re.search(clause)
         if s:
             found.append((m.group(0), s.group(1), (m.group(0) + clause).strip()))
     return found
@@ -83,55 +109,71 @@ def corpus() -> list[Path]:
     return sorted(p for p in ARCH.rglob("*.md") if p != REGISTER)
 
 
-def register_text() -> str:
-    return REGISTER.read_text(encoding="utf-8")
-
-
 class TestTheReadersFindSomething(unittest.TestCase):
     """Positive controls. A parse that quietly stops working looks exactly like a passing test."""
 
+    def test_the_register_yields_its_vocabulary(self) -> None:
+        words = vocabulary(register_text())
+        self.assertIn("DRAFT_REQUIRED", words)
+        self.assertIn("ACCEPTED", words)
+        self.assertGreaterEqual(len(words), 5, "the register's status vocabulary block no longer yields its words")
+
     def test_the_register_yields_its_rows(self) -> None:
-        reg = register(register_text())
+        text = register_text()
+        reg = register(text)
         self.assertEqual(20, len(reg), "the register no longer yields twenty rows; re-derive this test")
-        self.assertTrue(set(reg.values()) <= set(STATUSES),
-                        f"the register carries a status this test does not know: {sorted(set(reg.values()))}")
+        unknown = set(reg.values()) - set(vocabulary(text))
+        self.assertFalse(unknown, f"the register uses a status its own vocabulary block does not list: {sorted(unknown)}")
 
     def test_the_corpus_cites_adrs(self) -> None:
         cited = set().union(*(citations(p.read_text(encoding="utf-8")) for p in corpus()))
-        self.assertGreaterEqual(len(cited), 10, "almost no ADR is cited under docs/architecture; the reader has broken")
+        self.assertGreaterEqual(len(cited), 18, f"only {len(cited)} distinct ADRs cited; the reader has broken")
 
     def test_the_corpus_claims_statuses(self) -> None:
-        n = sum(len(claims(p.read_text(encoding="utf-8"))) for p in corpus())
-        self.assertGreaterEqual(n, 50, f"only {n} status claims read; the clause reader has broken")
+        words = vocabulary(register_text())
+        n = sum(len(claims(p.read_text(encoding="utf-8"), words)) for p in corpus())
+        self.assertGreaterEqual(n, 100, f"only {n} status claims read, against 116 in the corpus; the reader has broken")
 
 
 class TestTheReaderCanFail(unittest.TestCase):
-    """Negative controls, on copies. A guard that cannot fail guards nothing."""
+    """Negative controls, on copies and on real corpus sentences. A guard that cannot fail guards nothing."""
+
+    def setUp(self) -> None:
+        self.words = vocabulary(register_text())
 
     def test_an_unregistered_citation_is_seen(self) -> None:
         self.assertNotIn("ADR-021", register(register_text()))
         self.assertIn("ADR-021", citations("this design depends on ADR-021 for its shape"))
 
     def test_a_wrong_status_claim_is_seen(self) -> None:
-        reg = register(register_text())
-        read = claims("The design rests on ADR-001 modular monolith, `ACCEPTED`, and proceeds.")
+        read = claims("The design rests on ADR-001 modular monolith, `ACCEPTED`, and proceeds.", self.words)
         self.assertEqual([("ADR-001", "ACCEPTED")], [(a, s) for a, s, _ in read])
-        self.assertNotEqual("ACCEPTED", reg["ADR-001"], "ADR-001 is accepted in the register; re-derive this control")
+        self.assertNotEqual("ACCEPTED", register(register_text())["ADR-001"],
+                            "ADR-001 is accepted in the register; re-derive this control")
 
     def test_a_duplicated_register_identifier_is_seen(self) -> None:
         doubled = register_text() + "\n| ADR-001 | A second row | `ACCEPTED` | Nothing |\n"
         ids = register_identifiers(doubled)
         self.assertNotEqual(len(ids), len(set(ids)), "a repeated register row was not seen")
 
-    def test_a_status_from_another_clause_is_not_claimed(self) -> None:
-        text = "ADR-009's adapter boundary is elsewhere; ADR-019 retention, `BLOCKED_BY_S01`."
-        self.assertEqual([("ADR-019", "BLOCKED_BY_S01")], [(a, s) for a, s, _ in claims(text)],
-                         "a status was attributed across a clause boundary")
+    def test_a_status_from_another_sentence_is_not_claimed(self) -> None:
+        text = "The adapter boundary is ADR-009. A different design is `PROPOSED`."
+        self.assertEqual([], claims(text, self.words), "a status was attributed across a sentence boundary")
+
+    def test_a_full_stop_inside_a_version_does_not_end_the_clause(self) -> None:
+        text = "ADR-005 OpenAPI 3.2 for contract-first HTTP APIs, `DRAFT_REQUIRED`, which decides the shape."
+        self.assertEqual([("ADR-005", "DRAFT_REQUIRED")], [(a, s) for a, s, _ in claims(text, self.words)],
+                         "a full stop inside a version number ended the clause, so the claim went unchecked")
+
+    def test_a_full_stop_inside_a_file_name_does_not_end_the_clause(self) -> None:
+        text = "See P0.12-secrets-and-configuration.md for ADR-004 shared PostgreSQL with RLS, `DRAFT_REQUIRED`."
+        self.assertEqual([("ADR-004", "DRAFT_REQUIRED")], [(a, s) for a, s, _ in claims(text, self.words)],
+                         "a full stop inside a file name ended the clause")
 
     def test_two_identifiers_may_share_one_status(self) -> None:
         text = "The design names ADR-002 and ADR-003, `DRAFT_REQUIRED`, as dependencies."
         self.assertEqual([("ADR-002", "DRAFT_REQUIRED"), ("ADR-003", "DRAFT_REQUIRED")],
-                         [(a, s) for a, s, _ in claims(text)])
+                         [(a, s) for a, s, _ in claims(text, self.words)])
 
 
 class TestTheCorpusAgreesWithTheRegister(unittest.TestCase):
@@ -152,10 +194,11 @@ class TestTheCorpusAgreesWithTheRegister(unittest.TestCase):
                                             f"A decision with no row is not a decision.")
 
     def test_every_claimed_status_is_the_registers(self) -> None:
-        reg = register(register_text())
+        text = register_text()
+        reg, words = register(text), vocabulary(text)
         for p in corpus():
             with self.subTest(document=p.name):
-                for adr, claimed, clause in claims(p.read_text(encoding="utf-8")):
+                for adr, claimed, clause in claims(p.read_text(encoding="utf-8"), words):
                     self.assertIn(adr, reg, f"{p.name} claims a status for {adr}, which has no register row")
                     self.assertEqual(reg[adr], claimed,
                                      f"{p.name} says {adr} is `{claimed}`; the register says `{reg[adr]}`. "

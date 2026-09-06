@@ -11,9 +11,9 @@
     "baseline_commit": "be147d300acd2bd2fcb6ba2dd99f8aae13721d3c"
   },
   "completed": [
-    "tests/test_adr_citations.py holds every ADR citation under docs/architecture/ to the register: eleven tests, three positive controls, five negative controls, three comparisons.",
+    "tests/test_adr_citations.py holds every ADR citation under docs/architecture/ to the register: fourteen tests, four positive controls, seven negative controls, three comparisons.",
     "Negative controls run against the files: a citation of ADR-021, a claim of ACCEPTED where the register says DRAFT_REQUIRED, and a duplicated register identifier; each failed for its own reason.",
-    "The corpus already agrees: 114 status claims read, none disagreeing, so this is a regression guard and not a repair.",
+    "The corpus already agrees: 116 status claims read, none disagreeing, so this is a regression guard and not a repair.",
     "badf/ records the guard: DEC-102 and this checkpoint; NS-045 names #308, #309 and the tickets the survey graduated."
   ],
   "remaining": [
@@ -42,7 +42,10 @@
   "observations": [
     "The first reader ran backward from each status and silently missed four claims whose identifier lay beyond its ninety-character window. Counting what a parse does not read, against the raw occurrences, is what found that; a parse that reads only the easy cases passes.",
     "A three-digit pattern without a word boundary matched ADR-000 out of the ADR-0007 in someone else's example in docs/agents/domain.md. The identifier is bounded now, and the corpus is scoped to docs/architecture/ where this repository's normative documents are.",
-    "Every one of the corpus's 114 claims already agrees with the register, which is worth recording: the rule had been held by hand, by reviewers, and held correctly."
+    "Every one of the corpus's 114 claims already agrees with the register, which is worth recording: the rule had been held by hand, by reviewers, and held correctly.",
+    "The review found the status vocabulary hand-kept and wrong twice over: it omitted IN_REVIEW and DEPRECATED, so a document claiming either would have been read as making no claim, and it included DRAFT, which is the design pack's word and not a status an ADR may hold. The vocabulary is read from the register's own block now.",
+    "It also found the clause model truncating real claims: any full stop ended a clause, so 'ADR-005 OpenAPI 3.2 for contract-first HTTP APIs' ended inside the version number and that claim was never checked. A full stop ends a clause only when it ends a sentence, and two controls hold it.",
+    "The positive controls' floors were slack enough that a document silently failing to parse would still pass; they are set near the real figures now, eighteen identifiers and a hundred claims against twenty and a hundred and sixteen."
   ],
   "decisions": [
     "DEC-102: ADR citations are held to the register; the register decides and a document repeats."
@@ -78,6 +81,7 @@
     "Only Markdown under docs/architecture/ is read. The HTML pages cite ADRs too, and none of those citations is checked; that is a gap worth its own ticket.",
     "A citation with no status claim is checked for existence only; nothing requires a document to state a status at all.",
     "Nothing checks that an ADR's register row is itself right, or that a design's dependency on an ADR is the correct dependency.",
-    "A status stated in words rather than backticks is not read as a claim."
+    "A status stated in words rather than backticks is not read as a claim.",
+    "A status stated in a sentence after the one naming the identifier is not read as a claim; the clause ends at the sentence."
   ]
 }
