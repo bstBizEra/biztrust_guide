@@ -7,6 +7,8 @@
 >
 > `badf/next-actions.json` allocates NS ids as a rolling counter, a fresh block per work package, retiring the previous block. It never re-uses an id with a different meaning *within* its own ledger — but **NS-004 through NS-012 name different work there than they do here**, because both files number from one. Only NS-001, NS-002 and NS-003 mean the same thing in both places.
 >
+> The hub's next-steps cards (`index.html`, section 17) carry these frozen labels for the seven items they show, held to this file's headings by `tests/test_hub_next_steps_match_roadmap.py` since WP-062 (#208); before that the hub numbered its three platform cards NS-005 to NS-007, which here are documentation ownership, schema validation and the issue-branch-PR binding.
+>
 > A `next_action_id` found in `badf/` or in `sessions/checkpoints/` **must** be resolved against `badf/next-actions.json` **at the revision that issued it** — never against this file. Resolving NS-011 here yields "prove P0 tenant isolation"; in the ledger that issued it, it meant "merge pull request #4". This repository has no authority to do the former.
 
 ## Immediate — verify the public guide (NS-001 and NS-002 dated below)
@@ -135,7 +137,9 @@ Logto → organization token → APISIX → tenant context
 
 P1 remains blocked until cross-tenant denial is mechanically proven.
 
-### NS-012: Start the P1 broker-core vertical slice
+### NS-012: Start the P1A broker-core vertical slice
+
+*(Heading aligned to PLAN-001's P1A under WP-062; the id is unchanged.)*
 
 Only after P0 acceptance:
 
