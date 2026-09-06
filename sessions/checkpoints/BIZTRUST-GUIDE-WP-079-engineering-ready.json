@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-079-001",
+  "created_at": "2026-09-06T08:55:39Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-079",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #139 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.4 design with its nine mandatory sections, the mapping on the BizTrust side with a history table, provisioning as the only writer, a BizTrust-side membership record checked on every request, a resolver with five outcomes whose denials are indistinguishable to the caller, the mismatch path with the route's tenant segment compared and never trusted and no other carrier read, the lifecycle, nine negative controls including the ticket's four tests, the evidence contract, candidates pending ADR-002, ADR-003 and ADR-005, eight open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-079-p0-04-mapping-design",
+    "baseline_commit": "75ea3f84754219923f758307360a7c603ef340fb"
+  },
+  "completed": [
+    "Ticket #139 resolved by this branch: docs/architecture/p0/P0.04-tenant-mapping.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.4 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records P0.7 next in the manual's order and P0.5 and P0.10 unblocked, DEC-081 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-078.",
+    "After merge: #139 closed with a resolution comment; the map's decision line appended to #128.",
+    "Map #128: #141 P0.7 next in the manual's order; #142, #143, #144, #145 unblocked."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.04-tenant-mapping.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-079-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The mapping is one to one and one-directional: nothing in Logto is authority for a BizTrust tenant, and the custom-claims script is recorded as not a candidate.",
+    "The three denials the caller can provoke share one status and shape; the audit record, not the response, carries the reason.",
+    "The route's tenant segment is a proposal to the P0.8 conventions design; the comparison rule does not depend on which carrier is chosen."
+  ],
+  "decisions": [
+    "DEC-081: the P0.4 design at PROPOSED; the mapping on the BizTrust side written by provisioning only; membership checked on every request; five outcomes with indistinguishable denials; the tenant segment compared and never trusted."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-003 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's eight ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_078",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "tenant_mapping_changes": "PLATFORM_LEVEL_PROVISIONING_AUTHORITY_ONLY_NEVER_A_MEMBER_OR_A_REQUEST",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design reads a tenant identifier from a header, query or body, or lets anything but provisioning write the mapping.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No resolver was run; the design describes it and the controls that would prove it.",
+    "Logto's post-removal token behaviour is UNVERIFIED and measured by control 9; the BizTrust-side membership check does not depend on the answer.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
