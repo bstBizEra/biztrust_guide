@@ -50,11 +50,15 @@ def _md_rows(section: str, first_cell_pattern: str) -> dict[str, tuple[str, ...]
     return out
 
 
-def _page_table(table_class: str) -> dict[str, tuple[str, ...]]:
+def _tbody(table_class: str) -> str:
     m = re.search(rf'<table class="{table_class}">.*?<tbody>(.*?)</tbody>', PAGE.read_text(encoding="utf-8"), re.S)
     assert m, f"no table of class {table_class} on the page"
+    return m.group(1)
+
+
+def _page_table(table_class: str) -> dict[str, tuple[str, ...]]:
     out: dict[str, tuple[str, ...]] = {}
-    for row in re.finditer(r"<tr>(.*?)</tr>", m.group(1), re.S):
+    for row in re.finditer(r"<tr>(.*?)</tr>", _tbody(table_class), re.S):
         cells = [_norm(c) for c in re.findall(r"<td>(.*?)</td>", row.group(1), re.S)]
         assert cells, f"a row of the {table_class} table has no cells"
         out[cells[0]] = tuple(cells[1:])
@@ -62,9 +66,7 @@ def _page_table(table_class: str) -> dict[str, tuple[str, ...]]:
 
 
 def _page_row_count(table_class: str) -> int:
-    m = re.search(rf'<table class="{table_class}">.*?<tbody>(.*?)</tbody>', PAGE.read_text(encoding="utf-8"), re.S)
-    assert m, f"no table of class {table_class} on the page"
-    return len(re.findall(r"<tr>", m.group(1)))
+    return len(re.findall(r"<tr>", _tbody(table_class)))
 
 
 STREAM = r"E[1-8] .+"
