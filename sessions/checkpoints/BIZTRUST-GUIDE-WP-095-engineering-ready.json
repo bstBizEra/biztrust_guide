@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-095-001",
+  "created_at": "2026-09-06T13:16:26Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-095",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #275 on the P0 design map under charting decision 9, the last of the eight revisions: revise the P0.12 design in place from 0.2 to 0.3 with only the asks four later designs recorded, the administrative credential's three runs, app_role's audit grants, the log scan's two further readers, and a Changes in 0.3 section naming each ask and its source; keep it PROPOSED; re-anchor badf/ to the track's end.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-095-p0-12-v0-3",
+    "baseline_commit": "1fe0257e02d6bff3071e94f00aa7af3449d1fa95"
+  },
+  "completed": [
+    "Ticket #275 resolved by this branch: docs/architecture/p0/P0.12-secrets-and-configuration.md at 0.3, PROPOSED, with the asks of four later designs and a Changes in 0.3 section.",
+    "The design pack test holds the file to the template; the manual's P0.12 row already links it.",
+    "badf/ re-anchored: NS-043 records charting decision 9's revision track complete and what remains as the operator's, DEC-097 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-094.",
+    "After merge: #275 closed with a resolution comment; the map's decision line appended to #128 and the track reported complete.",
+    "Map #128: no open ticket. The five register gaps, the waiver #92, the seats #94 and the hand-off to a spec are the operator's."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-095-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The revision adds no class, grant or pattern a later design did not ask for; the Changes in 0.3 table is the reviewer's checklist.",
+    "The administrative class is now defined by who reads it and when, an operator-invoked run, rather than by the rotation exercise alone.",
+    "This is the eighth and last revision of charting decision 9; every ask the thirteen designs and the proof made of one another is now carried by the design that owns it."
+  ],
+  "decisions": [
+    "DEC-097: P0.12 at 0.3; the administrative credential's three runs; app_role's audit grants; the scan's patterns read by two more scrubbers; the revision track of charting decision 9 complete."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The revision keeps the design's eight ASSUMED positions unchanged; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "p0_design_revisions": "MAP_128_CHARTING_DECISION_9_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_094",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "design_revision": "PROPOSED_ONLY_CARRYING_RECORDED_ASKS_NOTHING_ELSE_MOVED",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A revision changes anything a later design did not ask for, or bumps a status past PROPOSED.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No credential, role or scan was created; the revision describes them and the controls that would prove them.",
+    "The revision does not re-verify the Logto and PostgreSQL facts the 0.1 and 0.2 designs cited; their dates stand.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
