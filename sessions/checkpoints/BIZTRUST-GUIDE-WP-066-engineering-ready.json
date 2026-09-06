@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-066-001",
+  "created_at": "2026-09-06T05:30:06Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-066",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #174 on the Guide v2 map under the showcase record: write landing/architecture.html as a projection of BIZTRUST-ARCH-001 sections 1, 4, 5, 6, 16, 17 and 18 and the roadmap's section 3 in the design voice, with the shell, the capability map, the contract family and the seventeen exit criteria copied and held by a test, the twenty-two invariants in plain words with their identifiers held, and what is decided read from the ADR register; link it from the entry and roadmap pages.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-066-showcase-architecture",
+    "baseline_commit": "34bb72ef61f860df584007305d90be4848a31936"
+  },
+  "completed": [
+    "Ticket #174 resolved by this branch: landing/architecture.html with eight blocks and the shell; its first draft on prototype/showcase-architecture, linked from the ticket.",
+    "tests/test_showcase_architecture.py, written red first, holds the capability map, the contract family, the seventeen exit criteria and the twenty-two invariant identifiers to their records; four negative controls recorded; README names it.",
+    "The entry and roadmap pages link the architecture page; landing/showcase.css gains one rule for copied lists; landing/README.md records the list component; AGENTS.md's page count is twenty-two.",
+    "badf/ re-anchored: NS-044 repointed at #175, DEC-068 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: seven invariants restated to their rows' substance and INV-011 in the design voice; the open panel's items are section 18's; the fourteen Gate A questions listed; the register's words (require a draft; blocked by the first slice) kept and the twenty cited to the map; the API platform cell cites section 11; the family paragraph names BIZTRUST-AUTHORITY-001 and the doctrine ticket's two homes; the copied list is a component; the README's additions list complete; two counts dropped from the prose."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-065.",
+    "After merge: #174 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #175 the P0 page next, then #176 to #180; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/architecture.html",
+    "landing/index.html",
+    "landing/roadmap.html",
+    "landing/showcase.css",
+    "landing/README.md",
+    "tests/test_showcase_architecture.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-066-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The page says the contract carries no broker-core doctrine and no planes; both are the roadmap's, and the page names them so, with the doctrine ticket as where they would enter the contract.",
+    "The ADR register's status cells were counted from the table, not from a grep: fourteen DRAFT_REQUIRED (ADR-001 to 012, 015, 020) and six BLOCKED_BY_S01 (013, 014, 016 to 019); a grep over the file over-counts because the prose repeats the words.",
+    "The invariants' plain words are the page's; the test holds only the identifiers and their order, and the two-axis review holds the words."
+  ],
+  "decisions": [
+    "DEC-068: the architecture page as the second projection; the contract's side kept where the ticket's vocabulary is the roadmap's; tables and lists copied and held; invariants in plain words with ids held."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #174 and the page is revised to match.",
+    "The planes-to-groups mapping and the invariants' plain words are the track's reading, and the source lines say so."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158, which the page names as where the doctrine would enter the contract."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_065",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_architecture tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table or list on the page differs from the record it copies, or a source line cites a passage that does not say what the section says.",
+      "The page states a gate as passed, a capability as existing, or an invariant, ADR or contract as accepted.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the tables, the lists and the links were checked by the tests and the validator.",
+    "The invariants' plain words and the planes-to-groups mapping are the page's; no test holds them.",
+    "The ADR register's fourteen-and-six split is hand-counted from its table at 34bb72e; no test compares the page to the register.",
+    "The fourteen-and-six split remains this page's count of the register's status cells, said so in the source line; no record states the split as a number."
+  ]
+}
