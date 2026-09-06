@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="The BizTrust architecture as its contract records it: a broker platform that is not an insurer's core, the planes it is drawn in, how it would be built, the contract family, the twenty-two invariant candidates in plain words, the questions the contract must answer before it can be frozen, and what is decided and what is not.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — The architecture: a contract that can be violated</title>
+  <!-- A projection of BIZTRUST-ARCH-001, the architecture contract, for the humans whose decisions gate the delivery.
+       Not a source of truth: the contract, the ADR register and the plan are. Rules: landing/README.md (SHOWCASE-001). Ticket #174 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#decided">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="architecture.html" aria-current="page">Architecture</a>
+    <span aria-disabled="true">P0 Identity and Tenant</span>
+    <span aria-disabled="true">P1 Insurance</span>
+    <span aria-disabled="true">P2 Payment and Finance</span>
+    <span aria-disabled="true">P3 Production</span>
+    <span aria-disabled="true">Continuous Operations and expansion</span>
+    <span aria-disabled="true">Team and doctrine</span>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="architecture">
+      <h2>The architecture: a contract that can be violated</h2>
+      <p class="record">Projects BIZTRUST-ARCH-001 0.1-draft, sections 1, 4, 5, 6, 16, 17 and 18; read at 34bb72e, 2026-09-06.</p>
+      <p>BizTrust's architecture is written as a contract: vocabulary, ownership, boundaries and invariants that a test could show were broken. It is a draft for contract freeze, proposed and not yet accepted, and it grants no authority to implement anything. Its position, in the contract's own sentence, is the definition of record:</p>
+      <blockquote class="principle">BizTrust is a multi-tenant insurance brokerage, distribution and insurance API platform. It is not an insurer policy-administration or underwriting core.</blockquote>
+      <p class="source">Source: BIZTRUST-ARCH-001, header (version 0.1-draft; status draft for contract freeze; implementation authority not granted by this document) and section 1, the position sentence quoted.</p>
+    </section>
+
+    <section class="block" id="cores">
+      <h2>A broker core, beside an insurer's core it never pretends to be</h2>
+      <p>The contract draws two sides. BizTrust would coordinate the broker's side of the lifecycle: clients, risks, submissions, placement, quotes, recommendations, binding coordination, broker policy records, servicing, claims advocacy, renewals, premium collection, commissions, settlement, reconciliation and partner distribution. Insurers would normally remain authoritative for underwriting decisions, risk acceptance, issued insurance contracts, insurer policy records, claim adjudication, insurer reserves and insurer accounting.</p>
+      <p>A tenant could perform a narrowly scoped authoritative act only where an accepted authority profile and an operative agreement prove delegated or master-policy authority; the contract says application configuration cannot create that authority. The overview's principle, that a request is not a confirmation, is this line drawn once.</p>
+      <p class="source">Source: BIZTRUST-ARCH-001, section 1, second and third paragraphs. The roadmap's doctrine of a broker core and an insurer core is the operator's draft (roadmap section 2); the doctrine ticket on the Guide v2 map (#158) would carry it into the contract, and until it does the contract's sentence above is the definition of record.</p>
+    </section>
+
+    <section class="block" id="planes">
+      <h2>The shape: three planes over an integration plane, and the capability map behind them</h2>
+      <p>The roadmap draws BizTrust as a control plane, a broker core and an API platform, all standing on an integration plane that faces insurers, banks, payment providers and partners. The contract's capability map is the record those planes summarise: four domain groups of candidate modules, which the contract says are logical ownership boundaries to refine in domain workshops and not a count of services.</p>
+      <table class="capabilities">
+        <thead><tr><th>Domain group</th><th>Candidate modules</th><th>Primary responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Platform</strong></td><td>Tenancy, Identity &amp; Access, Distribution, Compliance, Audit</td><td>Tenant control plane and evidence</td></tr>
+          <tr><td><strong>Brokerage</strong></td><td>Party, Client, Risk, Distribution Product, Submission, Placement, Quote/Indication, Recommendation, Binding, Policy, Claims, Renewal</td><td>Broker operating lifecycle and sourced insurance representations</td></tr>
+          <tr><td><strong>Financial</strong></td><td>Billing, Payment, Ledger, Commission, Settlement, Reconciliation</td><td>Premium and broker financial control</td></tr>
+          <tr><td><strong>Integration</strong></td><td>Insurer, Payment Provider, Bank, Partner API, Documents, Notifications</td><td>Controlled external interaction</td></tr>
+        </tbody>
+      </table>
+      <div class="models">
+        <div><b>Control plane</b><span>Tenant and identity, entitlement, branding, compliance, audit: the contract's Platform group.</span></div>
+        <div><b>Broker core</b><span>Client, risk, product, placement, quote, policy, claims, renewal and finance: the contract's Brokerage and Financial groups.</span></div>
+        <div><b>API platform</b><span>An insurance API, a payment API, a partner API and webhooks, all versioned contracts: the contract's interface standard.</span></div>
+        <div><b>Integration plane</b><span>Insurers, banks, payment providers and partner APIs behind adapters, so that no provider's concepts leak into the domain: the contract's Integration group.</span></div>
+      </div>
+      <p class="source">Source: BIZTRUST-ARCH-001, section 6, the capability map cell for cell and its two sentences on refinement and service count; the four planes from the roadmap's section 3 system shape, mapped onto the contract's groups by this page.</p>
+    </section>
+
+    <section class="block" id="style">
+      <h2>How it would be built, and what BizTrust would own</h2>
+      <p>The proposed style is a modular monolith behind explicit module contracts, supported by external infrastructure services; a logical boundary would not automatically become a separately deployed service, and a module could be extracted only on evidence of a need such as independent scaling, fault isolation, regulatory or security separation, team ownership or materially different availability. That is the first of twenty decisions, proposed and not accepted.</p>
+      <p>What BizTrust should own, the contract says, is the broker insurance domain model; the versioned insurance product model; placement, advice and broker workflow semantics; the premium, commission and settlement subledger model; and the tenant-pack and insurer, payment and partner interoperability contracts. Identity, gateway, workflow runtime, messaging, database and observability should remain replaceable infrastructure behind adapters.</p>
+      <p class="source">Source: BIZTRUST-ARCH-001, section 4.1 (the proposed style, marked as ADR-001's proposed decision) and section 4.2 (strategic intellectual property, the five items and the closing sentence).</p>
+    </section>
+
+    <section class="block" id="family">
+      <h2>The contract family</h2>
+      <p>The architecture contract is the parent; the roadmap proposes a family of twelve specifications beneath it, each with one scope. The Guide v2 map's charting recorded that the family keeps the authority contract the handbook already names and adds the UX and operations contracts, and that the twenty decisions stay with the first twelve named the foundational subset; that is the map's decision, reversible by comment, and the doctrine ticket carries it into the contract.</p>
+      <table class="family">
+        <thead><tr><th>Contract</th><th>Scope</th></tr></thead>
+        <tbody>
+          <tr><td><strong>BIZTRUST-ARCH-001</strong></td><td>Authoritative platform architecture</td></tr>
+          <tr><td><strong>BIZTRUST-DOMAIN-001</strong></td><td>Brokerage domain model</td></tr>
+          <tr><td><strong>BIZTRUST-DATA-001</strong></td><td>Canonical data architecture / ERD</td></tr>
+          <tr><td><strong>BIZTRUST-IAM-001</strong></td><td>Identity, tenant and authorization</td></tr>
+          <tr><td><strong>BIZTRUST-API-001</strong></td><td>Insurance/API standard</td></tr>
+          <tr><td><strong>BIZTRUST-EVENT-001</strong></td><td>Events and asynchronous contracts</td></tr>
+          <tr><td><strong>BIZTRUST-WF-001</strong></td><td>Workflow/state-machine architecture</td></tr>
+          <tr><td><strong>BIZTRUST-FIN-001</strong></td><td>Payment, ledger, commission, settlement</td></tr>
+          <tr><td><strong>BIZTRUST-INT-001</strong></td><td>Insurer/bank/payment/partner integration</td></tr>
+          <tr><td><strong>BIZTRUST-UX-001</strong></td><td>Web/Mobile interaction architecture</td></tr>
+          <tr><td><strong>BIZTRUST-OPS-001</strong></td><td>Runtime and production operating model</td></tr>
+          <tr><td><strong>BIZTRUST-PLAN-001</strong></td><td>Controlled implementation roadmap</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Source: the roadmap's section 3, the contract family table cell for cell, with "ARCH-001 remains the parent authority"; the Guide v2 map's charting decision 5 (issue #153) for the authority contract and the foundational subset; the doctrine ticket (#158) for carrying the family into the contract, which waits on the contract map's waiver.</p>
+    </section>
+
+    <section class="block" id="invariants">
+      <h2>Twenty-two invariants, in plain words</h2>
+      <p>An invariant is a claim that something is always true, and the contract keeps only claims whose violation a test could catch. All twenty-two are candidates until the architecture authority accepts them. In plain words, and in the contract's order:</p>
+      <ol class="invariants">
+        <li><b>INV-001</b> Every business record a tenant owns has exactly one tenant owner.</li>
+        <li><b>INV-002</b> A tenant's authority comes from validated identity, never from an identifier a client merely sends.</li>
+        <li><b>INV-003</b> One tenant cannot read or change another tenant's protected data.</li>
+        <li><b>INV-004</b> The application's authorization and the database's row-level security each enforce isolation on their own.</li>
+        <li><b>INV-005</b> A broker's records never impersonate an insurer's decisions or contracts.</li>
+        <li><b>INV-006</b> A past transaction keeps the exact product, wording, pricing and commission-rule versions it used.</li>
+        <li><b>INV-007</b> Every material insurance or financial transition can be attributed to someone and reconstructed later.</li>
+        <li><b>INV-008</b> A posted ledger record is never edited; a correction is a reversal or a compensating entry.</li>
+        <li><b>INV-009</b> Retrying a financial or binding operation is safe.</li>
+        <li><b>INV-010</b> A provider's particular behaviour stays behind an adapter.</li>
+        <li><b>INV-011</b> A second tenant joins without a copy of the platform's code being made for it.</li>
+        <li><b>INV-012</b> Every public and inter-module interface is a versioned contract written first.</li>
+        <li><b>INV-013</b> A long-running workflow survives duplicate messages, delay, restart and partial failure.</li>
+        <li><b>INV-014</b> A sensitive action needs an explicit permission and, where configured, an approver's authority.</li>
+        <li><b>INV-015</b> No claim that something is implemented or compliant is accepted without evidence bound to a revision.</li>
+        <li><b>INV-016</b> Every representation of cover names the legal authority, the effective period and the kept evidence behind it.</li>
+        <li><b>INV-017</b> When cover took effect and when it was recorded are two dates, and a correction never erases what was asserted before.</li>
+        <li><b>INV-018</b> A product, a wording, a rating, a broker's indication, an insurer's quote and a delegated offer each keep their authority and provenance.</li>
+        <li><b>INV-019</b> One risk placed across insurer shares, layers or certificates is still one risk, neither duplicated nor overwritten.</li>
+        <li><b>INV-020</b> A payment's state cannot create a state of cover; a premium condition that affects cover is judged by the workflow that knows who holds authority.</li>
+        <li><b>INV-021</b> Client money and office money stay distinguishable in every balance, movement and reconciliation, under the approved regime.</li>
+        <li><b>INV-022</b> Permission to use the platform is never the same as legal, insurer-delegated or scheme authority.</li>
+      </ol>
+      <p class="source">Source: BIZTRUST-ARCH-001, section 5, all twenty-two rows, each restated in plain words by this page; the identifiers and the order are the contract's, the words are not. The contract's own wording and the mechanical proof it expects for each are in the section.</p>
+    </section>
+
+    <section class="block" id="gate-a">
+      <h2>What the contract must answer before it can be frozen</h2>
+      <p>The roadmap's Gate A asks fourteen questions of the architecture, from who owns each datum to how a transaction is reconstructed from evidence. The contract's own exit criteria are seventeen, and they govern; the fourteen correspond to them and are fewer. The contract may be marked accepted only when reviewers can answer every one of these without relying on undocumented behaviour:</p>
+      <ol class="criteria">
+        <li>Who owns every major data class?</li>
+        <li>Which tenant owns every protected business record?</li>
+        <li>What establishes tenant authority?</li>
+        <li>Who may perform each sensitive operation, over which scope and with whose approval?</li>
+        <li>Which module owns each state transition?</li>
+        <li>What is broker-authoritative and what remains insurer-authoritative?</li>
+        <li>Under each tenant arrangement, who may legally conclude cover and within what scope?</li>
+        <li>How does a submission become authority-supported effective cover and then an issued policy representation?</li>
+        <li>How are effective time, record time, backdating, future dating, correction and supersession represented?</li>
+        <li>How are insurer shares, layers, facilities, master policies, certificates and bordereaux represented?</li>
+        <li>How are insurer product/wording/rating, broker distribution configuration, broker indication and insurer quote distinguished?</li>
+        <li>How does a payment become an allocated premium without bypassing insurance authority?</li>
+        <li>Whose money is held at each point, which account class contains it, and which reconciliation proves it?</li>
+        <li>How are ledger, commission and settlement results reproduced historically?</li>
+        <li>How do external integrations fail without corrupting state?</li>
+        <li>How does Tenant #2 onboard without a core-code fork?</li>
+        <li>How is every material transaction reconstructed from evidence?</li>
+      </ol>
+      <p>Critical findings must be closed or explicitly accepted by the correct human risk owner; test success does not self-approve the architecture.</p>
+      <p class="source">Source: BIZTRUST-ARCH-001, section 17, the seventeen criteria verbatim and the closing two sentences; the roadmap's section 3 Gate A for the fourteen questions; BIZTRUST-PLAN-001, section 10.3, for the correspondence ("they correspond to, and are fewer than, the contract's seventeen section 17 exit criteria; the contract's list governs").</p>
+    </section>
+
+    <section class="block" id="decided">
+      <h2>What is decided, and what is not</h2>
+      <div class="ledger">
+        <div>
+          <h3>Twenty decisions registered, none accepted</h3>
+          <p>The contract names twenty architecture decision records it requires, from a modular monolith first to how endorsement, cancellation, refund and renewal are modelled as historical transactions.</p>
+          <ul>
+            <li>Fourteen are ready to draft.<small>ADR-001 to ADR-012, ADR-015, ADR-020</small></li>
+            <li>Six wait on the tenant questions the overview lists, because they decide legal authority, money ownership or stored-data shape.<small>ADR-013, ADR-014, ADR-016 to ADR-019</small></li>
+            <li>The register says in its own status line that no ADR is accepted by that file; a mention in the handbook or the contract is not acceptance.</li>
+          </ul>
+        </div>
+        <div class="open">
+          <h3>Fifteen questions the freeze must resolve</h3>
+          <p>From the initial operating jurisdiction and licensing model to build-versus-adopt criteria for workflow, messaging and fine-grained authorization; among them whose money is held at each point, what authority and evidence are required before cover is shown as active, and where data may reside and for how long.</p>
+          <ul>
+            <li>Questions that change legal authority, money ownership or stored-data shape cannot be waived by an implementation team.<small>The contract's own rule</small></li>
+            <li>The freeze itself is the first slice of one Work Package, and its next step is an operator's waiver on the contract map before any drafting ahead of the tenant answers.<small>NS-041, the handbook's primary next action</small></li>
+          </ul>
+        </div>
+      </div>
+      <p class="source">Source: BIZTRUST-ARCH-001, section 16 (the twenty required ADRs) and section 18 (the fifteen unresolved questions and the sentence on what cannot be waived); the ADR register, its status line and its twenty status cells, read at 34bb72e on 2026-09-06 (fourteen DRAFT_REQUIRED, six BLOCKED_BY_S01); the handbook's continuity state for NS-041 as the primary next action.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you hold a seat that accepts the architecture</h3><p>The seventeen questions above are what acceptance means. The contract's sections 5 and 17 are the two to read; the invariants are candidates until you accept them, and nothing on this page accepts anything.</p><a class="btn" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-ARCH-001.md">Open BIZTRUST-ARCH-001</a></div>
+        <div><h3>If you hold authority for a tenant</h3><p>Six of the twenty decisions wait on the five questions on the overview. Answering them is the shortest path from this draft to a contract that can be frozen.</p><a class="btn secondary" href="index.html#decisions">The five questions</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and accepts nothing. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>
