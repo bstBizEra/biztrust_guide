@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-077",
-  "updated_at": "2026-09-06T08:30:28Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-078",
+  "updated_at": "2026-09-06T08:43:53Z",
   "actions": [
     {
       "id": "NS-040",
@@ -86,7 +86,7 @@
       "priority": 5,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
-      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Under the map's charting decision 8 (2026-09-06) a design names each ADR it depends on as a DRAFT_REQUIRED dependency instead of waiting on the ADR's ticket. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), and #140 P0.6 tenancy data model, resolved by this branch as docs/architecture/p0/P0.06-tenancy-data-model.md at PROPOSED. The manual's execution order runs P0.2, P0.3, P0.4, P0.6, so #138 P0.3 token validation is next, then #139 P0.4 once it lands, then #141 P0.7 RLS enforcement, which P0.6 unblocks; #144 P0.8 API conventions and #145 P0.9 event conventions are unblocked as well, then #142, #143, #146, #148 and #185. The secrets store still needs an ADR row the contract map must add. Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review, and is revised under a new version if its ADR decides differently.",
+      "action": "Work the P0 design map #128 one ticket per session, taking the first open, unblocked, unassigned child. Under the map's charting decision 8 (2026-09-06) a design names each ADR it depends on as a DRAFT_REQUIRED dependency instead of waiting on the ADR's ticket. Landed: P0.12 (WP-073, revised at 0.2 by WP-075), P0.2 (WP-076), P0.6 (WP-077), and #138 P0.3 token validation, resolved by this branch as docs/architecture/p0/P0.03-token-validation.md at PROPOSED. The manual's execution order runs P0.2, P0.3, P0.4, P0.6, so #139 P0.4 organization-to-tenant mapping is next, then #141 P0.7 RLS enforcement; #144 P0.8 API conventions and #145 P0.9 event conventions are unblocked as well, then #142, #143, #146, #148 and #185. The secrets store and the gateway each need an ADR row the contract map must add (the P0.12 and P0.3 designs' first questions). Each design lands as PROPOSED under docs/architecture/p0/ by one Work Package PR after fresh-context review, and is revised under a new version if its ADR decides differently.",
       "prerequisites": [
         "docs/architecture/p0/README.md defines the template, naming and status rules (WP-046); tests/test_p0_design_pack.py holds every design to it",
         "The design's ADRs named with their register status; nothing chosen, nothing ACCEPTED"
