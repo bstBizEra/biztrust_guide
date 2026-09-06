@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-062-001",
+  "created_at": "2026-09-06T04:31:36Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-062",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #208 on the Guide v2 map: decide that docs/NEXT_STEPS.md's frozen labels are the numbering the hub's next-steps cards carry; renumber the hub's three platform cards to NS-010, NS-011 and NS-012 and title every card as the file's heading; align NEXT_STEPS's NS-012 heading to PLAN-001's P1A with its id unchanged; say on the hub and in the file that the live ledger is badf/next-actions.json and is never resolved against the cards; hold the cards to the headings with a test.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-062-hub-ns-labels",
+    "baseline_commit": "ebdc50c09ca0a96a31aa340b7d5c0572a5beb9be"
+  },
+  "completed": [
+    "Ticket #208 resolved by this branch: the hub's three platform cards renumbered NS-010 to NS-012 and every card titled as docs/NEXT_STEPS.md's heading; a section intro naming the frozen labels and the live ledger; NEXT_STEPS's NS-012 heading aligned to P1A and its header note naming the hub's cards.",
+    "tests/test_hub_next_steps_match_roadmap.py, written red first (four cards differed at the baseline), holds every hub card's id and title to the file's headings; three negative controls recorded; README names it.",
+    "badf/ re-anchored: NS-044 repointed at #211, DEC-064 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-061.",
+    "After merge: #208 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #211 next; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "index.html",
+    "docs/NEXT_STEPS.md",
+    "tests/test_hub_next_steps_match_roadmap.py",
+    "README.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-062-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The NS-012 card keeps WP-059's body, which authorises the P1A slice per Work Package after BT-G0 and BT-G1; only its id and title change, and tests/test_hub_speaks_the_plan.py still passes on it.",
+    "The ledger's NS-003 to NS-005 references in the state file mean the file's items (the governing issue, protecting main, documentation ownership), which the hub's NS-003 and NS-004 cards also show; NS-005 has no hub card.",
+    "NEXT_STEPS's ids are frozen, not its titles; one title changed (P1 to P1A) with a parenthetical saying so, and the test normalises backticks so 'Protect `main`' equals the hub's 'Protect main'."
+  ],
+  "decisions": [
+    "DEC-064: NEXT_STEPS's frozen labels are the numbering the hub's cards carry; three cards renumbered, all titled as the headings, held by a test; the ledger untouched."
+  ],
+  "assumptions": [
+    "The /loop self-prompt to complete the guide's implementation is a chat instruction to work the next ready ticket under the charter; it adopts nothing and authorises nothing."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_061",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_hub_next_steps_match_roadmap",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/NEXT_STEPS.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A hub card's id or title differs from docs/NEXT_STEPS.md's heading.",
+      "Any change renumbers a ledger action or a checkpoint's next_action_id.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered hub was not viewed in a browser; the cards were checked by the tests and the validator.",
+    "The five NEXT_STEPS items the hub does not show (NS-005 to NS-009) are unchanged and unrendered; whether the hub should show them is not this ticket's question."
+  ]
+}
