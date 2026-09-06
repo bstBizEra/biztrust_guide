@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-068",
-  "updated_at": "2026-09-06T06:05:51Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-069",
+  "updated_at": "2026-09-06T06:19:22Z",
   "actions": [
     {
       "id": "NS-040",
@@ -108,7 +108,7 @@
       "priority": 6,
       "owner_role": "documentation-engineer",
       "authority": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
-      "action": "Work the Guide v2 map #153 one ticket per session: every record ticket has landed (#155 to #157, #165 to #171, #190, #203, #159, #160, #208, #211) and #172, the showcase's information architecture, is resolved by this branch as landing/README.md (SHOWCASE-001). The operator adopted the one-record route on #153 (comment of 2026-09-06, transcribed): the eight showcase pages are built one Work Package each against that record, in the README's order; #173 to #175 have landed and #176 the P1 page is resolved by this branch, so #177 the P2 page is next, then #178 to #180, each prototyped on its prototype branch, shipped under landing/, and linked from every page's navigation. #158 doctrine waits on the #92 waiver; #94 fills the seats; #154 asks the operator for the roadmap's cited documents.",
+      "action": "Work the Guide v2 map #153 one ticket per session: every record ticket has landed (#155 to #157, #165 to #171, #190, #203, #159, #160, #208, #211) and #172, the showcase's information architecture, is resolved by this branch as landing/README.md (SHOWCASE-001). The operator adopted the one-record route on #153 (comment of 2026-09-06, transcribed): the eight showcase pages are built one Work Package each against that record, in the README's order; #173 to #176 have landed and #177 the P2 page is resolved by this branch, so #178 the P3 page is next, then #179 and #180, each prototyped on its prototype branch, shipped under landing/, and linked from every page's navigation. #158 doctrine waits on the #92 waiver; #94 fills the seats; #154 asks the operator for the roadmap's cited documents.",
       "prerequisites": [
         "landing/README.md (SHOWCASE-001) and landing/showcase.css on main (WP-064); the record each page projects on main",
         "For each page: its ticket's prototype branch, and the record line's commit and date read"

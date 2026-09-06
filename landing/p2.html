@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BizTrust's payment and finance phase as its plan records it: P2 would close the insurance-to-money-to-insurer loop with attributable, reconcilable records. The ten concepts that must never collapse into one, the transaction flow, money that cannot invent cover, the nine epics, the ledger, commission, settlement and reconciliation in plain words, and Gate D, which is two gates.">
+  <meta name="theme-color" content="#071a2c">
+  <title>BizTrust — P2 Payment and Finance: money that cannot invent cover</title>
+  <!-- A projection of BIZTRUST-PLAN-001 section 6, its sections 10 and 12.1 for the gates and their seats, the roadmap's section 6 and the P2 manual, for the humans whose decisions gate the delivery.
+       Not a source of truth: the plan, the roadmap and the P2 manual are. Rules: landing/README.md (SHOWCASE-001). Ticket #177 on the Guide v2 map (#153). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <aside class="strip" aria-label="Where BizTrust stands">
+    <ul>
+      <li>Architecture design stage</li>
+      <li>Contract freeze pending</li>
+      <li class="no">Implementation not yet authorised</li>
+    </ul>
+    <a href="#today">What this means</a>
+  </aside>
+
+  <header class="mast">
+    <a class="wordmark" href="#main">BizTrust<small>by BizEra</small></a>
+    <a class="handbook" href="../index.html">For engineers: the implementation handbook</a>
+  </header>
+  <nav class="showcase-nav" aria-label="The showcase">
+    <a href="index.html">Overview</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="p0.html">P0 Identity and Tenant</a>
+    <a href="p1.html">P1 Insurance</a>
+    <a href="p2.html" aria-current="page">P2 Payment and Finance</a>
+    <span aria-disabled="true">P3 Production</span>
+    <span aria-disabled="true">Continuous Operations and expansion</span>
+    <span aria-disabled="true">Team and doctrine</span>
+  </nav>
+
+  <main id="main">
+    <section class="block" id="objective">
+      <h2>P2 would close the loop from insurance to money to insurer, with records that can be reconciled</h2>
+      <p class="record">Projects BIZTRUST-PLAN-001 1.0-draft, sections 6, 10 and 12.1, BIZTRUST-ROADMAP-001 operator draft, section 6, and the P2 manual, sections 01, 02 and 04 to 07; read at 530f7b2, 2026-09-06.</p>
+      <p>The third phase is where money enters the platform. Its objective, in the plan's words, is to close the insurance-to-money-to-insurer loop with attributable, reconcilable records, so that payment, ledger, commission, settlement and reconciliation are each their own thing. The roadmap gives the phase its fuller name: payment, ledger, commission, settlement and reconciliation.</p>
+      <p>The plan's label table gives the phase one executive label and two gates: label D, Financial Integrity Proven, is BT-G4 Financial Ready and BT-G5 Integration Ready. The manual's first entry condition is that the previous phase's two gates, BT-G2 and BT-G3, label C, are recorded. Its reason is the phase's whole discipline in one sentence: P2 posts money against workflows that have already been shown to survive duplicates and conflicts; it does not add durability to them, and it does not add cover to anything.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 6, the objective paragraph, for the phase's purpose; the roadmap's section 6 for the phase's fuller name; section 10.1's label table for D, Financial Integrity Proven, and its two identifiers; the P2 manual, <code>phases/p2.html</code> section 01, for label C recorded as the first entry condition and the sentence quoted from it. The first sentence of the first paragraph is this page's.</p>
+    </section>
+
+    <section class="block" id="concepts">
+      <h2>Ten concepts that must never collapse into one object</h2>
+      <p>The roadmap's core rule for the phase is a list, and the plan carries it as P2's design constraint. Each of the ten is a separate record with its own life; the failure the rule prevents is the one where a single "payment" row is asked to say what was owed, what was tried, what arrived, what it paid for, and what the insurer is due, and ends up saying none of them reliably.</p>
+      <ol class="copied concepts">
+        <li>Invoice</li>
+        <li>Payment</li>
+        <li>Payment Intent</li>
+        <li>Payment Attempt</li>
+        <li>Payment Allocation</li>
+        <li>Ledger</li>
+        <li>Commission</li>
+        <li>Settlement</li>
+        <li>Reconciliation</li>
+        <li>Refund</li>
+      </ol>
+      <p>In plain words: an invoice says what is owed and when. A payment intent says someone means to pay it; an attempt is one try, by one method, which may fail; a payment is what actually arrived. An allocation says which debt the money that arrived pays, in whole or in part. The ledger is the double-entry record of every movement. Commission is the intermediary's share, computed under a versioned agreement. Settlement is the insurer's money going to the insurer. Reconciliation is the comparison of the platform's records with the provider's, the bank's and the insurer's. A refund is money going back, with its own life and its own duplicates to guard against. The manual's stop conditions include storing two of the ten as one.</p>
+      <p class="source">Source: the roadmap's section 6, the core rule, copied name for name and held by <code>tests/test_showcase_p2.py</code>; BIZTRUST-PLAN-001 section 6 for the rule carried as P2's design constraint; the P2 manual's section 07 for two of the ten stored as one as a stop condition. The plain-words paragraph and the description of the failure the rule prevents are this page's.</p>
+    </section>
+
+    <section class="block" id="flow">
+      <h2>The transaction flow, and the trace Gate D would demand</h2>
+      <p>The roadmap draws P2's transaction flow as one spine with two fan-outs. An insurance transaction raises an invoice; the invoice gets a payment intent; a payment orchestrator offers the intent to a bank, a QR scheme, a card or a wallet; the provider's confirmation is verified, then allocated; the allocation posts to a double-entry ledger, which feeds premium, commission and settlement; reconciliation compares what was posted with what the outside world says; and the result goes back to the insurance workflow. The roadmap's Gate D turns that flow into the trace the phase must be able to show for one activity, copied here in its order.</p>
+      <ol class="copied trace">
+        <li>Customer</li>
+        <li>Insurance Transaction</li>
+        <li>Invoice</li>
+        <li>Payment</li>
+        <li>Provider Confirmation</li>
+        <li>Ledger</li>
+        <li>Commission</li>
+        <li>Insurer Payable</li>
+        <li>Settlement</li>
+        <li>Reconciliation</li>
+        <li>Policy/Insurance Evidence</li>
+      </ol>
+      <p>The plan keeps a second sentence as P2's exit condition, carried word for word from the previous plan: end-to-end evidence must trace customer or partner activity through indication or offer, payment, authority-supported coverage confirmation, policy representation, ledger, commission, settlement and reconciliation. The manual renders it as the last item of its exit checklist.</p>
+      <p class="source">Source: the roadmap's section 6, the P2 transaction flow, for the spine and the two fan-outs, paraphrased in the roadmap's order in this page's words; the roadmap's Gate D block for the trace, copied step for step and held by <code>tests/test_showcase_p2.py</code>; BIZTRUST-PLAN-001 section 6 for the end-to-end evidence sentence quoted and for the manual rendering it as the last exit item.</p>
+    </section>
+
+    <section class="block" id="safety">
+      <h2>Money that cannot invent cover</h2>
+      <p>The contract's invariant candidate INV-020 reads: payment state cannot invent coverage state; any premium condition affecting cover is evaluated by the authority-aware insurance workflow. The manual builds the phase around one sequence every reviewer would walk, the P2 equivalent of P0's bypass test: what happens when a payment provider calls back to say money has arrived. The six steps below are this page's grouping of the manual's sequence.</p>
+      <div class="models" role="list">
+        <div role="listitem"><b>1. Verify, then deduplicate</b><span>The provider's signature is checked and the event deduplicated by the provider's own identifier before anything else reads it.</span></div>
+        <div role="listitem"><b>2. Record a fact about the payment</b><span>A payment-confirmed event is emitted. It says nothing about cover.</span></div>
+        <div role="listitem"><b>3. Ask the binding module</b><span>The workflow queries binding for authority and coverage-confirmation state; it does not decide either itself.</span></div>
+        <div role="listitem"><b>4. Without confirmation, wait</b><span>If authoritative confirmation is missing: wait, retry or escalate. No coverage transition. The premium is held under the accepted money regime, not applied to a cover that does not exist.</span></div>
+        <div role="listitem"><b>5. With valid authority, register and post</b><span>If authority evidence and the effective period are valid, policy registration or activation is requested from the policy module, and only on the policy's own coverage-changed event is an approved journal posting requested from the ledger.</span></div>
+        <div role="listitem"><b>6. If payment succeeded and binding failed</b><span>The approved compensation policy decides hold, void or refund. The workflow does not invent a financial outcome.</span></div>
+      </div>
+      <p>The manual's first stop signal is the same rule stated as a failure: a payment callback that activated cover is the exact failure INV-020 names, and the fix is not a check in the callback but the workflow that should have been between them.</p>
+      <p class="source">Source: BIZTRUST-ARCH-001 section 5 for INV-020's text, quoted; the P2 manual's section 04, the safety workflow, for the steps restated in this page's grouping and words; its section 05 for the stop signal on a payment callback activating cover, with its sentence on where the fix lies.</p>
+    </section>
+
+    <section class="block" id="epics">
+      <h2>Nine epics in six capability groups</h2>
+      <p>The plan lists P2's work as nine epics, the previous plan's finance epics carried under new identifiers and grouped by the roadmap's six capability groups: payment orchestration, the insurance subledger, the commission engine, settlement, reconciliation and the adapter SDKs. The table is copied from the plan cell for cell.</p>
+      <table class="epics">
+        <thead><tr><th>Epic</th><th>Capability</th><th>Was</th></tr></thead>
+        <tbody>
+          <tr><td>P2A.1</td><td>Invoice and premium due</td><td>P3.1</td></tr>
+          <tr><td>P2A.2</td><td>Payment intent, attempt and allocation</td><td>P3.2</td></tr>
+          <tr><td>P2A.3</td><td>Payment adapter and signed webhook handling</td><td>P3.3</td></tr>
+          <tr><td>P2A.4</td><td>Refund, reversal and chargeback</td><td>P3.4</td></tr>
+          <tr><td>P2B.1</td><td>Immutable double-entry insurance subledger</td><td>P3.5</td></tr>
+          <tr><td>P2C.1</td><td>Versioned broker and agent commission</td><td>P3.6</td></tr>
+          <tr><td>P2D.1</td><td>Insurer settlement and remittance</td><td>P3.7</td></tr>
+          <tr><td>P2E.1</td><td>Bank/provider/ledger reconciliation</td><td>P3.8</td></tr>
+          <tr><td>P2F.1</td><td>Insurer and payment Adapter SDKs</td><td>P3.9</td></tr>
+        </tbody>
+      </table>
+      <p>Two of the previous plan's finance epics are not here: the partner API with versioned webhooks and the tenant-pack validation foundation are, in the plan, the first items of two expansion streams that follow production, not P2 work. The adapter group carries the roadmap's boundary rule: external provider-specific logic never leaks into the insurance domain.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 6, the epic table, copied cell for cell and held by <code>tests/test_showcase_p2.py</code>, and its paragraph on the previous plan's P3.10 and P3.11 moving to the expansion streams E2 and E1; the roadmap's section 6 headings P2A to P2F for the six groups' names and its P2F block for the boundary rule quoted; the P2 manual's section 02 heading for the counts of nine and six.</p>
+    </section>
+
+    <section class="block" id="money">
+      <h2>The ledger, commission, settlement and reconciliation, in plain words</h2>
+      <p>Four of the ten concepts carry most of the phase's proof. The plain words beneath each are this page's; the lists are copied from the roadmap.</p>
+      <div class="pair">
+        <div>
+          <h3>The ledger</h3>
+          <p>A double-entry record that the platform would own, and that can only grow. Every journal balances or is rejected whole; a record once posted cannot be updated or deleted, at the database itself and not only in the application; every entry keeps the rule versions that were in force when it was made; and money the intermediary holds for clients is never held in the same class, or netted against, the intermediary's own. The regime that decides whose money the intermediary holds and when premium counts as received by the insurer is a jurisdiction-dependent decision the manual reserves to qualified legal and finance reviewers, and until it is accepted, the manual says, a generic premium journal is not evidence.</p>
+        </div>
+        <div>
+          <h3>Commission</h3>
+          <p>The intermediary's share, computed under a versioned agreement rather than a formula in code, so that a commission computed a year ago recomputes to the same figure from the inputs kept with it. The roadmap's engine would support broker, insurer-agreement, agent, sub-broker and referral commission, revenue share, incentives, overrides, clawbacks and reversals.</p>
+        </div>
+      </div>
+      <div class="pair">
+        <div>
+          <h3>Settlement</h3>
+          <p>The insurer's money reaching the insurer, as the roadmap draws it:</p>
+          <ol class="copied settlement">
+            <li>Premium Collected</li>
+            <li>Allocation</li>
+            <li>Insurer Payable</li>
+            <li>Commission</li>
+            <li>Settlement Batch</li>
+            <li>Carrier Remittance</li>
+            <li>Reconciliation</li>
+          </ol>
+        </div>
+        <div>
+          <h3>Reconciliation</h3>
+          <p>The comparison of the platform's records with the payment provider's, the bank statement's and the insurer's settlement, each outcome carrying one of the roadmap's statuses:</p>
+          <ol class="copied statuses">
+            <li>MATCHED</li>
+            <li>UNMATCHED</li>
+            <li>AMOUNT_MISMATCH</li>
+            <li>MISSING_INTERNAL</li>
+            <li>MISSING_PROVIDER</li>
+            <li>DUPLICATE</li>
+            <li>PENDING_INVESTIGATION</li>
+            <li>RESOLVED</li>
+          </ol>
+          <p>The manual adds one rule the roadmap does not state: a period closes on a bank statement, never on a notification, because a reconciliation marked matched from a callback or a QR acknowledgement has reconciled the platform to itself.</p>
+        </div>
+      </div>
+      <p class="source">Source: the roadmap's section 6, P2B for the platform owning an immutable double-entry subledger and historical records preserving rule versions, P2C for the commission engine's list, P2D for the settlement chain and P2E for the four things compared and the eight statuses, the two lists copied step for step and held by <code>tests/test_showcase_p2.py</code>; the P2 manual's section 06 for balanced journals rejected whole, posted records immutable at the database level, a historical commission recomputing from retained inputs, and client-money and office-money classes kept distinct; its section 01 for ADR-014's questions, its jurisdiction-dependent marking and the sentence that a generic premium journal is not evidence; its section 05 for the stop signal on a period closed on a notification, restated. The plain words are this page's.</p>
+    </section>
+
+    <section class="block" id="gate">
+      <h2>Gate D is two gates, each with its own record-keeper</h2>
+      <p>Label D closes on two records. BT-G4 Financial Ready is the money's own proof: the journals, the reconciliations, the commission and the trace. BT-G5 Integration Ready is the proof that the outside world cannot corrupt it: replayed, tampered and out-of-order provider events, two adapters against one contract, and the roadmap's failure cases each run as a test. The manual's rule: each is recorded separately, by a human, and the phase is not complete until both are.</p>
+      <div class="gate"><b>D</b><span>BT-G4 Financial Ready and BT-G5 Integration Ready</span><p>The trace customer, insurance transaction, invoice, payment, provider confirmation, ledger, commission, insurer payable, settlement, reconciliation, policy evidence, is proven, and the roadmap's failure cases are proven handled. The plan's seat table has the broker finance and accounting reviewer recording BT-G4 with the release authority, and the security risk owner recording BT-G5; the manual proposes the same, adding the integration owner beside the security risk owner.</p></div>
+      <p>The failure cases are the roadmap's, restated by the plan; the manual makes each one a test with a named owner, the provider-facing ones run against a provider sandbox and the evidence bound to a revision. They are copied here in the roadmap's order.</p>
+      <ol class="copied failures">
+        <li>duplicate payment</li>
+        <li>duplicated callback</li>
+        <li>provider timeout</li>
+        <li>missing webhook</li>
+        <li>eventual confirmation</li>
+        <li>refund duplication</li>
+        <li>incorrect currency</li>
+        <li>ledger mismatch</li>
+        <li>reconciliation mismatch</li>
+        <li>carrier settlement difference</li>
+      </ol>
+      <p>What the two seats would have to see is the manual's gate section. For BT-G4: every journal balancing and an unbalanced draft rejected whole; a posted record that cannot be changed at the database; all three reconciliations detecting a planted difference; a historical commission recomputed to the same figure; client and office money distinct in every balance; a period closed on a statement with both keys on every entry; and the Gate D trace end to end. For BT-G5: replayed, tampered and out-of-order provider events unable to repeat or invent a mutation; two adapters passing the same contract tests without touching the domain core; the failure cases each passed; no provider vocabulary in any domain schema; and the end-to-end evidence sentence met. The manual says two of those items, the statement close and the vocabulary rule, are its own additions to the roadmap's gate.</p>
+      <p class="source">Source: BIZTRUST-PLAN-001 section 10.1's label table for D and its two identifiers; section 10.2's gate table for the two gates' requirements; section 10.3's Gate D paragraph for the trace, quoted in the slab, and the failure cases; the roadmap's Gate D block for the failure cases, copied and held by <code>tests/test_showcase_p2.py</code>; section 12.1's seat table, which the plan marks as its proposal, for the finance and accounting reviewer with the release authority on BT-G4 and the security risk owner on BT-G5; the P2 manual's section 06 for the sentence quoted, the conditions of each gate restated here in this page's words, and its note on its two additions; its section 05, whose table says the plan names none of these roles and the Who column is proposed, for the integration owner beside the security risk owner, and for the failure cases as tests against a sandbox.</p>
+    </section>
+
+    <section class="block" id="today">
+      <h2>Where P2 stands</h2>
+      <div class="today">
+        <div><b>P2 has not started</b>Its first entry condition is label C recorded, the two gates that close P1, and P1's own first condition is P0's gate. The handbook's continuity state records architecture acceptance and production platform implementation as not granted.</div>
+        <div><b>The money regime is undecided</b>The manual's second entry condition is that ADR-014, the client-money and risk-transfer regime, is accepted by qualified legal and finance review for the operating jurisdiction. The register reads it as blocked on slice S01, as it reads ADR-018, the decision on premium conditions and non-payment.</div>
+        <div><b>The ledger and adapter decisions are drafts</b>ADR-008, the subledger, ADR-009, the adapters, and ADR-012, idempotent mutations, read as draft required in the register. Provider selections, insurer, payment provider and bank, are deferred, and the manual says each arrives as its own decision.</div>
+        <div><b>Nothing here is accounting advice</b>The manual's last stop condition is a page or a record presenting a journal as accounting advice; every entry, it says, is conceptual until the chart of accounts is approved. This page records nothing and advises nothing.</div>
+      </div>
+      <p class="source">Source: the P2 manual's section 01 for its entry conditions, the ADRs it names and the deferred provider selections; the ADR register, <code>docs/architecture/ADR_REGISTER.md</code>, read at 530f7b2 on 2026-09-06, for the five current status cells; the handbook's continuity state, <code>badf/current-state.json</code>, read at the same commit, whose authority fields record architecture acceptance and production platform implementation as not granted; the P1 manual's section 01 for label B as P1's first entry condition; the P2 manual's section 07 for the last stop condition and its sentence on conceptual entries. The strip at the top of this page states the overview's three status lines and is revised when they change.</p>
+    </section>
+
+    <section class="engage" id="engage">
+      <h2>What to do with this page</h2>
+      <div class="pair">
+        <div><h3>If you are the finance reviewer, or hold the security risk owner seat</h3><p>The manual's section 05 says what each of you would have to see before recording your gate, and its section 01 says what qualified review must accept about the money regime before any journal counts as evidence. Nothing on this page records anything.</p><a class="btn" href="../phases/p2.html">Read the P2 manual</a></div>
+        <div><h3>If you want the records themselves</h3><p>PLAN-001 section 6 is the phase, its epics and its exit sentence; the roadmap's section 6 is where the core rule, the flow, the lists and Gate D come from. Where this page and a record disagree, the record is right.</p><a class="btn secondary" href="https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/BIZTRUST-PLAN-001.md">Open BIZTRUST-PLAN-001</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This page is a projection of the governed architecture in <a href="https://github.com/bstBizEra/biztrust_guide">bstBizEra/biztrust_guide</a>. The handbook and its machine-readable records are authoritative; when they change, this page is revised to match. It claims no capability as existing and records no gate. <a href="../index.html">The implementation handbook</a>.
+  </footer>
+</body>
+</html>
