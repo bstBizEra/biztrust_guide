@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T10:26:21Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-084",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #145 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.9 design with its nine mandatory sections, the CloudEvents envelope with ARCH-001 section 12's metadata mapped onto core attributes, documented extensions and two custom ones with the rename at the boundary, what never rides in a context attribute, the outbox and inbox as tenant-owned tables with an in-process relay, the AsyncAPI document with two lint gates and a fixture per rule, the compatibility policy, what an event is not, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005 and ADR-004, eleven open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #145 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.9 design with its nine mandatory sections, the CloudEvents envelope with ARCH-001 section 12's metadata mapped onto core attributes, documented extensions and two custom ones with the rename at the boundary, what never rides in a context attribute, the outbox and inbox as tenant-owned tables with an in-process relay, the AsyncAPI document with two lint gates and a fixture per rule, the compatibility policy, what an event is not, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005 and ADR-004, twelve open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-084-p0-09-event-design",
@@ -41,16 +41,16 @@
     }
   ],
   "observations": [
-    "Every ARCH-001 section 12 field has a carrier in the envelope and a rename at the boundary; the design adds two custom extensions and no more.",
+    "Every ARCH-001 section 12 field has a carrier in the envelope and a rename at the boundary; the design adds three custom extensions and no more.",
     "Four register gaps now stand on the map: the secrets store, the gateway, the audit integrity mechanism and the event transport; each is a question in its design, not a candidate.",
-    "The design asks the P0.2 design's next version to run the contract lint job over events/ too, and the P0.6 design's to list a platform-level outbox."
+    "The design asks the P0.2 design's next version to run the contract lint job over events/ too, the P0.6 design's to list a platform-level outbox and inbox, the P0.10 design's to name the outbox writer as a caller of its scrubber, and the P0.5 and P0.4 designs' to publish the events it declares."
   ],
   "decisions": [
     "DEC-086: the P0.9 design at PROPOSED; a CloudEvent envelope with ARCH-001's metadata mapped and two custom extensions; the outbox row in the state change's transaction and the inbox claim before the transition; AsyncAPI 3.1.0 with two lint gates and a fixture per rule; additive change within a major version."
   ],
   "assumptions": [
     "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
-    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+    "The design's twelve ASSUMED positions are the track's; each names the decision that would reverse it."
   ],
   "blockers": [
     {
