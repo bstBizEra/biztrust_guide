@@ -401,7 +401,7 @@ The roadmap's section 9 gives a 24-step loop for every Work Package in every pha
 | 07 | Plan | Plan | Work Package anatomy and criteria that can fail (Plan §03, §04) |
 | 08 | Work Package Decomposition | Plan | Decomposition (Plan §06) |
 | 09 | Implement | Build | Change discipline and building to contract (Build §03, §06) |
-| 10 | Self-Test | Build | The implementing agent binds each criterion to quoted command output before the reviewer's independent verification (Build §08) |
+| 10 | Self-Test | Build | The commands Plan specified are run and their output quoted before the peer reviewer reads the diff (Build §08) |
 | 11 | Independent Code Review | Build | The reviewer roles the exit gate requires (Build §07, §08) |
 | 12 | Security Review | Assure | Carried under another name: Assure's security reviewer, who owns layer 4 for any change touching authentication, tenancy or data access (Assure §05) |
 | 13 | Contract / Integration Test | Assure | Layers L2 unit and integration and L3 contract tests (Assure §02) |
