@@ -22,16 +22,15 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+try:
+    from showcase_parity import norm, section, md_rows, page_table, page_list
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm, section, md_rows, page_table, page_list
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "landing" / "p0.html"
 PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
 FLOWS = ROOT / "docs" / "architecture" / "FLOWS.md"
-
-try:
-    from showcase_parity import norm, section, md_rows, page_table, page_list
-except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
-    from tests.showcase_parity import norm, section, md_rows, page_table, page_list
 
 
 def plan_section_4() -> str:
@@ -47,7 +46,7 @@ def plan_proof() -> list[str]:
 
 
 def flows_matrix() -> dict[str, tuple[str, ...]]:
-    # every row but the header row, whose first cell is "Attempt"; the separator row is skipped by _md_rows
+    # every row but the header row, whose first cell is "Attempt"; the separator row is skipped by md_rows
     return md_rows(section(FLOWS, "\n### Minimum negative proof matrix", "\n## 4. "), r"(?!Attempt$).+")
 
 

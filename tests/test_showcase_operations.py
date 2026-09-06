@@ -21,16 +21,14 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "landing" / "operations.html"
-PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
-
 try:
     from showcase_parity import section, md_rows, page_table, page_row_count
 except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
     from tests.showcase_parity import section, md_rows, page_table, page_row_count
 
+ROOT = Path(__file__).resolve().parents[1]
+PAGE = ROOT / "landing" / "operations.html"
+PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
 
 STREAM = r"E[1-8] .+"
 

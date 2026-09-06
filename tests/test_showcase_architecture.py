@@ -24,16 +24,15 @@ from __future__ import annotations
 import re
 import unittest
 from pathlib import Path
+try:
+    from showcase_parity import norm, section, md_rows, page_table, page_list
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm, section, md_rows, page_table, page_list
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "landing" / "architecture.html"
 CONTRACT = ROOT / "docs" / "architecture" / "BIZTRUST-ARCH-001.md"
 ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
-
-try:
-    from showcase_parity import norm, section, md_rows, page_table, page_list
-except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
-    from tests.showcase_parity import norm, section, md_rows, page_table, page_list
 
 
 def contract_capability_map() -> dict[str, tuple[str, ...]]:

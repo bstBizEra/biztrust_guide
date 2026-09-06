@@ -13,7 +13,7 @@
   "completed": [
     "tests/showcase_parity.py: the one reader for record and page tables and lists, with one normalisation.",
     "tests/test_showcase_parity_helpers.py, written red first (the module did not exist), holds the readers on synthetic fixtures; four negative controls recorded.",
-    "The eight showcase tests import the module and keep only their record-specific functions; every parity test passes against the unchanged records.",
+    "The eight showcase parity tests import the module and keep only their record-specific functions; every parity test passes against the unchanged records. The shell test, test_showcase_pages.py, keeps its own case-preserving reader on purpose, because navigation labels are compared as written.",
     "README names the helper module and its test; badf/ re-anchored: DEC-076 appended, this checkpoint written."
   ],
   "remaining": [
@@ -53,7 +53,7 @@
   "observations": [
     "The rewrite is mechanical and asserts that no underscore-prefixed reader survives in any file, so a drifted file stops it rather than half-changing.",
     "The union normalisation changes no parity result: the suite passes against the same records before and after.",
-    "Five non-showcase tests keep their own _norm; they read other shapes and are out of this package's scope."
+    "Five non-showcase tests keep their own _norm; they read other shapes and are out of this package's scope. test_showcase_pages.py, the shell test, keeps its case-preserving _norm as well: the review pass tried folding it in and nine navigation-label checks failed, which is the case fold doing what the shell test must not."
   ],
   "decisions": [
     "DEC-076: one parity-helper module for the showcase tests, page path explicit, union normalisation, own unit tests."
@@ -130,7 +130,7 @@
     ]
   },
   "declared_non_coverage": [
-    "The five non-showcase tests with their own _norm are not folded in.",
+    "The five non-showcase tests with their own _norm are not folded in. The red-first claim rests on this session's run, not on a commit in history.",
     "The module is exercised on synthetic fixtures and on the real records through the eight parity tests; no other shape is tested."
   ]
 }

@@ -23,17 +23,15 @@ from __future__ import annotations
 import re
 import unittest
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "landing" / "p1.html"
-PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
-ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
-
 try:
     from showcase_parity import norm, section, md_rows, fenced_lines, page_table, page_list
 except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
     from tests.showcase_parity import norm, section, md_rows, fenced_lines, page_table, page_list
 
+ROOT = Path(__file__).resolve().parents[1]
+PAGE = ROOT / "landing" / "p1.html"
+PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
+ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
 
 SUBPHASES = {"p1a": ("\n### 5.1 ", "\n### 5.2 ", r"P1A\.\d{1,2}"),
              "p1b": ("\n### 5.2 ", "\n### 5.3 ", r"P1B\.\d{1,2}"),

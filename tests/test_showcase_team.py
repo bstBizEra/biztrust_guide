@@ -24,17 +24,15 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "landing" / "team.html"
-PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
-ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
-
 try:
     from showcase_parity import section, headed_table, fenced_lines, page_table, page_list
 except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
     from tests.showcase_parity import section, headed_table, fenced_lines, page_table, page_list
 
+ROOT = Path(__file__).resolve().parents[1]
+PAGE = ROOT / "landing" / "team.html"
+PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
+ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
 
 TABLES = {
     "seats": ("\n### 12.1 ", "\n## 13. ", "| Seat | Source | Records or accepts |"),

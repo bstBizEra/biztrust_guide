@@ -23,16 +23,15 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+try:
+    from showcase_parity import section, md_rows, fenced_lines, page_table, page_list
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import section, md_rows, fenced_lines, page_table, page_list
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "landing" / "p3.html"
 PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
 ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
-
-try:
-    from showcase_parity import section, md_rows, fenced_lines, page_table, page_list
-except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
-    from tests.showcase_parity import section, md_rows, fenced_lines, page_table, page_list
 
 
 def plan_epics() -> dict[str, tuple[str, ...]]:
@@ -46,7 +45,6 @@ def roadmap_lists() -> dict[str, list[str]]:
         "incident": fenced_lines(section(ROADMAP, "\n# P3J ", "\n# Gate E ")),
         "evidence": fenced_lines(section(ROADMAP, "\n# Gate E ", "\n# 8. ")),
     }
-
 
 EXPECTED = {"environments": 6, "pipeline": 18, "incident": 8, "evidence": 18}
 

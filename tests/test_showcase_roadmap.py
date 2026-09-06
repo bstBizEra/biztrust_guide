@@ -22,15 +22,14 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "landing" / "roadmap.html"
-PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
-
 try:
     from showcase_parity import section, md_rows, page_table
 except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
     from tests.showcase_parity import section, md_rows, page_table
+
+ROOT = Path(__file__).resolve().parents[1]
+PAGE = ROOT / "landing" / "roadmap.html"
+PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
 
 
 def plan_phases() -> dict[str, tuple[str, ...]]:

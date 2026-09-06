@@ -3,7 +3,7 @@
 Every page under landing/ copies tables and lists from a record (PLAN-001, ARCH-001, FLOWS.md, the
 roadmap) and a test holds the copy to the record cell for cell. Until WP-074 each of those tests
 carried its own copy of the readers below, and the copies had drifted: one stripped markdown links,
-one dropped arrow-only fence lines, one dropped "+" joiners. This module is the one reader; a test
+two dropped arrow-only fence lines, one dropped "+" joiners, and one kept every fence line. This module is the one reader; a test
 imports what it needs and keeps only the record-specific functions that say where its tables are.
 
 Two sides, one normalisation:

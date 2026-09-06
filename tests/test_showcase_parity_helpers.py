@@ -3,14 +3,15 @@
 
 The eight showcase tests hold copied tables and lists to their records through this module. These
 are its unit tests, on small synthetic fixtures, so that a change to a reader is caught here before
-it shows up as eight parity failures with no obvious cause. Each test names the behaviour a copy had
-drifted on before WP-074: markdown links, separator rows, joiner lines, the "copied" class prefix.
+it shows up as eight parity failures with no obvious cause. Each test names a behaviour the copies had
+drifted on before WP-074 (markdown links, joiner lines) or that every copy relied on without a test of
+its own (the separator guard, the "copied" class prefix, the duplicate a keyed table hides).
 
 Negative controls (run 2026-09-06 under WP-074, on in-memory copies):
   * Make norm keep markdown link syntax      -> test_norm_reads_a_markdown_link_as_its_text FAILS
   * Let md_rows keep the separator row       -> test_md_rows_skips_header_and_separator FAILS
   * Let fenced_lines keep "+" joiners        -> test_fenced_lines_drops_arrows_and_joiners FAILS
-  * Let page_list match any <ol> class       -> test_page_list_requires_the_copied_prefix FAILS
+  * Let page_list match any <ol> class       -> test_page_list_requires_the_copied_prefix FAILS (the decoy list precedes the copied one)
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -20,11 +21,10 @@ from __future__ import annotations
 import tempfile
 import unittest
 from pathlib import Path
-
 try:
-    from showcase_parity import bullets, fenced_lines, headed_table, md_rows, norm, page_list, page_row_count, page_table, section
+    from showcase_parity import bullets, fenced_lines, headed_table, md_rows, norm, page_list, page_row_count, page_table, page_tbody, section
 except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
-    from tests.showcase_parity import bullets, fenced_lines, headed_table, md_rows, norm, page_list, page_row_count, page_table, section
+    from tests.showcase_parity import bullets, fenced_lines, headed_table, md_rows, norm, page_list, page_row_count, page_table, page_tbody, section
 
 RECORD = """# Synthetic record
 
@@ -42,7 +42,9 @@ RECORD = """# Synthetic record
 | Business authority | Grants |
 | SRE | Co-records |
 
-Text after the blank line, with a stray | pipe.
+| Not | this table |
+|---|---|
+| Later | row |
 
 ## 3. Fence
 
@@ -50,7 +52,9 @@ Text after the blank line, with a stray | pipe.
 Risk
 → Market
 ↓
+↕
 +
+=
 Bind
 ```
 
@@ -66,8 +70,8 @@ PAGE = """<table class="epics"><thead><tr><th>Epic</th></tr></thead><tbody>
 <tr><td>X1.2</td><td>A <a href="https://example.invalid/x">linked</a> capability</td><td>—</td></tr>
 <tr><td>X1.2</td><td>duplicate key</td><td>—</td></tr>
 </tbody></table>
-<ol class="copied chain"><li>Risk</li><li>Market</li><li>Bind</li></ol>
 <ol class="chain"><li>not the copied list</li></ol>
+<ol class="copied chain"><li>Risk</li><li>Market</li><li>Bind</li></ol>
 """
 
 
@@ -104,6 +108,7 @@ class TestRecordReaders(unittest.TestCase):
     def test_headed_table_reads_to_the_blank_line(self) -> None:
         rows = headed_table(section(self.record, "\n## 2. Headed", "\n## 3. "), "| Seat | Records |")
         self.assertEqual({"business authority": ("grants",), "sre": ("co-records",)}, rows)
+        self.assertNotIn("later", rows, "a second table after the blank line is not part of the headed table")
 
     def test_fenced_lines_drops_arrows_and_joiners(self) -> None:
         self.assertEqual(["risk", "market", "bind"], fenced_lines(section(self.record, "\n## 3. Fence", "\n## 4. ")))
@@ -130,6 +135,10 @@ class TestPageReaders(unittest.TestCase):
 
     def test_page_list_requires_the_copied_prefix(self) -> None:
         self.assertEqual(["risk", "market", "bind"], page_list(self.page, "chain"))
+
+    def test_page_tbody_is_the_inner_html(self) -> None:
+        self.assertIn("<tr><td>X1.1</td>", page_tbody(self.page, "epics"))
+        self.assertNotIn("<thead>", page_tbody(self.page, "epics"))
 
     def test_missing_table_is_a_defect(self) -> None:
         with self.assertRaises(AssertionError):
