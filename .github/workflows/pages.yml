@@ -56,6 +56,7 @@ jobs:
           test -s index.html
           test -s styles.css
           test -s script.js
+          test -s landing/showcase.css
           test -s assets/unitrust-horizontal.png
           test -s assets/unitrust-icon.png
 
@@ -63,6 +64,7 @@ jobs:
         run: |
           mkdir -p _site/assets
           cp styles.css script.js .nojekyll _site/
+          mkdir -p _site/landing && cp landing/showcase.css _site/landing/
           cp assets/unitrust-horizontal.png assets/unitrust-vertical.png assets/unitrust-icon.png _site/assets/
           git ls-files '*.html' | while read -r page; do
             mkdir -p "_site/$(dirname "$page")"
