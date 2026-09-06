@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-087-001",
+  "created_at": "2026-09-06T11:19:19Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-087",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #185 on the P0 design map, the map's last ticket, under the pack's template and the map's charting decision 8: write the P0.13 design with its nine mandatory sections, the surface's place and its one rule, login and tenant selection with the tenant learned from the API, member administration with a BizTrust-side half effective at once and a Logto-side half applied by the identity administration job, security settings and sessions, tenant configuration, the audit viewer as the P0.10 contract, the denial paths as the user sees them, what is never on the surface, ten negative controls with one measurement, the evidence contract, candidates pending ADR-001, ADR-002 and ADR-003, eleven open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-087-p0-13-control-plane-design",
+    "baseline_commit": "15ccee891f5526d5703d3a1c513d7e691a29ef90"
+  },
+  "completed": [
+    "Ticket #185 resolved by this branch: docs/architecture/p0/P0.13-control-plane-web.md at PROPOSED with the template's nine sections; the map's last ticket.",
+    "The P0 manual's P0.13 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records the map's frontier as empty and the hand-off as the operator's call, DEC-089 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-086.",
+    "After merge: #185 closed with a resolution comment; the map's decision line appended to #128; the asks on P0.2, P0.4, P0.5, P0.6, P0.8 and P0.12 recorded as fog; the map's frontier reported empty to the operator.",
+    "Map #128: no open ticket; the wayfinder hands off to /to-spec when the operator opens it; the five register gaps and the eight next versions remain on Not yet specified."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.13-control-plane-web.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-087-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The surface holds nothing that could bypass the sequence: no import, no credential, one generated client, one outbound allow-list; its controls are the denial paths as a human sees them.",
+    "Every Logto-side change is a request the identity administration job applies, because the administrative credential may not be held by a running process and no narrower scope is documented; the BizTrust-side half denies at once.",
+    "With this design the P0 design map has no open ticket; thirteen designs and the proof stand at PROPOSED, and the hand-off to a spec is the operator's."
+  ],
+  "decisions": [
+    "DEC-089: the P0.13 design at PROPOSED; the control plane a client of the admin API holding no credential and no import; the tenant learned from the API; member administration in two halves with the Logto half applied by the identity administration job; the audit viewer as the P0.10 contract; the denial paths rendered, never worked around."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-001, ADR-002 and ADR-003 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's eleven ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_086",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "control_plane": "DESIGN_ONLY_NO_SCREEN_JOB_OR_RECORD_CREATED_NO_INSURANCE_FUNCTION",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design gives the surface a database credential, a module import or the Management API credential, or puts an insurance function on it.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No screen, client, job or record was created; the design describes them and the controls that would prove them.",
+    "What a Logto session is, and whether a narrower Management API scope exists, are unverified; invitations, just-in-time joining and self-service settings are a later version.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
