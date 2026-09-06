@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-082-001",
+  "created_at": "2026-09-06T09:49:53Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-082",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #143 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.10 design with its nine mandatory sections, the record's fields under the evidence contract's names with ARCH-001 section 15's additions and the research's integrity and retention fields, what is never in it, the write contract in the decision's transaction failing closed, the reason-code registry, protection from ordinary mutation in four layers with a hash chain, who may read it, the proof that every allow and every deny produces a record, ten negative controls with one measurement, the evidence contract, candidates pending ADR-004 and ADR-001, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-082-p0-10-audit-design",
+    "baseline_commit": "e17fcbbcad85e5a2352d38a37b26280cdacabee3"
+  },
+  "completed": [
+    "Ticket #143 resolved by this branch: docs/architecture/p0/P0.10-audit-framework.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.10 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records P0.8 and P0.9 next in the manual's order, P0.11 and the security proof unblocked, and the audit integrity mechanism as a missing ADR row, DEC-084 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-081.",
+    "After merge: #143 closed with a resolution comment; the map's decision line appended to #128; the integrity-mechanism ADR row recorded as fog.",
+    "Map #128: #144 P0.8 and #145 P0.9 next in the manual's order; #146 P0.11 and #148 the security proof unblocked."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.10-audit-framework.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-082-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The record keeps the evidence contract's field names, so the baseline and the design read the same; the additions are ARCH-001's and the research's, none invented.",
+    "Three register gaps now stand on the map: the secrets store, the gateway, and the audit integrity mechanism; each is a question in its design, not a candidate.",
+    "The design asks five landed designs for a next version: P0.6 and P0.12 for app_role's select and insert on the audit tables and the tests, P0.7 for the audit tables as the second exception to its four policies and the savepoint, P0.2 for the migration lint's audit rules, P0.4 for the fail-closed error class."
+  ],
+  "decisions": [
+    "DEC-084: the P0.10 design at PROPOSED; two audit tables under the evidence contract's names; one write contract in the decision's transaction, fail closed; no runtime mutation, a hash chain; the proof as read-back and count."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "AUDIT_INTEGRITY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "New; on map #128's Not yet specified; the design's question 2."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_081",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "audit_record": "DESIGN_ONLY_NO_RECORD_WRITTEN_SYNTHETIC_FIXTURES_ONLY",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design lets a runtime role change or delete an audit record, or lets an allow proceed unrecorded.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No record was written and no table exists; the design describes them and the controls that would prove them.",
+    "Retention, legal hold, the business-authority fields and non-repudiation by signature are outside P0 and named as such.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
