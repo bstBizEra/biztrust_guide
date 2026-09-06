@@ -4,7 +4,7 @@
   "created_at": "2026-09-06T09:32:29Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-081",
   "state": "ENGINEERING_READY",
-  "objective": "Resolve ticket #142 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.5 design with its nine mandatory sections, the request the command takes and the identifier it is idempotent on, the six check-then-act steps with their roles, the provisioning record with its one-running-run index, partial failure per step and what a rerun does, the acceptance as a test with equal digests and a masked trace diff for INV-011, ten negative controls with one measurement, the evidence contract, candidates pending ADR-002, ADR-003, ADR-001 and ADR-004, nine open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "objective": "Resolve ticket #142 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.5 design with its nine mandatory sections, the request the command takes and the identifier it is idempotent on, the six check-then-act steps with their roles, the provisioning record with its one-running-run index, partial failure per step and what a rerun does, the acceptance as a test with equal digests and a masked trace diff for INV-011, ten negative controls with one measurement, the evidence contract, candidates pending ADR-002, ADR-003, ADR-001 and ADR-004, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
   "source": {
     "repository": "bstBizEra/biztrust_guide",
     "branch": "docs/biztrust-guide-wp-081-p0-05-provisioning-design",
@@ -42,7 +42,7 @@
   ],
   "observations": [
     "The command is idempotent on the request reference and convergent on the tenant identifier; a name is never a key, since the reference documents no uniqueness for it.",
-    "The design asks three landed designs for a next version: P0.6 for the run table and the roles, P0.12 for the provisioning run as an administrative-credential read, and its own later version for re-creation and closure as runs.",
+    "The design asks three landed designs for a next version: P0.6 to list the run table, P0.12 to admit the provisioning run as a second use of the administrative credential, and P0.4 to count the provisioning status as disabled at the resolver; re-creation and closure as runs go to this design's own later version.",
     "No per-tenant schema object or database role exists under the proposed tier; the ticket's roles are the organization's."
   ],
   "decisions": [
@@ -50,7 +50,7 @@
   ],
   "assumptions": [
     "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
-    "The design's nine ASSUMED positions are the track's; each names the decision that would reverse it."
+    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
   ],
   "blockers": [
     {
