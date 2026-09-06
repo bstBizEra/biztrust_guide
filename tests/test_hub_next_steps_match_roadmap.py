@@ -17,7 +17,8 @@ Positive controls: NEXT_STEPS must yield at least twelve headings and the hub at
 Negative controls (run 2026-09-06 under WP-062, on in-memory copies):
   * Renumber the hub's Freeze card back to NS-005   -> test_hub_cards_match_roadmap_headings FAILS
   * Retitle the hub's NS-004 card "Guard main"       -> test_hub_cards_match_roadmap_headings FAILS
-  * Add a hub card NS-013                            -> test_hub_cards_match_roadmap_headings FAILS
+  * Add a hub card NS-013                            -> test_hub_cards_match_roadmap_headings and test_hub_shows_exactly_seven_cards FAIL
+  * Delete the hub's NS-002 card                     -> test_hub_shows_exactly_seven_cards FAILS (review pass)
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -32,6 +33,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HUB = ROOT / "index.html"
 ROADMAP = ROOT / "docs" / "NEXT_STEPS.md"
+CARD_COUNT = 7  # the hub shows seven of the file's twelve; a lost or added card fails here before the comparison
 
 
 def _norm(fragment: str) -> str:
@@ -65,6 +67,9 @@ class TestCorpusIsPresent(unittest.TestCase):
 
     def test_hub_yields_cards(self) -> None:
         self.assertGreaterEqual(len(hub_cards()), 1, "no next-steps cards parsed on the hub; the shape changed or the parser is wrong")
+
+    def test_hub_shows_exactly_seven_cards(self) -> None:
+        self.assertEqual(CARD_COUNT, len(hub_cards()), "the hub does not show exactly seven next-steps cards; the hub's intro and NEXT_STEPS's note both say seven")
 
 
 class TestHubCarriesTheFrozenLabels(unittest.TestCase):

@@ -13,7 +13,8 @@
   "completed": [
     "Ticket #208 resolved by this branch: the hub's three platform cards renumbered NS-010 to NS-012 and every card titled as docs/NEXT_STEPS.md's heading; a section intro naming the frozen labels and the live ledger; NEXT_STEPS's NS-012 heading aligned to P1A and its header note naming the hub's cards.",
     "tests/test_hub_next_steps_match_roadmap.py, written red first (four cards differed at the baseline), holds every hub card's id and title to the file's headings; three negative controls recorded; README names it.",
-    "badf/ re-anchored: NS-044 repointed at #211, DEC-064 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #211, DEC-064 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: the test pins seven cards; the state file says which NS-007 and which NS-003 to NS-005 it means; DEC-064 records that the ticket's premise was wrong and names the title policy and the heading edit as additions beyond one numbering."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-061.",
