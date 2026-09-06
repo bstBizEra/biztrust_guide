@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-068-001",
+  "created_at": "2026-09-06T06:05:51Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-068",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #176 on the Guide v2 map under the showcase record: write landing/p1.html as a projection of BIZTRUST-PLAN-001 section 5, its sections 10 and 12.1 for the gates and their seats, the roadmap's section 5 and the P1 manual in the design voice, with the shell, the three epic tables, the twelve-step slice and the two operating-model chains copied and held by a test, the boundaries, the binding rules, the surfaces and the gate conditions in plain words labelled the page's, and Gate C as two gates with the seats the manual proposes; link it from the four landed showcase pages.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-068-showcase-p1",
+    "baseline_commit": "21b1d3ed07cc4f8f36643678a246da85947e8a0c"
+  },
+  "completed": [
+    "Ticket #176 resolved by this branch: landing/p1.html with eight blocks and the shell; its first draft on prototype/showcase-p1, linked from the ticket.",
+    "tests/test_showcase_p1.py, written red first, holds the three epic tables, the vertical slice and the two operating-model chains to their records; three negative controls recorded; README names it.",
+    "The overview, roadmap, architecture and P0 pages link the P1 page; AGENTS.md's page count is twenty-four.",
+    "badf/ re-anchored: NS-044 repointed at #177, DEC-070 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-067.",
+    "After merge: #176 closed with a resolution comment; the map's decision line appended.",
+    "Map #153: #177 the P2 page next, then #178 to #180; #158 waits on #92; #94 fills the seats."
+  ],
+  "files_changed": [
+    "landing/p1.html",
+    "landing/index.html",
+    "landing/roadmap.html",
+    "landing/architecture.html",
+    "landing/p0.html",
+    "tests/test_showcase_p1.py",
+    "README.md",
+    "AGENTS.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-068-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The plan's P1A.14 row carries two markdown links; the parity test reads a markdown link as its text so that the page's anchors compare equal.",
+    "The manual's gate section lists the conditions of both gates as one list; the page restates them in two groups and says the order is its own.",
+    "The workstation's list is paraphrased in the plan's order without a count; the roadmap's P1 Web block is the source."
+  ],
+  "decisions": [
+    "DEC-070: the P1 page as the fourth projection; the slice, the tables and the chains copied and held; the boundaries, rules, surfaces and gate conditions in the page's words; Gate C as two gates with the manual's proposed seats."
+  ],
+  "assumptions": [
+    "The operator's 'proceed as you recommend, self-paced' delegates each page's decisions to its package as proposals; the operator may react on #176 and the page is revised to match.",
+    "The plain-words restatements and the characterisation of the two models are the track's reading, and the source lines say so."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; also gates #158."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94. The page names slice S01's authority-profile answer as P1's unmet entry condition."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "showcase_one_record_route": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_AS_RECOMMENDED_SELF_PACED",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_067",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "p1_implementation": "NOT_GRANTED_UNTIL_BT_G1",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest tests.test_showcase_p1 tests.test_showcase_pages",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "landing/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/153"
+    ],
+    "stop_if": [
+      "A table or list on the page differs from the record it copies, or a source line cites a passage that does not say what the section says.",
+      "The page states a gate as passed, a capability as existing, or P1 as authorised or begun.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "The rendered page was not viewed in a browser; the shell, the tables, the lists and the links were checked by the tests and the validator.",
+    "The boundaries' glosses, the plain-words rules, the surfaces paragraph and the gate conditions are the page's; no test holds them.",
+    "The ADR register's five status cells were read by hand at 21b1d3e; no test compares the page to the register."
+  ]
+}
