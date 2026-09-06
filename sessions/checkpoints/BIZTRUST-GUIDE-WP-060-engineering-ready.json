@@ -14,7 +14,8 @@
     "Ticket #159 resolved by this branch: PLAN-001 section 13.1 records the 24-row mapping with its four unnamed steps marked; reference/work-package-loop.html renders it with the decision, the mapping, the four steps and limits.",
     "tests/test_work_package_loop_page.py: rows held to the plan, exactly 24 rows, every stage citation to a displayed section, every stage link to an existing id; three negative controls recorded; README names it.",
     "The overview's axes section and the hub's lifecycle section link the page; README and AGENTS.md page counts updated.",
-    "badf/ re-anchored: NS-044 repointed at #160, #208 and the Architect ticket, DEC-062 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #160, #208 and the Architect ticket, DEC-062 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: rows 10 and 14 cite Build's exit gate and change discipline for what those sections say; row 23 reads Learn's entry rule the right way round; the table marks exactly the ticket's four unnamed steps, and the plan's prose and the page's two sections enumerate the same four; the security reviewer's remit stated; the unused style block removed; NS-044's sentence reworded."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059.",
@@ -49,7 +50,8 @@
   "observations": [
     "The page names ENG-G0 to ENG-G8 and BT-Gn; tests/test_gate_namespaces.py scans reference/*.html and admits both prefixed forms.",
     "The mapping's 'where' cells carry stage citations in the catalogue's form (Stage §NN); the new test resolves them against displayed section numbers, so a stage page that renumbers fails here rather than silently.",
-    "PLAN-001 section 13.1 is a subsection so that sections 14 and 15 keep their numbers, which pages cite."
+    "PLAN-001 section 13.1 is a subsection so that sections 14 and 15 keep their numbers, which pages cite.",
+    "tests/test_work_package_loop_page.py's _norm drops inline tags where tests/test_continuous_operations_page.py's spaces them, because this page's citations sit inside parentheses; the docstring says so, and a shared helper is worth extracting if a fourth plan-rendering test appears."
   ],
   "decisions": [
     "DEC-062: the loop is PLAN-001 section 13.1 and a reference page; nine stages; four unnamed steps marked, one a gap with an Architect section proposed on its own ticket."

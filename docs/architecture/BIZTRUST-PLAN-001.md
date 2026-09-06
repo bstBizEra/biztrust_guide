@@ -388,7 +388,7 @@ One roadmap item is not a Work Package item: **gate passed**. Read as `BT-Gn`, a
 
 ### 13.1 The Work Package loop against the nine stages
 
-The roadmap's section 9 gives a 24-step loop for every Work Package in every phase and says it extends the guide's nine-stage lifecycle. The mapping below is this plan's proposal, recorded under WP-060 ([#159](https://github.com/bstBizEra/biztrust_guide/issues/159)); the stage count stays nine, because every step has an owning stage. Four steps are not named on any stage page and are marked so: one is a gap with a proposed owner, three are carried by an existing rule or record rather than a section. The guide renders this table as `reference/work-package-loop.html`, held to it by `tests/test_work_package_loop_page.py`.
+The roadmap's section 9 gives a 24-step loop for every Work Package in every phase and says it extends the guide's nine-stage lifecycle. The mapping below is this plan's proposal, recorded under WP-060 ([#159](https://github.com/bstBizEra/biztrust_guide/issues/159)); the stage count stays nine, because every step has an owning stage. The four steps the ticket named are marked in the table: threat and risk analysis is a gap with a proposed owner (06); independent security review is carried under another name (12); evidence collection is carried by a rule rather than a section (17); feeding knowledge and memory back is carried by records rather than a section (23). The guide renders this table as `reference/work-package-loop.html`, held to it by `tests/test_work_package_loop_page.py`.
 
 | Step | Roadmap step | Stage | Where the stage carries it |
 |---|---|---|---|
@@ -401,20 +401,20 @@ The roadmap's section 9 gives a 24-step loop for every Work Package in every pha
 | 07 | Plan | Plan | Work Package anatomy and criteria that can fail (Plan §03, §04) |
 | 08 | Work Package Decomposition | Plan | Decomposition (Plan §06) |
 | 09 | Implement | Build | Change discipline and building to contract (Build §03, §06) |
-| 10 | Self-Test | Build | The implementing agent's own checks under the change discipline, before the reviewer's (Build §03, §08) |
+| 10 | Self-Test | Build | The implementing agent binds each criterion to quoted command output before the reviewer's independent verification (Build §08) |
 | 11 | Independent Code Review | Build | The reviewer roles the exit gate requires (Build §07, §08) |
-| 12 | Security Review | Assure | The security reviewer among Assure's roles (Assure §05) |
+| 12 | Security Review | Assure | Carried under another name: Assure's security reviewer, who owns layer 4 for any change touching authentication, tenancy or data access (Assure §05) |
 | 13 | Contract / Integration Test | Assure | Layers L2 unit and integration and L3 contract tests (Assure §02) |
-| 14 | Debug | Build | Not named as a step on any stage page; a failed check returns the package to Build's change discipline (Build §03) |
+| 14 | Debug | Build | Carried inside Build: a failing check is fixed within the package under the change discipline, which allows no adjacent improvements and verifies against the tree that ships (Build §03) |
 | 15 | Regression | Assure | Layers L1 repository validation and L2, and assurance in steady state (Assure §02, §07) |
-| 16 | Web / Mobile E2E | Release | Not named as a layer; the deployed thing is verified end to end on its critical path (Release §04), and the pipeline's end-to-end step is P3B.1 |
-| 17 | Evidence Collection | Assure | The evidence manifest is Assure's output (Assure §04); collecting evidence is every stage's obligation under AGENTS.md section 9, not a step of its own |
+| 16 | Web / Mobile E2E | Release | Carried by Release's verification of the deployed thing end to end on its critical path (Release §04); the pipeline's end-to-end step is P3B.1 |
+| 17 | Evidence Collection | Assure | Carried by a rule, not a step: the evidence manifest is Assure's output (Assure §04) and evidence is bound to a revision at every stage under AGENTS.md section 9 |
 | 18 | Gate Evaluation | Every stage | Each stage's exit gate, ENG-G0 to ENG-G8; a phase's capability gate BT-Gn is judged on the phase pages |
 | 19 | Human Authorization if Required | Plan | Authority records (Plan §05); release authority at Release's entry (Release §01); a gate is recorded by a human (PLAN-001 section 10) |
 | 20 | Release | Release | Progressive exposure, verification of the deployed thing and rollback (Release §03 to §05) |
 | 21 | Observe | Operate | Service objectives and the telemetry floor (Operate §03, §04) |
 | 22 | Learn | Learn | Decision quality against outcome quality, defect-escape analysis, the promotion bar (Learn §03 to §05) |
-| 23 | Feed Knowledge / Memory | Learn | Not named as a step; Learn reads memory as an input (Learn §01) and the charter's checkpoint and handoff records carry knowledge forward (AGENTS.md sections 6, 7) |
+| 23 | Feed Knowledge / Memory | Learn | Not named as a step: Learn's inputs are escape-ledger entries and decision records, not memory (Learn §01), and the charter's checkpoint and handoff records carry knowledge forward (AGENTS.md sections 6, 7) |
 | 24 | Next Controlled Iteration | Learn | Learn's exit gate returns to Discover (Learn §08); Operate's exit to Learn is continuous (Operate §11) |
 
 Steps 10 to 16 are seven names for what the guide splits across Build, Assure and Release; the roadmap's order inside them is not a sequence the stages impose, since Assure's six layers run together and Release verifies after exposure. Step 18 belongs to no single stage: every stage ends in an `ENG-Gn` exit gate, and the phase gates `BT-Gn` of section 10 are a different namespace (section 1).
