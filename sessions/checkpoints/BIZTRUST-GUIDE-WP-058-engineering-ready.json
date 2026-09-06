@@ -13,7 +13,8 @@
   "completed": [
     "Ticket #171 resolved by this branch as a finding: the catalogue cites no phase page, gate or epic (searched for phase, DELIVERY_PLAN, PLAN-001, BT-G, epic, P0, P1: zero occurrences), so no row moves; its method note now records this and names the tests that hold the phase pages.",
     "Verified from history: tests/test_gate_namespaces.py admitted BT-G7 under WP-051 (0a71751); tests/test_phase_pages.py moved its epic source per page under WP-051 to WP-055; tests/test_continuous_operations_page.py landed with the operations page under WP-056.",
-    "badf/ re-anchored: NS-044 repointed at the frontier (#203, #159, #160) and names the showcase as a build for /to-spec, DEC-060 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at the frontier (#203, #159, #160), records the track's /to-spec proposal for the showcase as a proposal on #153, and puts the hub's version label to #203; DEC-060 appended; this checkpoint written.",
+    "Review pass: four should-fix and three nits adopted: 'every record ticket has landed' corrected in NS-044 and the state file; the showcase re-route reworded as the track's proposal for comment on #153, without /implement; DEC-053's label condition recorded as met by finding and put to #203; the catalogue sentence names capability gates and epic identifiers exactly, scopes 'every row' to the table, and says 'none in the rows or notes'; the layout count corrected to fourteen rows over twelve directories."
   ],
   "remaining": [
     "Fresh-context adversarial review of the head commit, then merge, as for WP-029 through WP-057.",
@@ -41,7 +42,7 @@
   ],
   "observations": [
     "The catalogue's new sentence contains no section-number citation, so tests/test_catalogue_agrees_with_pages.py's citation check does not read it; its outputs-set check reads only the rows.",
-    "The catalogue's 'fourteen' target layout directories come from the hub's repository design, which the overview also renders; PLAN-001 did not change the layout, so that count stands.",
+    "The catalogue's fourteen target-layout rows cover twelve directories, all in the hub's repository design; PLAN-001 has no layout section, so that count stands. The manuals' 'Lands in (candidate)' cells name directories the hub's tree lacks (adapters/, infra/, docs/runbooks/, packages/flags/); that is pre-existing and outside this ticket.",
     "The ticket's second half, the test changes, needed no commit here because the charter's rule that HTML tickets move their tests in the same package was followed by every manual ticket."
   ],
   "decisions": [
