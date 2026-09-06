@@ -24,12 +24,13 @@ otherwise collapse into one entry and go unnoticed.
 Positive controls: the readers must find epics in every phase, streams in section 8, a row for every
 phase in 9.1, and both totals.
 
-Negative controls (run 2026-09-06 under WP-099, on in-memory copies of the plan):
-  * an epic row added to section 6 and not to 9.1   -> test_every_phase_agrees FAILS
-  * 9.1's P3 count changed to 11                    -> test_every_phase_agrees FAILS
-  * the totals sentence left saying 64 when a phase grew -> test_the_totals_are_the_sum FAILS
-  * section 8's header row counted as a stream      -> refused by the stream pattern, held below
-  * one identifier written on two rows              -> test_no_epic_identifier_is_listed_twice FAILS
+Negative controls. Four are tests here, on in-memory copies of the plan: an epic added to a phase,
+one identifier written on two rows, a row shown inside a fence, and section 8's header. Three more were
+run by hand against the file under WP-099 on 2026-09-06, each failing for its own reason:
+
+  * an epic row added to section 6 and not to 9.1        -> test_every_phase_agrees FAILS, and the totals
+  * 9.1's P3 count changed to 11                         -> test_every_phase_agrees FAILS, and the control
+  * a phase grown, 9.1 following, the totals left at 64  -> test_the_totals_are_the_sum FAILS
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -40,7 +41,7 @@ import re
 import unittest
 from pathlib import Path
 
-from showcase_parity import md_rows, norm
+from showcase_parity import md_row_count, md_rows
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
@@ -63,12 +64,20 @@ TOTALS = re.compile(r"\*\*(\d+) epics across the five phases, of which (\d+) lie
 # plan grew past it, which is the failure this test is for.
 
 
+FENCE = re.compile(r"^```.*?^```", re.M | re.S)
+
+
 def between(text: str, start: str, end: str) -> str:
-    """The text between the first `start` and the next `end`. Text rather than a path, so a control can modify it."""
+    """The text between the first `start` and the next `end`, fenced blocks removed.
+
+    Text rather than a path, so a control can modify the plan before it is read. Fenced blocks go
+    because a table row shown as an example inside one is not an epic; the plan already carries a
+    fence in section 5.5, and a documentation example in a phase section would otherwise be counted.
+    """
     assert start in text, f"no {start!r} in the plan"
     rest = text.split(start, 1)[1]
     assert end in rest, f"no {end!r} after {start!r}"
-    return rest.split(end, 1)[0]
+    return FENCE.sub("", rest.split(end, 1)[0])
 
 
 def epic_ids(plan: str) -> dict[str, set[str]]:
@@ -77,16 +86,13 @@ def epic_ids(plan: str) -> dict[str, set[str]]:
 
 
 def epic_rows(plan: str) -> dict[str, int]:
-    """Each phase's epic *rows*, counted from the lines themselves.
+    """Each phase's epic *rows*, duplicates included.
 
     `md_rows` keys its result by first cell, so two rows carrying one identifier collapse into one
-    entry and the count comes up short. Counting lines as well as identifiers is what notices that.
+    entry and the count comes up short. Counting the rows as well as the identifiers is what notices
+    that, and both readings come from the same seam so they cannot drift apart.
     """
-    out = {}
-    for key, start, end, pattern in PHASES:
-        body = between(plan, start, end)
-        out[key] = len([l for l in body.splitlines() if re.match(rf"\|\s*{pattern}\s*\|", l.strip())])
-    return out
+    return {key: md_row_count(between(plan, start, end), pattern) for key, start, end, pattern in PHASES}
 
 
 def epic_counts(plan: str) -> dict[str, int]:
@@ -165,6 +171,15 @@ class TestTheReaderCanFail(unittest.TestCase):
         self.assertNotEqual(plan, wrong, "section 9.1 no longer states P3 as 10; re-derive this control")
         self.assertNotEqual(epic_counts(wrong)["p3"], inventory(wrong)["p3"])
 
+    def test_a_row_shown_inside_a_fence_is_not_an_epic(self) -> None:
+        plan = plan_text()
+        example = "\n```text\n| P0.1 | An example, not an epic | — |\n```\n"
+        illustrated = plan.replace("\n## 5. ", example + "\n## 5. ", 1)
+        self.assertEqual(epic_counts(plan)["p0"], epic_counts(illustrated)["p0"],
+                         "a table row shown as an example inside a fence was counted as an epic")
+        self.assertEqual(epic_rows(plan)["p0"], epic_rows(illustrated)["p0"],
+                         "the row counter read inside a fence, so it would disagree with the identifier count")
+
     def test_the_streams_header_is_not_a_stream(self) -> None:
         plan = plan_text()
         header = "| Stream | Capability | Carries from the previous plan |"
@@ -197,6 +212,16 @@ class TestTheInventoryAgreesWithThePlan(unittest.TestCase):
                 self.assertEqual(rows[key], counts[key],
                                  f"the {key} section holds {rows[key]} epic rows for {counts[key]} identifiers; "
                                  f"one identifier is listed twice, and the inventory would count it once")
+
+    def test_section_8_holds_streams_and_no_epics(self) -> None:
+        plan = plan_text()
+        start, end, _ = STREAMS
+        body = between(plan, start, end)
+        self.assertGreater(stream_count(plan), 0, "no expansion streams found in section 8")
+        for _, _, _, pattern in PHASES:
+            with self.subTest(pattern=pattern):
+                self.assertEqual(0, md_row_count(body, pattern),
+                                 "section 8 holds an epic identifier; its rows are streams, and streams are not epics")
 
     def test_the_totals_are_the_sum(self) -> None:
         plan = plan_text()
