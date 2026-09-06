@@ -22,7 +22,6 @@
   ],
   "files_changed": [
     "docs/architecture/p0/P0.02-repository-and-boundaries.md",
-    "phases/p0.html",
     "badf/current-state.json",
     "badf/next-actions.json",
     "badf/decision-log.jsonl",
