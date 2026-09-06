@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-097-001",
+  "created_at": "2026-09-06T14:33:13Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-097",
+  "state": "ENGINEERING_READY",
+  "objective": "Hold every design under docs/architecture/p0/ to the one rule WP-096's defect broke and no test held: a design that writes \"those N nouns\" points back at a set it has already counted, so a different count of that noun in the same file is a contradiction. The blanket form of the rule is false and is not held. No design changes.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-097-back-reference",
+    "baseline_commit": "bb6a1f3d20f748ad1c487a70a0c4c3bfea81f1e2"
+  },
+  "completed": [
+    "tests/test_p0_design_pack.py holds every design to the back-reference rule; the module docstring records the negative control.",
+    "Negative control run: the test fails on the P0.12 design as it stood at df6115e and passes on main.",
+    "badf/ records the guard: DEC-099 and this checkpoint; NS-043 names WP-096 and WP-097."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #294 closed."
+  ],
+  "files_changed": [
+    "tests/test_p0_design_pack.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-097-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The rule that would have caught the most is false; the rule that is true catches this defect and nothing else. Probing both against the pack before writing either is what separated them.",
+    "Two back-references stand in the pack at bb6a1f3, in the P0.12 and P0.13 designs, and both agree with their file, so the test guards live text rather than a hypothetical.",
+    "This test reads no rule from the pack README, unlike the five beside it; the docstring says so, and the README is unchanged because no agent may add a rule to it here."
+  ],
+  "decisions": [
+    "DEC-099: the back-reference rule is held for every design; the blanket rule is not; no allow-list."
+  ],
+  "assumptions": [
+    "A back-reference in these designs always points back within its own file; none points at another design's count.",
+    "Number words up to twenty cover the pack; a design counting higher writes a numeral, which this rule does not read."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_revisions": "MAP_128_CHARTING_DECISION_9_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_096",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "tests/test_p0_design_pack.py"
+    ],
+    "stop_if": [
+      "A design is edited to satisfy the test; the test exists to find a contradiction, not to be satisfied."
+    ]
+  },
+  "declared_non_coverage": [
+    "Only back-references are held. A design may still contradict itself in a way no mechanical rule sees, and the reading of 2026-09-06 does not rerun.",
+    "Numerals, ranges and counts spelled across a sentence are not read.",
+    "Nothing here checks whether any count is correct, only whether one design counts one set two ways."
+  ]
+}
