@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-085-001",
+  "created_at": "2026-09-06T10:42:26Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-085",
+  "state": "ENGINEERING_READY",
+  "objective": "Resolve ticket #146 on the P0 design map under the pack's template and the map's charting decision 8: write the P0.11 design with its nine mandatory sections, the identifiers that join the three signals and how they travel, the HTTP and database conventions adopted by name and level with the platform's own attribute namespace, the log record's shape, four metrics, sampling, what is forbidden and where it is enforced, the collector topology as a question, database-side corroboration through application_name, the proof as a test that reconstructs one request from its identifier alone, ten negative controls with one measurement, the evidence contract, candidates pending ADR-005 and ADR-004, ten open questions with ASSUMED positions, and a two-package cut; link it from the P0 manual's row.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-085-p0-11-observability-design",
+    "baseline_commit": "b03e3dad284118d50cd91f7514aea207f487e871"
+  },
+  "completed": [
+    "Ticket #146 resolved by this branch: docs/architecture/p0/P0.11-observability-baseline.md at PROPOSED with the template's nine sections.",
+    "The P0 manual's P0.11 row links the design on GitHub; the design pack test holds the file to the template.",
+    "badf/ re-anchored: NS-043 records the security proof as the frontier and the observability stack as a missing ADR row, DEC-087 appended, this checkpoint written."
+  ],
+  "remaining": [
+    "Two-axis code review of the head commit, then merge, as for WP-059 to WP-084.",
+    "After merge: #146 closed with a resolution comment; the map's decision line appended to #128; the stack's missing ADR row and the asks on P0.10, P0.12, P0.2 and P0.8 recorded as fog.",
+    "Map #128: #148 the security proof is the frontier; #185 P0.13 after the proof."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.11-observability-baseline.md",
+    "phases/p0.html",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-085-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "No actor identifier rides in any signal; the actor is in the audit record, found by the request identifier, because the conventions' identity attributes are PII at Development stability.",
+    "Five register gaps now stand on the map: the secrets store, the gateway, the audit integrity mechanism, the event transport and the observability stack; each is a question in its design, not a candidate.",
+    "The design answers the P0.10 design's question 4 with application_name and asks that design's next version to record it."
+  ],
+  "decisions": [
+    "DEC-087: the P0.11 design at PROPOSED; the trace-id and the biztrust.* attributes joining three signals; the conventions adopted by name; no actor, header, body or secret in a signal; sampling the API's own; application_name into the server log; one request reconstructed from its identifier."
+  ],
+  "assumptions": [
+    "The map's charting decision 8 permits the design to proceed with ADR-004 DRAFT_REQUIRED; the operator may reverse it by comment on #128.",
+    "The design's ten ASSUMED positions are the track's; each names the decision that would reverse it."
+  ],
+  "blockers": [
+    {
+      "code": "OPERATOR_WAIVER_ON_ISSUE_27",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; gates the ADR tickets each design names as dependencies."
+    },
+    {
+      "code": "SECRETS_STORE_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "GATEWAY_ADR_ROW_MISSING",
+      "owner_role": "accountable-architecture-owner",
+      "resolution": "Unchanged; on map #128's Not yet specified."
+    },
+    {
+      "code": "ROADMAP_SOURCE_DOCUMENTS_ISSUE_154",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "S01_BROKER_ANSWERS_AND_REVIEW_SEATS",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged; #93 and #94."
+    },
+    {
+      "code": "OPERATOR_LINE_ON_ISSUE_52",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "CONTENT_DECISIONS_ISSUES_78_81",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "REPOSITORY_OWNER_ACTIONS_NS_003_004_005",
+      "owner_role": "repository-administrator",
+      "resolution": "Unchanged."
+    },
+    {
+      "code": "INDEPENDENT_ORACLE_AUTHOR_REQUIRED",
+      "owner_role": "human-reviewer",
+      "resolution": "Unchanged."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
+    "p0_designs_ahead_of_adr_tickets": "MAP_128_CHARTING_DECISION_8_2026_09_06_AGENT_RECOMMENDATION_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_FRESH_CONTEXT_REVIEW_AS_FOR_WP_029_TO_084",
+    "architecture_drafting_ahead_of_s01": "WAIT_FOR_OPERATOR_WAIVER_ISSUE_92",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "observability": "DESIGN_ONLY_NO_SIGNAL_PACKAGE_OR_STACK_CHOSEN",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "plan_acceptance": "NOT_GRANTED_UNTIL_BT_G0",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0",
+    "architecture_acceptance": "NOT_GRANTED",
+    "production_platform_implementation": "NOT_GRANTED",
+    "experiment_rerun": "NOT_GRANTED"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "badf/next-actions.json",
+      "docs/architecture/p0/README.md",
+      "https://github.com/bstBizEra/biztrust_guide/issues/128"
+    ],
+    "stop_if": [
+      "A design names a technology as chosen, marks itself ACCEPTED, or says a capability is implemented, secure or compliant.",
+      "A design names an observability stack as chosen, puts an actor, a header, a body or a secret in a signal, or makes a trace the evidence instead of the audit record.",
+      "Another session's worktree or uncommitted edit is touched."
+    ]
+  },
+  "declared_non_coverage": [
+    "No signal was emitted, no package created and no stack chosen; the design describes them and the controls that would prove them.",
+    "Tail-based sampling, the collector's redaction on each signal and production sampling are unverified or deferred to P3D.1.",
+    "The design pack test checks structure and vocabulary, not the substance of any section."
+  ]
+}
