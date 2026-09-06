@@ -57,8 +57,7 @@ jobs:
           test -s styles.css
           test -s script.js
           test -s landing/showcase.css
-          test -s assets/unitrust-horizontal.png
-          test -s assets/unitrust-icon.png
+          test -s assets/biztrust-symbol.svg
 
       - name: Stage immutable site artifact
         run: |
@@ -66,11 +65,27 @@ jobs:
           cp styles.css script.js .nojekyll _site/
           mkdir -p _site/landing
           cp landing/showcase.css _site/landing/
-          cp assets/unitrust-horizontal.png assets/unitrust-vertical.png assets/unitrust-icon.png _site/assets/
+          git ls-files 'assets/*' | while read -r asset; do
+            mkdir -p "_site/$(dirname "$asset")"
+            cp "$asset" "_site/$asset"
+          done
           git ls-files '*.html' | while read -r page; do
             mkdir -p "_site/$(dirname "$page")"
             cp "$page" "_site/$page"
           done
+
+      - name: Verify every tracked asset reached the artifact
+        run: |
+          status=0
+          for asset in $(git ls-files 'assets/*'); do
+            if [ ! -f "_site/$asset" ]; then
+              echo "MISSING FROM ARTIFACT: $asset"
+              status=1
+            fi
+          done
+          echo "--- staged assets ---"
+          find _site/assets -type f | sort
+          exit $status
 
       - name: Verify every tracked page reached the artifact
         run: |

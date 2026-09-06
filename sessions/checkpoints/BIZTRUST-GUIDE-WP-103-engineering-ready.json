@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-103-001",
+  "created_at": "2026-09-06T18:56:24Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-103",
+  "state": "ENGINEERING_READY",
+  "objective": "Take Tenant A's mark off the platform's own handbook. All nineteen pages carried assets/unitrust-*.png in the topbar, the footer, the closing directive and the favicon - fifty-seven references to a synthetic broker tenant's artwork - and the showcase record cited those marks as the reason the showcase was given no chrome in common with the handbook. Land the BizTrust symbol in every slot, hold the rule with a test that covers every page rather than the nine showcase pages alone, and use the signature gradient as the one identity accent.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-103-brand-marks",
+    "baseline_commit": "82892da67ffd34a3fecc9db869311ed1c6e1a059"
+  },
+  "completed": [
+    "All fifty-seven references to assets/unitrust-*.png across nineteen pages are gone; every topbar, footer, closing-directive and favicon slot carries assets/biztrust-symbol.svg.",
+    "index.html gained the favicon it never had: it was the one page of nineteen pointing browsers at nothing while the other eighteen pointed at a tenant's icon.",
+    "The three unitrust PNGs are deleted, one of which - unitrust-vertical.png - was shipped in every published artifact and referenced by no page.",
+    "styles.css and landing/showcase.css declare the signature gradient's three stops as tokens; the reading-progress bar, which was a lime-to-teal ramp built from the UI palette, is the one place that uses it.",
+    "The mark's slots are sized from the brand guide's section 3 minimums, with the reason written as a comment beside the topbar rule.",
+    "tests/test_brand_marks.py holds three rules over every page and both stylesheets: no tenant mark, no asset that nothing references, and the gradient's stops and order unaltered with no brand colour used as text.",
+    "landing/README.md no longer claims the handbook carries UniTrust marks; the rule it justified is unchanged and the question the correction opens is ticketed.",
+    ".github/workflows/pages.yml copies what git tracks under assets/ instead of three hand-named files.",
+    "badf/ records the change: DEC-105, NS-046 and this checkpoint.",
+    "Every topbar link now names itself: eighteen of the nineteen carried no aria-label, and their only text is .brand-copy, which is display:none below 760px."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #318 closed; #319 and #320 stay open for the operator."
+  ],
+  "files_changed": [
+    "assets/biztrust-symbol.svg",
+    "assets/unitrust-horizontal.png",
+    "assets/unitrust-icon.png",
+    "assets/unitrust-vertical.png",
+    "index.html",
+    "phases/*.html",
+    "reference/*.html",
+    "stages/*.html",
+    "styles.css",
+    "landing/showcase.css",
+    "landing/README.md",
+    ".github/workflows/pages.yml",
+    "tests/test_brand_marks.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-103-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The showcase record had already noticed the defect and worked around it rather than reporting it: landing/README.md section 2 said the handbook's UniTrust marks were why the showcase shares no chrome with it. A workaround written into a record reads as a design decision to everyone who comes after.",
+    "Nothing guarded it. tests/test_showcase_pages.py forbade a tenant mark on the nine showcase pages and nowhere else, so nineteen handbook pages carrying one passed every check in the repository. The rule that was missing is the wider one, and it is now written.",
+    "The control that matters is not a mutation. Against this repository at 82892da the new module reports 28 failures and names both defects exactly, including the orphan asset by filename.",
+    "The horizontal lockup master cannot be used as an image anywhere: 'Biz' and 'Broker Insurance' are <text> elements in Inter, and an SVG loaded through <img> is an isolated document that gets neither the page's stylesheet nor its webfont. The site's Google Fonts link does not reach it. This is why the wordmark stays HTML text and the image stays the symbol, and it is the substance of #319.",
+    "The symbol sits on two very dark grounds, the footer's #04131f and the closing block's #071a2c. Its lightest stop reads at roughly 13:1 there and its deepest at roughly 7.5:1, so it is legible; but the brand guide's section 7 asks for a prepared reversed master before standardised use on dark applications, and none exists. Recorded as a deviation, not as compliance.",
+    "Both review axes found the same regression independently, and it was real: emptying the chrome images' alt left eighteen topbar links with no accessible name at all on a phone. The alt had been carrying that name by accident and badly - a link to the guide's home announced as 'UniTrust Broker Insurance'. Fixed by naming the link, which is what index.html had always done, rather than by putting text back in the image.",
+    "The first version of this module passed four mutations it claimed to catch, all found by review: an orphan asset whose name is a substring of a referenced one; a token redefined lower down, where the second value is the one that wins; the gradient's angle reversed with every stop correct; and a brand colour written as a literal hex rather than a token. It also failed a legitimate background-color, because `color\\s*:` matches the end of `background-color:`. All five are now cases, and the four it missed are marked as review's in the docstring.",
+    "The justification for the symbol was circular as first written - this package set the slot widths it then cited as too narrow for the lockup - and the comment in styles.css gave a height against a minimum stated as a width. The reason that does not depend on this package's own choices is the lockup's font dependency, and it now leads in both places.",
+    "Section 15's condition was claimed against the wrong element. It asks that 'BizTrust' stay visible in the interface; .brand-copy reads 'Delivery phases' or 'Delivery lifecycle' on eighteen pages and is hidden below 760px. The condition does hold, by the footer's own line of text on every page at every width, and that is what the record now says.",
+    "Two documents still named a deleted file: docs/LIVE_PREVIEW.md told a reader troubleshooting 404s to link assets/unitrust-icon.png, and README.md called the stylesheet a 'UniTrust/BizTrust visual system'. The new test reads pages and stylesheets, not prose, so neither was caught by it; that limit is now declared."
+  ],
+  "decisions": [
+    "DEC-105: the symbol in every chrome slot, the gradient as one accent, the lockup not landed."
+  ],
+  "assumptions": [
+    "The operator's answer of 2026-09-06 - marks and gradient accents, palette untouched, vertical lockup left out and reported - is the scope, and remains reversible by the operator.",
+    "A tenant's name in prose is correct and only its artwork is forbidden; the test matches asset paths and image filenames, never the word alone."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "brand_update": "OPERATOR_INSTRUCTION_2026_09_06_MARKS_AND_GRADIENT_ACCENTS_REVERSIBLE_BY_OPERATOR",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_102",
+    "brand_standard_authorship": "NOT_GRANTED: the supplied masters are not edited or re-authored here",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "badf/current-state.json",
+      "tests/test_brand_marks.py"
+    ],
+    "stop_if": [
+      "An SVG master supplied by the operator is edited to make it usable; that makes the agent the author of a brand asset. Report it instead, as #319 does.",
+      "A brand colour is introduced as a text colour on the strength of the palette alone; the brand guide's own section 5 measures the deepest stop at 2.62:1 on white."
+    ]
+  },
+  "declared_non_coverage": [
+    "The palette is untouched. Navy, teal, lime and amber still carry the UI; a migration to the brand's Carbon and Graphite neutrals is a separate decision with its own contrast pass.",
+    "An SVG favicon is not rendered by every browser - Safari has historically wanted a raster or a mask-icon - so some visitors will see a default icon rather than a wrong one. The brand guide's section 17 already lists a favicon master among the files still to be created.",
+    "The test reads filenames, not artwork: an asset with the right name and the wrong drawing inside it passes.",
+    "Whether the showcase should now share the handbook's mark is not decided here; it is a SHOWCASE-001 rule and it is open as #320.",
+    "The symbol's use on the two very dark grounds deviates from the brand guide's section 7, which asks for a prepared reversed master first. It is legible there, and the deviation is recorded rather than resolved.",
+    "Prose is not checked. A document naming an asset that no longer exists is invisible to the test; both instances in this tree were found by review and fixed by hand.",
+    "The page walk and its skip set are copied from scripts/validate_continuity.py rather than shared with it, because nothing under tests/ imports that script. Two lists now have to be kept in step by hand."
+  ]
+}
