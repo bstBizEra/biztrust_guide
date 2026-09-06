@@ -21,8 +21,6 @@ Stdlib only:  python3 -m unittest discover -s tests -v
 
 from __future__ import annotations
 
-import html as html_mod
-import re
 import unittest
 from pathlib import Path
 
@@ -31,68 +29,24 @@ PAGE = ROOT / "landing" / "p2.html"
 PLAN = ROOT / "docs" / "architecture" / "BIZTRUST-PLAN-001.md"
 ROADMAP = ROOT / "docs" / "research" / "roadmap" / "BIZTRUST-ROADMAP-001-operator-draft.md"
 
-
-def _norm(fragment: str) -> str:
-    s = re.sub(r"<[^>]+>", "", fragment)
-    s = html_mod.unescape(s).replace("`", "").replace("**", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
-
-
-def _section(path: Path, start: str, end: str) -> str:
-    return path.read_text(encoding="utf-8").split(start, 1)[1].split(end, 1)[0]
-
-
-def _md_rows(section: str, first_cell_pattern: str) -> dict[str, tuple[str, ...]]:
-    out: dict[str, tuple[str, ...]] = {}
-    for line in section.splitlines():
-        if not line.strip().startswith("|"):
-            continue
-        cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) >= 2 and re.fullmatch(first_cell_pattern, cells[0]) and not re.fullmatch(r"-+", cells[1]):
-            out[_norm(cells[0])] = tuple(_norm(c) for c in cells[1:])
-    return out
-
-
-def _fenced_lines(section: str) -> list[str]:
-    """The lines of the first ```text fence in the section: arrows stripped, arrow-only lines dropped."""
-    fence = section.split("```text", 1)[1].split("```", 1)[0]
-    lines = [line.strip().lstrip("→ ").strip() for line in fence.splitlines()]
-    return [_norm(line) for line in lines if line and line not in ("↓", "↕", "│", "▼")]
-
-
-def _bullets(section: str) -> list[str]:
-    return [_norm(line[2:]) for line in section.splitlines() if line.startswith("* ")]
-
-
-def _page_table(table_class: str) -> dict[str, tuple[str, ...]]:
-    m = re.search(rf'<table class="{table_class}">.*?<tbody>(.*?)</tbody>', PAGE.read_text(encoding="utf-8"), re.S)
-    assert m, f"no table of class {table_class} on the page"
-    out: dict[str, tuple[str, ...]] = {}
-    for row in re.finditer(r"<tr>(.*?)</tr>", m.group(1), re.S):
-        cells = [_norm(c) for c in re.findall(r"<td>(.*?)</td>", row.group(1), re.S)]
-        assert cells, f"a row of the {table_class} table has no cells"
-        out[cells[0]] = tuple(cells[1:])
-    return out
-
-
-def _page_list(list_class: str) -> list[str]:
-    m = re.search(rf'<ol class="copied {list_class}">(.*?)</ol>', PAGE.read_text(encoding="utf-8"), re.S)
-    assert m, f"no list of class copied {list_class} on the page"
-    return [_norm(item) for item in re.findall(r"<li>(.*?)</li>", m.group(1), re.S)]
+try:
+    from showcase_parity import section, md_rows, fenced_lines, bullets, page_table, page_list
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import section, md_rows, fenced_lines, bullets, page_table, page_list
 
 
 def plan_epics() -> dict[str, tuple[str, ...]]:
-    return _md_rows(_section(PLAN, "\n## 6. P2", "\n## 7. "), r"P2[A-F]\.\d{1,2}")
+    return md_rows(section(PLAN, "\n## 6. P2", "\n## 7. "), r"P2[A-F]\.\d{1,2}")
 
 
 def roadmap_lists() -> dict[str, list[str]]:
-    gate_d = _section(ROADMAP, "\n# Gate D ", "\n# 7. ")
+    gate_d = section(ROADMAP, "\n# Gate D ", "\n# 7. ")
     return {
-        "concepts": _fenced_lines(_section(ROADMAP, "\n## Core rule", "\n## P2 transaction flow")),
-        "trace": _fenced_lines(gate_d),
-        "settlement": _fenced_lines(_section(ROADMAP, "\n# P2D ", "\n# P2E ")),
-        "statuses": _fenced_lines(_section(ROADMAP, "\n# P2E ", "\n# P2F ").split("Statuses:", 1)[1]),
-        "failures": _bullets(gate_d),
+        "concepts": fenced_lines(section(ROADMAP, "\n## Core rule", "\n## P2 transaction flow")),
+        "trace": fenced_lines(gate_d),
+        "settlement": fenced_lines(section(ROADMAP, "\n# P2D ", "\n# P2E ")),
+        "statuses": fenced_lines(section(ROADMAP, "\n# P2E ", "\n# P2F ").split("Statuses:", 1)[1]),
+        "failures": bullets(gate_d),
     }
 
 
@@ -111,21 +65,21 @@ class TestCorpusIsPresent(unittest.TestCase):
 
     def test_page_parses(self) -> None:
         self.assertTrue(PAGE.is_file(), "landing/p2.html is missing")
-        self.assertGreaterEqual(len(_page_table("epics")), 1)
+        self.assertGreaterEqual(len(page_table(PAGE, "epics")), 1)
         for name in EXPECTED:
             with self.subTest(list=name):
-                self.assertGreaterEqual(len(_page_list(name)), 1)
+                self.assertGreaterEqual(len(page_list(PAGE, name)), 1)
 
 
 class TestParityWithTheRecords(unittest.TestCase):
     def test_epics_match_the_plan(self) -> None:
-        self.assertEqual(plan_epics(), _page_table("epics"), "the epic table disagrees with PLAN-001 section 6")
+        self.assertEqual(plan_epics(), page_table(PAGE, "epics"), "the epic table disagrees with PLAN-001 section 6")
 
     def test_lists_match_the_roadmap(self) -> None:
         lists = roadmap_lists()
         for name in EXPECTED:
             with self.subTest(list=name):
-                self.assertEqual(lists[name], _page_list(name), f"the {name} list disagrees with the roadmap's section 6")
+                self.assertEqual(lists[name], page_list(PAGE, name), f"the {name} list disagrees with the roadmap's section 6")
 
 
 if __name__ == "__main__":
