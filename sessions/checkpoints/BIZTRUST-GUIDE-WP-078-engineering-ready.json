@@ -42,7 +42,7 @@
   ],
   "observations": [
     "The gateway is the second technology, after the secrets store, that the register has no ADR row for; the design records what the researched gateway could prove and relies on none of it.",
-    "Controls 8 and 9 measure Logto's issuance-time refusals, which the research reads in source and marks as no versioned guarantee, so the spike's record replaces the research's reading.",
+    "Controls 8 and 9 are measurements of Logto's issuance-time refusals, which the research reads in source and marks as no versioned guarantee; they are recorded as baselines, not seen failing, and the spike's record replaces the research's reading.",
     "The chain reads no request identifier; the mismatch between a token's organization and the tenant a request is about is P0.4's, as the research's gap 2 says."
   ],
   "decisions": [
