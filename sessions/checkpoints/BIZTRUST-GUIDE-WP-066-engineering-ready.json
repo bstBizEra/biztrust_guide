@@ -14,7 +14,8 @@
     "Ticket #174 resolved by this branch: landing/architecture.html with eight blocks and the shell; its first draft on prototype/showcase-architecture, linked from the ticket.",
     "tests/test_showcase_architecture.py, written red first, holds the capability map, the contract family, the seventeen exit criteria and the twenty-two invariant identifiers to their records; four negative controls recorded; README names it.",
     "The entry and roadmap pages link the architecture page; landing/showcase.css gains one rule for copied lists; landing/README.md records the list component; AGENTS.md's page count is twenty-two.",
-    "badf/ re-anchored: NS-044 repointed at #175, DEC-068 appended, this checkpoint written."
+    "badf/ re-anchored: NS-044 repointed at #175, DEC-068 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: seven invariants restated to their rows' substance and INV-011 in the design voice; the open panel's items are section 18's; the fourteen Gate A questions listed; the register's words (require a draft; blocked by the first slice) kept and the twenty cited to the map; the API platform cell cites section 11; the family paragraph names BIZTRUST-AUTHORITY-001 and the doctrine ticket's two homes; the copied list is a component; the README's additions list complete; two counts dropped from the prose."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-065.",
@@ -130,6 +131,7 @@
   "declared_non_coverage": [
     "The rendered page was not viewed in a browser; the shell, the tables, the lists and the links were checked by the tests and the validator.",
     "The invariants' plain words and the planes-to-groups mapping are the page's; no test holds them.",
-    "The ADR register's fourteen-and-six split is hand-counted from its table at 34bb72e; no test compares the page to the register."
+    "The ADR register's fourteen-and-six split is hand-counted from its table at 34bb72e; no test compares the page to the register.",
+    "The fourteen-and-six split remains this page's count of the register's status cells, said so in the source line; no record states the split as a number."
   ]
 }

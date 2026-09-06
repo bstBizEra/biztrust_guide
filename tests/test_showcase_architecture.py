@@ -65,7 +65,7 @@ def _page_table(table_class: str) -> dict[str, tuple[str, ...]]:
 
 
 def _page_list(list_class: str) -> list[str]:
-    m = re.search(rf'<ol class="{list_class}">(.*?)</ol>', PAGE.read_text(encoding="utf-8"), re.S)
+    m = re.search(rf'<ol class="copied {list_class}">(.*?)</ol>', PAGE.read_text(encoding="utf-8"), re.S)
     assert m, f"no list of class {list_class} on the page"
     return [_norm(item) for item in re.findall(r"<li>(.*?)</li>", m.group(1), re.S)]
 
@@ -116,7 +116,7 @@ class TestParityWithTheRecords(unittest.TestCase):
         self.assertEqual(contract_exit_criteria(), _page_list("criteria"), "the exit criteria disagree with ARCH-001 section 17")
 
     def test_invariant_ids_match_the_contract(self) -> None:
-        page_ids = re.findall(r"<li><b>(INV-\d{3})</b>", re.search(r'<ol class="invariants">(.*?)</ol>', PAGE.read_text(encoding="utf-8"), re.S).group(1))
+        page_ids = [item.split(" ", 1)[0].upper() for item in _page_list("invariants")]
         self.assertEqual(contract_invariant_ids(), page_ids, "the invariants' identifiers or order disagree with ARCH-001 section 5")
 
 
