@@ -47,7 +47,8 @@
     "The rule that would have caught the most is false; the rule that is true catches this defect and nothing else. Probing both against the pack before writing either is what separated them.",
     "Two back-references stand in the pack at bb6a1f3, in the P0.12 and P0.13 designs, and both agree with their file, so the test guards live text rather than a hypothetical.",
     "The rule went into its own module after review: tests/test_p0_design_pack.py says it reads its rules from the pack README, and this rule is not one of them.",
-    "The first form of the rule could not see 'those three `runs`', and this pack backticks its names throughout; the review found it, and the text is normalised before it is read."
+    "The first form of the rule could not see 'those three `runs`', and this pack backticks its names throughout; the review found it, and the text is normalised before it is read.",
+    "The review found the noun pattern widened for no reason, so that 'those two a screen' would be held on the article; it is two letters or more again, with a test."
   ],
   "decisions": [
     "DEC-099: the back-reference rule is held for every design; the blanket rule is not; no allow-list."
@@ -68,11 +69,11 @@
   },
   "next_action_id": "NS-041",
   "recovery": {
-    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_pack.py",
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_p0_design_self_consistency.py",
     "read_first": [
       "AGENTS.md",
       "badf/current-state.json",
-      "tests/test_p0_design_pack.py"
+      "tests/test_p0_design_self_consistency.py"
     ],
     "stop_if": [
       "A design is edited to satisfy the test; the test exists to find a contradiction, not to be satisfied."

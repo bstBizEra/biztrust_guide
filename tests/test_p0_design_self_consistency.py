@@ -22,7 +22,9 @@ counting a second set. A design whose back-reference cannot agree should name it
 counting it; there is no allow-list.
 
 Markdown is normalised away before the text is read, because this pack backticks and bolds its names
-throughout and "those three `runs`" is the same sentence as "those three runs".
+throughout and "those three `runs`" is the same sentence as "those three runs". The noun is the word
+after the number, of two letters or more, so that an article is never read as the noun: this pack
+already writes "gives two a screen", and "those two a screen" must not be held on "a".
 
 Negative controls (run 2026-09-06 under WP-097, on in-memory copies):
   * P0.12 as it stood at df6115e, before WP-096   -> test_back_references_agree FAILS
@@ -46,12 +48,16 @@ PACK = ROOT / "docs" / "architecture" / "p0"
 
 NUMBER_WORDS = ("one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|"
                 "fifteen|sixteen|seventeen|eighteen|nineteen|twenty")
-MARKUP = re.compile(r"[`*_]+")
-BACK_REFERENCE = re.compile(rf"\b(?:those|these)\s+({NUMBER_WORDS})\s+([a-z][a-z-]*)\b", re.I)
+MARKUP = re.compile(r"[`*]+")
+BACK_REFERENCE = re.compile(rf"\b(?:those|these)\s+({NUMBER_WORDS})\s+([a-z][a-z-]+)\b", re.I)
 
 
 def plain(text: str) -> str:
-    """The text with markdown emphasis and code spans removed, so styling cannot hide a count."""
+    """The text with backticks and asterisks removed, so styling cannot hide a count.
+
+    Underscores are left alone: an underscore is a word character, so it never stood between a
+    number and its noun, and removing it would only join the halves of a snake_case name.
+    """
     return MARKUP.sub("", text)
 
 
@@ -88,6 +94,10 @@ class TestTheRuleReadsWhatItClaims(unittest.TestCase):
         text = "`Four` runs read it.\n\nMay not be used outside those three **runs**."
         self.assertEqual([("three", "runs", {"four"})], disagreements(text),
                          "styling around a number or a noun must not hide a back-reference")
+
+    def test_an_article_is_never_read_as_the_noun(self) -> None:
+        text = "P0 gives two a screen. Those two a screen are the ones above; three a screen exist."
+        self.assertEqual([], disagreements(text), "an article after the number is not a noun")
 
     def test_two_sets_of_the_same_noun_are_not_a_disagreement(self) -> None:
         text = "Two packages hold the documents. The Work Package created four packages."
