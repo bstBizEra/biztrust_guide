@@ -14,8 +14,9 @@
     "Ticket #211 resolved by this branch: stages/architect.html section 07 Threat and risk analysis; the threat model as a gated output row, an exit-gate item, and the security reviewer's remit extended; roles, gate and stop renumbered 08 to 10.",
     "reference/artifact-catalogue.html: a Threat model row in the Architect block with the hub's security directory as its target-layout path; seven Architect gate citations moved from §08 to §09; the target-layout count fifteen.",
     "reference/risk-tiers.html: a Threat model row in the schedule; PLAN-001 section 13.1 and reference/work-package-loop.html: step 06 cites Architect §07 and the gap language removed.",
-    "Red first: PLAN-001's step 06 citing Architect §07 failed tests/test_work_package_loop_page.py until the section existed; the catalogue test failed until the row existed.",
-    "badf/ re-anchored: NS-044 says the agent-workable frontier is empty and names what waits on the operator, DEC-065 appended, this checkpoint written."
+    "Red first: the loop page's link to stages/architect.html#threat failed test_every_stage_link_has_its_anchor until the section existed (the citation Architect §07 resolved against the old roles section, so the number check alone did not go red); the catalogue test failed until the row existed.",
+    "badf/ re-anchored: NS-044 says the agent-workable frontier is empty and names what waits on the operator, DEC-065 appended, this checkpoint written.",
+    "Review pass from the two-axis code review: the sidebar lists the new section and renumbers the three after it; the page's split class; tiering left to the schedule with a link; the hub and Define linked and the boundaries attributed to the architecture pack; the schedule's Critical cell traced to the gate's dated acceptance; the catalogue's counts 64 and 55; the records corrected on Define, on which test went red, and on NS-044's duplicated sentence."
   ],
   "remaining": [
     "Two-axis code review of the head commit, then merge, as for WP-059 to WP-062.",
@@ -48,7 +49,8 @@
   "observations": [
     "The section is inserted after systems of record so that Architect §03, §05 and §06, which the loop mapping cites, keep their numbers; the spine test needs a new eyebrow, 'What could go wrong', which collides with none of the five it keys on.",
     "tests/test_no_cross_page_duplication.py scans the stage pages; the new section's wording was kept distinct from Assure's isolation layer and the hub's security group, which say related things.",
-    "The Define manual is unchanged: its risk-tier section already points at the schedule as the price list, and the schedule gained the row."
+    "The Define manual is unchanged: it defines the tier and the schedule prices it; the schedule links Define, not the reverse, and Define's sentence that no stage manual varies its behaviour by the tier's value stays true because the manual owes the model by what a package touches and leaves tiering to the schedule.",
+    "No test file changed: the spine, catalogue and duplication tests derive their expectations from the pages, so the new section and the renumbering are held without an edit; the catalogue's prose counts are not held by any test and were corrected by hand to 64 and 55."
   ],
   "decisions": [
     "DEC-065: the Architect threat-model section, output, gate item, catalogue row and schedule row; the loop mapping's gap closed."

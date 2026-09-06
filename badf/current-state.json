@@ -5,7 +5,7 @@
   "updated_at": "2026-09-06T04:45:05Z",
   "active_work_package": {
     "id": "BIZTRUST-GUIDE-WP-063",
-    "title": "The Architect manual's threat and risk analysis section, its output row, gate item and catalogue row; the loop mapping's gap closed - issue #216",
+    "title": "The Architect manual's threat and risk analysis section, its output row, gate item, catalogue and schedule rows; the loop mapping's gap closed - issue #216",
     "state": "ENGINEERING_READY",
     "objective": "Resolve ticket #211 on the Guide v2 map: give the Architect manual a section on threat and risk analysis that says what the threat model is for this platform, what it must cover, when it is owed, who produces and reviews it, and how it enters the exit gate; add the threat model as a gated Architect output with its catalogue row and its exit-gate item; add a threat-model row to the risk-tier schedule; renumber the sections and citations the insertion shifts; close the gap the loop mapping recorded at step 06.",
     "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/216",
