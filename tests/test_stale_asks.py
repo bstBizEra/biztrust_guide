@@ -4,8 +4,8 @@
 The pack was written design by design and revised design by design, and the revision round
 updated the designs that GRANTED asks and not the designs that MADE them. Every revised design
 carries a "Changes in 0.N" table crediting whoever asked, by name and often by question number;
-almost no asker recorded that its ask had been answered. Twenty-four such pairs are open (#326,
-found by the thirteen design reviews under #322).
+almost no asker recorded that its ask had been answered. Twenty-six such pairs are open (#326,
+found by the thirteen design reviews under #322 and by this module's own adversarial review).
 
 The cost is not tidiness. A design's open questions are what a reader at `BT-G0` uses to see what
 the design is still waiting on, and fifteen questions across seven designs name a dependency that
@@ -18,12 +18,21 @@ candidate sentences against the two dozen that are real. One design can credit a
 thing while a DIFFERENT ask from the same asker stays genuinely open, so naming the sibling is
 not evidence of anything.
 
-The precise key was already in the pack: twenty-seven of the forty-four change rows credit "The
-P0.A design, question N". That names the exact question the change answered, so the check is a
-triple - carrier, asker, question - and not a proximity guess.
+The precise key was already in the pack: twenty-eight of the thirty-six change rows credit "The
+P0.A design, question N", or its possessive form. That names the exact question the change
+answered, so the check is a triple - carrier, asker, question - and not a proximity guess.
 
-WHERE "STILL OPEN" IS READ. Only inside the question's `Waits on:` clause, up to its `ASSUMED`
-marker. That boundary is doing real work: P0.7's question 10 reads "At `0.1` this waited on the
+(An earlier version of this docstring said forty-four rows and twenty-seven credits. It was
+counting the tables' header rows, and its credit reader missed the possessive form entirely,
+which hid a real twenty-fifth pair: P0.2 credits "the P0.9 design's question 12".)
+
+WHERE "STILL OPEN" IS READ. Only from the question's waiting word onward - "Waits on", "Blocked
+on", "Depends on", "Outstanding" - up to its `ASSUMED` marker. Starting at the waiting word is
+what does the work here; the `ASSUMED` terminator is the right boundary for a clause but is NOT
+load-bearing, and an earlier version of this docstring wrongly claimed it was. Review removed the
+terminator and every credited question read exactly the same.
+
+What starting at the waiting word buys: P0.7's question 10 reads "At `0.1` this waited on the
 P0.5 design and the P0.6 design's next version; BOTH HAVE LANDED, and the P0.6 design lists the
 role at its own `0.2`. Waits on: ADR-003 and ADR-004". It mentions its carrier twice and is the
 one credited question in the pack that is properly up to date. A reader that took the whole
@@ -32,10 +41,15 @@ should follow.
 
 WHAT THIS DOES NOT DO.
 
- 1. Seventeen of the forty-four change rows credit an asker WITHOUT a question number - "The P0.4
+ 1. Eight of the thirty-six change rows credit an asker WITHOUT a question number - "The P0.4
     design, its history table". Those are not checked at all. The instances are real (P0.4's
     history-table ask is one of them) but there is no key to pair them on, and guessing is what
     the sweep did.
+ 1a. A question RENUMBERED so that a credit's number now points at a different question is not
+    caught: the check asks whether the carrier is named in question N's clause, not whether
+    question N is still the question the carrier answered. Review swapped two of P0.7's questions
+    and the suite stayed green. Catching it needs the credit to say what it answered, not only
+    which number.
  2. It reads a question's `Waits on:` clause, so an ask left open in the design's BODY rather
     than in its open questions is invisible. P0.5's four stale sentences are mostly of that kind
     and are in #326's prose.
@@ -55,11 +69,15 @@ and question must exist, and the one properly-updated question must still read a
 count with no margin is not a control, which WP-105 learned the expensive way.
 
 WHAT THE REGISTRY IS ABSORBING. Emptying STALE_ASKS and running against the tree this was written
-on reports exactly the twenty-four triples registered below, and exactly one credited question
-that is clean: P0.7's question 10. That is the real-tree control, not a synthetic mutation.
+on reports exactly the twenty-six triples registered below, across fifteen questions, and exactly
+one credited question that is clean: P0.7's question 10. That is the real-tree control, not a
+synthetic mutation. Review verified the clean-question claim against all sixteen credited pairs.
 
 Negative controls (run 2026-09-07 under WP-106, each on a copied tree, run as
 `unittest discover -s tests -p test_stale_asks.py` from that tree's root):
+  * A question rewritten to say "Blocked on:" instead      -> test_the_updated_question_is_still_updated
+  * A credit written in the possessive, "the P0.A design's" -> test_the_same_credits_are_found
+  * A design's questions heading renamed away              -> test_every_design_has_open_questions
   * A new credit whose question still waits on its carrier -> test_no_credited_ask_still_waits
   * A registered question updated, entry left behind       -> test_registered_stale_asks_are_still_stale
   * A registered question's carriers change                -> test_registered_stale_asks_are_still_stale
@@ -86,8 +104,13 @@ TICKET = "#326"
 
 QUESTIONS_HEADING = "## Open questions and dependencies"
 
+# Returned when a credited question names no waiting clause at all. Distinct from "waits on
+# nothing", which is the clean result, because a question with no clause cannot be judged either
+# way and must not pass silently.
+NO_WAITING_CLAUSE = {"": "the question names no waiting clause, so nothing here can judge it"}
+
 # "The P0.4 design, question 2" and "The P0.13 design, questions 3 and 4".
-CREDIT = re.compile(r"The (P0\.\d+) design,?\s+questions?\s+((?:\d+(?:\s*(?:,|and)\s*)?)+)")
+CREDIT = re.compile(r"[Tt]he (P0\.\d+) design(?:'s)?,?\s+questions?\s+((?:\d+(?:\s*(?:,|and)\s*)?)+)")
 
 # The one credited question in the pack that records its ask as answered, and the model the rest
 # should follow. Asserted separately so that this module can never be satisfied by every question
@@ -123,6 +146,7 @@ STALE_ASKS: dict[tuple[str, int], dict[str, str]] = {
     },
     ("P0.9", 12): {
         "P0.10": "The outbox writer named as a second caller of the scrubber's patterns, refusing as that design's control 7 has",
+        "P0.2": "The 'Contract lint' job over `openapi/` and `events/` with the fixture runs",
         "P0.4": "The lifecycle's rows publish the P0.9 design's events through the outbox",
         "P0.5": "The tenant-provisioned event written to the platform outbox in the activation's transaction, and the section n",
         "P0.6": "`tenancy.platform_outbox` and `tenancy.platform_inbox`",
@@ -142,6 +166,7 @@ STALE_ASKS: dict[tuple[str, int], dict[str, str]] = {
         "P0.2": "The 'Observability tests' job",
     },
     ("P0.13", 2): {
+        "P0.12": "The administrative class defined by who reads it, an operator-invoked run rather than the rotation exercise al",
         "P0.5": "The identity administration job as the command family's second command, with the same credential position, and",
     },
     ("P0.13", 3): {
@@ -182,7 +207,7 @@ EXPECTED_CREDITS = (
 )
 
 # The registry's size, asserted so it can only shrink.
-REGISTERED_TRIPLES = 24
+REGISTERED_TRIPLES = 26
 
 
 def designs() -> dict[str, Path]:
@@ -210,15 +235,30 @@ def questions(text: str) -> dict[int, str]:
     return found
 
 
-def waits_on(question: str) -> str:
-    """The clause naming what a question is still waiting for.
+# What a question is still waiting for, however it says so. The literal "Waits on:" was the only
+# form read until review rewrote one question as "Blocked on:" and watched it go stale in silence.
+WAITING = re.compile(
+    r"(?:[Ww]aits on|[Bb]locked on|[Dd]epends on|[Oo]utstanding)\b:?(.*?)(?:`ASSUMED`|$)", re.S
+)
 
-    Bounded at `ASSUMED`, and taken only from `Waits on:` onward, because a question may recite
-    what it USED to wait on before saying what it waits on now - which is exactly what the pack's
-    one properly-updated question does.
+
+def waits_on(question: str) -> str | None:
+    """The clause naming what a question is still waiting for, or None if it names no such clause.
+
+    Taken from the waiting word onward, because a question may recite what it USED to wait on
+    before saying what it waits on now - which is what the pack's one up-to-date question does.
+
+    The `ASSUMED` terminator is NOT what makes that work, and an earlier version of this docstring
+    claimed it was. Review removed the terminator and every credited question read the same; the
+    work is done by starting at the waiting word. The terminator is kept because it is the right
+    boundary for a clause, not because it is load-bearing here.
+
+    None rather than "" for a question with no waiting clause at all: fourteen of the pack's
+    hundred and sixteen questions have none, and a credit landing on one would otherwise read as
+    clean by construction rather than as unreadable.
     """
-    found = re.search(r"[Ww]aits on:(.*?)(?:`ASSUMED`|$)", question, re.S)
-    return found.group(1) if found else ""
+    found = WAITING.search(question)
+    return found.group(1) if found else None
 
 
 def credits() -> dict[tuple[str, int], dict[str, str]]:
@@ -249,7 +289,10 @@ def still_waiting(asker: str, number: int, carriers: dict[str, str]) -> dict[str
     if number not in asked:
         return {}
     clause = waits_on(asked[number])
-    return {c: w for c, w in carriers.items() if c in clause}
+    if clause is None:
+        return NO_WAITING_CLAUSE
+    # Word-bounded: a substring test would have "P0.1" match P0.10 through P0.13.
+    return {c: w for c, w in carriers.items() if re.search(rf"{re.escape(c)}\b", clause)}
 
 
 class TestTheReaderReadsSomething(unittest.TestCase):
@@ -293,6 +336,32 @@ class TestTheReaderReadsSomething(unittest.TestCase):
             f"now reads as waiting again. Either the design changed or the `Waits on:` boundary "
             f"has stopped working; check the reader before the design.",
         )
+
+
+class TestEveryDesignIsReadable(unittest.TestCase):
+    """Review renamed one design's questions heading and its twelve questions vanished, silently."""
+
+    def test_every_design_has_open_questions(self) -> None:
+        for name, path in sorted(designs().items()):
+            with self.subTest(design=name):
+                text = path.read_text(encoding="utf-8")
+                self.assertIn(QUESTIONS_HEADING, text, f"{name} has no open-questions section to read")
+                self.assertNotEqual({}, questions(text), f"{name}'s open-questions section yields no numbered question")
+
+    def test_every_credited_question_can_be_judged(self) -> None:
+        """A credited question with no waiting clause is unreadable, not clean.
+
+        Fourteen of the pack's questions name no waiting clause. None is credited today, so this
+        rule passes over the corpus rather than over an exception list - but a credit landing on
+        one later must fail rather than read as up to date.
+        """
+        for (asker, number), carriers in sorted(credits().items()):
+            with self.subTest(asker=asker, question=number):
+                self.assertNotEqual(
+                    NO_WAITING_CLAUSE, still_waiting(asker, number, carriers),
+                    f"{asker} question {number} is credited by {sorted(carriers)} and names no "
+                    f"waiting clause, so nothing here can tell whether the ask is still open.",
+                )
 
 
 class TestNoCreditedAskStillWaits(unittest.TestCase):

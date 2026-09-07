@@ -12,7 +12,7 @@
   },
   "completed": [
     "tests/test_stale_asks.py pairs sixteen credited (asker, question) pairs against each question's own 'Waits on:' clause.",
-    "Twenty-four stale triples across fifteen questions are registered, each carrying the change row the carrier recorded as its evidence.",
+    "Twenty-six stale triples across fifteen questions are registered, each carrying the change row the carrier recorded as its evidence.",
     "The ratchet holds: an entry must still be stale against exactly its carriers, so updating a question forces its entry out, and the registry may only shrink.",
     "P0.7's question 10 - the pack's one properly updated credited question - is asserted separately, so the module can never be satisfied by every question being stale.",
     "Seven controls, three isolated and four declared not isolated.",
@@ -47,7 +47,13 @@
     "The 'Waits on:' boundary is the whole discriminator, and one question proves it. P0.7's question 10 reads 'At 0.1 this waited on the P0.5 design and the P0.6 design's next version; both have landed', then 'Waits on: ADR-003 and ADR-004'. It names its carrier twice and is up to date. A reader taking the whole question calls it stale - exactly backwards - so that question is now asserted as the module's own control.",
     "Fifteen of the sixteen credited pairs are registered, so the rule catching a NEW stale pair currently reads one question. That is what a registry of two dozen live defects looks like rather than a weakness, but a green suite here means 'no new staleness', not 'the pack is clean', and the docstring says so in capitals.",
     "Seventeen change rows credit an asker without a question number - 'The P0.4 design, its history table'. Those instances are real and are not checked, because there is no key to pair them on and guessing is what the sweep did.",
-    "A control script lost a backslash again, writing a literal newline into generated Python where '\\\\n' was meant, in a heredoc. The repository's own note says to use the file-writing tool rather than a heredoc for anything carrying escapes; it was the heredoc that failed, twice now."
+    "A control script lost a backslash again, writing a literal newline into generated Python where '\\\\n' was meant, in a heredoc. The repository's own note says to use the file-writing tool rather than a heredoc for anything carrying escapes; it was the heredoc that failed, twice now.",
+    "Review broke the first version four ways and disproved one of its stated reasons. The worst break: the waiting reader required the literal 'Waits on:', so rewriting a question as 'Blocked on:' let it go stale in silence - and the control that exists to catch exactly that was satisfied by the ABSENCE of the string it looked for. The reader now takes four waiting words.",
+    "The credit reader took one phrasing, and four of five realistic variants walked past it. That was not only hypothetical: it was already missing a real pair, because P0.2 credits 'the P0.9 design's question 12' in the possessive. The registry is twenty-six triples, not twenty-four, and the docstring's 'exactly twenty-four' was wrong when written.",
+    "A stated rationale was false. The docstring said the `ASSUMED` terminator 'is doing real work'; review removed it and every credited question read the same. The work is done by starting at the waiting word. The terminator is kept as the right boundary for a clause and the claim is retracted in place, where the next reader will meet it.",
+    "Two counts were wrong because the row filter did not exclude the tables' own header rows: thirty-six change rows, not forty-four, and eight crediting no question number, not seventeen. A count taken from a filter is only as good as the filter.",
+    "Renaming a design's open-questions heading made its twelve questions permanently unreadable with no failure at all. Two structural rules now hold that: every design has a readable questions section, and a credited question with no waiting clause is unreadable rather than clean - fourteen of the pack's questions name no waiting clause, and none is credited today.",
+    "One evasion is declared rather than closed: a question renumbered so a credit's number points at a different question is not caught, because the check asks whether the carrier is named in question N, not whether question N is still the question the carrier answered."
   ],
   "decisions": [
     "DEC-108: pair on the credited question number; twenty-four stale pairs registered as a ratchet; NS-047 retired."
@@ -78,10 +84,12 @@
     ]
   },
   "declared_non_coverage": [
-    "Seventeen change rows credit an asker with no question number and are not checked; there is no key to pair them on.",
+    "Eight change rows credit an asker with no question number and are not checked; there is no key to pair them on.",
     "An ask left open in a design's body rather than in its numbered open questions is invisible; P0.5's four stale sentences are mostly of that kind and stay in #326's prose.",
     "It cannot tell whether a carrier really answered an ask, only that the carrier says it did and the asker says it is still waiting. Which record is wrong is #326's question.",
     "Fifteen of sixteen credited pairs are registered, so the rule catching a new stale pair reads one question until the registry shrinks.",
-    "The three designs still at 0.1 have no Changes table, so they appear only as askers, never as carriers."
+    "The three designs still at 0.1 have no Changes table, so they appear only as askers, never as carriers.",
+    "A question renumbered so that a credit's number points at a different question is not caught.",
+    "Fourteen of the pack's questions name no waiting clause at all. None is credited today, and a credit landing on one fails as unreadable rather than passing as clean."
   ]
 }
