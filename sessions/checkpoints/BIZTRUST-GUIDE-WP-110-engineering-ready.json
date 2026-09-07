@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-110-001",
+  "created_at": "2026-09-07T05:18:54Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-110",
+  "state": "ENGINEERING_READY",
+  "objective": "Five copies of one text normaliser become one. Four test modules carried a private _norm and tests/showcase_parity.py already exported the same function, more completely. #341 asked for the copies to be merged and for the one real question - whether a tag becomes nothing or a space - to be decided explicitly rather than inherited.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-110-shared-norm",
+    "baseline_commit": "924e52fadf40a91e06b22f5866a58cc5c73c4d3a"
+  },
+  "completed": [
+    "Four modules import showcase_parity.norm instead of defining _norm; five copies of the function become one.",
+    "The tag question is settled by experiment and the reason is written in showcase_parity.norm's own docstring, where the choice is made.",
+    "Each adopting module's docstring says where its normaliser now lives.",
+    "All four modules' DECLARED negative controls were re-run and still fire, which is #341's fourth acceptance criterion.",
+    "The dual-import idiom of test_showcase_architecture.py is used, so the modules still run both by discovery and by module name from the root; both were exercised."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #341 closed."
+  ],
+  "files_changed": [
+    "tests/showcase_parity.py",
+    "tests/test_continuous_operations_page.py",
+    "tests/test_hub_next_steps_match_roadmap.py",
+    "tests/test_team_model.py",
+    "tests/test_work_package_loop_page.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-110-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest tests.test_team_model",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The shared function already existed and the first survey missed it. WP-109 measured this duplication and reported that a refactor needed a new module; showcase_parity.norm was already there, doing strictly more, and #341's own text pointed at that file as the precedent without noticing it held the function. Looking for the seam before building one would have found it.",
+    "The one real question was decided by the suite rather than by preference, which is what made it cheap. Making the module that spaced tags drop them: green. Making the other three space them: test_work_package_loop_page fails, on a page that writes '(<a>Discover 03</a>)' against a record that writes '(Discover 03)'. Its docstring had predicted exactly that case, so the experiment confirmed a comment nobody had tested.",
+    "A passing suite would not have been enough here and #341 said so in advance. A refactor of guards can leave every test green while quietly weakening what they catch, so each adopting module's own declared control was re-run as a mutation. All four still fire.",
+    "The two modules that keep a private copy were read, not assumed: test_showcase_pages.py neither lowercases nor strips backticks, and test_phase_pages.py normalises a plain label with no markup at all. Merging those would have changed behaviour to no purpose, which is the Speculative Generality the WP-109 measurement declined for designs()."
+  ],
+  "decisions": [
+    "DEC-112: four copies adopt showcase_parity.norm; a tag becomes nothing, settled by experiment."
+  ],
+  "assumptions": [
+    "showcase_parity.norm doing strictly more than the copies it replaces - Markdown links resolved, bold markers stripped - is safe because both sides of every comparison pass through it, and the suite confirms it."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "test_refactor": "OPERATOR_INSTRUCTION_2026_09_07_PROCEED_WITH_MEASURE_OF_EVIDENCE_AND_SOURCES_OF_TRUTH",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_109",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests",
+    "read_first": [
+      "tests/showcase_parity.py",
+      "https://github.com/bstBizEra/biztrust_guide/issues/341"
+    ],
+    "stop_if": [
+      "A module's private normaliser is replaced without re-running that module's own declared negative control.",
+      "test_showcase_pages.py or test_phase_pages.py is made to adopt the shared function; theirs are different by design."
+    ]
+  },
+  "declared_non_coverage": [
+    "Only _norm is consolidated. designs() keeps its four variants, which differ deliberately - one excludes the security proof, one is keyed by epic - and unifying them needs parameters, as WP-109 measured.",
+    "No behaviour of the four modules is otherwise changed, and no page or record is touched.",
+    "The controls re-run here are the ones each module declares; a defect a module never claimed to catch is still not caught."
+  ]
+}

@@ -20,6 +20,9 @@ Negative controls (run 2026-09-06 under WP-060, on in-memory copies):
   * Add a 25th row to the page                -> test_table_has_exactly_24_rows FAILS
   * Cite "Build §12" on the page              -> test_stage_citations_resolve FAILS
 
+Text is normalised by showcase_parity.norm, shared with the showcase tests (WP-110, #341).
+This module carried its own copy; four modules carried the same one.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
@@ -38,11 +41,10 @@ STAGE_NAMES = ("Discover", "Define", "Architect", "Plan", "Build", "Assure", "Re
 SECTION_START, SECTION_END = "\n### 13.1 ", "\n## 14. "
 
 
-def _norm(fragment: str) -> str:
-    """Inline tags (the links round a citation) are dropped, not spaced, so "(<a>Discover §03</a>)" reads "(discover §03)"."""
-    s = re.sub(r"<[^>]+>", "", fragment)
-    s = html_mod.unescape(s).replace("`", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
+try:
+    from showcase_parity import norm as _norm
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm as _norm
 
 
 def plan_rows() -> dict[str, tuple[str, str, str]]:

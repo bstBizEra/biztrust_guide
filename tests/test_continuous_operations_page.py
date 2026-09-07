@@ -21,6 +21,9 @@ Negative controls (run 2026-09-06 under WP-056, on in-memory copies):
   * Add an E9 row to the streams table             -> test_each_table_has_exactly_eight_rows FAILS (review pass)
   * Drop every BT-G6 from the page                 -> test_page_names_exactly_the_gates_the_plan_does FAILS (review pass)
 
+Text is normalised by showcase_parity.norm, shared with the showcase tests (WP-110, #341).
+This module carried its own copy; four modules carried the same one.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
@@ -40,10 +43,10 @@ P3 = ROOT / "phases" / "p3.html"
 STREAM_IDS = {f"E{n}" for n in range(1, 9)}
 
 
-def _norm(fragment: str) -> str:
-    s = re.sub(r"<[^>]+>", " ", fragment)
-    s = html_mod.unescape(s).replace("`", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
+try:
+    from showcase_parity import norm as _norm
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm as _norm
 
 
 def _plan_section(start: str, end: str) -> str:

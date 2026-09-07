@@ -31,7 +31,16 @@ JOINERS = ("↓", "↕", "│", "▼", "+", "=")
 
 
 def norm(fragment: str) -> str:
-    """Tags out, markdown links to their text, entities unescaped, backticks and bold out, whitespace one space, lower case."""
+    """Tags out, markdown links to their text, entities unescaped, backticks and bold out, whitespace one space, lower case.
+
+    A TAG BECOMES NOTHING, NOT A SPACE, and that is decided rather than assumed. Four modules
+    carried a private copy of this function and one of them replaced a tag with " " instead
+    (WP-110, #341). The suite settles which is right: make that module drop tags and everything
+    passes; make the other three space them and test_work_package_loop_page fails, because the
+    page writes a citation as "(<a>Discover 03</a>)" and the record it is compared against writes
+    "(Discover 03)". Spacing gives "( discover 03 )" on one side only. So dropping is required by
+    a live case and spacing is required by nothing.
+    """
     s = re.sub(r"<[^>]+>", "", fragment)
     s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)
     s = html_mod.unescape(s).replace("`", "").replace("**", "")

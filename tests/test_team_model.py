@@ -16,6 +16,9 @@ Negative controls (run 2026-09-06 under WP-061, on in-memory copies):
   * Add a tenth seat to the hub                -> test_seats_match_the_plan and test_plan_and_hub_each_hold_nine_seats FAIL
   * Reword the seats table's header in the plan -> plan_seats raises with the header it expects (review pass)
 
+Text is normalised by showcase_parity.norm, shared with the showcase tests (WP-110, #341).
+This module carried its own copy; four modules carried the same one.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
@@ -34,10 +37,10 @@ CONTRACT_SEATS = ("business authority", "insurance-domain practitioner", "legal/
 SEAT_COUNT = 9  # the record's number; a tenth seat or a lost one fails here before the comparison
 
 
-def _norm(fragment: str) -> str:
-    s = re.sub(r"<[^>]+>", "", fragment)
-    s = html_mod.unescape(s).replace("`", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
+try:
+    from showcase_parity import norm as _norm
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm as _norm
 
 
 SEATS_HEADER = "| Seat | Source | Records or accepts |"

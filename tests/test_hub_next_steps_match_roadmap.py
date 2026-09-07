@@ -20,6 +20,9 @@ Negative controls (run 2026-09-06 under WP-062, on in-memory copies):
   * Add a hub card NS-013                            -> test_hub_cards_match_roadmap_headings and test_hub_shows_exactly_seven_cards FAIL
   * Delete the hub's NS-002 card                     -> test_hub_shows_exactly_seven_cards FAILS (review pass)
 
+Text is normalised by showcase_parity.norm, shared with the showcase tests (WP-110, #341).
+This module carried its own copy; four modules carried the same one.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
@@ -36,10 +39,10 @@ ROADMAP = ROOT / "docs" / "NEXT_STEPS.md"
 CARD_COUNT = 7  # the hub shows seven of the file's twelve; a lost or added card fails here before the comparison
 
 
-def _norm(fragment: str) -> str:
-    s = re.sub(r"<[^>]+>", "", fragment)
-    s = html_mod.unescape(s).replace("`", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
+try:
+    from showcase_parity import norm as _norm
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm as _norm
 
 
 def roadmap_headings() -> dict[str, str]:
