@@ -54,6 +54,11 @@
       "command": "python3 wp110_regression.py (review's 8 record-side divergences)",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "wp110_exact_inputs.py - old vs new on every fragment the four modules actually normalise",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
@@ -61,7 +66,8 @@
     "That is the exact failure #341's fourth criterion warned about, and my own controls missed it. The four I re-ran were each module's own declared controls, but all four are page-side plain-text edits that any normaliser catches; none exercised the behaviour that had changed. A control has to exercise the change, not merely exist.",
     "Making norm() stricter for everyone was tried before adding a sibling, and the suite refused it: dropping the link step fails test_epics_match_the_plan and norm()'s own self-tests, because the records those readers compare do carry Markdown emphasis and links. So the leniency is real and needed - by other callers - and the two behaviours are two named functions rather than one with a boolean.",
     "The tag question was decided by experiment rather than preference. Making the module that spaced tags drop them leaves the suite green; making the other three space them fails test_work_package_loop_page, whose page writes a citation as '(<a>Discover 03</a>)' against a record writing '(Discover 03)'. Its docstring had predicted exactly that case, so the experiment confirmed a comment nobody had tested.",
-    "One claim of mine was corrected rather than defended: I said test_phase_pages.py would 'change behaviour to no purpose' if it adopted the shared function. Review adopted it there and the suite stayed green. Excluding it is still right - it would inherit the leniency - but the stated reason was asserted, not demonstrated."
+    "One claim of mine was corrected rather than defended: I said test_phase_pages.py would 'change behaviour to no purpose' if it adopted the shared function. Review adopted it there and the suite stayed green. Excluding it is still right - it would inherit the leniency - but the stated reason was asserted, not demonstrated.",
+    "The correction is proved behaviour-preserving rather than asserted to be. Each module's own reader was run with _norm captured, and old and new compared on exactly the arguments it passes: 96 fragments for the operations page, 19 for the hub, 18 for the team model, 144 for the Work Package loop - 277 in all, ZERO differences, including the module whose implementation changed from spacing tags to dropping them. A broader corpus of whole <td> contents showed 42 apparent differences for that module, all of the shape '<strong>E1</strong><small>Tenant Scale</small>', and all of them artefacts of the corpus builder: that module's own regex splits the identifier cell before _norm ever sees it. Checking what a function is actually called with beats checking what it could be called with."
   ],
   "decisions": [
     "DEC-112: four copies adopt showcase_parity.norm; a tag becomes nothing, settled by experiment."
