@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-108-001",
+  "created_at": "2026-09-07T04:18:16Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-108",
+  "state": "WAIT_FOR_AUTHORITY",
+  "objective": "Write down when a design's version moves and what its Landed by row records, which the pack's README never said. The silence was filled in by practice until WP-101 repaired forty-eight broken links, moved no version and added itself to no row; its review accepted that judgement and asked for the gap to be named rather than filled in by the package that noticed it. #316 named it and recommended two rules. This writes them into README section 4.1 and holds the half a test can hold. It unblocks the repairs #323 to #329 record, which were left unfixed because nobody could say whether repairing them moved a version.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-108-version-rule",
+    "baseline_commit": "43f4a94cef03059ad924aacee9f5bf60053f20e5"
+  },
+  "completed": [
+    "README section 4.1 states when a version moves and what Landed by records, with the trade the first rule buys and the reason only half of it is testable.",
+    "tests/test_design_versions.py holds the mechanical half over all thirteen designs: a version agrees with its own Landed by row, every revision names the version it moved to, every named package left a checkpoint.",
+    "P0.12's Landed by row is completed: WP-075 is recorded as revising it to 0.2, which git confirms at c3e255a.",
+    "Six controls, all isolated, the first of them the real historical defect rather than a synthetic mutation.",
+    "NS-049 queues the repairs #323 to #329 record, which this rule unblocks."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #316 resolved and closed on map #296."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/README.md",
+    "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "tests/test_design_versions.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-108-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "Writing the rule down immediately found the one row that never obeyed it. Twelve of the thirteen Landed by rows name the version each revision moved to; P0.12's recorded 'revised by WP-075 from the research of #240' and named none, while git shows that package moving the design from 0.1 to 0.2 in c3e255a. The pack's practice was consistent in every row but one, and nothing would have said which one. That is the argument for the rule, made by the rule.",
+    "The reader was too narrow for its own corpus at first, and reported P0.12 at 0.2 when its row ends at 0.3: a second revision is written as a continuation, 'and to `0.3` by `WP-095`', not by repeating 'revised'. The same mistake as WP-106's waiting reader, caught the same way - by running the reader over the real corpus before trusting what it said.",
+    "Only half the rule is testable and the README says which half. 'A version moves when what the design says changes' is a reviewer's judgement; no test can tell a repaired link from a withdrawn control. Writing the untestable half down anyway is the point: it is what a reviewer applies, and WP-101's review had to reconstruct it from practice because it was nowhere.",
+    "This unblocks the repairs. #323 to #329 were recorded and not fixed partly because the operator asked for that and partly because nobody could say whether repairing a design moved its version. NS-049 now says which findings move one: a claim that disagrees with the proof, a mechanism the grants forbid and a rule 3 absolute all change what a design says; a misquoted citation that leaves the substance intact does not.",
+    "The review's first finding is the one that mattered and it is correct: this package answered a question reserved to the operator. #316 is OPEN, carries no comment, is labelled wayfinder:grilling - a human-in-the-loop ticket - and its recommendation is signed by an agent. AGENTS.md line 49 holds that approval is an explicit authority record and never inferred, and line 18 that unknown authority is not permission but a reason to stop.",
+    "The precedent was my own and I departed from it. WP-103 met a rule in landing/README.md whose stated reason had gone, did NOT change it, annotated it and opened #320 saying the question was the operator's. Eight commits later this package wrote a rule into a record governing thirteen designs and shipped a test enforcing it. An operator instruction to proceed on the agent's call is not an authority record for changing a record's rules, and treating it as one is exactly the inference AGENTS.md forbids.",
+    "DEC-110 overstated in the same direction, saying the WP-101 review had accepted these rules. It accepted WP-101's judgement that a link repair is not a revision, and #316's own text says it asked for the gap to be NAMED rather than filled in by the package that noticed it. Filling it in is precisely what was asked not to happen.",
+    "A fifth published count was wrong. 'Twelve of the thirteen Landed by rows name the version' counted five rows carrying no revision at all as having done it correctly. Measured: thirteen rows, eight carrying a revision, nine entries, eight naming a version. Every one of the five wrong counts came from a reading rather than a measurement.",
+    "The reader also produced a FALSE FAILURE, which is worse than a miss: 'and by `WP-x`' in a row's descriptive prose was read as a revision. A continuation must now name its version, so only 'revised' may omit one - which is the defect the module exists to catch."
+  ],
+  "decisions": [
+    "DEC-110: both rules in README 4.1; the mechanical half tested; P0.12's row completed."
+  ],
+  "assumptions": [
+    "#316's recommendation is the rule, having been written by the package that raised it and accepted by the WP-101 review; the operator may reverse it by a comment on #316.",
+    "Recording a version that was moved is a correction to a design's history, not a change to what it says, so it moves no version."
+  ],
+  "blockers": [
+    {
+      "code": "DESIGN_VERSION_RULE_NOT_ADOPTED",
+      "owner_role": "operator",
+      "resolution": "Answer #316. It is an open wayfinder:grilling ticket whose recommendation is an agent proposal; AGENTS.md holds that approval is an explicit authority record and never inferred. Until it is answered the rule in the pack README section 4.1 and tests/test_design_versions.py must not land. P0.12 corrected Landed-by row stands on its own, being settled by git at c3e255a."
+    }
+  ],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "record_rule_addition": "OPERATOR_INSTRUCTION_2026_09_07_PROCEED_ON_YOUR_CALL: PROPOSED, REVERSIBLE_BY_OPERATOR_ON_316",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_107",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_design_versions.py",
+    "read_first": [
+      "docs/architecture/p0/README.md",
+      "tests/test_design_versions.py"
+    ],
+    "stop_if": [
+      "A design's version is moved to satisfy the test rather than because what the design says changed.",
+      "A Landed by row gains an entry for a package that changed no claim; the row is not a changelog."
+    ]
+  },
+  "declared_non_coverage": [
+    "Whether a change altered a claim is not tested and cannot be; the README states it as a reviewer's rule.",
+    "The rule is written for the P0 pack's README only. Later phases have no design pack yet, and whether they inherit it is theirs to say.",
+    "A Landed by row's prose - what a revision carried - is not checked, only its package and version.",
+    "Nothing checks that a version was moved by the package the row names rather than by another; git is the record for that.",
+    "Not adopted. The rule is #316's recommendation and #316 is unanswered; nothing here is a decision."
+  ]
+}

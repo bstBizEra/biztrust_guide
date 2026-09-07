@@ -64,6 +64,12 @@ Every design has these sections, in this order, with these headings. A missing o
 
 A table at the top: version, status (from section 3), epic number and manual row, map ticket, Work Package that landed it, the ADRs it depends on with each one's register status, and the research files it cites.
 
+**A version moves when what the design says changes** ([#316](https://github.com/bstBizEra/biztrust_guide/issues/316)). New or altered content, a dependency added, a question answered, a control added or removed. A repair that changes no claim does not move it: a broken link, a typo, a renamed file the design points at. The design says what it always said, and its links were always meant to reach the files they name.
+
+**`Landed by` records what shaped the design**: the Work Package that landed it, and each one that moved its version, naming the version it moved to. Not every edit. A file's full edit history is git's job, and a status block that becomes a changelog stops telling a reader the one thing they open it for, which is where this design came from.
+
+The cost is that a reader cannot see from the design that it was repaired, which is the right trade only while the first rule stays sharp. Both were reconstructed from the pack's own practice under the WP-101 review, which repaired forty-eight broken links across all fourteen files, moved no version and added itself to no `Landed by` row; the review accepted that judgement and asked for the gap to be named rather than filled in by the package that noticed it. `tests/test_design_versions.py` holds the mechanical half - a version agrees with its own `Landed by` row, and every revision names the version it moved to. Whether a change altered a claim is a question for review, not for a test. Both rules are proposals, like everything else in this pack, and the operator may reverse either by a comment on #316.
+
 ### 4.2 Scope and non-scope
 
 What this epic builds and what it deliberately does not. Non-scope names the epic or phase that owns each excluded item, so a gap reads as a decision and not an omission (the Architect stage's rule, [`stages/architect.html#freeze`](../../../stages/architect.html#freeze): deferral is an output, not an omission).
