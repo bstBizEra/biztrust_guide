@@ -11,11 +11,13 @@
     "baseline_commit": "924e52fadf40a91e06b22f5866a58cc5c73c4d3a"
   },
   "completed": [
-    "Four modules import showcase_parity.norm instead of defining _norm; five copies of the function become one.",
-    "The tag question is settled by experiment and the reason is written in showcase_parity.norm's own docstring, where the choice is made.",
-    "Each adopting module's docstring says where its normaliser now lives.",
-    "All four modules' DECLARED negative controls were re-run and still fire, which is #341's fourth acceptance criterion.",
-    "The dual-import idiom of test_showcase_architecture.py is used, so the modules still run both by discovery and by module name from the root; both were exercised."
+    "tests/showcase_parity.py gains norm_markup(), the strict sibling of norm(): markup and backticks out, Markdown emphasis and links left alone.",
+    "Four modules import it instead of defining _norm; five definitions of the shared behaviour become two named functions with different jobs.",
+    "The tag question is settled by experiment and recorded in norm()'s docstring, where the choice is made.",
+    "Review's eight record-side divergences are caught again - two per module, each of which passed under the first attempt.",
+    "All four modules' declared page-side controls still fire, and each module's docstring now records the WP-110 re-run rather than leaving the evidence in a commit message.",
+    "Three dead `import html as html_mod` lines removed from modules that no longer normalise for themselves.",
+    "The dual-import idiom is used, so the modules run by discovery and by module name from the root; both exercised."
   ],
   "remaining": [
     "Two-axis review of the head commit, then merge.",
@@ -47,13 +49,19 @@
       "command": "python3 scripts/validate_continuity.py",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "python3 wp110_regression.py (review's 8 record-side divergences)",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
-    "The shared function already existed and the first survey missed it. WP-109 measured this duplication and reported that a refactor needed a new module; showcase_parity.norm was already there, doing strictly more, and #341's own text pointed at that file as the precedent without noticing it held the function. Looking for the seam before building one would have found it.",
-    "The one real question was decided by the suite rather than by preference, which is what made it cheap. Making the module that spaced tags drop them: green. Making the other three space them: test_work_package_loop_page fails, on a page that writes '(<a>Discover 03</a>)' against a record that writes '(Discover 03)'. Its docstring had predicted exactly that case, so the experiment confirmed a comment nobody had tested.",
-    "A passing suite would not have been enough here and #341 said so in advance. A refactor of guards can leave every test green while quietly weakening what they catch, so each adopting module's own declared control was re-run as a mutation. All four still fire.",
-    "The two modules that keep a private copy were read, not assumed: test_showcase_pages.py neither lowercases nor strips backticks, and test_phase_pages.py normalises a plain label with no markup at all. Merging those would have changed behaviour to no purpose, which is the Speculative Generality the WP-109 measurement declined for designs()."
+    "The first attempt WEAKENED all four guards and the suite did not notice. Review constructed eight record-side divergences - a cell gaining `**bold**`, a cell becoming `[text](url)` where the page says something else - and every one was caught at the base commit and passed after the refactor. norm() resolves Markdown links and strips bold, so a link's target became invisible to the comparison entirely. The justification for adopting it, that those steps were 'improvements on the record side', was asserted and never checked: no cell in any region those four compare contains a link or a bold marker.",
+    "That is the exact failure #341's fourth criterion warned about, and my own controls missed it. The four I re-ran were each module's own declared controls, but all four are page-side plain-text edits that any normaliser catches; none exercised the behaviour that had changed. A control has to exercise the change, not merely exist.",
+    "Making norm() stricter for everyone was tried before adding a sibling, and the suite refused it: dropping the link step fails test_epics_match_the_plan and norm()'s own self-tests, because the records those readers compare do carry Markdown emphasis and links. So the leniency is real and needed - by other callers - and the two behaviours are two named functions rather than one with a boolean.",
+    "The tag question was decided by experiment rather than preference. Making the module that spaced tags drop them leaves the suite green; making the other three space them fails test_work_package_loop_page, whose page writes a citation as '(<a>Discover 03</a>)' against a record writing '(Discover 03)'. Its docstring had predicted exactly that case, so the experiment confirmed a comment nobody had tested.",
+    "One claim of mine was corrected rather than defended: I said test_phase_pages.py would 'change behaviour to no purpose' if it adopted the shared function. Review adopted it there and the suite stayed green. Excluding it is still right - it would inherit the leniency - but the stated reason was asserted, not demonstrated."
   ],
   "decisions": [
     "DEC-112: four copies adopt showcase_parity.norm; a tag becomes nothing, settled by experiment."
@@ -83,7 +91,8 @@
   },
   "declared_non_coverage": [
     "Only _norm is consolidated. designs() keeps its four variants, which differ deliberately - one excludes the security proof, one is keyed by epic - and unifying them needs parameters, as WP-109 measured.",
-    "No behaviour of the four modules is otherwise changed, and no page or record is touched.",
-    "The controls re-run here are the ones each module declares; a defect a module never claimed to catch is still not caught."
+    "The controls re-run here are the ones each module declares; a defect a module never claimed to catch is still not caught.",
+    "The four modules are now STRICTER than before only in the sense that they are no longer looser; norm_markup reproduces exactly the behaviour their private copies had, except that one of them stops spacing tags.",
+    "Only 4 of the 17 controls those modules declare were re-run, plus review's 8. The other 13 are unchanged and were not exercised."
   ]
 }

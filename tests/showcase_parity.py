@@ -47,6 +47,29 @@ def norm(fragment: str) -> str:
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
+def norm_markup(fragment: str) -> str:
+    """Markup out, and Markdown emphasis left ALONE. The strict sibling of norm().
+
+    norm() also resolves `[text](url)` to its text and strips `**`, which it must: dropping
+    either fails test_epics_match_the_plan and norm()'s own self-tests, because the records those
+    readers compare do use Markdown emphasis and links.
+
+    The four modules that compare a record's cell to a page's cell do NOT want that leniency, and
+    WP-110 first gave it to them by mistake. Review measured the cost: eight record-side
+    mutations - a cell gaining `**bold**`, or becoming `[text](url)` where the page says something
+    else - were caught before and passed after. Those are real copy divergences, and under norm()
+    the link's TARGET becomes invisible to the comparison entirely. It bought nothing: no cell in
+    any region those four compare contains a link or a bold marker.
+
+    So the difference is not a preference and not a parameter. norm() tolerates Markdown because
+    its records carry it; norm_markup() refuses to, because a record that emphasises or links text
+    the page does not is exactly the divergence its callers exist to catch.
+    """
+    s = re.sub(r"<[^>]+>", "", fragment)
+    s = html_mod.unescape(s).replace("`", "")
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
 def section(path: Path, start: str, end: str) -> str:
     """The text of `path` between the first `start` and the next `end`; raises if either is missing."""
     return path.read_text(encoding="utf-8").split(start, 1)[1].split(end, 1)[0]
