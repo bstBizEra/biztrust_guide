@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-109-001",
+  "created_at": "2026-09-07T04:51:57Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-109",
+  "state": "ENGINEERING_READY",
+  "objective": "Record, in P0.12's Landed by row, the version WP-075 moved the design to. The row says 'revised by BIZTRUST-GUIDE-WP-075 from the research of #240' and names no version; commit c3e255a moved the design from 0.1 to 0.2 and wrote that row in the same change. Eight of the pack's nine revision entries name their version and this one does not. The correction rests on git alone and needs no answer to #316, which asks when a version moves: this one moved.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-109-p012-landed-by",
+    "baseline_commit": "43f4a94cef03059ad924aacee9f5bf60053f20e5"
+  },
+  "completed": [
+    "P0.12's Landed by row reads 'revised to `0.2` by `BIZTRUST-GUIDE-WP-075`', which is what commit c3e255a did.",
+    "The design's own version is unchanged at `0.3`, asserted by the change script itself.",
+    "No rule is applied and no other design is touched; #316 stays open and PR #338 stays a draft."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: PR #338 no longer needs this hunk."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-109-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The evidence is one commit and needs no interpretation. c3e255a moved the version from 0.1 to 0.2 AND wrote the row entry that omits it, in the same change: 'git show c3e255a -- <design>' shows both hunks. A package recorded its own revision and left out the number it had just changed.",
+    "This is deliberately separated from the rule that would have caught it. WP-108 prepared that rule and stopped, because #316 is an open wayfinder:grilling ticket and AGENTS.md holds that approval is an explicit authority record and never inferred. A fact settled by git is not a rule, and landing it does not pre-empt the answer.",
+    "A refactor was considered first and measured rather than assumed, and the measurement was then corrected by review. designs() has four variants of which two are byte-identical, and the other two differ DELIBERATELY - one excludes the security proof, one is keyed by epic - so unifying them needs parameters and the Speculative Generality argument holds. _norm() is a different case and the first measurement understated it: six copies, of which three are identical but for a docstring and a fourth differs by one character in a tag substitution. That one needs no parameters, so the argument that covers designs() does not cover it. Filed rather than done, because this package has one outcome.",
+    "Review also found DEC-111 over-claiming that nothing here depends on #316. The row's content does not; the decision to leave this design's own version at 0.3 while editing it is one plausible answer to that question, and DEC-105 and DEC-108 both deferred repairs for exactly that reason. It is recorded as an assumption now rather than as a question that does not arise."
+  ],
+  "decisions": [
+    "DEC-111: the row records the version WP-075 moved it to; no rule applied."
+  ],
+  "assumptions": [
+    "Recording a version that git proves was moved is a correction of fact, not an application of #316's unanswered rule.",
+    "Editing a design's Landed by row without moving the design's version is the treatment #316's recommendation implies; a rule that bumped a version for every edit would make this commit wrong, and that rule is not the one on the table but has not been ruled out either."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "factual_correction": "OPERATOR_INSTRUCTION_2026_09_07_IMPLEMENT_ACCORDING_TO_EVIDENCE_AND_SOURCES_OF_TRUTH",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_107",
+    "design_version_rule": "NOT_GRANTED: #316 is unanswered and nothing here applies it",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "git show c3e255a -- docs/architecture/p0/P0.12-secrets-and-configuration.md",
+    "read_first": [
+      "docs/architecture/p0/P0.12-secrets-and-configuration.md",
+      "badf/current-state.json"
+    ],
+    "stop_if": [
+      "Any other design's row or version is edited; only this one is settled by git without a rule."
+    ]
+  },
+  "declared_non_coverage": [
+    "No rule is written and nothing holds the other twelve rows; that is #316 and PR #338, which stay open.",
+    "The eight other revision entries were read and all name their version; none needed correcting.",
+    "Whether the row's prose is right - what the revision carried - is not examined, only the version it names.",
+    "The _norm() duplication across six test modules is measured and filed, not fixed; this package has one outcome."
+  ]
+}
