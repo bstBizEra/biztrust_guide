@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-103",
-  "updated_at": "2026-09-06T18:56:24Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-104",
+  "updated_at": "2026-09-07T01:06:54Z",
   "actions": [
     {
       "id": "NS-040",
@@ -192,6 +192,25 @@
         "An agent edits a supplied SVG master to make it usable, or changes the SHOWCASE-001 mast rule without the operator"
       ],
       "fallback": "The handbook keeps the symbol in every slot and the showcase keeps its text wordmark; neither is blocked by these questions."
+    },
+    {
+      "id": "NS-047",
+      "primary": false,
+      "priority": 10,
+      "owner_role": "documentation-engineer",
+      "authority": "IMPLEMENTATION_SCOPE",
+      "action": "Build the two guards #330 asks for, over the defect classes the thirteen design reviews found. The first: every claim in a design that a control feeds the BT-G1 matrix resolves to a control the security proof names on one of its eleven rows, and every control the proof names exists in the design it names - eight instances disagree today (#323). The second: an ask a sibling's own 'Changes in' table says it carried stops reading as open in the design that asked - seventeen of these sit in the three designs still at 0.1, which have never been revised (#326). The naive keyword form of the second over-matches and must pair the specific ask, not the design name.",
+      "prerequisites": [
+        "#330 is read; #323 and #326 hold the instances each guard must catch"
+      ],
+      "evidence_required": [
+        "Both guards fail on this repository at e1a8b65, where the instances live, and pass after the designs are corrected",
+        "Each guard's negative controls run as the suite runs them, each failing only the test that names it"
+      ],
+      "stop_conditions": [
+        "A design is edited to satisfy a guard before checking whether the claim or the ask was the thing that was wrong"
+      ],
+      "fallback": "The eight finding tickets stand on their own; the guards stop the classes recurring, they do not fix the instances."
     }
   ]
 }

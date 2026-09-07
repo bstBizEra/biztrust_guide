@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-104-001",
+  "created_at": "2026-09-07T01:06:54Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-104",
+  "state": "ENGINEERING_READY",
+  "objective": "Move the thirteen P0 designs from PROPOSED to IN_REVIEW, which the pack's README section 3 defines as 'a fresh-context review is recorded on the ticket'. No such review existed: every one of the thirteen map tickets carried a single comment, the wayfinder resolution, and the reviews that had happened were of each Work Package's diff, recorded on its pull request. A diff review asks whether a change did what its ticket said; the pack's section 1 asks whether the design holds up as a design. Thirteen designs had never been asked.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-104-designs-in-review",
+    "baseline_commit": "e1a8b6505cafc6b0395e0dc38481747d518d2f42"
+  },
+  "completed": [
+    "Thirteen fresh-context design reviews, one per design, each against the pack's own rubric - section 1's four questions, section 4's nine mandatory sections, section 5's six rules - recorded as a comment on the design's map ticket: #137 to #148 and #185.",
+    "All thirteen verdicts are DESIGN rather than description: every design answers section 1's four questions from its own text.",
+    "Thirteen status blocks read IN_REVIEW; the manual's thirteen status statements move with them.",
+    "tests/test_p0_design_pack.py no longer goes quiet when a design moves past PROPOSED, and a new check holds the manual's stated status to the designs' own.",
+    "Eight finding tickets, #323 to #330, one per class rather than one per instance."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #322 closed; the eight finding tickets stay open."
+  ],
+  "files_changed": [
+    "docs/architecture/p0/P0.*.md",
+    "phases/p0.html",
+    "tests/test_p0_design_pack.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-104-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The defects cluster at the seams. Each design was written and revised on its own branch and nothing re-read the joins, so almost every finding is a disagreement between two files rather than a fault inside one - which is exactly what a diff review cannot see, because it only ever looks at one change.",
+    "The worst finding is #325: the proof asserts two BT-G1 rows' database expectation from the P0.11 trace's CLIENT spans, and P0.11 says in three places that telemetry is not evidence and never accepts the duty in its coverage or its non-coverage. The inference does not hold either - no control shows a business query would have emitted a span in that run, so an empty span set is equally consistent with instrumentation not firing.",
+    "Two classes were established by census rather than by sampling, which is why they are trusted: the BT-G1 mismatches were found by extracting every control reference from the proof's rows and comparing them against each design's own claim, and the three designs still at 0.1 are credited seventeen times by siblings' changes tables. Three reviewers independently found three of the BT-G1 mismatches from three different files, and the census found the same three and no more.",
+    "A keyword sweep for the staleness class flags about seventy sentences, and that number is not reported as a finding: it over-matches, because one design can credit an asker for one thing while another ask from the same asker stays genuinely open. Only the hand-verified instances and the structural seventeen are recorded.",
+    "Moving all thirteen statuses at once would have silently gutted test_manual_links_each_proposed_design, which skipped every status but PROPOSED. Restoring the old form on this branch, with the manual's link to a design deliberately broken, makes it pass - the control is in the module's docstring.",
+    "Review found the thirteenth status statement, which this package had missed and which its own new check could not see: twelve epic rows read \"(design, PROPOSED)\" and the security proof's reads \"(the proof's design, PROPOSED)\", so both the substitution and the regex written to catch it were shaped by the twelve.",
+    "It also found the status check vacuous. It compared the SET of statuses the manual mentions against the SET the designs hold, which says nothing while they all agree - the state it was written in. Three mutations survived: a row's status dropped, two rows' links swapped, and one design marked REJECTED while REJECTED was written on a different design's row, misstating both and leaving the sets equal. The check now pairs each design against the anchor whose href names it, which is a seam the markup already had, and a third check holds a numbered design's link inside its own epic row.",
+    "The irony is recorded rather than smoothed over: this package's own guard had the shape it criticised in eight of the designs it reviewed - a claim that reads as checked and is not.",
+    "The spec axis found two claims published on tickets that the files do not support, and both are withdrawn or corrected on the tickets themselves. The policy.bound rule 2 finding is wrong: P0.9 names it once, in Scope and non-scope, as something it hands to P1's designs, which is correct scoping and the opposite of adopting the name. The P0.13 quotation named the expected column as the baseline; the finding stands and the real baseline supports it better. The first was taken on a reviewing agent's word without checking, while the severe findings were all checked - the lesson is that the verification threshold was set by severity and should have been set by publication.",
+    "Every review comment closes 'the design stays PROPOSED until someone with the authority says otherwise', which this package made false by moving the thirteen to IN_REVIEW. The sentence meant that no agent moves a design to ACCEPTED or REJECTED, which holds; it is annotated on #322 rather than edited into thirteen comments.",
+    "Criterion 4 is partial in both directions and is recorded as partial: about seventeen findings in the comments carry no ticket link, and #323's eighth item appears in no comment. The eight tickets are one per class, so the thirteen comments remain the instance list."
+  ],
+  "decisions": [
+    "DEC-106: thirteen designs to IN_REVIEW on recorded reviews; no version moves, nothing accepted or rejected, findings ticketed."
+  ],
+  "assumptions": [
+    "A design review and the Work Package diff review its landing required are different reviews; section 3's is recorded on the ticket and asks whether the design holds, section 5 rule 6's is recorded on the pull request and asks whether the change did what it said.",
+    "A status transition is not a revision, so no version moves. #316 is open on when one does."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "design_review": "OPERATOR_INSTRUCTION_2026_09_07_REVIEW_ALL_THIRTEEN_FIX_NOTHING_NEVER_REJECT",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_103",
+    "design_acceptance": "ARCHITECTURE_AUTHORITY_AFTER_BT_G0_AND_ITS_ADRS: NOT_APPROACHED_BY_THIS_PACKAGE",
+    "design_rejection": "NOT_GRANTED: a rejection is nearer an acceptance decision than an agent should take",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER",
+    "p0_implementation": "NOT_GRANTED_UNTIL_BT_G0"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 scripts/validate_continuity.py",
+    "read_first": [
+      "AGENTS.md",
+      "docs/architecture/p0/README.md",
+      "badf/current-state.json"
+    ],
+    "stop_if": [
+      "A design is marked ACCEPTED, or REJECTED, by anything other than the architecture authority's own record.",
+      "A finding from #323 to #329 is fixed by editing a design before it is settled whether that moves the design's version (#316)."
+    ]
+  },
+  "declared_non_coverage": [
+    "No finding is fixed. Eight tickets record them; the designs are unchanged but for their status line.",
+    "The two guards #330 asks for are not built here; they are NS-047, so that this package has one outcome.",
+    "The reviews read each design against the pack's rules and its siblings. They do not judge whether a design's architecture is right, which is the architecture authority's question at BT-G0.",
+    "The keyword census of stale asks is not a finding and its count is not reported; only hand-verified instances and the structural seventeen are.",
+    "The manual's prose is not read, only its anchors: a sentence elsewhere asserting a design's status is invisible.",
+    "The status the manual states is compared to the status the design declares, not to anything showing the declaration is warranted; the review that IN_REVIEW rests on lives on a map ticket and no test reads a ticket.",
+    "The eight tickets are one per defect class and do not enumerate every instance; the thirteen review comments do."
+  ]
+}
