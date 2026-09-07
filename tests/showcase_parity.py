@@ -31,10 +31,55 @@ JOINERS = ("↓", "↕", "│", "▼", "+", "=")
 
 
 def norm(fragment: str) -> str:
-    """Tags out, markdown links to their text, entities unescaped, backticks and bold out, whitespace one space, lower case."""
+    """Tags out, markdown links to their text, entities unescaped, backticks and bold out, whitespace one space, lower case.
+
+    A TAG BECOMES NOTHING, NOT A SPACE, and that is decided rather than assumed. Four modules
+    carried a private copy of this function and one of them replaced a tag with " " instead
+    (WP-110, #341). The suite settles which is right: make that module drop tags and everything
+    passes; make the other three space them and test_work_package_loop_page fails, because the
+    page writes a citation as "(<a>Discover 03</a>)" and the record it is compared against writes
+    "(Discover 03)". Spacing gives "( discover 03 )" on one side only. So dropping is required by
+    a live case and spacing is required by nothing.
+    """
     s = re.sub(r"<[^>]+>", "", fragment)
     s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)
     s = html_mod.unescape(s).replace("`", "").replace("**", "")
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def norm_markup(fragment: str, *, tag: str = "") -> str:
+    """Markup out, and Markdown emphasis left ALONE. The strict sibling of norm().
+
+    `tag` is what a tag is replaced by, and it is a real two-valued choice with a live caller on
+    each side, not a knob. A tag that stands where the record has no space must vanish: the Work
+    Package loop page writes a citation as "(<a>Discover 03</a>)" against a record writing
+    "(Discover 03)", and spacing gives "( discover 03 )" on one side only - the suite fails. A tag
+    that stands where the record HAS a space must become one: "product<br>packs" against a record
+    writing "product packs" matches only if the tag spaces. Neither is universally right, because
+    a tag boundary is sometimes a word boundary and sometimes not.
+
+    So each caller keeps the answer its own corpus needs, and the default is the commoner one.
+    The operations page passes tag=" " because that is what it did before this function existed;
+    dropping there would have lost a divergence it used to catch, and nothing in its corpus
+    needed the change.
+
+    norm() also resolves `[text](url)` to its text and strips `**`, which it must: dropping
+    either fails test_epics_match_the_plan and norm()'s own self-tests, because the records those
+    readers compare do use Markdown emphasis and links.
+
+    The four modules that compare a record's cell to a page's cell do NOT want that leniency, and
+    WP-110 first gave it to them by mistake. Review measured the cost: eight record-side
+    mutations - a cell gaining `**bold**`, or becoming `[text](url)` where the page says something
+    else - were caught before and passed after. Those are real copy divergences, and under norm()
+    the link's TARGET becomes invisible to the comparison entirely. It bought nothing: no cell in
+    any region those four compare contains a link or a bold marker.
+
+    So the difference is not a preference and not a parameter. norm() tolerates Markdown because
+    its records carry it; norm_markup() refuses to, because a record that emphasises or links text
+    the page does not is exactly the divergence its callers exist to catch.
+    """
+    s = re.sub(r"<[^>]+>", tag, fragment)
+    s = html_mod.unescape(s).replace("`", "")
     return re.sub(r"\s+", " ", s).strip().lower()
 
 

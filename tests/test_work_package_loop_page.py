@@ -20,6 +20,21 @@ Negative controls (run 2026-09-06 under WP-060, on in-memory copies):
   * Add a 25th row to the page                -> test_table_has_exactly_24_rows FAILS
   * Cite "Build §12" on the page              -> test_stage_citations_resolve FAILS
 
+Text is normalised by showcase_parity.norm_markup (WP-110, #341), which four modules
+carried a copy of. It is the STRICT sibling of norm(): it leaves Markdown emphasis and
+links alone, because a record that emphasises or hyperlinks text the page does not is a
+divergence this module exists to catch. Adopting norm() instead - the first attempt -
+let eight such divergences through, and review measured every one.
+
+Controls re-run 2026-09-07 under WP-110, because a refactor of a guard can leave every
+test green while weakening what it catches:
+  * step 12's stage changed on the page          -> test_rows_match_the_plan FAILS
+  * the record's cell gains `**bold**` markers      -> caught
+  * the record's cell becomes `[text](url)` where   -> caught
+    the page says something else
+The last two are review's, and they PASSED when this module briefly used norm() rather
+than norm_markup(). That is why the strict sibling exists.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
@@ -38,11 +53,10 @@ STAGE_NAMES = ("Discover", "Define", "Architect", "Plan", "Build", "Assure", "Re
 SECTION_START, SECTION_END = "\n### 13.1 ", "\n## 14. "
 
 
-def _norm(fragment: str) -> str:
-    """Inline tags (the links round a citation) are dropped, not spaced, so "(<a>Discover §03</a>)" reads "(discover §03)"."""
-    s = re.sub(r"<[^>]+>", "", fragment)
-    s = html_mod.unescape(s).replace("`", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
+try:
+    from showcase_parity import norm_markup as _norm
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm_markup as _norm
 
 
 def plan_rows() -> dict[str, tuple[str, str, str]]:

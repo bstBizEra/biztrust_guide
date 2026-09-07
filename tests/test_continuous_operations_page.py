@@ -21,12 +21,26 @@ Negative controls (run 2026-09-06 under WP-056, on in-memory copies):
   * Add an E9 row to the streams table             -> test_each_table_has_exactly_eight_rows FAILS (review pass)
   * Drop every BT-G6 from the page                 -> test_page_names_exactly_the_gates_the_plan_does FAILS (review pass)
 
+Text is normalised by showcase_parity.norm_markup with tag=" " (WP-110, #341), which four modules
+carried a copy of. It is the STRICT sibling of norm(): it leaves Markdown emphasis and
+links alone, because a record that emphasises or hyperlinks text the page does not is a
+divergence this module exists to catch. Adopting norm() instead - the first attempt -
+let eight such divergences through, and review measured every one.
+
+Controls re-run 2026-09-07 under WP-110, because a refactor of a guard can leave every
+test green while weakening what it catches:
+  * E4's capability changed on the page          -> test_streams_match_the_plan FAILS
+  * the record's cell gains `**bold**` markers      -> caught
+  * the record's cell becomes `[text](url)` where   -> caught
+    the page says something else
+The last two are review's, and they PASSED when this module briefly used norm() rather
+than norm_markup(). That is why the strict sibling exists.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
 from __future__ import annotations
 
-import html as html_mod
 import re
 import unittest
 from pathlib import Path
@@ -40,10 +54,18 @@ P3 = ROOT / "phases" / "p3.html"
 STREAM_IDS = {f"E{n}" for n in range(1, 9)}
 
 
+try:
+    from showcase_parity import norm_markup
+except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
+    from tests.showcase_parity import norm_markup
+
+
 def _norm(fragment: str) -> str:
-    s = re.sub(r"<[^>]+>", " ", fragment)
-    s = html_mod.unescape(s).replace("`", "")
-    return re.sub(r"\s+", " ", s).strip().lower()
+    """This page's tags stand where the record has a space, so they become one.
+
+    The Work Package loop page is the other way round and drops them; see norm_markup.
+    """
+    return norm_markup(fragment, tag=" ")
 
 
 def _plan_section(start: str, end: str) -> str:
