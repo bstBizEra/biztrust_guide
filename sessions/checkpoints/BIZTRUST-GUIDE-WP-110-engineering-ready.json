@@ -11,13 +11,14 @@
     "baseline_commit": "924e52fadf40a91e06b22f5866a58cc5c73c4d3a"
   },
   "completed": [
-    "tests/showcase_parity.py gains norm_markup(), the strict sibling of norm(): markup and backticks out, Markdown emphasis and links left alone.",
     "Four modules import it instead of defining _norm; five definitions of the shared behaviour become two named functions with different jobs.",
     "The tag question is settled by experiment and recorded in norm()'s docstring, where the choice is made.",
     "Review's eight record-side divergences are caught again - two per module, each of which passed under the first attempt.",
     "All four modules' declared page-side controls still fire, and each module's docstring now records the WP-110 re-run rather than leaving the evidence in a commit message.",
     "Three dead `import html as html_mod` lines removed from modules that no longer normalise for themselves.",
-    "The dual-import idiom is used, so the modules run by discovery and by module name from the root; both exercised."
+    "The dual-import idiom is used, so the modules run by discovery and by module name from the root; both exercised.",
+    "tests/showcase_parity.py gains norm_markup(fragment, *, tag=''), the strict sibling of norm(): markup and backticks out, Markdown emphasis and links left alone.",
+    "NO module's behaviour changes. The three that dropped tags take the default; the operations page passes tag=' ', which is what it did before, so the package is a pure refactor."
   ],
   "remaining": [
     "Two-axis review of the head commit, then merge.",
@@ -59,6 +60,11 @@
       "command": "wp110_exact_inputs.py - old vs new on every fragment the four modules actually normalise",
       "status": "PASS",
       "exit_code": 0
+    },
+    {
+      "command": "showcase_parity.norm_markup with each module's own tag setting, against its pre-refactor copy",
+      "status": "PASS",
+      "exit_code": 0
     }
   ],
   "observations": [
@@ -67,7 +73,9 @@
     "Making norm() stricter for everyone was tried before adding a sibling, and the suite refused it: dropping the link step fails test_epics_match_the_plan and norm()'s own self-tests, because the records those readers compare do carry Markdown emphasis and links. So the leniency is real and needed - by other callers - and the two behaviours are two named functions rather than one with a boolean.",
     "The tag question was decided by experiment rather than preference. Making the module that spaced tags drop them leaves the suite green; making the other three space them fails test_work_package_loop_page, whose page writes a citation as '(<a>Discover 03</a>)' against a record writing '(Discover 03)'. Its docstring had predicted exactly that case, so the experiment confirmed a comment nobody had tested.",
     "One claim of mine was corrected rather than defended: I said test_phase_pages.py would 'change behaviour to no purpose' if it adopted the shared function. Review adopted it there and the suite stayed green. Excluding it is still right - it would inherit the leniency - but the stated reason was asserted, not demonstrated.",
-    "The correction is proved behaviour-preserving rather than asserted to be. Each module's own reader was run with _norm captured, and old and new compared on exactly the arguments it passes: 96 fragments for the operations page, 19 for the hub, 18 for the team model, 144 for the Work Package loop - 277 in all, ZERO differences, including the module whose implementation changed from spacing tags to dropping them. A broader corpus of whole <td> contents showed 42 apparent differences for that module, all of the shape '<strong>E1</strong><small>Tenant Scale</small>', and all of them artefacts of the corpus builder: that module's own regex splits the identifier cell before _norm ever sees it. Checking what a function is actually called with beats checking what it could be called with."
+    "The correction is proved behaviour-preserving rather than asserted to be. Each module's own reader was run with _norm captured, and old and new compared on exactly the arguments it passes: 96 fragments for the operations page, 19 for the hub, 18 for the team model, 144 for the Work Package loop - 277 calls in all from those readers, zero differences. Verification then re-derived it independently over the full suite - 633 calls, 143 unique fragments - and also found zero. My '277 fragments' was 277 CALLS from the readers I invoked, not 277 distinct fragments and not the whole set; the seventh count of this session that was looser than it sounded. A broader corpus of whole <td> contents showed 42 apparent differences for that module, all of the shape '<strong>E1</strong><small>Tenant Scale</small>', and all of them artefacts of the corpus builder: that module's own regex splits the identifier cell before _norm ever sees it. Checking what a function is actually called with beats checking what it could be called with.",
+    "Verification found the one behaviour change that remained, and it is now removed rather than documented. test_continuous_operations_page spaced tags and norm_markup dropped them, which loses a divergence where a tag stands between two non-space characters: a record reading 'productpacks' against a page reading 'product<br>packs' was caught at the base commit and missed after. Nothing live depended on it, and the docstring's rationale showed only that nothing is lost TODAY. This package had already been wrong twice on that reasoning, so the module keeps spacing and norm_markup takes the replacement as a parameter.",
+    "The parameter is a real two-valued choice, not a knob, and each value has a live caller. A tag standing where the record has no space must vanish - the loop page's '(<a>Discover 03</a>)' against '(Discover 03)', which fails if spaced. A tag standing where the record HAS a space must become one - 'product<br>packs' against 'product packs', which fails if dropped. A tag boundary is sometimes a word boundary and sometimes not, so neither answer is universally right and the earlier framing of it as one was wrong."
   ],
   "decisions": [
     "DEC-112: four copies adopt showcase_parity.norm; a tag becomes nothing, settled by experiment."
@@ -98,7 +106,7 @@
   "declared_non_coverage": [
     "Only _norm is consolidated. designs() keeps its four variants, which differ deliberately - one excludes the security proof, one is keyed by epic - and unifying them needs parameters, as WP-109 measured.",
     "The controls re-run here are the ones each module declares; a defect a module never claimed to catch is still not caught.",
-    "The four modules are now STRICTER than before only in the sense that they are no longer looser; norm_markup reproduces exactly the behaviour their private copies had, except that one of them stops spacing tags.",
-    "Only 4 of the 17 controls those modules declare were re-run, plus review's 8. The other 13 are unchanged and were not exercised."
+    "Only 4 of the 17 controls those modules declare were re-run, plus review's 8. The other 13 are unchanged and were not exercised.",
+    "No module's behaviour changes at all. norm_markup reproduces each private copy exactly, including the one that spaces tags."
   ]
 }

@@ -47,8 +47,21 @@ def norm(fragment: str) -> str:
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
-def norm_markup(fragment: str) -> str:
+def norm_markup(fragment: str, *, tag: str = "") -> str:
     """Markup out, and Markdown emphasis left ALONE. The strict sibling of norm().
+
+    `tag` is what a tag is replaced by, and it is a real two-valued choice with a live caller on
+    each side, not a knob. A tag that stands where the record has no space must vanish: the Work
+    Package loop page writes a citation as "(<a>Discover 03</a>)" against a record writing
+    "(Discover 03)", and spacing gives "( discover 03 )" on one side only - the suite fails. A tag
+    that stands where the record HAS a space must become one: "product<br>packs" against a record
+    writing "product packs" matches only if the tag spaces. Neither is universally right, because
+    a tag boundary is sometimes a word boundary and sometimes not.
+
+    So each caller keeps the answer its own corpus needs, and the default is the commoner one.
+    The operations page passes tag=" " because that is what it did before this function existed;
+    dropping there would have lost a divergence it used to catch, and nothing in its corpus
+    needed the change.
 
     norm() also resolves `[text](url)` to its text and strips `**`, which it must: dropping
     either fails test_epics_match_the_plan and norm()'s own self-tests, because the records those
@@ -65,7 +78,7 @@ def norm_markup(fragment: str) -> str:
     its records carry it; norm_markup() refuses to, because a record that emphasises or links text
     the page does not is exactly the divergence its callers exist to catch.
     """
-    s = re.sub(r"<[^>]+>", "", fragment)
+    s = re.sub(r"<[^>]+>", tag, fragment)
     s = html_mod.unescape(s).replace("`", "")
     return re.sub(r"\s+", " ", s).strip().lower()
 

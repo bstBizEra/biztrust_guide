@@ -21,7 +21,7 @@ Negative controls (run 2026-09-06 under WP-056, on in-memory copies):
   * Add an E9 row to the streams table             -> test_each_table_has_exactly_eight_rows FAILS (review pass)
   * Drop every BT-G6 from the page                 -> test_page_names_exactly_the_gates_the_plan_does FAILS (review pass)
 
-Text is normalised by showcase_parity.norm_markup (WP-110, #341), which four modules
+Text is normalised by showcase_parity.norm_markup with tag=" " (WP-110, #341), which four modules
 carried a copy of. It is the STRICT sibling of norm(): it leaves Markdown emphasis and
 links alone, because a record that emphasises or hyperlinks text the page does not is a
 divergence this module exists to catch. Adopting norm() instead - the first attempt -
@@ -55,9 +55,17 @@ STREAM_IDS = {f"E{n}" for n in range(1, 9)}
 
 
 try:
-    from showcase_parity import norm_markup as _norm
+    from showcase_parity import norm_markup
 except ModuleNotFoundError:  # invoked by module name from the repository root rather than by discovery
-    from tests.showcase_parity import norm_markup as _norm
+    from tests.showcase_parity import norm_markup
+
+
+def _norm(fragment: str) -> str:
+    """This page's tags stand where the record has a space, so they become one.
+
+    The Work Package loop page is the other way round and drops them; see norm_markup.
+    """
+    return norm_markup(fragment, tag=" ")
 
 
 def _plan_section(start: str, end: str) -> str:
