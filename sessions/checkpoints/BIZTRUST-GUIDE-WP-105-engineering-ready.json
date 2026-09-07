@@ -14,8 +14,8 @@
     "tests/test_btg1_matrix_reconciles.py reads the proof's eleven matrix rows and every design's own claim, and holds them to each other forward and backward.",
     "The five disagreements are registered with their exact controls and a reason each: P0.3 (10), P0.4 (9), P0.5 (4), P0.7 (7, 8, 9, 10), P0.12 (6).",
     "The ratchet: an entry must still disagree at exactly its numbers, so a repaired design leaves the list; the registry's membership is asserted, so a sixth disagreement cannot be filed into it.",
-    "Seven controls, five isolated and two declared not isolated because they take the corpus away.",
-    "The backward direction - every control the proof names exists in the design it names - passes today with nothing registered, so it is a live rule from the start."
+    "The backward direction - every control the proof names exists in the design it names - passes today with nothing registered, so it is a live rule from the start.",
+    "Eleven controls, ten isolated and one declared not: renaming the matrix section away breaks five rules at once."
   ],
   "remaining": [
     "Two-axis review of the head commit, then merge.",
@@ -44,7 +44,13 @@
     "The reader had to be clause-bounded, not line-bounded. P0.5's claim on the matrix shares a line with 'Controls 1 to 3 and 5 are the manual's acceptance', which is true and has nothing to do with BT-G1, so a line-level reader invents three claims the design never made. Splitting on ; and | - the technique tests/test_adr_citations.py uses - reads exactly what the design said.",
     "Two phrasings that look alike and mean opposite things had to be told apart: 'every control feeds the BT-G1 matrix', which is a claim over the whole control set, and 'the verifier for any control that feeds the BT-G1 matrix is not the implementer', which is a conditional about the verifier and claims nothing. Requiring the verb after 'every control' separates them; without that, P0.6 and P0.12 would both have been read as claiming everything.",
     "Emptying the registry and running the module against this tree reports exactly the five designs at exactly the registered numbers. That is what makes the registry trustworthy: it is absorbing real disagreements, not covering for a reader that finds nothing. The same five came from a hand census and from three independent reviewers reading three different files.",
-    "The first attempt at the sentence reader used [^.]* to split on full stops, which breaks on this pack because 'P0.7 design's' contains one; the reader silently began mid-word and found nothing in P0.5 and P0.12. It was caught by probing what the reader returned before trusting it, rather than by the tests, which would have passed."
+    "The first attempt at the sentence reader used [^.]* to split on full stops, which breaks on this pack because 'P0.7 design's' contains one; the reader silently began mid-word and found nothing in P0.5 and P0.12. It was caught by probing what the reader returned before trusting it, rather than by the tests, which would have passed.",
+    "An adversarial review broke the first version six ways, and every one was real. The worst was the reader taking BOTH of the proof's numbered tables: editing the proof's OWN control table to mention 'P0.3 control 10' made the module announce that P0.3 had been repaired and instruct the author to delete a live #323 defect. A guard that tells you to retire a real finding is worse than no guard. The reader is now scoped to the '### The rows' section and asserts that anchor rather than assuming it.",
+    "Two evasions were about how an author writes rather than what they mean: a claim wrapped over two lines, which a line-at-a-time reader saw as neither claim, and a hyphen range '3-5', which the range parser read as {3, 5} and so lost the interior claim on control 4 in silence. Prose is joined into paragraphs before clause-splitting now, and one number grammar handles 'to', '-' and '–'.",
+    "Three positive controls were thresholds - at least six designs, at least thirty controls - and review showed both numbers sat exactly on the tree's own values, so de-prefixing five mentions shrank the matrix to the threshold and passed. They are named sets now: CLAIMING and CARRIED_DESIGNS. A count with no margin is not a control.",
+    "The reworked module immediately found something its author had not: matrix row 11 names no numbered control at all, resting on 'P0.10's read-back' instead. That is a real property of the matrix, already visible from the other side in the P0.10 review, and it is registered as the single known instance so that a second cannot appear unnoticed.",
+    "One evasion is NOT closed and is declared instead: a claim phrased 'rows of the security proof's minimum negative proof matrix', without the BT-G1 label, is not read. Widening the trigger to the bare word 'matrix' was considered and rejected - the pack also uses it for the baseline's matrix, P0.7's matrix, the matrix file and the matrix's scope, so widening would manufacture claims no design made, which is the failure this reader exists to avoid.",
+    "Six of the thirteen designs file no readable claim at all - P0.2, P0.8, P0.9, P0.10, P0.11 and P0.13 - so the forward rule genuinely reads under half the pack. Recorded in the docstring in capitals rather than left for a reader to infer from a passing suite."
   ],
   "decisions": [
     "DEC-107: the BT-G1 guard, with five registered disagreements as a ratchet; the second guard split to NS-048."
@@ -81,6 +87,9 @@
     "It does not read a design's evidence contract, so P0.6 naming five controls in its text and four in its evidence table passes here.",
     "It does not notice a design carrying the matrix's verifier language with no matrix row at all, which is P0.9's case.",
     "All three are recorded in #323's prose; a guard that caught them would have to understand the rows rather than count them.",
-    "The second guard #330 asks for, over stale asks, is not here. It is NS-048."
+    "The second guard #330 asks for, over stale asks, is not here. It is NS-048.",
+    "A claim that never writes the literal BT-G1 is not read; the trigger is deliberately not widened to the bare word 'matrix'.",
+    "Six designs file no readable claim, so the forward rule covers seven of thirteen. A design that claims nothing is silent here, not clean.",
+    "Matrix row 11 rests on a mechanism rather than a numbered control, so nothing here reaches it; it is registered, not checked."
   ]
 }
