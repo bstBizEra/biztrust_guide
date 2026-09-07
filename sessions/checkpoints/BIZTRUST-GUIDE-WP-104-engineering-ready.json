@@ -13,7 +13,7 @@
   "completed": [
     "Thirteen fresh-context design reviews, one per design, each against the pack's own rubric - section 1's four questions, section 4's nine mandatory sections, section 5's six rules - recorded as a comment on the design's map ticket: #137 to #148 and #185.",
     "All thirteen verdicts are DESIGN rather than description: every design answers section 1's four questions from its own text.",
-    "Thirteen status blocks read IN_REVIEW; the P0 manual's twelve epic rows move with them.",
+    "Thirteen status blocks read IN_REVIEW; the manual's thirteen status statements move with them.",
     "tests/test_p0_design_pack.py no longer goes quiet when a design moves past PROPOSED, and a new check holds the manual's stated status to the designs' own.",
     "Eight finding tickets, #323 to #330, one per class rather than one per instance."
   ],
@@ -47,7 +47,10 @@
     "The worst finding is #325: the proof asserts two BT-G1 rows' database expectation from the P0.11 trace's CLIENT spans, and P0.11 says in three places that telemetry is not evidence and never accepts the duty in its coverage or its non-coverage. The inference does not hold either - no control shows a business query would have emitted a span in that run, so an empty span set is equally consistent with instrumentation not firing.",
     "Two classes were established by census rather than by sampling, which is why they are trusted: the BT-G1 mismatches were found by extracting every control reference from the proof's rows and comparing them against each design's own claim, and the three designs still at 0.1 are credited seventeen times by siblings' changes tables. Three reviewers independently found three of the BT-G1 mismatches from three different files, and the census found the same three and no more.",
     "A keyword sweep for the staleness class flags about seventy sentences, and that number is not reported as a finding: it over-matches, because one design can credit an asker for one thing while another ask from the same asker stays genuinely open. Only the hand-verified instances and the structural seventeen are recorded.",
-    "Moving all thirteen statuses at once would have silently gutted test_manual_links_each_proposed_design, which skipped every status but PROPOSED. Restoring the old form on this branch, with the manual's link to a design deliberately broken, makes it pass - the control is in the module's docstring."
+    "Moving all thirteen statuses at once would have silently gutted test_manual_links_each_proposed_design, which skipped every status but PROPOSED. Restoring the old form on this branch, with the manual's link to a design deliberately broken, makes it pass - the control is in the module's docstring.",
+    "Review found the thirteenth status statement, which this package had missed and which its own new check could not see: twelve epic rows read \"(design, PROPOSED)\" and the security proof's reads \"(the proof's design, PROPOSED)\", so both the substitution and the regex written to catch it were shaped by the twelve.",
+    "It also found the status check vacuous. It compared the SET of statuses the manual mentions against the SET the designs hold, which says nothing while they all agree - the state it was written in. Three mutations survived: a row's status dropped, two rows' links swapped, and one design marked REJECTED while REJECTED was written on a different design's row, misstating both and leaving the sets equal. The check now pairs each design against the anchor whose href names it, which is a seam the markup already had, and a third check holds a numbered design's link inside its own epic row.",
+    "The irony is recorded rather than smoothed over: this package's own guard had the shape it criticised in eight of the designs it reviewed - a claim that reads as checked and is not."
   ],
   "decisions": [
     "DEC-106: thirteen designs to IN_REVIEW on recorded reviews; no version moves, nothing accepted or rejected, findings ticketed."
@@ -84,6 +87,8 @@
     "No finding is fixed. Eight tickets record them; the designs are unchanged but for their status line.",
     "The two guards #330 asks for are not built here; they are NS-047, so that this package has one outcome.",
     "The reviews read each design against the pack's rules and its siblings. They do not judge whether a design's architecture is right, which is the architecture authority's question at BT-G0.",
-    "The keyword census of stale asks is not a finding and its count is not reported; only hand-verified instances and the structural seventeen are."
+    "The keyword census of stale asks is not a finding and its count is not reported; only hand-verified instances and the structural seventeen are.",
+    "The manual's prose is not read, only its anchors: a sentence elsewhere asserting a design's status is invisible.",
+    "The status the manual states is compared to the status the design declares, not to anything showing the declaration is warranted; the review that IN_REVIEW rests on lives on a map ticket and no test reads a ticket."
   ]
 }

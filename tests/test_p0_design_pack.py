@@ -16,11 +16,27 @@ Negative controls (run 2026-09-06 under WP-073, on in-memory copies of P0.12):
   * Remove the "Evidence contract" heading             -> test_mandatory_sections_in_order FAILS
   * Set the status to ACCEPTED                          -> test_status_is_proposable FAILS
   * Write "we use OpenBao" in the candidates section    -> test_no_technology_is_chosen FAILS
-  * Drop the manual's link to the design                -> test_manual_links_each_landed_design FAILS
 
-Negative controls added 2026-09-07 under WP-104, on in-memory copies:
-  * Set one design to DRAFT, so the link rule skips it   -> test_manual_links_each_landed_design FAILS
-  * Leave one manual row at PROPOSED after the move      -> test_the_manual_states_each_design_status FAILS
+Negative controls added 2026-09-07 under WP-104, on in-memory copies. The first three were
+found by review, after a first version of the status check passed all of them:
+  * Drop one row's status, leaving its link             -> ..._and_states_its_status FAILS
+  * Mark one design REJECTED and write REJECTED on a    -> ..._and_states_its_status FAILS
+    DIFFERENT design's row, so both sets stay equal
+  * Swap two epic rows' design links                    -> test_the_epic_row_holds_its_own_design_link FAILS
+  * Leave one manual row at the old status              -> ..._and_states_its_status FAILS
+Two controls are deliberately not isolated, because what they break really does break more
+than one rule, and claiming otherwise would be false precision:
+  * Drop the manual's link to a design                  -> ..._and_states_its_status AND
+                                                           test_the_epic_row_holds_its_own_design_link
+  * Set one design to DRAFT                             -> test_every_landed_design_is_linked
+                                                           and one more
+
+WHAT THESE DO NOT DO. They read the manual's anchors, not its prose: a sentence elsewhere on
+the page asserting a design's status is not seen. They do not check that an epic row's OTHER
+cells describe the design it links. And the status the manual states is compared to the status
+the design's block declares, not to anything that would show the declaration is true - the
+review recorded on the design's map ticket is what section 3 rests IN_REVIEW on, and no test
+reads a ticket.
 
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
@@ -33,10 +49,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "docs" / "architecture" / "p0"
-
-# Every status a design on main may hold. README section 3: "A `DRAFT` lives on its
-# branch; a design lands on `main` only at `PROPOSED`."
-LANDED_STATUSES = ("PROPOSED", "IN_REVIEW", "ACCEPTED", "REJECTED", "SUPERSEDED")
 README = PACK / "README.md"
 MANUAL = ROOT / "phases" / "p0.html"
 DESIGN_URL = "https://github.com/bstBizEra/biztrust_guide/blob/main/docs/architecture/p0/"
@@ -64,6 +76,17 @@ def status_field(text: str, field: str) -> str:
     m = re.search(rf"^\| {re.escape(field)} \| (.+?) \|$", text, re.M)
     assert m, f"no status-block row for {field!r}"
     return m.group(1).strip()
+
+
+def design_status(path: Path) -> str:
+    """A design's status, from its status block, without the backticks the table writes."""
+    return status_field(path.read_text(encoding="utf-8"), "Status").strip("`")
+
+
+# Every status a design on main may hold: the README's own vocabulary less DRAFT, which
+# section 3 keeps on a branch - "A `DRAFT` lives on its branch; a design lands on `main` only
+# at `PROPOSED`." Derived rather than listed, so it cannot drift from the record it cites.
+LANDED_STATUSES = tuple(s for s in readme_statuses() if s != "DRAFT")
 
 
 class TestTemplateIsPresent(unittest.TestCase):
@@ -108,41 +131,72 @@ class TestEveryDesignObeysTheTemplate(unittest.TestCase):
                 controls = text.split("## Negative controls", 1)[1].split("\n## ", 1)[0]
                 self.assertGreaterEqual(len([l for l in controls.splitlines() if l.startswith("| ") and not l.startswith("| #") and not l.startswith("|---")]), 1, f"{p.name}: no negative control row (README 4.5)")
 
-    def test_manual_links_each_landed_design(self) -> None:
-        """The manual links every design that has reached PROPOSED, whatever it has reached since.
+    def test_the_manual_links_each_design_and_states_its_status(self) -> None:
+        """Each design is linked, and the status beside THAT link is that design's own.
 
-        This was written as "each design at PROPOSED, skip the rest", which is only safe while
-        no design has moved on. WP-104 moved all thirteen to IN_REVIEW at once, and the old
-        form would have iterated over nothing and passed. The README's section 6 rule is that
-        the link appears when a design REACHES PROPOSED; reaching it and moving on does not
-        withdraw the link, so the statuses at or past it are the ones that must be linked.
+        Paired, not compared set-wise. A set comparison is vacuous while every design holds
+        the same status - the state this was written in - and review found three mutations
+        that survived one: dropping a row's status, swapping two rows' links, and marking one
+        design REJECTED while writing REJECTED on a different design's row, which misstates
+        both and leaves the two sets equal.
+
+        The pairing seam is in the markup: the manual states a status as the TEXT of the
+        anchor whose HREF names the design, so the link and the claim about it are one string
+        and cannot drift apart.
         """
         manual = MANUAL.read_text(encoding="utf-8")
-        linked = 0
         for p in designs():
-            status = status_field(p.read_text(encoding="utf-8"), "Status").strip("`")
-            if status not in LANDED_STATUSES:
-                continue
+            status = design_status(p)
             with self.subTest(design=p.name):
-                self.assertIn(DESIGN_URL + p.name, manual, f"the P0 manual does not link {p.name}")
-                linked += 1
-        self.assertEqual(len(designs()), linked, "a design in the pack is at a status the manual need not link")
+                anchors = re.findall(
+                    rf'<a href="{re.escape(DESIGN_URL + p.name)}"[^>]*>([^<]*)</a>', manual
+                )
+                if status not in LANDED_STATUSES:
+                    continue
+                self.assertNotEqual([], anchors, f"the P0 manual does not link {p.name}")
+                for text in anchors:
+                    stated = re.search(r"\b([A-Z][A-Z_]{2,})\b", text)
+                    self.assertIsNotNone(stated, f"the manual links {p.name} and states no status: {text!r}")
+                    self.assertEqual(
+                        status, stated.group(1),
+                        f"the manual says {p.name} is {stated.group(1)}; the design says {status}",
+                    )
 
-    def test_the_manual_states_each_design_status(self) -> None:
-        """The manual copies each design's status, so the two must agree.
+    def test_every_landed_design_is_linked(self) -> None:
+        """Positive control for the rule above: it must have had every design to check.
 
-        Numbers and names on a page are the record's, never the page's own. Twelve epic rows
-        carried "(design, PROPOSED)" while the designs said PROPOSED; nothing made them move
-        together, and nothing would have said so.
+        Written separately because the rule above returns early for a status the manual need
+        not link, and a rule that can skip its whole corpus has to say how many it saw.
+        """
+        landed = [p for p in designs() if design_status(p) in LANDED_STATUSES]
+        self.assertEqual(len(designs()), len(landed), "a design in the pack is at a status the manual need not link")
+        self.assertGreaterEqual(len(landed), 13, "fewer designs than the pack holds")
+
+    def test_the_epic_row_holds_its_own_design_link(self) -> None:
+        """A numbered design's link is in the row of the epic it belongs to, not merely somewhere.
+
+        Review swapped two rows' links and the substring check did not notice, because it asked
+        whether the file contained a link and not which row held it. The security proof has no
+        epic row of its own and is checked by the rule above alone.
         """
         manual = MANUAL.read_text(encoding="utf-8")
-        stated = set(re.findall(r"\(design, ([A-Z_]+)\)", manual))
-        self.assertNotEqual(set(), stated, "the manual states no design status; this check reads nothing")
-        actual = {
-            status_field(p.read_text(encoding="utf-8"), "Status").strip("`")
-            for p in designs()
-        }
-        self.assertEqual(actual, stated, "the manual's stated status is not the designs' own")
+        rows = re.findall(r"<tr>.*?</tr>", manual, re.S)
+        self.assertNotEqual([], rows, "the manual has no table rows; this check reads nothing")
+        checked = 0
+        for p in designs():
+            epic = re.match(r"P0\.(\d{2})-", p.name)
+            if not epic:
+                continue
+            wanted = f"<strong>P0.{int(epic.group(1))}</strong>"
+            with self.subTest(design=p.name):
+                owning = [r for r in rows if wanted in r]
+                self.assertEqual(1, len(owning), f"expected exactly one epic row for {wanted}")
+                self.assertIn(
+                    DESIGN_URL + p.name, owning[0],
+                    f"the row for {wanted} does not link {p.name}; another row may hold it",
+                )
+                checked += 1
+        self.assertEqual(12, checked, "expected twelve numbered designs to check")
 
 
 if __name__ == "__main__":
