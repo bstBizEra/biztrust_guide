@@ -50,7 +50,10 @@
     "Moving all thirteen statuses at once would have silently gutted test_manual_links_each_proposed_design, which skipped every status but PROPOSED. Restoring the old form on this branch, with the manual's link to a design deliberately broken, makes it pass - the control is in the module's docstring.",
     "Review found the thirteenth status statement, which this package had missed and which its own new check could not see: twelve epic rows read \"(design, PROPOSED)\" and the security proof's reads \"(the proof's design, PROPOSED)\", so both the substitution and the regex written to catch it were shaped by the twelve.",
     "It also found the status check vacuous. It compared the SET of statuses the manual mentions against the SET the designs hold, which says nothing while they all agree - the state it was written in. Three mutations survived: a row's status dropped, two rows' links swapped, and one design marked REJECTED while REJECTED was written on a different design's row, misstating both and leaving the sets equal. The check now pairs each design against the anchor whose href names it, which is a seam the markup already had, and a third check holds a numbered design's link inside its own epic row.",
-    "The irony is recorded rather than smoothed over: this package's own guard had the shape it criticised in eight of the designs it reviewed - a claim that reads as checked and is not."
+    "The irony is recorded rather than smoothed over: this package's own guard had the shape it criticised in eight of the designs it reviewed - a claim that reads as checked and is not.",
+    "The spec axis found two claims published on tickets that the files do not support, and both are withdrawn or corrected on the tickets themselves. The policy.bound rule 2 finding is wrong: P0.9 names it once, in Scope and non-scope, as something it hands to P1's designs, which is correct scoping and the opposite of adopting the name. The P0.13 quotation named the expected column as the baseline; the finding stands and the real baseline supports it better. The first was taken on a reviewing agent's word without checking, while the severe findings were all checked - the lesson is that the verification threshold was set by severity and should have been set by publication.",
+    "Every review comment closes 'the design stays PROPOSED until someone with the authority says otherwise', which this package made false by moving the thirteen to IN_REVIEW. The sentence meant that no agent moves a design to ACCEPTED or REJECTED, which holds; it is annotated on #322 rather than edited into thirteen comments.",
+    "Criterion 4 is partial in both directions and is recorded as partial: about seventeen findings in the comments carry no ticket link, and #323's eighth item appears in no comment. The eight tickets are one per class, so the thirteen comments remain the instance list."
   ],
   "decisions": [
     "DEC-106: thirteen designs to IN_REVIEW on recorded reviews; no version moves, nothing accepted or rejected, findings ticketed."
@@ -89,6 +92,7 @@
     "The reviews read each design against the pack's rules and its siblings. They do not judge whether a design's architecture is right, which is the architecture authority's question at BT-G0.",
     "The keyword census of stale asks is not a finding and its count is not reported; only hand-verified instances and the structural seventeen are.",
     "The manual's prose is not read, only its anchors: a sentence elsewhere asserting a design's status is invisible.",
-    "The status the manual states is compared to the status the design declares, not to anything showing the declaration is warranted; the review that IN_REVIEW rests on lives on a map ticket and no test reads a ticket."
+    "The status the manual states is compared to the status the design declares, not to anything showing the declaration is warranted; the review that IN_REVIEW rests on lives on a map ticket and no test reads a ticket.",
+    "The eight tickets are one per defect class and do not enumerate every instance; the thirteen review comments do."
   ]
 }
