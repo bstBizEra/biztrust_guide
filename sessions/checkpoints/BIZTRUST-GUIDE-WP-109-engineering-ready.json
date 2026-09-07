@@ -41,13 +41,15 @@
   "observations": [
     "The evidence is one commit and needs no interpretation. c3e255a moved the version from 0.1 to 0.2 AND wrote the row entry that omits it, in the same change: 'git show c3e255a -- <design>' shows both hunks. A package recorded its own revision and left out the number it had just changed.",
     "This is deliberately separated from the rule that would have caught it. WP-108 prepared that rule and stopped, because #316 is an open wayfinder:grilling ticket and AGENTS.md holds that approval is an explicit authority record and never inferred. A fact settled by git is not a rule, and landing it does not pre-empt the answer.",
-    "A refactor was considered first and measured rather than assumed. Reviewers flagged Duplicated Code across the guards three times, but only two helpers are byte-identical across modules - designs() in two files and _norm() in two - while four designs() variants differ deliberately, one excluding the security proof and one keyed by epic. Unifying those needs parameters, which is the Speculative Generality the same baseline warns against, so the refactor was not done and the measurement is recorded instead."
+    "A refactor was considered first and measured rather than assumed, and the measurement was then corrected by review. designs() has four variants of which two are byte-identical, and the other two differ DELIBERATELY - one excludes the security proof, one is keyed by epic - so unifying them needs parameters and the Speculative Generality argument holds. _norm() is a different case and the first measurement understated it: six copies, of which three are identical but for a docstring and a fourth differs by one character in a tag substitution. That one needs no parameters, so the argument that covers designs() does not cover it. Filed rather than done, because this package has one outcome.",
+    "Review also found DEC-111 over-claiming that nothing here depends on #316. The row's content does not; the decision to leave this design's own version at 0.3 while editing it is one plausible answer to that question, and DEC-105 and DEC-108 both deferred repairs for exactly that reason. It is recorded as an assumption now rather than as a question that does not arise."
   ],
   "decisions": [
     "DEC-111: the row records the version WP-075 moved it to; no rule applied."
   ],
   "assumptions": [
-    "Recording a version that git proves was moved is a correction of fact, not an application of #316's unanswered rule."
+    "Recording a version that git proves was moved is a correction of fact, not an application of #316's unanswered rule.",
+    "Editing a design's Landed by row without moving the design's version is the treatment #316's recommendation implies; a rule that bumped a version for every edit would make this commit wrong, and that rule is not the one on the table but has not been ruled out either."
   ],
   "blockers": [],
   "authority": {
@@ -72,6 +74,7 @@
   "declared_non_coverage": [
     "No rule is written and nothing holds the other twelve rows; that is #316 and PR #338, which stay open.",
     "The eight other revision entries were read and all name their version; none needed correcting.",
-    "Whether the row's prose is right - what the revision carried - is not examined, only the version it names."
+    "Whether the row's prose is right - what the revision carried - is not examined, only the version it names.",
+    "The _norm() duplication across six test modules is measured and filed, not fixed; this package has one outcome."
   ]
 }
