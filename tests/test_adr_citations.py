@@ -47,6 +47,10 @@ Negative controls (run 2026-09-07 under WP-100, on the files and on copies):
   * a status in the register's vocabulary but not the test's   -> impossible; the vocabulary is the register's
   * a full stop inside a version number or a file name         -> must not end a clause, held below
 
+The site's HTML pages are held to the same register by tests/test_html_adr_citations.py
+(WP-107, #313). Their grammar is not this one's: the pages state statuses in aggregate, by
+range and by count, rather than after each identifier, so the two readers are separate.
+
 Stdlib only:  python3 -m unittest discover -s tests -v
 """
 
