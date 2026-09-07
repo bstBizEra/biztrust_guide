@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "CHK-BIZTRUST-GUIDE-WP-106-001",
+  "created_at": "2026-09-07T03:28:40Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-106",
+  "state": "ENGINEERING_READY",
+  "objective": "Stop an answered ask reading as open. The pack's revision round updated the designs that granted asks and not the designs that made them, so fifteen questions across seven designs still name a dependency a sibling's own Changes table says it carried - twenty-four such pairs. Land the second of the two guards #330 asks for, pairing on the question number the credits already carry rather than sweeping for keywords, with the twenty-four registered as a ratchet rather than repaired.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-106-stale-asks",
+    "baseline_commit": "533f8cc56af0ff7c0ba72402b10ebdd1ec6390f9"
+  },
+  "completed": [
+    "tests/test_stale_asks.py pairs sixteen credited (asker, question) pairs against each question's own 'Waits on:' clause.",
+    "Twenty-four stale triples across fifteen questions are registered, each carrying the change row the carrier recorded as its evidence.",
+    "The ratchet holds: an entry must still be stale against exactly its carriers, so updating a question forces its entry out, and the registry may only shrink.",
+    "P0.7's question 10 - the pack's one properly updated credited question - is asserted separately, so the module can never be satisfied by every question being stale.",
+    "Seven controls, three isolated and four declared not isolated.",
+    "NS-047 retired: both of #330's guards have landed."
+  ],
+  "remaining": [
+    "Two-axis review of the head commit, then merge.",
+    "After merge: #330 closed; #323 to #329 stay open."
+  ],
+  "files_changed": [
+    "tests/test_stale_asks.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-106-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The keyword sweep this guard replaces was built first, in WP-104, and flagged about seventy candidate sentences against the two dozen that are real. Its count was deliberately never reported as a finding. The reason it over-matches is worth keeping: one design can credit an asker for one thing while a DIFFERENT ask from the same asker stays genuinely open, so naming a sibling near 'next version' is evidence of nothing at all.",
+    "The exact key was already in the pack and had been overlooked: twenty-seven of the forty-four change rows credit 'The P0.A design, question N'. Once that is read, the check is a triple rather than a proximity guess, and it needs no tuning.",
+    "The 'Waits on:' boundary is the whole discriminator, and one question proves it. P0.7's question 10 reads 'At 0.1 this waited on the P0.5 design and the P0.6 design's next version; both have landed', then 'Waits on: ADR-003 and ADR-004'. It names its carrier twice and is up to date. A reader taking the whole question calls it stale - exactly backwards - so that question is now asserted as the module's own control.",
+    "Fifteen of the sixteen credited pairs are registered, so the rule catching a NEW stale pair currently reads one question. That is what a registry of two dozen live defects looks like rather than a weakness, but a green suite here means 'no new staleness', not 'the pack is clean', and the docstring says so in capitals.",
+    "Seventeen change rows credit an asker without a question number - 'The P0.4 design, its history table'. Those instances are real and are not checked, because there is no key to pair them on and guessing is what the sweep did.",
+    "A control script lost a backslash again, writing a literal newline into generated Python where '\\\\n' was meant, in a heredoc. The repository's own note says to use the file-writing tool rather than a heredoc for anything carrying escapes; it was the heredoc that failed, twice now."
+  ],
+  "decisions": [
+    "DEC-108: pair on the credited question number; twenty-four stale pairs registered as a ratchet; NS-047 retired."
+  ],
+  "assumptions": [
+    "A change row crediting 'The P0.A design, question N' means that change answered that question.",
+    "A question is still waiting on something only if it names it inside its own 'Waits on:' clause."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guard_implementation": "OPERATOR_INSTRUCTION_2026_09_07_PROCEED_ON_YOUR_CALL",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_105",
+    "design_repair": "NOT_GRANTED: the twenty-four stale asks are registered, not fixed; #316 is open",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python3 -m unittest discover -s tests -p test_stale_asks.py",
+    "read_first": [
+      "tests/test_stale_asks.py",
+      "badf/current-state.json"
+    ],
+    "stop_if": [
+      "A new stale pair is added to STALE_ASKS. The registry may only shrink.",
+      "A question is edited to satisfy the guard before checking whether the question or the credit is the wrong one."
+    ]
+  },
+  "declared_non_coverage": [
+    "Seventeen change rows credit an asker with no question number and are not checked; there is no key to pair them on.",
+    "An ask left open in a design's body rather than in its numbered open questions is invisible; P0.5's four stale sentences are mostly of that kind and stay in #326's prose.",
+    "It cannot tell whether a carrier really answered an ask, only that the carrier says it did and the asker says it is still waiting. Which record is wrong is #326's question.",
+    "Fifteen of sixteen credited pairs are registered, so the rule catching a new stale pair reads one question until the registry shrinks.",
+    "The three designs still at 0.1 have no Changes table, so they appear only as askers, never as carriers."
+  ]
+}
