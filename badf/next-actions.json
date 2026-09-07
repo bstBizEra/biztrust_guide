@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-105",
-  "updated_at": "2026-09-07T01:30:33Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-106",
+  "updated_at": "2026-09-07T03:28:40Z",
   "actions": [
     {
       "id": "NS-040",
@@ -192,25 +192,6 @@
         "An agent edits a supplied SVG master to make it usable, or changes the SHOWCASE-001 mast rule without the operator"
       ],
       "fallback": "The handbook keeps the symbol in every slot and the showcase keeps its text wordmark; neither is blocked by these questions."
-    },
-    {
-      "id": "NS-047",
-      "primary": false,
-      "priority": 10,
-      "owner_role": "documentation-engineer",
-      "authority": "IMPLEMENTATION_SCOPE",
-      "action": "The second of the two guards #330 asks for: an ask a sibling's own 'Changes in' table says it carried stops reading as open in the design that asked. Seventeen of these sit in the three designs still at 0.1, which have never been revised, and more sit in the revised ones (#326). The first guard landed as WP-105. The naive keyword form of this one over-matches badly - a sweep flags about seventy sentences - because one design can credit an asker for one thing while another ask from the same asker stays genuinely open, so the guard has to pair the specific ask and not the design name. That is the hard part and the reason to build it once.",
-      "prerequisites": [
-        "#330 is read; #323 and #326 hold the instances each guard must catch"
-      ],
-      "evidence_required": [
-        "The guard names the seventeen structural instances and does not name a sentence that is genuinely still open",
-        "Its negative controls run as the suite runs them, and any control that is not isolated says so"
-      ],
-      "stop_conditions": [
-        "A design is edited to satisfy a guard before checking whether the claim or the ask was the thing that was wrong"
-      ],
-      "fallback": "The eight finding tickets stand on their own; the guards stop the classes recurring, they do not fix the instances."
     }
   ]
 }
