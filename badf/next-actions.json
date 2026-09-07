@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
-  "work_package_id": "BIZTRUST-GUIDE-WP-104",
-  "updated_at": "2026-09-07T01:06:54Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-105",
+  "updated_at": "2026-09-07T01:30:33Z",
   "actions": [
     {
       "id": "NS-040",
@@ -199,13 +199,13 @@
       "priority": 10,
       "owner_role": "documentation-engineer",
       "authority": "IMPLEMENTATION_SCOPE",
-      "action": "Build the two guards #330 asks for, over the defect classes the thirteen design reviews found. The first: every claim in a design that a control feeds the BT-G1 matrix resolves to a control the security proof names on one of its eleven rows, and every control the proof names exists in the design it names - eight instances disagree today (#323). The second: an ask a sibling's own 'Changes in' table says it carried stops reading as open in the design that asked - seventeen of these sit in the three designs still at 0.1, which have never been revised (#326). The naive keyword form of the second over-matches and must pair the specific ask, not the design name.",
+      "action": "The second of the two guards #330 asks for: an ask a sibling's own 'Changes in' table says it carried stops reading as open in the design that asked. Seventeen of these sit in the three designs still at 0.1, which have never been revised, and more sit in the revised ones (#326). The first guard landed as WP-105. The naive keyword form of this one over-matches badly - a sweep flags about seventy sentences - because one design can credit an asker for one thing while another ask from the same asker stays genuinely open, so the guard has to pair the specific ask and not the design name. That is the hard part and the reason to build it once.",
       "prerequisites": [
         "#330 is read; #323 and #326 hold the instances each guard must catch"
       ],
       "evidence_required": [
-        "Both guards fail on this repository at e1a8b65, where the instances live, and pass after the designs are corrected",
-        "Each guard's negative controls run as the suite runs them, each failing only the test that names it"
+        "The guard names the seventeen structural instances and does not name a sentence that is genuinely still open",
+        "Its negative controls run as the suite runs them, and any control that is not isolated says so"
       ],
       "stop_conditions": [
         "A design is edited to satisfy a guard before checking whether the claim or the ask was the thing that was wrong"
