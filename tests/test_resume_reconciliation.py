@@ -112,6 +112,22 @@ def git_ok(cwd: Path, *args: str) -> str:
     return done.stdout.strip()
 
 
+def main_line_tip(root: Path) -> tuple[str, str]:
+    """The first of MAIN_REFS that resolves here, as (ref, sha).
+
+    Written after a control measured the alternative false: this module first named
+    `refs/heads/main` outright, and a plain `git clone` - which brings `origin/main` and no local
+    `main` - errored the live-tree test in every control run, so the unmutated clone was red and
+    the twelve controls behind it proved nothing. Corroboration has to read the ref the code
+    actually read, and MAIN_REFS is pinned by TestAnchors.
+    """
+    for ref in VALIDATOR_MODULE.MAIN_REFS:
+        done = git(root, "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}")
+        if done.returncode == 0:
+            return ref, done.stdout.strip()
+    raise AssertionError(f"none of {VALIDATOR_MODULE.MAIN_REFS} resolves in {root}")
+
+
 def record(work_package: str, baseline: str) -> dict:
     """The two fields the reconciliation reads, in the shape `badf/current-state.json` holds them."""
     return {"active_work_package": {"id": work_package}, "source": {"baseline_commit": baseline}}
@@ -194,10 +210,10 @@ class TestTheLiveTree(unittest.TestCase):
             return
         self.assertEqual("LAG_EXPECTED", verdict, reason)
         # The two observed facts the verdict rests on, so the assertion above cannot be vacuous.
-        tip = git_ok(REPO, "rev-parse", "refs/heads/main")
+        ref, tip = main_line_tip(REPO)
         subject = git_ok(REPO, "log", "-1", "--format=%s", tip)
         self.assertTrue(subject.startswith(f"[{RECORDED_WORK_PACKAGE}]"),
-                        f"main's head is {tip[:12]} {subject!r}, which does not land the record's package")
+                        f"{ref} is at {tip[:12]} {subject!r}, which does not land the record's package")
         self.assertNotEqual(RECORDED_BASELINE, tip, "the record would not lag if it named main's head")
         self.assertIn("has already landed", reason)
 
