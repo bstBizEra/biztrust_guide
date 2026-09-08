@@ -139,6 +139,18 @@ def regions_of(source: str) -> dict[str, str]:
     return {m.group("name"): m.group("body") for m in BUILD.REGION.finditer(source)}
 
 
+def body_of(rendered: str) -> str:
+    """A panel's own rendering, with the shared provenance sentence removed.
+
+    Every panel ends with `<p class="section-intro">Source …`, and that sentence contains UNKNOWN
+    whenever git cannot read the tree - so an assertion for UNKNOWN over the whole rendering can be
+    satisfied without the panel body saying anything at all. That is how
+    `test_a_missing_record_renders_unknown_in_every_panel_without_raising` passed while the queue
+    panel was drawing an empty table over a file it had never read.
+    """
+    return rendered.split('<p class="section-intro">Source', 1)[0]
+
+
 class TestControlsCanFire(unittest.TestCase):
     """Positive controls. Every rule below is measured over something; these prove there is
     something to measure. A refactor that emptied any of these would leave the rest vacuous."""
@@ -158,6 +170,18 @@ class TestControlsCanFire(unittest.TestCase):
         current, actions = records()
         self.assertIn("authority", current)
         self.assertGreater(len(actions.get("actions", [])), 0, "no recorded action to project")
+
+    def test_the_live_queue_filter_admits_some_actions_and_excludes_others(self) -> None:
+        """Positive control for the two live-record queue assertions further down.
+
+        `test_the_excluded_actions_are_listed_with_their_authority` iterates the excluded list, so
+        an empty one would make it pass while measuring nothing at all. This declares the premise
+        rather than leaving it implicit; if it fires, the record has changed shape and that test
+        needs re-deriving, not deleting.
+        """
+        queue, excluded = BUILD.human_queue(records()[1])
+        self.assertGreater(len(queue), 0, "no recorded action waits on a human")
+        self.assertGreater(len(excluded), 0, "the filter excluded nothing, so the residue is empty")
 
 
 class TestTheCommittedPageIsAPlaceholder(unittest.TestCase):
@@ -287,8 +311,39 @@ class TestAuthorityGrouping(unittest.TestCase):
         self.assertIsNone(BUILD.domain_of("_leading"))
         self.assertIsNone(BUILD.domain_of(""))
 
+    def test_every_recorded_key_lands_where_the_rule_puts_it(self) -> None:
+        """THE RULE, re-derived over whatever the record happens to hold.
+
+        Unconditional and record-independent: a key with a separator lands under its first segment,
+        a key without one lands in Unscoped. It says nothing about which keys exist, so a records
+        edit cannot turn it red. The test below is the deliberate exception and declares itself.
+        """
+        current, _ = records()
+        groups, unscoped = BUILD.group_authority(current["authority"])
+        for domain, entries in groups:
+            for key, _value in entries:
+                with self.subTest(key=key):
+                    self.assertEqual(key.partition("_")[0], domain)
+                    self.assertIn("_", key)
+        for key, _value in unscoped:
+            with self.subTest(key=key):
+                self.assertNotIn("_", key.strip("_") or "_",
+                                 "a key with a domain segment was left unscoped")
+
     def test_the_live_unscoped_key_is_exactly_the_one_346_names(self) -> None:
-        """The defect, live. `implementation` beside `production_platform_implementation`."""
+        """The defect, live. `implementation` beside `production_platform_implementation`.
+
+        A DECLARED DEPENDENCE ON THE RECORD, and the only one in this module. WP-112 learned that a
+        control whose expectation depends on the record it happens to run against is not a control;
+        this is a TEST rather than a control, and the dependence is the point - it is a ratchet on
+        #346 being live, which is why the page carries a callout about it.
+
+        IF THIS GOES RED, #346 HAS BEEN FIXED IN THE RECORD. The repair is then to delete this test
+        and the page's Unscoped callout together, and to leave
+        `test_every_recorded_key_lands_where_the_rule_puts_it` above standing. Do not weaken the
+        rule to keep this green. `test_the_unscoped_group_is_named_on_the_page` rests on the same
+        premise and goes with it.
+        """
         current, _ = records()
         groups, unscoped = BUILD.group_authority(current["authority"])
         self.assertIn("implementation", [key for key, _ in unscoped])
@@ -415,12 +470,91 @@ class TestAbsentFactsBecomeUnknown(unittest.TestCase):
     """UNKNOWN is a value, not a failure - and never a convenient one."""
 
     def test_a_missing_record_renders_unknown_in_every_panel_without_raising(self) -> None:
+        """UNKNOWN in the panel's BODY, with the shared provenance sentence stripped first.
+
+        This test was near-vacuous when it was written: the queue panel satisfied it only through
+        the provenance line, which every panel carries and which says UNKNOWN for the source commit
+        of any tree git cannot read. The body was meanwhile rendering "No recorded action matches
+        the filter" over a file that had not been read. Splitting the provenance sentence off is
+        what makes the assertion about the panel rather than about the sentence under it.
+        """
         facts = BUILD.gather(None, None, {"validator_stdout": ""}, NOW)
         for name, builder in sorted(BUILD.BUILDERS.items()):
             with self.subTest(panel=name):
-                rendered = builder(facts)
-                self.assertIn(BUILD.UNKNOWN, rendered,
-                              "a panel with no data that does not say UNKNOWN")
+                body = body_of(builder(facts))
+                self.assertNotEqual("", body.strip(), "the panel is nothing but its provenance")
+                self.assertIn(BUILD.UNKNOWN, body,
+                              "a panel with no data that does not say UNKNOWN in its own body")
+
+    def test_a_missing_actions_record_is_unknown_and_never_an_empty_queue(self) -> None:
+        """#352: the projector emits UNKNOWN where a fact is absent, never a convenient value.
+
+        AN EMPTY RENDERING IS A CONVENIENT VALUE, and it was the live behaviour. Measured before
+        the fix by deleting badf/next-actions.json from a copy of the tree and running the
+        projector: the panel read "No recorded action matches the filter. That is a reading of
+        badf/next-actions.json" - false, nothing had been read - then "The 0 recorded action(s) the
+        filter did NOT admit" and "The filter excluded no recorded action", exit 0.
+        """
+        facts = BUILD.gather(records()[0], None, OBSERVED, NOW,
+                             {BUILD.NEXT_ACTIONS: "badf/next-actions.json could not be read: "
+                                                  "FileNotFoundError"})
+        body = body_of(BUILD.render_queue(facts))
+        self.assertIn(BUILD.UNKNOWN, body)
+        self.assertIn("could not be read: FileNotFoundError", body,
+                      "the reason read_json gave never reached the panel")
+        for wording in ("No recorded action matches the filter", "recorded action(s) the filter",
+                        "excluded no recorded action", "in the record's own priority order"):
+            with self.subTest(wording=wording):
+                self.assertNotIn(wording, body, "an absent record rendered as an empty queue")
+        self.assertNotIn("0 ", body, "a count drawn from a record that was never read")
+
+    def test_a_missing_state_record_is_unknown_in_every_panel_it_feeds(self) -> None:
+        """Not special-cased to the queue: the same rule on badf/current-state.json."""
+        facts = BUILD.gather(None, records()[1], OBSERVED, NOW,
+                             {BUILD.CURRENT_STATE: "badf/current-state.json is not valid JSON: "
+                                                   "JSONDecodeError"})
+        for name in ("decision", "package", "authority"):
+            with self.subTest(panel=name):
+                body = body_of(BUILD.BUILDERS[name](facts))
+                self.assertIn(BUILD.UNKNOWN, body)
+                self.assertIn("is not valid JSON: JSONDecodeError", body)
+        # And the panel fed by the OTHER record is untouched, so the guard is scoped.
+        self.assertIn("in the record's own priority order", BUILD.render_queue(facts))
+
+    def test_a_record_that_was_read_and_is_empty_is_not_reported_as_unreadable(self) -> None:
+        """The distinction the fix exists to draw. An empty queue is a measurement; an absent file
+        is not, and the two rendered identically."""
+        facts = BUILD.gather(records()[0], {"actions": []}, OBSERVED, NOW)
+        body = body_of(BUILD.render_queue(facts))
+        self.assertIn("No recorded action matches the filter", body)
+        self.assertNotIn("could not be read", body)
+
+    def test_an_actions_document_with_no_actions_array_is_unknown(self) -> None:
+        """A file that loaded and carries no `actions` array still says nothing about the queue."""
+        for document in ({}, {"actions": "NS-041"}, {"actions": None}):
+            with self.subTest(document=document):
+                facts = BUILD.gather(records()[0], document, OBSERVED, NOW)
+                body = body_of(BUILD.render_queue(facts))
+                self.assertIn(BUILD.UNKNOWN, body)
+                self.assertIn("carries no `actions` array", body)
+
+    def test_the_decision_panel_does_not_claim_to_have_read_an_absent_ledger(self) -> None:
+        """current-state is present, next-actions is not: the panel renders, and its one sentence
+        about the ledger must not read as a finding about the ledger's contents."""
+        facts = BUILD.gather(records()[0], None, OBSERVED, NOW,
+                             {BUILD.NEXT_ACTIONS: "badf/next-actions.json could not be read: "
+                                                  "FileNotFoundError"})
+        rendered = BUILD.render_decision(facts)
+        self.assertIn("could not be read: FileNotFoundError", rendered)
+        self.assertNotIn("No matching action is recorded", rendered)
+
+    def test_a_lost_reason_is_said_to_be_lost_rather_than_invented(self) -> None:
+        """`unusable` is the one place a reason can be missing, and it must not fill one in."""
+        self.assertEqual("", BUILD.unusable({"a": 1}, "", "badf/x.json"))
+        self.assertEqual("", BUILD.unusable({}, "some reason", "badf/x.json"),
+                         "an empty but PRESENT document is usable")
+        self.assertEqual("because", BUILD.unusable(None, "because", "badf/x.json"))
+        self.assertIn("no reason was recorded", BUILD.unusable(None, "", "badf/x.json"))
 
     def test_a_missing_field_is_unknown_rather_than_empty(self) -> None:
         self.assertEqual(BUILD.UNKNOWN, BUILD.field({}, "resume_decision"))

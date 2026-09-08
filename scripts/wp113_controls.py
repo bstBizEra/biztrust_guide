@@ -16,16 +16,24 @@ TWO KINDS OF CONTROL.
 
   SCRIPT controls RUN `python scripts/build_control_page.py` in a fresh copy and assert what the
   written page says. They exist because of limit 1 of `tests/test_control_page.py`: that module
-  never executes `observe()` - the git calls and the validator invocation - in order to keep
-  `tests/` subprocess-free, so a defect living only there is invisible to it. A fresh copy is made
-  with `shutil.copytree`, which drops `.git`, so the copy is NOT a repository: every git fact must
-  degrade to UNKNOWN and the run must still exit 0 and write a page. That is the degradation CI
-  produces for a different reason - `actions/checkout@v7` with no `fetch-depth` gives a shallow
-  clone - and it is the reading a published copy of this page will normally carry.
+  never executes `observe()`, `read_json` or `build` - the git calls, the validator invocation and
+  the file reads - in order to keep `tests/` subprocess-free, so a defect living only there is
+  invisible to it. They come in TWO PAIRS, and in each pair the second member removes the guard
+  that makes the first member's answer what it is, so neither green is green by accident.
 
-  The second script control weakens the guard that produces the first one's UNKNOWN and shows the
-  same copy write an EMPTY provenance value instead, so the UNKNOWN in the first is known to come
-  from the guard rather than from luck.
+    THE NO-REPOSITORY PAIR. A fresh copy is made with `shutil.copytree`, which drops `.git`, so the
+    copy is NOT a repository: every git fact must degrade to UNKNOWN and the run must still exit 0
+    and write a page. That is the degradation CI produces for a different reason -
+    `actions/checkout@v7` with no `fetch-depth` gives a shallow clone - and it is the reading a
+    published copy of this page will normally carry.
+
+    THE ABSENT-RECORD PAIR. `badf/next-actions.json` is deleted from the copy, and the queue panel
+    must render UNKNOWN carrying the reason `read_json` gave. Measured at d38040a, before the
+    repair: it rendered an empty queue instead - "No recorded action matches the filter. That is a
+    reading of badf/next-actions.json", which was false because nothing had been read - and exit 0.
+    The second member restores `build`'s discarding of `read_json`'s reason and shows the same copy
+    fall back to "no reason was recorded", so the reason on the page is known to come from
+    `read_json` and not from the fallback.
 
 ONE SUITE CONTROL EXPECTS GREEN. It is a DECLARED HOLE - a real defect the test module does not
 catch, because of limit 1 - and it is here so that the limit is demonstrated rather than claimed.
@@ -46,6 +54,7 @@ Usage:  python scripts/wp113_controls.py [<repository>] [<scratch>]
 """
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import subprocess
@@ -58,6 +67,8 @@ PYTHON = sys.executable
 PROJECTOR = "scripts/build_control_page.py"
 PAGE = "control/index.html"
 WORKFLOW = ".github/workflows/pages.yml"
+STATE = "badf/current-state.json"
+ACTIONS = "badf/next-actions.json"
 
 # --- the exact text each mutation replaces -------------------------------------------------------
 
@@ -101,6 +112,29 @@ INJECT_REFUSAL = (
     "        raise ProjectionError(\n"
 )
 OBSERVE_COMMIT = '    commit = git(root, "rev-parse", "HEAD") or UNKNOWN\n'
+QUEUE_ABSENT_GUARD = (
+    '    if facts["actions_absent"]:\n'
+    '        return render_unknown(facts, NEXT_ACTIONS, facts["actions_absent"],\n'
+    '                              facts["actions_recorded_at"])\n'
+)
+DECISION_ABSENT_GUARD = (
+    '    if facts["current_absent"]:\n'
+    '        return render_unknown(facts, CURRENT_STATE, facts["current_absent"], facts["recorded_at"])\n'
+    '    decision = facts["resume_decision"]\n'
+)
+UNKNOWN_BODY = (
+    '        \'<div class="callout">\'\n'
+    '        f\'<strong>{UNKNOWN}</strong>\'\n'
+    "        f'<p>{esc(reason)}. Nothing else is shown in this panel. A count, a list or an empty '\n"
+    "        f'table drawn from a record that was never read would report a measurement this projection '\n"
+    "        f'does not have, and {UNKNOWN} is the honest answer rather than a convenient one.</p>'\n"
+    "        '</div>'\n"
+)
+DECISION_TAIL = '    decision = facts["resume_decision"]\n'
+EMPTY_BODY = "        ''\n"
+NO_ACTIONS_ARRAY = (
+    '    if not actions_absent and not isinstance((actions or {}).get("actions"), list):\n'
+)
 
 PACKAGE_REGION_END = "<!--/BTG-CONTROL:package-->\n"
 DERIVED_CLAIM = "This page is <strong>derived and non-authoritative</strong>."
@@ -253,9 +287,17 @@ def the_injection_made_permissive(root: Path) -> None:
 
 def a_record_value_committed_into_the_placeholder(root: Path) -> None:
     """Committing generated state creates a file true when written and false thereafter - the
-    defect class #343, #345, #346 and #347 all describe."""
-    edit(root, PAGE, "<h3>This page has not been generated</h3>",
-         "<h3>WAIT_FOR_AUTHORITY</h3>")
+    defect class #343, #345, #346 and #347 all describe.
+
+    THE VALUE IS READ FROM THE RECORD, not written literally. It was `WAIT_FOR_AUTHORITY` in the
+    source, and the test it is aimed at compares against whatever `badf/current-state.json` spells;
+    the day the record's resume_decision moves, a literal mutation would stop tripping that test
+    while the defect it injects was as real as ever. WP-112 lost three of nineteen controls to
+    exactly that, and the rule it left is that a control whose expectation depends on the record it
+    happens to run against is not a control.
+    """
+    recorded = json.loads((root / STATE).read_text(encoding="utf-8"))["resume_decision"]
+    edit(root, PAGE, "<h3>This page has not been generated</h3>", f"<h3>{recorded}</h3>")
 
 
 def a_placeholder_that_does_not_say_it_is_one(root: Path) -> None:
@@ -321,6 +363,39 @@ def the_workflow_step_moved_after_verification(root: Path) -> None:
     """After the verification steps, the artifact is checked before the data is in it."""
     edit(root, WORKFLOW, WORKFLOW_STEP, "")
     edit(root, WORKFLOW, WORKFLOW_CONFIGURE, WORKFLOW_STEP + "\n" + WORKFLOW_CONFIGURE)
+
+
+def the_queues_absent_record_guard_removed(root: Path) -> None:
+    """The live defect restored: an absent badf/next-actions.json renders as an EMPTY QUEUE.
+
+    Measured on the tree at d38040a by deleting the file from a copy and running the projector: the
+    panel read "No recorded action matches the filter. That is a reading of badf/next-actions.json"
+    - false, because nothing had been read - then "The 0 recorded action(s) the filter did NOT
+    admit" and "The filter excluded no recorded action", exit 0. #352 requires UNKNOWN where a fact
+    is absent, and an empty rendering is a convenient value.
+    """
+    edit(root, PROJECTOR, QUEUE_ABSENT_GUARD, "")
+
+
+def the_state_panels_absent_record_guard_removed(root: Path) -> None:
+    """The same defect on the other record: the decision panel drawn over an unread state file."""
+    edit(root, PROJECTOR, DECISION_ABSENT_GUARD, DECISION_TAIL)
+
+
+def the_unknown_panel_reduced_to_its_provenance_line(root: Path) -> None:
+    """The panel says nothing in its own body and leans on the shared provenance sentence.
+
+    That sentence carries UNKNOWN for the source commit of any tree git cannot read, so a test
+    asserting UNKNOWN over the whole rendering passes while the body says nothing. That is how the
+    near-vacuous version of the named test passed at d38040a, and this control is what stops the
+    repair being undone.
+    """
+    edit(root, PROJECTOR, UNKNOWN_BODY, EMPTY_BODY)
+
+
+def the_no_actions_array_case_read_as_an_empty_queue(root: Path) -> None:
+    """A document that loaded and carries no `actions` array still says nothing about the queue."""
+    edit(root, PROJECTOR, NO_ACTIONS_ARRAY, "    if False:\n")
 
 
 def the_head_commit_read_as_a_short_sha(root: Path) -> None:
@@ -395,6 +470,17 @@ SUITE_CONTROLS = [
      "test_the_projection_writes_into_the_artifact_and_not_into_the_tree"),
     ("the workflow step moved after verification", the_workflow_step_moved_after_verification,
      "test_the_projection_runs_after_staging_and_before_both_verifications"),
+    ("the queue's absent-record guard removed", the_queues_absent_record_guard_removed,
+     "test_a_missing_actions_record_is_unknown_and_never_an_empty_queue"),
+    ("the state panels' absent-record guard removed",
+     the_state_panels_absent_record_guard_removed,
+     "test_a_missing_state_record_is_unknown_in_every_panel_it_feeds"),
+    ("the UNKNOWN panel reduced to its provenance line",
+     the_unknown_panel_reduced_to_its_provenance_line,
+     "test_a_missing_record_renders_unknown_in_every_panel_without_raising"),
+    ("a loaded document with no actions array read as an empty queue",
+     the_no_actions_array_case_read_as_an_empty_queue,
+     "test_an_actions_document_with_no_actions_array_is_unknown"),
     # HOLE, not a defect: expected GREEN. See the_head_commit_read_as_a_short_sha.
     ("DECLARED HOLE: the head commit read as a short SHA", the_head_commit_read_as_a_short_sha,
      None),
@@ -406,12 +492,43 @@ def the_unknown_guard_weakened(root: Path) -> None:
     edit(root, PROJECTOR, OBSERVE_COMMIT, '    commit = git(root, "rev-parse", "HEAD") or ""\n')
 
 
-# (name, mutation, the provenance row the written page must carry)
+ABSENT_THREADED = "    absent = {CURRENT_STATE: current_why, NEXT_ACTIONS: actions_why}\n"
+
+
+def the_absence_reason_discarded_again(root: Path) -> None:
+    """`build` stops passing `read_json`'s reason to `gather`, as it did at d38040a.
+
+    `read_json` has always returned (document, reason) and both call sites read
+    `current, _ = read_json(...)`, so the module docstring's promise of "UNKNOWN with the reason
+    beside it" was never kept by anything. Paired with the control above so that the reason in the
+    unmutated run is known to come from `read_json` rather than from the fallback: with this
+    applied the same copy renders "no reason was recorded" instead of the FileNotFoundError.
+    """
+    edit(root, PROJECTOR, ABSENT_THREADED, "    absent = {}\n")
+
+
+def remove_next_actions(root: Path) -> None:
+    """Delete the ledger from the copy. Not a code mutation - the CONDITION the panel must survive."""
+    (root / ACTIONS).unlink()
+
+
+# (name, how to prepare the copy, what the written page must carry)
+#
+# The first pair demonstrates the no-repository degradation; the second demonstrates the
+# absent-record degradation and that the reason reaching the page is the one `read_json` gave. Both
+# are pairs on purpose: the second member removes the guard that makes the first member's answer
+# what it is, so neither green is green by accident.
 SCRIPT_CONTROLS = [
     ("THE NO-REPOSITORY DEMONSTRATION: the projector run in a copy with no .git, unmutated",
      None, "<div><span>Source commit</span><p>UNKNOWN</p></div>"),
     ("the same copy with the UNKNOWN guard weakened to an empty string",
      the_unknown_guard_weakened, "<div><span>Source commit</span><p></p></div>"),
+    ("THE ABSENT-RECORD DEMONSTRATION: badf/next-actions.json deleted from the copy, code unmutated",
+     remove_next_actions,
+     "badf/next-actions.json could not be read: FileNotFoundError. Nothing else is shown"),
+    ("the same deletion with read_json's reason discarded in build, as it was at d38040a",
+     lambda root: (remove_next_actions(root), the_absence_reason_discarded_again(root)) and None,
+     "badf/next-actions.json is not available and no reason was recorded"),
 ]
 
 FAILED = re.compile(r"^(?:FAIL|ERROR): (\w+) ", re.M)

@@ -299,12 +299,43 @@ def provenance_line(source: str, commit: str, written_of: str, written: str, bui
     )
 
 
+def render_unknown(facts: dict, source: str, reason: str, written: str) -> str:
+    """A panel whose source record could not be read. UNKNOWN, with the reason, and nothing else.
+
+    #352: "The projector emits UNKNOWN where a fact is absent, never a convenient value." An EMPTY
+    RENDERING IS A CONVENIENT VALUE. Measured before this existed: deleting `badf/next-actions.json`
+    from a copy of the tree and running the projector produced a queue panel reading "No recorded
+    action matches the filter. That is a reading of badf/next-actions.json" - a sentence that was
+    false, because nothing had been read - followed by "The 0 recorded action(s) the filter did NOT
+    admit" and "The filter excluded no recorded action". Exit 0, page built, and a reader could not
+    tell an empty queue from an absent file.
+
+    So the count, the excluded list and every explanatory sentence are SUPPRESSED here rather than
+    drawn with zeroes. A zero is a measurement; there was no measurement.
+
+    THE REASON IS THE VALIDATOR OF THIS PANEL. It comes from `read_json`, which has always returned
+    one and whose callers discarded it, so the docstring's promise of "UNKNOWN with the reason
+    beside it" was unkept. It is threaded through `build` -> `gather` -> here.
+    """
+    return (
+        '<div class="callout">'
+        f'<strong>{UNKNOWN}</strong>'
+        f'<p>{esc(reason)}. Nothing else is shown in this panel. A count, a list or an empty '
+        f'table drawn from a record that was never read would report a measurement this projection '
+        f'does not have, and {UNKNOWN} is the honest answer rather than a convenient one.</p>'
+        '</div>'
+        + provenance_line(source, facts["commit"], source, written, facts["built_at"])
+    )
+
+
 def render_decision(facts: dict) -> str:
     """RESUME_DECISION, first on the page and in the loudest component the guide has.
 
     The value is the record's own word. The reader is told which action it is about and where that
     action is recorded; nothing here says what to do about it.
     """
+    if facts["current_absent"]:
+        return render_unknown(facts, CURRENT_STATE, facts["current_absent"], facts["recorded_at"])
     decision = facts["resume_decision"]
     primary_id = facts["primary_next_action"]
     primary = facts["primary_action"]
@@ -314,6 +345,9 @@ def render_decision(facts: dict) -> str:
         f'<b>{esc(field(primary, "authority"))}</b>. '
         f'{esc(field(primary, "action"))}'
         if primary is not None else
+        f'Primary next action <b>{esc(primary_id)}</b>. {esc(facts["actions_absent"])}, so nothing '
+        f'more about it is shown here.'
+        if facts["actions_absent"] else
         f'Primary next action <b>{esc(primary_id)}</b>. '
         f'No matching action is recorded in <code>{esc(NEXT_ACTIONS)}</code>, so nothing more '
         f'about it is shown here.'
@@ -330,6 +364,8 @@ def render_decision(facts: dict) -> str:
 
 
 def render_package(facts: dict) -> str:
+    if facts["current_absent"]:
+        return render_unknown(facts, CURRENT_STATE, facts["current_absent"], facts["recorded_at"])
     work_package = facts["work_package"]
     source = facts["source"]
     rows = [
@@ -371,6 +407,9 @@ def render_reconciliation(facts: dict) -> str:
 
 
 def render_queue(facts: dict) -> str:
+    if facts["actions_absent"]:
+        return render_unknown(facts, NEXT_ACTIONS, facts["actions_absent"],
+                              facts["actions_recorded_at"])
     queue, excluded = facts["queue"], facts["excluded"]
     if queue:
         rows = "".join(
@@ -413,6 +452,8 @@ def render_queue(facts: dict) -> str:
 
 
 def render_authority(facts: dict) -> str:
+    if facts["current_absent"]:
+        return render_unknown(facts, CURRENT_STATE, facts["current_absent"], facts["recorded_at"])
     groups, unscoped = facts["authority_groups"], facts["authority_unscoped"]
     rows = "".join(
         "<tr>"
@@ -541,14 +582,43 @@ def observe(root: Path) -> dict:
     }
 
 
-def gather(current: dict | None, actions: dict | None, observed: dict, now: datetime) -> dict:
+def unusable(document: dict | None, why: str, relative: str) -> str:
+    """Why `relative` cannot be projected, or "" when it can.
+
+    An empty string means USABLE, and every panel guard reads it that way. The fallback exists so
+    that a caller which loses the reason still cannot produce a confident-looking panel: it says
+    the reason was not recorded rather than inventing one.
+    """
+    if document is not None:
+        return ""
+    return why or f"{relative} is not available and no reason was recorded"
+
+
+def gather(current: dict | None, actions: dict | None, observed: dict, now: datetime,
+           absent: dict[str, str] | None = None) -> dict:
     """Every fact the panels render, with each absent one already turned into UNKNOWN.
 
-    PURE. It reads no file, runs no process and asks the clock nothing; `now` and `observed` are
-    handed in. A fact that is absent from either becomes UNKNOWN here rather than at the point of
+    PURE. It reads no file, runs no process and asks the clock nothing; `now`, `observed` and
+    `absent` are handed in. A fact that is absent becomes UNKNOWN here rather than at the point of
     rendering, so that every panel spells it the one way.
+
+    `absent` maps a source path to the reason `read_json` gave for not returning a document. It is
+    threaded rather than discarded because the panels must say WHY, and because an unreadable
+    record and an empty one are different facts that looked identical on the page until they were
+    told apart here.
     """
+    absent = absent or {}
     printed = parse_validator(observed.get("validator_stdout", ""))
+    current_absent = unusable(current, absent.get(CURRENT_STATE, ""), CURRENT_STATE)
+    actions_absent = unusable(actions, absent.get(NEXT_ACTIONS, ""), NEXT_ACTIONS)
+    # A document that loaded but carries no `actions` array is a THIRD case, and rendering it as an
+    # empty queue would repeat the defect one level down: the file was read, and it still says
+    # nothing about what is waiting.
+    if not actions_absent and not isinstance((actions or {}).get("actions"), list):
+        actions_absent = (
+            f"{NEXT_ACTIONS} loaded, but it carries no `actions` array, so there is no queue in it "
+            f"to project"
+        )
     groups, unscoped = group_authority(current.get("authority") if current else None)
     queue, excluded = human_queue(actions)
     primary_id = field(current, "primary_next_action_id")
@@ -560,6 +630,8 @@ def gather(current: dict | None, actions: dict | None, observed: dict, now: date
                 break
 
     return {
+        "current_absent": current_absent,
+        "actions_absent": actions_absent,
         # The record is the authority on its own resume decision; the validator ECHOES it. Read
         # from the record, so that a validator that could not run leaves this panel UNKNOWN rather
         # than silently reporting the echo of a file this projector never opened.
@@ -635,9 +707,12 @@ def render(facts: dict, template: str) -> str:
 
 
 def build(root: Path, template: str, now: datetime) -> str:
-    current, _ = read_json(root, CURRENT_STATE)
-    actions, _ = read_json(root, NEXT_ACTIONS)
-    return render(gather(current, actions, observe(root), now), template)
+    current, current_why = read_json(root, CURRENT_STATE)
+    actions, actions_why = read_json(root, NEXT_ACTIONS)
+    # BOTH reasons are kept. They were discarded here - `current, _ = read_json(...)` - while the
+    # module docstring promised "UNKNOWN with the reason beside it", which nothing rendered.
+    absent = {CURRENT_STATE: current_why, NEXT_ACTIONS: actions_why}
+    return render(gather(current, actions, observe(root), now, absent), template)
 
 
 def main(argv: list[str] | None = None) -> int:
