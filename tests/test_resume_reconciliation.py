@@ -36,10 +36,12 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     by this module's own `git` calls rather than asked of the code under test. Where the full
     history is present the verdict must be exactly LAG_EXPECTED; where it is not - CI checks out
     with `actions/checkout@v7` and no `fetch-depth`, so every CI run is shallow - the verdict must
-    be exactly UNKNOWN and its reason must name the missing fact. Neither branch is a skip: both
-    assert. But it does mean the LAG_EXPECTED half of that test is not exercised in CI, which is
-    why `test_lag_expected_when_the_recorded_package_has_landed` constructs the same shape in a
-    fixture repository that CI can run.
+    be exactly UNKNOWN and must carry a non-empty reason. Neither branch is a skip: both assert.
+    Two things follow, and both are limits rather than caveats. The LAG_EXPECTED half is not
+    exercised in CI at all, which is why `test_lag_expected_when_the_recorded_package_has_landed`
+    constructs the same shape in a fixture repository that CI can run. And the degraded half
+    checks only that a reason exists, not that it names the right missing fact; the fixture case
+    `test_unknown_on_a_shallow_clone_and_the_reason_says_shallow` is where that wording is held.
  2. `test_the_current_tree_reports_lag_expected` is a reading of live records and live history, so
     it is TIME-BOUND by construction. It stays true while `badf/current-state.json` names WP-111
     and WP-111 is in the main line after the recorded baseline; when issue #316 rolls that record
@@ -48,12 +50,24 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     looser assertion.
  3. `git` must be on PATH. If it is not, this module ERRORS rather than skipping. A skip here
     would report a green suite for an environment in which nothing was measured.
- 4. The reconciliation is checked for its VERDICT and for the presence of a reason. The reason's
-    wording is asserted only where a rule depends on it - that a shallow clone says so, and that a
-    landing does not read as work in progress.
+ 4. The reconciliation is checked for its VERDICT and for the presence of a one-line reason. The
+    reason's WORDING is asserted for three facts and no others: that a shallow clone says
+    "shallow", that an absent baseline says "object database", and that a landing reads as "has
+    already landed" and explicitly not as work in progress. Everything else a reason says is
+    unchecked prose.
  5. Nothing here checks that the recorded package is the RIGHT one, or that the record's
-    `state`, `resume_decision` or `stop_reason` agree with the verdict. Those are records
-    questions and a records edit waits on #316.
+    `state`, `resume_decision` or `stop_reason` agree with the verdict. That is a hole, not a
+    caveat, and `scripts/wp112_controls.py` demonstrates it rather than this sentence asserting
+    it: a record whose package has LANDED while its own `state` still reads IN_PROGRESS leaves
+    this suite GREEN. The control expects green and reports if it ever goes red, because a hole
+    that has closed needs its limit re-derived. The records half waits on #316.
+
+MEASURED, on fresh clones, by `scripts/wp112_controls.py` - fourteen controls, the unmutated clone
+first and green. Eleven mutations of the reconciliation each trip the test named for them; four of
+those trip nothing else. One is the declared hole above. Two run the validator itself on a
+genuinely shallow clone: unmutated it prints UNKNOWN and exits 0, and with the shallow guard
+weakened it prints CONSISTENT and exits 0 - which is how the first of the two is known to be
+produced by the guard rather than by accident.
 
 Run: `python -m unittest discover -s tests -p test_resume_reconciliation.py -v`
 """
