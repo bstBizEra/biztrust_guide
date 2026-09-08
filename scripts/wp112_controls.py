@@ -16,13 +16,27 @@ That has a consequence worth stating: a clone carries COMMITTED state. Run this 
 committed tree, or it will measure the previous commit and say so by disagreeing with the suite you
 just ran.
 
-TWO KINDS OF CONTROL.
+THREE KINDS OF CONTROL.
 
   SUITE controls mutate `scripts/validate_continuity.py` in a full clone, run
 
       python -m unittest discover -s tests -p test_resume_reconciliation.py -v
 
   from that clone's root, and assert the NAMED test fails.
+
+  ENVIRONMENT controls mutate nothing in the first of each pair. They put an UNMUTATED tree into a
+  situation it must survive and assert the suite stays GREEN. Two situations, two pairs:
+
+    * a working tree sitting in a SUBDIRECTORY of a clone of this repository. A test that goes red
+      for where the tree was unpacked fails for an environment reason, which is the flakiness #311
+      keeps out of this suite.
+    * a clone whose `origin/main` carries ONE MORE Work Package than the record knows - the merge
+      that is coming. Until review caught it, the live test required the main line's TIP to be the
+      recorded package's merge, so merging this very package would have broken this very package's
+      test, green in CI because CI is shallow.
+
+  The second of each pair removes the check that makes the first green and shows the same
+  environment go RED, so the green is known to come from the check rather than from luck.
 
   SCRIPT controls run `python scripts/validate_continuity.py` in a SHALLOW clone and assert the
   printed verdict and exit code. The brief for this package required the shallow case to be
@@ -32,16 +46,18 @@ TWO KINDS OF CONTROL.
   because the first is worthless alone: it weakens the shallow guard and shows the same clone then
   reports CONSISTENT, so the UNKNOWN in the first is produced by the guard rather than by accident.
 
-ONE SUITE CONTROL EXPECTS GREEN. It is a DECLARED HOLE - a real thing this guard does not catch -
-and it is here so that limit 5 of `tests/test_resume_reconciliation.py` is demonstrated rather than
-claimed. If it starts failing, the hole has closed and the limit must be re-derived, not deleted.
+TWO SUITE CONTROLS EXPECT GREEN. Each is a DECLARED HOLE - a real thing this guard does not catch -
+and they are here so that limits 5 and 7 of `tests/test_resume_reconciliation.py` are demonstrated
+rather than claimed. If either starts failing, that hole has closed and its limit must be
+re-derived, not deleted.
 
 THE ROT RISK, stated plainly because this file is committed. A control script that nothing runs
-looks like evidence and is not. It is DELIBERATELY NOT WIRED INTO CI: a dozen clones and suite runs
-is far too slow for every push, and `scripts/validate_continuity.py` is the instrument every other
-gate in this repository is read through - a workflow step that flaked here would be removed rather
-than fixed. Run this before changing the reconciliation, and before believing any sentence the test
-module's docstring states about what it catches.
+looks like evidence and is not. It is DELIBERATELY NOT WIRED INTO CI: every control makes a fresh
+clone, and all but the two shallow-clone controls then run the whole module suite on top of it -
+which is minutes of work, repeated, on every push. `scripts/validate_continuity.py` is also the
+instrument every other gate in this repository is read through, and a CI step that flaked here
+would be removed rather than fixed. Run this before changing the reconciliation, and before
+believing any sentence the test module's docstring states about what it catches.
 
 It lives in `scripts/` and not `tests/` on purpose: `unittest discover -s tests` must not collect
 it, and it clones repositories, which is not a thing `tests/` should do on every push.
@@ -50,7 +66,9 @@ Usage:  python scripts/wp112_controls.py [<repository>] [<scratch>]
 """
 from __future__ import annotations
 
+import json
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -80,7 +98,6 @@ LAG_RETURN = '        return "LAG_EXPECTED", ('
 DIVERGED_RETURN = '        return "DIVERGED", ('
 SIGNATURE = 'def reconcile_recorded_state(root: Path, current: dict) -> tuple[str, str]:'
 PRINT_BLOCK = (
-    '    verdict, reason = reconcile_safely(ROOT, current)\n'
     '    print(f"STATE_RECONCILIATION={verdict}")\n'
     '    print(f"STATE_RECONCILIATION_REASON={reason}")\n'
 )
@@ -151,23 +168,28 @@ def head_added_as_a_fallback_main_ref(root: Path) -> None:
 
 def the_reconciliation_not_printed(root: Path) -> None:
     """Computed and dropped. Step 8 is only performed if step 7's reader can see the answer."""
-    edit(root, VALIDATOR, PRINT_BLOCK, "    reconcile_safely(ROOT, current)\n")
+    edit(root, VALIDATOR, PRINT_BLOCK, "")
 
 
 def the_reconciliation_printed_away_from_the_resume_decision(root: Path) -> None:
     """Printed, but above the verdict line rather than beside the two lines step 7 already reads."""
     edit(root, VALIDATOR, PRINT_BLOCK, "")
-    edit(root, VALIDATOR, PASS_LINE,
-         '    _verdict, _reason = reconcile_safely(ROOT, current)\n'
-         '    print(f"STATE_RECONCILIATION={_verdict}")\n'
-         '    print(f"STATE_RECONCILIATION_REASON={_reason}")\n' + PASS_LINE)
+    edit(root, VALIDATOR, PASS_LINE, PRINT_BLOCK + PASS_LINE)
 
 
 def the_advisory_made_fatal(root: Path) -> None:
-    """An advisory word given the power to fail CI is the flakiness #311 exists to keep out."""
+    """An advisory word given the power to fail CI is the flakiness #311 exists to keep out.
+
+    The condition is `verdict in RECONCILIATION_VOCABULARY`, which is ALWAYS true, so the run
+    always fails. It read `verdict == "CONSISTENT"` once, which was fatal only while the live tree
+    read something else - and when this package's own record rolled forward to an unlanded package
+    the live verdict became CONSISTENT, the mutated run exited 0, and the control quietly stopped
+    demonstrating anything. A control whose mutation depends on the record it runs against is not
+    a control.
+    """
     edit(root, VALIDATOR, RETURN_ZERO,
          '    print(f"STATE_RECONCILIATION_REASON={reason}")\n'
-         '    return 0 if verdict == "CONSISTENT" else 1\n')
+         '    return 1 if verdict in RECONCILIATION_VOCABULARY else 0\n')
 
 
 def the_reconciliation_raises(root: Path) -> None:
@@ -186,15 +208,41 @@ def a_recorded_state_that_contradicts_the_verdict(root: Path) -> None:
     The reconciliation reads two fields - the package id and the baseline commit - and says nothing
     about the rest of the record. A record whose package has LANDED while its own `state` still
     reads IN_PROGRESS is exactly the contradiction step 8 is asked about, and this guard does not
-    see it. Limit 5 of the test module is written from this control. The records half waits on
-    #316; the point of the control is that the gap is measured rather than asserted.
+    see it. Limit 5 of the test module is written from this control. Reconciling the record
+    itself is a records edit and not this guard's business; the point of the control is that
+    the gap is measured rather than asserted.
     """
     edit(root, STATE, RECORDED_STATE, '"state": "IN_PROGRESS",')
 
 
+DIVERGED_DOC_TAIL = "WHY the two parted, so this entry does not say."
+
+
+def a_cause_claimed_in_the_diverged_docstring(root: Path) -> None:
+    """THE SECOND DECLARED HOLE, and this control asserts the suite stays GREEN.
+
+    The docstring guard forbids the ABSENCE claims - the ones DIVERGED's own precondition makes
+    false - and requires the presence claim. It does NOT forbid claims about the CAUSE, which the
+    reason guard does forbid. That asymmetry is deliberate and limit 7 of the test module states
+    it: a docstring paragraph may legitimately name causes in order to say they cannot be
+    distinguished, and the code comment beside this very branch does exactly that, while the
+    printed reason is one terse assertion in which naming a cause IS asserting it.
+
+    The price is this hole: a docstring that asserts a cause outright passes. Measured, not
+    assumed - if this control ever goes red the asymmetry has been closed and limit 7 must be
+    re-derived rather than deleted.
+    """
+    edit(root, VALIDATOR, DIVERGED_DOC_TAIL,
+         "WHY the two parted; a force-push moved the main line away.")
+
+
 SUITE_CONTROLS = [
+    # Named against a FIXTURE test, not the live reading. The live reading only takes the
+    # LAG_EXPECTED branch while the record happens to lag, and this package's own record rolling
+    # forward moved it to CONSISTENT - at which point this control stopped tripping the test it
+    # named, while the defect it injects was as real as ever.
     ("a landing reported as CONSISTENT", a_landing_reported_as_consistent,
-     "test_the_current_tree_reports_lag_expected"),
+     "test_lag_expected_when_the_recorded_package_has_landed"),
     ("any movement counted as a landing", any_movement_counted_as_a_landing,
      "test_consistent_when_a_sibling_package_landed_first"),
     ("the package id matched anywhere in the subject",
@@ -216,11 +264,56 @@ SUITE_CONTROLS = [
     ("the advisory verdict made fatal", the_advisory_made_fatal,
      "test_the_reconciliation_is_printed_beside_the_resume_decision"),
     ("the reconciliation raises", the_reconciliation_raises,
-     "test_the_current_tree_reports_lag_expected"),
+     "test_the_live_reading_agrees_with_the_history_measured_here"),
     # HOLE, not a defect: expected GREEN. See a_recorded_state_that_contradicts_the_verdict.
     ("DECLARED HOLE: a recorded state that contradicts the verdict",
      a_recorded_state_that_contradicts_the_verdict, None),
+    # HOLE, not a defect: expected GREEN. See a_cause_claimed_in_the_diverged_docstring.
+    ("DECLARED HOLE: a cause asserted in the DIVERGED docstring entry",
+     a_cause_claimed_in_the_diverged_docstring, None),
 ]
+
+# --- the mutations the ENVIRONMENT controls use -----------------------------------------------
+#
+# Each removes the check that makes one expected-green environment green, so that the green is
+# known to come from the check. The list they belong to is beside its builders, further down.
+
+TEST_MODULE = "tests/test_resume_reconciliation.py"
+PROBE_GUARD = (
+    '        if os.path.normcase(os.path.realpath(top.stdout.strip())) != \\\n'
+    '                os.path.normcase(os.path.realpath(REPO)):\n'
+    '            return False, "inside another repository rather than at its root"\n'
+)
+
+
+def the_probe_guard_removed(root: Path) -> None:
+    """`full_history_is_present` stops noticing that it is not at the repository root.
+
+    Without it the probe answers "judgeable" for a tree inside another checkout of this repository
+    - toplevel resolves, not shallow, a main ref resolves, the baseline is in the enclosing
+    repository's object database - and then demands LAG_EXPECTED while the code correctly answers
+    UNKNOWN.
+    """
+    edit(root, TEST_MODULE, PROBE_GUARD, "")
+
+
+RANGE_CORROBORATION = (
+    '        landings = [line for line in subjects if line.startswith(f"[{work_package}]")]\n'
+)
+
+
+def the_corroboration_required_to_be_the_tip(root: Path) -> None:
+    """Put back the rule that made merging this package break this package's own test.
+
+    LAG_EXPECTED claims the recorded package landed SOMEWHERE since the baseline. The version this
+    restores required the main line's TIP to be that package's merge, which is the same thing only
+    until the next package merges. Paired with the control above so that the green there is known
+    to come from the range corroboration and not from the fixture being too weak to tell.
+    """
+    edit(root, TEST_MODULE, RANGE_CORROBORATION,
+         '        landings = ([subjects[0]] if subjects\n'
+         '                    and subjects[0].startswith(f"[{work_package}]") else [])\n')
+
 
 SCRIPT_CONTROLS = [
     ("THE SHALLOW-CLONE DEMONSTRATION: `git clone --depth 1`, unmutated", None, "UNKNOWN"),
@@ -254,6 +347,145 @@ def clone(source: Path, into: Path, name: str, depth: int = 0) -> Path:
     return root
 
 
+def git_out(root: Path, *args: str) -> str:
+    """One git command at `root`, refusing to return silence on failure."""
+    done = subprocess.run(["git", "-C", str(root), *args],
+                          capture_output=True, text=True, encoding="utf-8", errors="replace",
+                          timeout=120)
+    if done.returncode != 0:
+        raise AssertionError(f"git {' '.join(args)} failed in {root}: {done.stdout}{done.stderr}")
+    return done.stdout.strip()
+
+
+def nested_inside_a_clone(source: Path, into: Path, name: str) -> Path:
+    """A working tree of `source` sitting in a SUBDIRECTORY of a clone of `source`.
+
+    Not a repository itself, but inside one that holds this repository's objects and its
+    `origin/main` - which is exactly what makes the case interesting: every fact a naive probe
+    reads comes back present, and every one of them is about the wrong root.
+    """
+    enclosing = clone(source, into, name)
+    nested = enclosing / "nested"
+    shutil.copytree(enclosing, nested,
+                    ignore=shutil.ignore_patterns(".git", "_site", "node_modules", "__pycache__"))
+    top = subprocess.run(["git", "-C", str(nested), "rev-parse", "--show-toplevel"],
+                         capture_output=True, text=True, timeout=60)
+    if top.returncode != 0 or Path(top.stdout.strip()).name == "nested":
+        raise AssertionError(f"the nested tree is not inside the clone: {top.stdout}{top.stderr}")
+    return nested
+
+
+def check_source_main_line(source: Path) -> str:
+    """Refuse to run when the source's local `main` carries commits its `origin/main` does not.
+
+    A clone's `origin/main` IS the source's `refs/heads/main`, so every control below reads the
+    source's LOCAL main line whatever the source's own `origin/main` says.
+
+    ONE DIRECTION ONLY, and the other direction is the reason this sentence is narrow. Both of
+    these were measured, on scratch clones built for the purpose:
+
+      local `main` AHEAD of `origin/main`   -> REFUSED. This is the incident that produced the
+                                               check: a stray command committed onto local `main`,
+                                               the worktree suite stayed green because it reads
+                                               `origin/main`, and every clone went red on the
+                                               live-tree test's corroboration - which reads the
+                                               main-line TIP and found a commit landing no Work
+                                               Package. Diagnosing that cost far more than this.
+      local `main` BEHIND `origin/main`     -> ALLOWED. Built as a scratch source and run: the
+                                               unmutated-clone control came back exit 0 with no
+                                               failures. That is the ordinary state of a checkout
+                                               that has fetched and not pulled, and refusing it
+                                               would be a false failure of exactly the kind the
+                                               check exists to prevent. The first version of this
+                                               check compared for inequality in BOTH directions
+                                               and did refuse it; review measured that, and this
+                                               is the repair.
+
+    WHAT IT DOES NOT PROMISE. It is not a guarantee that the run will be green. A local `main` far
+    enough behind - before the merge the record's package landed in - satisfies this check and
+    still fails the live-tree corroboration. That case is not checked here, because pinning it
+    would mean this runner deciding which commit the record's package landed in, which is the
+    tests' business and not the harness's.
+    """
+    def ref(name: str) -> str:
+        done = subprocess.run(["git", "-C", str(source), "rev-parse", "--verify", "--quiet",
+                               f"{name}^{{commit}}"], capture_output=True, text=True, timeout=60)
+        return done.stdout.strip() if done.returncode == 0 else ""
+
+    local, published = ref("refs/heads/main"), ref("refs/remotes/origin/main")
+    if not local or not published or local == published:
+        return local or published
+    behind = subprocess.run(["git", "-C", str(source), "merge-base", "--is-ancestor",
+                             local, published], capture_output=True, text=True, timeout=60)
+    if behind.returncode == 0:
+        return local
+    subject = subprocess.run(["git", "-C", str(source), "log", "-1", "--format=%s", local],
+                             capture_output=True, text=True, timeout=60).stdout.strip()
+    raise SystemExit(
+        f"REFUSING TO RUN. {source}: refs/heads/main is {local[:12]} {subject!r}, which carries "
+        f"commits refs/remotes/origin/main ({published[:12]}) does not. Every clone below would "
+        f"take its origin/main from that local branch, so the live-tree control would measure the "
+        f"drift rather than this package's code. Reconcile the source's main first.")
+
+
+def clone_with_a_later_package(source: Path, into: Path, name: str) -> Path:
+    """A clone whose `origin/main` has ONE MORE Work Package on it than the record knows.
+
+    This is the merge that is coming: when this package lands, main's tip is its merge and no
+    longer the recorded package's. The commit is made with `commit-tree` over the existing tip's
+    own tree, so the WORKING TREE is untouched and the clone still carries the module under test -
+    a checkout of the older tip would have thrown the module away and measured nothing.
+
+    Two things are asserted before the control is allowed to mean anything: the new tip's subject
+    must NOT open with the recorded package's id, and the recorded package's landing must still be
+    somewhere in the range. Without both, a green result would prove only that the fixture failed
+    to reproduce the case.
+    """
+    root = clone(source, into, name)
+    record = json.loads((root / STATE).read_text(encoding="utf-8"))
+    work_package = record["active_work_package"]["id"]
+    baseline = record["source"]["baseline_commit"]
+
+    # BOTH commits are synthesised, and that is a repair. This first built only the later package
+    # and relied on the recorded one having already landed - true while the record named WP-111,
+    # and false the moment the record rolled forward to WP-112, at which point the builder's own
+    # guard fired and the control could not run at all. A fixture for "a later package lands on
+    # top of the recorded one" must not depend on whether the recorded one has landed yet.
+    tip = git_out(root, "rev-parse", "refs/remotes/origin/main")
+    for subject in (f"[{work_package}] the recorded package lands (#351) (#998)",
+                    "[BIZTRUST-GUIDE-WP-999] a later package lands on the main line (#351) (#999)"):
+        tip = git_out(root, "-c", "user.name=WP-112 control",
+                      "-c", "user.email=wp112@invalid.example",
+                      "commit-tree", f"{tip}^{{tree}}", "-p", tip, "-m", subject)
+    git_out(root, "update-ref", "refs/remotes/origin/main", tip)
+
+    now = git_out(root, "log", "-1", "--format=%s", "refs/remotes/origin/main")
+    if now.startswith(f"[{work_package}]"):
+        raise AssertionError(f"the simulated tip still lands the recorded package: {now!r}")
+    landings = [line for line in git_out(root, "log", "--format=%s",
+                                         f"{baseline}..refs/remotes/origin/main").splitlines()
+                if line.startswith(f"[{work_package}]")]
+    if not landings:
+        raise AssertionError(
+            f"{work_package} is not in {baseline[:12]}..origin/main, so this fixture does not "
+            f"reproduce a LAG_EXPECTED tree at all")
+    return root
+
+
+ENVIRONMENT_CONTROLS = [
+    ("THE ENCLOSING-REPOSITORY DEGRADATION: the tree inside another checkout, unmutated",
+     nested_inside_a_clone, None, None),
+    ("the same tree with the test probe's enclosing-repository check removed",
+     nested_inside_a_clone, the_probe_guard_removed,
+     "test_the_live_reading_agrees_with_the_history_measured_here"),
+    ("THE MERGE THAT IS COMING: a later package lands on top of the recorded one, unmutated",
+     clone_with_a_later_package, None, None),
+    ("the same later merge with the corroboration required to be the TIP",
+     clone_with_a_later_package, the_corroboration_required_to_be_the_tip,
+     "test_the_live_reading_agrees_with_the_history_measured_here"),
+]
+
+
 def run_suite(root: Path) -> tuple[int, set[str]]:
     done = subprocess.run(
         [PYTHON, "-m", "unittest", "discover", "-s", "tests",
@@ -274,6 +506,7 @@ def main() -> int:
     source = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
     holder = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path(tempfile.mkdtemp())
     holder.mkdir(parents=True, exist_ok=True)
+    check_source_main_line(source)
     bad = 0
 
     code, failures = run_suite(clone(source, holder, "control_00_unmutated"))
@@ -306,6 +539,30 @@ def main() -> int:
               f"failed: {sorted(failures) or 'NOTHING'}"
               f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
 
+    for index, (name, build, mutate, expected) in enumerate(ENVIRONMENT_CONTROLS, start=1):
+        root = build(source, holder, f"environment_{index:02d}")
+        if mutate is not None:
+            mutate(root)
+        code, failures = run_suite(root)
+        if expected is None:
+            ok = code == 0 and not failures
+            bad += 0 if ok else 1
+            print(f"[{'PASS' if ok else 'BAD '}] {name}")
+            # "EXPECTED GREEN", not "DEGRADATION": one of these environments is degraded (a tree
+            # unpacked inside another checkout) and the other is simply the future (a later
+            # package on the main line). Calling both a degradation would misdescribe the case
+            # this pair was added for.
+            print(f"       EXPECTED GREEN: the suite must stay green here; exit {code}; "
+                  f"failed: {sorted(failures) or 'nothing'}")
+            continue
+        ok = code != 0 and expected in failures
+        isolated = failures == {expected}
+        bad += 0 if ok else 1
+        print(f"[{'PASS' if ok else 'BAD '}] {name}")
+        print(f"       expected {expected} to fail; exit {code}; "
+              f"failed: {sorted(failures) or 'NOTHING'}"
+              f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
+
     for index, (name, mutate, expected) in enumerate(SCRIPT_CONTROLS, start=1):
         root = clone(source, holder, f"shallow_{index:02d}", depth=1)
         if mutate is not None:
@@ -317,7 +574,7 @@ def main() -> int:
         print(f"       shallow clone: expected STATE_RECONCILIATION={expected} and exit 0; "
               f"got {verdict} and exit {code}")
 
-    total = len(SUITE_CONTROLS) + len(SCRIPT_CONTROLS)
+    total = len(SUITE_CONTROLS) + len(ENVIRONMENT_CONTROLS) + len(SCRIPT_CONTROLS)
     print(f"\n{total} controls, {bad} not behaving as declared")
     return 1 if bad else 0
 

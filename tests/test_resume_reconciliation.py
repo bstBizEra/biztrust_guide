@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Step 8 of the resume protocol has a tool, and this is what holds it to its four words (#345).
+"""Step 8 of the resume protocol has a tool, and this is what holds it to its four words (#351).
 
 `AGENTS.md` section 3 step 7 runs `scripts/validate_continuity.py`; step 8 says "Reconcile observed
 state with recorded state" and until WP-112 nothing performed it - the validator made no `git` call
-at all. The consequence was live: `badf/current-state.json` names BIZTRUST-GUIDE-WP-111 as the
-active package in a pre-merge state, and that package's merge commit IS this main line's head.
+at all. The consequence was live when this was written: `badf/current-state.json` named
+BIZTRUST-GUIDE-WP-111 as the active package in a pre-merge state while that package's merge commit
+was already on the main line. Whether it is still the main line's HEAD is not a claim this module
+makes - it stops being true the moment anything merges after it, which is exactly the mistake the
+live test was repaired for.
 
 THIS MODULE SHELLS OUT. It runs `git` to build fixture repositories, and `sys.executable` to run
 the validator. The rest of `tests/` is subprocess-free and that is worth saying out loud;
@@ -27,27 +30,37 @@ THE FOUR WORDS, and the rule each one is measured against:
                 before its merge, so it cannot record its own merge. Normal - and never to be read
                 as work in progress, because the branch may still exist and an agent resuming from
                 the record alone would reopen finished work.
-  DIVERGED      the recorded baseline is not an ancestor of the main line. No ordering explains it.
+  DIVERGED      the recorded baseline is not an ancestor of the main line. It was meant to be the
+                disagreement no ordering explains, and it is not: a main ref that has simply not
+                been fetched sits behind the baseline and lands here too. Issue #353, limit 9.
   UNKNOWN       the history needed to judge is unavailable.
 
 WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
 
  1. The live-tree assertion is CONDITIONAL on the environment, and the condition is MEASURED here
-    by this module's own `git` calls rather than asked of the code under test. Where the full
-    history is present the verdict must be exactly LAG_EXPECTED; where it is not - CI checks out
-    with `actions/checkout@v7` and no `fetch-depth`, so every CI run is shallow - the verdict must
-    be exactly UNKNOWN and must carry a non-empty reason. Neither branch is a skip: both assert.
-    Two things follow, and both are limits rather than caveats. The LAG_EXPECTED half is not
-    exercised in CI at all, which is why `test_lag_expected_when_the_recorded_package_has_landed`
-    constructs the same shape in a fixture repository that CI can run. And the degraded half
-    checks only that a reason exists, not that it names the right missing fact; the fixture case
+    by this module's own `git` calls rather than asked of the code under test. Where the history
+    needed to judge is absent - CI checks out with `actions/checkout@v7` and no `fetch-depth`, so
+    every CI run is shallow - the verdict must be exactly UNKNOWN and must carry a non-empty
+    reason. Where it is present, the verdict must be the word the three measured facts imply, one
+    branch per word. No branch is a skip: every one of them asserts.
+    Two things follow, and both are limits rather than caveats. In CI only the UNKNOWN branch ever
+    runs, which is why the other three words are constructed in fixture repositories that CI can
+    run. And the UNKNOWN branch checks only that a reason exists, not that it names the right
+    missing fact; the fixture case
     `test_unknown_on_a_shallow_clone_and_the_reason_says_shallow` is where that wording is held.
- 2. `test_the_current_tree_reports_lag_expected` is a reading of live records and live history, so
-    it is TIME-BOUND by construction. It stays true while `badf/current-state.json` names WP-111
-    and WP-111 is in the main line after the recorded baseline; when issue #316 rolls that record
-    forward the anchors in `TestAnchors` fail FIRST and say which value moved. That is the
-    intended behaviour of a reading of a live divergence, not rot to be papered over with a
-    looser assertion.
+ 2. The live reading takes whichever branch the history puts it in, and NOTHING here pins which
+    branch that is. It is therefore no longer a ratchet on the current divergence: if the record
+    rolls forward to a package that has not landed, this test asserts CONSISTENT and says
+    nothing about the change. That is the price of the repair below and it is paid on purpose -
+    the alternative failed ordinary bookkeeping as though it were a code defect.
+
+    THE REPAIR. This module hardcoded `BIZTRUST-GUIDE-WP-111` and corroborated LAG_EXPECTED by
+    requiring the main line's TIP subject to be that package's merge. LAG_EXPECTED claims no such
+    thing: it claims the package landed SOMEWHERE since the recorded baseline. Tip and range agree
+    only until the next package merges, so **merging WP-112 would have broken WP-112's own test**,
+    and it would have landed green because CI is shallow and takes the UNKNOWN branch. The id and
+    the baseline are now read from the record, the corroboration is over the range, and a control
+    simulates the next package merging and shows the test pass with the verdict still LAG_EXPECTED.
  3. `git` must be on PATH. If it is not, this module ERRORS rather than skipping. A skip here
     would report a green suite for an environment in which nothing was measured.
  4. The reconciliation is checked for its VERDICT and for the presence of a one-line reason. The
@@ -60,14 +73,60 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     caveat, and `scripts/wp112_controls.py` demonstrates it rather than this sentence asserting
     it: a record whose package has LANDED while its own `state` still reads IN_PROGRESS leaves
     this suite GREEN. The control expects green and reports if it ever goes red, because a hole
-    that has closed needs its limit re-derived. The records half waits on #316.
+    that has closed needs its limit re-derived. Reconciling the record itself is a records edit
+    and not this module's business.
+ 6. A tree that is not the root of the repository containing it DEGRADES here rather than failing.
+    `full_history_is_present` checks that case itself, because without it the probe read the
+    enclosing repository's toplevel, shallowness, main ref and object database - all present, all
+    about the wrong root - answered "judgeable", and then demanded LAG_EXPECTED while the code
+    correctly answered UNKNOWN. A test that goes red for where the tree was unpacked is a test
+    failing for an environment reason, which is what #311 exists to keep out. Measured by a
+    control that copies the tree into a subdirectory of a clone and expects GREEN, paired with one
+    that removes the check and shows the same tree go RED.
 
-MEASURED, on fresh clones, by `scripts/wp112_controls.py` - fourteen controls, the unmutated clone
-first and green. Eleven mutations of the reconciliation each trip the test named for them; four of
-those trip nothing else. One is the declared hole above. Two run the validator itself on a
-genuinely shallow clone: unmutated it prints UNKNOWN and exits 0, and with the shallow guard
-weakened it prints CONSISTENT and exits 0 - which is how the first of the two is known to be
-produced by the guard rather than by accident.
+ 7. The DIVERGED prose is guarded in TWO places and against TWO different lists, and the
+    asymmetry is deliberate. The printed reason may not carry an absence claim NOR a cause -
+    `rebase`, `force-push` - because a reason is one terse assertion in which naming a cause is
+    asserting it. The docstring entry is held only to the absence claims and to stating that the
+    baseline is present, because a docstring paragraph may legitimately name causes in order to
+    say they cannot be distinguished, which is what the comment beside that branch does.
+
+    That leaves a hole: a docstring entry that asserts a cause outright passes. It is
+    demonstrated rather than asserted - `scripts/wp112_controls.py` writes "a force-push moved the
+    main line away" into that entry and expects the suite to stay GREEN. If it goes red the
+    asymmetry has closed and this limit must be re-derived.
+
+    The guard reads the entry through `vocabulary_entry`, which MEASURES the entry's indent rather
+    than assuming it: CPython 3.13 strips a docstring's common leading whitespace at compile time
+    and earlier versions do not, so the same source yields entries at column 0 on one interpreter
+    and column 4 on another. Which version CI runs is not asserted here, because nothing in this
+    repository pins it. Both shapes were exercised before this limit was written.
+
+ 8. The live test measures WIRING; the fixture tests measure RULES. Its branches re-derive the
+    classification from the same three facts the code reads, with this module's own git calls, so
+    it can catch the function reading the wrong record, resolving the wrong ref, or answering over
+    a history it cannot see - and it cannot catch a rule that is wrong in both places at once.
+    The non-circular half is `TestVocabulary`, where every word is reached by constructing the
+    condition in a repository built for it.
+
+ 9. DIVERGED IS NOT ALWAYS A FAULT, and nothing here treats it as one. A clone whose main ref has
+    not been fetched sits BEHIND the recorded baseline, and the baseline is then not an ancestor
+    of it, so the reconciliation returns DIVERGED - the loudest word - for a stale ref. Measured:
+    with `origin/main` moved to the commit before the baseline, `reconcile_safely` returns
+    DIVERGED with a reason that is factually true and an implication that is not. Filed as #353
+    and deliberately NOT fixed in this package; the fixtures here construct the not-an-ancestor
+    condition and assert the word, which is the behaviour as it stands, not as #353 may leave it.
+
+MEASURED, on fresh clones, by `scripts/wp112_controls.py` - nineteen controls, run only after an
+unmutated clone that must be green first. THIRTEEN mutations each trip the test named for them,
+and SIX of those trip nothing else. Two are the declared holes above, limits 5 and 7, and expect
+the suite to stay GREEN. Two more expect GREEN without mutating anything: an unmutated tree inside
+another checkout of this repository, which is limit 6, and an unmutated tree whose `origin/main`
+carries one more Work Package than the record knows, which is limit 2 - the merge that is coming.
+Each of those two is paired with a mutation that removes the check making it green and shows the
+same tree go red. The last two run the validator itself on a genuinely shallow clone: unmutated it
+prints UNKNOWN and exits 0, and with the shallow guard weakened it prints CONSISTENT and exits 0 -
+which is how the first of the two is known to be produced by the guard rather than by accident.
 
 Run: `python -m unittest discover -s tests -p test_resume_reconciliation.py -v`
 """
@@ -76,6 +135,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
+import re
 import shutil
 import subprocess
 import sys
@@ -87,10 +148,17 @@ REPO = Path(__file__).resolve().parents[1]
 VALIDATOR = REPO / "scripts/validate_continuity.py"
 STATE = REPO / "badf/current-state.json"
 
-# The anchors this module reads the live tree through. Asserted in TestAnchors, never assumed.
-RECORDED_WORK_PACKAGE = "BIZTRUST-GUIDE-WP-111"
-RECORDED_BASELINE = "372cf217098e2af11db0e786b746a5d583c7705a"
+# NO RECORDED VALUES LIVE HERE. The Work Package id and the baseline commit are READ FROM
+# `badf/current-state.json` every time they are needed. They were constants once - the module was
+# written against BIZTRUST-GUIDE-WP-111 at baseline 372cf217098e, and that is stated here as
+# history rather than asserted anywhere - and pinning them meant this suite would go red when the
+# record rolled forward, which is ordinary Work Package bookkeeping and not a defect here.
 VOCABULARY = ("CONSISTENT", "LAG_EXPECTED", "DIVERGED", "UNKNOWN")
+
+# Claims that the repository LACKS the baseline. DIVERGED is reachable only after `cat-file -e`
+# proves it is present, so any of these is false wherever DIVERGED is described - in the printed
+# reason and in the docstring entry alike.
+ABSENCE_CLAIMS = ("does not carry", "does not have", "does not hold")
 
 # Fixture commits must not depend on the runner's git identity, and must not be signed.
 GIT_SETTINGS = [
@@ -142,6 +210,43 @@ def main_line_tip(root: Path) -> tuple[str, str]:
     raise AssertionError(f"none of {VALIDATOR_MODULE.MAIN_REFS} resolves in {root}")
 
 
+def vocabulary_entry(word: str) -> str:
+    """The paragraph `reconcile_recorded_state`'s docstring gives to one vocabulary word.
+
+    The docstring lays the four words out as a definition list - four spaces, the word, two or
+    more spaces, then the text, continued on lines indented past it. This reads one entry: from
+    its opening line to the next line that opens another entry or ends the list.
+
+    An entry this cannot find is a FAILURE at the call site, never a skip. A reader that returns
+    nothing quietly is how a check comes to pass hardest at the moment it stops checking, and this
+    module already carries one finding of exactly that shape.
+    """
+    doc = VALIDATOR_MODULE.reconcile_recorded_state.__doc__ or ""
+    lines = doc.splitlines()
+    # The entry's own indent is MEASURED, not assumed: CPython 3.13 strips the common leading
+    # whitespace from a docstring at compile time and earlier versions do not, so the same source
+    # gives entries at column 0 on one interpreter and at column 4 on another. A reader that
+    # hard-coded either would pass on one and find nothing on the other - silently, since finding
+    # nothing is indistinguishable from finding a clean entry unless somebody asserts otherwise.
+    # That is what `test_the_docstring_reader_can_tell_the_entries_apart` is for. Both shapes were
+    # exercised: the first version of this reader found nothing on either.
+    opening = re.compile(rf"^(\s*){re.escape(word)} {{2,}}(.*)$")
+    for index, line in enumerate(lines):
+        found = opening.match(line)
+        if not found:
+            continue
+        indent = len(found.group(1))
+        collected = [found.group(2)]
+        for following in lines[index + 1:]:
+            # A continuation is indented PAST the word. Anything else - the next entry, or the
+            # prose that follows the list - ends this entry.
+            if following.strip() and len(following) - len(following.lstrip()) <= indent:
+                break
+            collected.append(following)
+        return "\n".join(collected).strip()
+    return ""
+
+
 def record(work_package: str, baseline: str) -> dict:
     """The two fields the reconciliation reads, in the shape `badf/current-state.json` holds them."""
     return {"active_work_package": {"id": work_package}, "source": {"baseline_commit": baseline}}
@@ -189,46 +294,107 @@ class TestAnchors(unittest.TestCase):
         self.assertEqual(("refs/remotes/origin/main", "refs/heads/main"), refs)
         self.assertNotIn("HEAD", refs)
 
-    def test_the_recorded_state_still_names_the_work_package_this_module_reads(self) -> None:
+    def test_the_record_carries_the_two_fields_the_reconciliation_reads(self) -> None:
+        """SHAPE, not values. This test used to pin the id and the baseline to the strings the
+        module was written against, which would have failed the suite for a records change - the
+        rolling-forward every Work Package does. What the module needs is that the two fields are
+        there and well formed; which package they name is the record's business.
+        """
         current = json.loads(STATE.read_text(encoding="utf-8"))
-        self.assertEqual(RECORDED_WORK_PACKAGE, current["active_work_package"]["id"])
-        self.assertEqual(RECORDED_BASELINE, current["source"]["baseline_commit"])
+        work_package = current["active_work_package"]["id"]
+        baseline = current["source"]["baseline_commit"]
+        self.assertRegex(work_package, r"^BIZTRUST-GUIDE-WP-\d+$")
+        self.assertRegex(baseline, r"^[0-9a-f]{40}$")
 
 
 class TestTheLiveTree(unittest.TestCase):
     """The reading this whole change exists to produce, on the records and history as they are."""
 
-    def full_history_is_present(self) -> tuple[bool, str]:
-        """Measured here, with this module's own git calls, not asked of the code under test."""
+    def recorded(self) -> tuple[dict, str, str]:
+        """The record, and the two fields the reconciliation reads, READ FROM IT.
+
+        Neither is a constant. This module carried the Work Package id and the baseline as
+        hardcoded strings until review measured what that costs: the corroboration below then
+        demanded that the id it had been written with be the one in the record, so the record
+        rolling forward would have turned this suite red for ordinary bookkeeping.
+        """
+        current = json.loads(STATE.read_text(encoding="utf-8"))
+        return current, current["active_work_package"]["id"], current["source"]["baseline_commit"]
+
+    def full_history_is_present(self, baseline: str) -> tuple[bool, str]:
+        """Measured here, with this module's own git calls, not asked of the code under test.
+
+        The enclosing-repository case is checked HERE and not only in the code, and that is a
+        repair rather than a flourish. Without it this probe answered "judgeable" for a tree
+        unpacked inside another checkout of this repository - toplevel resolves, the clone is not
+        shallow, a main ref resolves, the baseline is in the enclosing repository's object
+        database - and then demanded LAG_EXPECTED while the code correctly answered UNKNOWN. A
+        test that goes red because of where the tree was unpacked is a test failing for an
+        environment reason, which is what #311 exists to keep out of this suite. Measured by a
+        control that copies the tree into a subdirectory of a clone and expects GREEN.
+        """
         top = git(REPO, "rev-parse", "--show-toplevel")
         if top.returncode != 0:
             return False, "not a git repository"
+        if os.path.normcase(os.path.realpath(top.stdout.strip())) != \
+                os.path.normcase(os.path.realpath(REPO)):
+            return False, "inside another repository rather than at its root"
         if git(REPO, "rev-parse", "--is-shallow-repository").stdout.strip() == "true":
             return False, "shallow"
         if not any(git(REPO, "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}").returncode == 0
                    for ref in VALIDATOR_MODULE.MAIN_REFS):
             return False, "no main ref"
-        if git(REPO, "cat-file", "-e", f"{RECORDED_BASELINE}^{{commit}}").returncode != 0:
+        if git(REPO, "cat-file", "-e", f"{baseline}^{{commit}}").returncode != 0:
             return False, "the recorded baseline is not in the object database"
         return True, "full history"
 
-    def test_the_current_tree_reports_lag_expected(self) -> None:
-        current = json.loads(STATE.read_text(encoding="utf-8"))
+    def test_the_live_reading_agrees_with_the_history_measured_here(self) -> None:
+        """The live reading, corroborated against what the verdict actually rests on.
+
+        THE CORROBORATION IS A RANGE, NOT A TIP, and that is this test's whole subject. An earlier
+        version asserted that the main line's TIP subject landed the recorded package. LAG_EXPECTED
+        does not claim that: it claims the package landed SOMEWHERE in the main line since the
+        recorded baseline. The two agree only until the next package merges - so merging WP-112
+        would have broken WP-112's own test, and it would have landed green because CI is shallow
+        and takes the UNKNOWN branch. Measured by a control that simulates exactly that merge.
+
+        Every branch asserts; none is a skip. What each one is worth differs, and limit 8 says so:
+        the fixture tests hold the RULES, and this test holds the WIRING - that the function reads
+        the record this module reads, resolves the ref this module resolves, and answers over the
+        history this module can see.
+        """
+        current, work_package, baseline = self.recorded()
         verdict, reason = reconcile(REPO, current)
-        judgeable, why = self.full_history_is_present()
+
+        judgeable, why = self.full_history_is_present(baseline)
         if not judgeable:
-            # Limit 1. Not a skip: the degraded environment is held to UNKNOWN and to a reason
-            # that names what is missing, which is the whole contract in CI.
+            # Limit 1. Not a skip: the degraded environment is held to UNKNOWN and to a reason.
             self.assertEqual("UNKNOWN", verdict, f"{why}: {reason}")
             self.assertTrue(reason.strip(), "UNKNOWN must carry its reason")
             return
-        self.assertEqual("LAG_EXPECTED", verdict, reason)
-        # The two observed facts the verdict rests on, so the assertion above cannot be vacuous.
+
         ref, tip = main_line_tip(REPO)
-        subject = git_ok(REPO, "log", "-1", "--format=%s", tip)
-        self.assertTrue(subject.startswith(f"[{RECORDED_WORK_PACKAGE}]"),
-                        f"{ref} is at {tip[:12]} {subject!r}, which does not land the record's package")
-        self.assertNotEqual(RECORDED_BASELINE, tip, "the record would not lag if it named main's head")
+        ancestry = git(REPO, "merge-base", "--is-ancestor", baseline, tip).returncode
+        self.assertIn(ancestry, (0, 1), f"git could not decide whether {baseline[:12]} precedes {ref}")
+        if ancestry == 1:
+            self.assertEqual("DIVERGED", verdict, reason)
+            self.assertIn("is present in this clone", reason)
+            return
+
+        subjects = [line for line in
+                    git_ok(REPO, "log", "--format=%s", f"{baseline}..{tip}").splitlines()
+                    if line.strip()]
+        landings = [line for line in subjects if line.startswith(f"[{work_package}]")]
+        if not landings:
+            self.assertEqual("CONSISTENT", verdict, reason)
+            return
+
+        # The landing is NOT required to be the tip. That is the whole repair, and it is proved by
+        # a control that puts a later package on the main line rather than by anything assertable
+        # here: two assertions that used to sit at this spot said nothing at all - a filter is
+        # always no longer than what it filters, and an empty range has already returned
+        # CONSISTENT above, so neither could fail.
+        self.assertEqual("LAG_EXPECTED", verdict, reason)
         self.assertIn("has already landed", reason)
 
     def test_the_reconciliation_is_printed_beside_the_resume_decision(self) -> None:
@@ -279,6 +445,8 @@ class TestVocabulary(unittest.TestCase):
     """
 
     verdicts: dict[str, tuple[str, str]] = {}
+    # The DIVERGED fixtures, kept so the reason can be checked against what git says about them.
+    diverged_repositories: dict[str, tuple[Path, str]] = {}
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -333,6 +501,20 @@ class TestVocabulary(unittest.TestCase):
         cls.verdicts["not_an_ancestor"] = reconcile(
             apart, record("BIZTRUST-GUIDE-WP-901", stranded))
         assert root_commit != stranded
+        cls.diverged_repositories = {"not_an_ancestor": (apart, stranded)}
+
+        # DIVERGED again, from an ORPHAN history: the baseline shares no commit at all with main.
+        # Kept as a second fixture because the two differ in exactly the way the reason must not
+        # claim to know - one branched from main, one never touched it - and the reason has to be
+        # true of both.
+        orphan = build_repo(base / "orphan")
+        add_commit(orphan, "[BIZTRUST-GUIDE-WP-900] the main root")
+        git_ok(orphan, "checkout", "--quiet", "--orphan", "elsewhere")
+        orphan_baseline = add_commit(orphan, "[BIZTRUST-GUIDE-WP-903] an unrelated history")
+        git_ok(orphan, "checkout", "--quiet", "--force", "main")
+        cls.verdicts["orphan_history"] = reconcile(
+            orphan, record("BIZTRUST-GUIDE-WP-901", orphan_baseline))
+        cls.diverged_repositories["orphan_history"] = (orphan, orphan_baseline)
 
         # UNKNOWN, four ways.
         plain = base / "plain"
@@ -407,6 +589,65 @@ class TestVocabulary(unittest.TestCase):
 
     def test_diverged_when_the_baseline_is_not_an_ancestor_of_the_main_line(self) -> None:
         self.assertEqual("DIVERGED", self.verdict("not_an_ancestor"), self.reason("not_an_ancestor"))
+
+    def test_diverged_from_an_orphan_history_too(self) -> None:
+        self.assertEqual("DIVERGED", self.verdict("orphan_history"), self.reason("orphan_history"))
+
+    def test_the_diverged_reason_is_true_of_the_condition_that_reaches_it(self) -> None:
+        """The sentence is held to what git says about the fixture, not to what it sounds like.
+
+        This test exists because the previous wording was measured FALSE: it said "the record was
+        branched from a history this repository does not carry", and DIVERGED is reachable only
+        AFTER `cat-file -e` proves the baseline IS in the object database. Both fixtures print it,
+        so both are checked here, and the check is that the baseline is PRESENT - the opposite of
+        what the sentence used to assert.
+        """
+        for case, (root, baseline) in self.diverged_repositories.items():
+            with self.subTest(case=case):
+                self.assertEqual("DIVERGED", self.verdict(case), self.reason(case))
+                present = git(root, "cat-file", "-e", f"{baseline}^{{commit}}")
+                self.assertEqual(0, present.returncode,
+                                 f"{case}: DIVERGED can only be reached with the baseline present")
+                ancestry = git(root, "merge-base", "--is-ancestor", baseline,
+                               main_line_tip(root)[1])
+                self.assertEqual(1, ancestry.returncode,
+                                 f"{case}: the fixture must not be an ancestor of the main line")
+                self.assertIn("is present in this clone", self.reason(case))
+                self.assertIn("is not an ancestor of", self.reason(case))
+                # The two facts above are all the code has established at that point. Anything
+                # about WHY they parted - a rebase, a force-push, an unrelated line of work - is
+                # not distinguishable by any call this function makes, so it may not be claimed.
+                for overclaim in ABSENCE_CLAIMS + ("rebase", "force-push"):
+                    self.assertNotIn(overclaim, self.reason(case))
+
+    def test_the_diverged_entry_of_the_docstring_makes_the_same_claim(self) -> None:
+        """The prose that DOCUMENTS the branch is held to the same claim as the prose it PRINTS.
+
+        Written from a review finding rather than from foresight. The identical overclaim - "the
+        record was branched from a history this repository does not have" - survived seventy lines
+        above the repair, in the docstring entry for the same branch, because the check that
+        removed it read the REASON and only the reason. A guard scoped to one string's LOCATION
+        cannot see the same claim written somewhere else, and the reason and this entry are two
+        statements of one fact.
+        """
+        entry = vocabulary_entry("DIVERGED")
+        self.assertTrue(entry, "the DIVERGED entry of the docstring could not be read at all")
+        self.assertIn("IS in this clone", entry,
+                      "the entry must state that the baseline is PRESENT, which is what "
+                      "`cat-file -e` established before this branch can be reached")
+        for overclaim in ABSENCE_CLAIMS:
+            self.assertNotIn(overclaim, entry)
+
+    def test_the_docstring_reader_can_tell_the_entries_apart(self) -> None:
+        """Without this the check above passes hardest when the reader stops finding anything."""
+        self.assertEqual("", vocabulary_entry("NO_SUCH_WORD"))
+        for word in VOCABULARY:
+            self.assertTrue(vocabulary_entry(word), f"no docstring entry for {word}")
+        # UNKNOWN legitimately says the clone does NOT hold a commit - that is what UNKNOWN means.
+        # It is the reason the forbidden strings are scoped to one entry rather than swept over
+        # the whole docstring, and this asserts the reader really does separate them.
+        self.assertIn("does not hold", vocabulary_entry("UNKNOWN"))
+        self.assertNotIn("does not hold", vocabulary_entry("DIVERGED"))
 
     def test_unknown_outside_a_repository(self) -> None:
         self.assertEqual("UNKNOWN", self.verdict("not_a_repository"))

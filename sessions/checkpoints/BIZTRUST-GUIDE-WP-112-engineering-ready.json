@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "BIZTRUST-GUIDE-WP-112-engineering-ready",
+  "created_at": "2026-09-08T18:24:08Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-112",
+  "state": "ENGINEERING_READY",
+  "objective": "Give step 8 of the mandatory resume protocol a tool: scripts/validate_continuity.py compares the recorded active Work Package against the observed main line and prints one of CONSISTENT, LAG_EXPECTED, DIVERGED or UNKNOWN beside RESUME_DECISION, advisory and degrading rather than failing where the history is absent (#351).",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-112-reconcile",
+    "baseline_commit": "c7e45cc5ce6e75801a8047b3f7c0d280c9d0a702"
+  },
+  "completed": [
+    "scripts/validate_continuity.py gains reconcile_recorded_state() and a reconcile_safely() wrapper, and prints STATE_RECONCILIATION and STATE_RECONCILIATION_REASON in the PASS block after PRIMARY_NEXT_ACTION. Before this the file made no git call at all - grep -cE 'subprocess|rev-parse|origin/main' returned 0 - so a record naming a package whose merge commit was already on main printed PASS with nothing said about it.",
+    "THE VERDICT IS ADVISORY AND CANNOT FAIL THE RUN. It never appends to errors and never changes the exit code, because .github/workflows/pages.yml checks out with actions/checkout@v7 and no fetch-depth: every CI run is a shallow clone in which the recorded baseline is simply not in the object database. A check that failed there would fail for a reason that has nothing to do with the repository, which is the flakiness #311 exists to keep out of this suite.",
+    "The main line is read from the first of refs/remotes/origin/main, refs/heads/main that resolves. HEAD is deliberately NOT a fallback: on a Work Package branch HEAD carries that package's own unmerged commits, and reading them as landings would make the ordinary case - an agent working on a branch - produce a statement about main.",
+    "LAG_EXPECTED is the word the package exists for. badf/current-state.json is written on a package's branch BEFORE its merge, so it cannot record its own merge; every merge leaves that window until the next package opens. It is normal, and its reason says in as many words that it does NOT describe work still in progress, because the branch may still exist and an agent resuming from the record alone would reopen finished work.",
+    "CONSISTENT does not require the main line to be still AT the baseline. Another package merging while this one is in flight is ordinary; the record claims that ITS package is active, and that claim holds until that package lands. Reading any movement as lag would make every normal merge look like a fault, which is why the vocabulary has four words rather than two.",
+    "tests/test_resume_reconciliation.py reaches all four words by CONSTRUCTING each condition in a real fixture repository - including a genuinely shallow clone made with git clone --depth 1 over file://, because git ignores --depth on a plain local path - rather than by mocking a return. It shells out to git and to the validator, which the rest of tests/ does not; the docstring says so and cites tests/test_wp024_fixtures_are_sealed.py as the precedent. Nothing here touches the network.",
+    "scripts/wp112_controls.py runs nineteen controls on fresh CLONES, the unmutated clone first and green. Thirteen mutations each trip the test named for them and six of those trip nothing else; two are declared holes expecting the suite to stay GREEN; two put an unmutated tree into a situation it must survive and also expect GREEN, each paired with a mutation that removes the check and shows the same tree go RED; two run the validator itself on a shallow clone and assert the printed verdict and exit code.",
+    "The runner clones rather than copying, unlike scripts/wp111_controls.py, because the subject here IS git history: a copy without .git answers UNKNOWN to everything, which is the answer these controls most need to distinguish from a real one.",
+    "314 tests OK, skipped=1 (287 measured on main at c7e45cc, 27 in this module); validate_continuity.py CONTINUITY_VALIDATION=PASS with exactly one verdict line; scripts/wp112_controls.py 19 controls, 0 not behaving as declared."
+  ],
+  "remaining": [
+    "#353, filed from this package's final review and deliberately not implemented here: a clone whose main ref has simply not been fetched sits BEHIND the recorded baseline and gets DIVERGED, the loudest of the four words, for a stale ref rather than a fault.",
+    "AGENTS.md section 3 step 8 still says only 'Reconcile observed state with recorded state'. The gap this package closed was the tool, not the text; whether step 8 should name the tool is a policy edit and is not made here.",
+    "Nothing reconciles the REST of the record. The verdict reads two fields - the package id and the baseline commit - and says nothing about whether state, resume_decision or stop_reason agree with it."
+  ],
+  "files_changed": [
+    "scripts/validate_continuity.py",
+    "tests/test_resume_reconciliation.py",
+    "scripts/wp112_controls.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-112-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/wp112_controls.py (19 controls on fresh clones, unmutated clone first, four expecting GREEN)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "FIVE REVIEW ROUNDS, AND EVERY SINGLE FINDING WAS A SENTENCE THAT DID NOT MATCH A MEASUREMENT. Not one was a wrong algorithm. The DIVERGED reason said the repository did not carry the baseline, on a branch reachable only AFTER cat-file -e proves it does. The same false sentence then survived seventy lines up in the docstring for the same branch, because the guard that removed it read the REASON and only the reason: a guard scoped to one string's LOCATION cannot see the claim, only the string. The control runner's own drift guard refused a source whose local main was merely BEHIND its origin/main - the ordinary state of a checkout that has fetched and not pulled - and justified it with a claim review measured false.",
+    "THE WORST OF THEM WOULD HAVE BROKEN THIS PACKAGE BY MERGING IT. The live test hardcoded BIZTRUST-GUIDE-WP-111 and corroborated LAG_EXPECTED by requiring the main line's TIP subject to be that package's merge. LAG_EXPECTED claims no such thing - it claims the package landed SOMEWHERE since the recorded baseline - and tip and range agree only until the next package merges. It would have landed green, because CI is shallow and takes the UNKNOWN branch, and gone red for whoever next ran the suite locally. The corroboration is now over the range and the package id is read from badf/current-state.json, so the record rolling forward is bookkeeping rather than a red suite.",
+    "NARROWING BaseException TO Exception WAS NOT THE WHOLE FIX, AND ONLY MEASURING SHOWED IT. reconcile_safely caught BaseException, so a Ctrl-C inside step 8 became UNKNOWN and the run exited 0, contradicting this file's own documented '130 FAIL - interrupted'. Narrowing it let the interrupt out - and because step 8 ran AFTER the PASS line, the escaping interrupt printed a SECOND CONTINUITY_VALIDATION line: measured as PASS then FAIL, exit 130, so a consumer grepping for PASS found one on a run the operator had stopped. Step 8 is now COMPUTED before the verdict line and PRINTED after it. Re-measured: one verdict line, FAIL, exit 130. The lesson is not about exception types. It is that a fix aimed at one documented contract broke another documented contract in the same file, and nothing but running it would have said so.",
+    "pathlib.write_text SILENTLY WROTE CRLF. Two of this package's three files were entirely CRLF - 689 and 568 pairs - because write_text translates \\n to os.linesep on Windows and scripted edits had used it. The suite stayed green and git would have normalised the bytes at commit under .gitattributes, so nothing would have said so until a working copy disagreed with the committed bytes. This repository has already lost two sealed-fixture tests to stale CRLF. Use read_bytes/write_bytes for any scripted edit here, and check with `file` rather than trusting the diff.",
+    "A COMMAND INTENDED FOR A TEMP DIRECTORY RAN AGAINST THE SHARED CHECKOUT. A throwaway git init + commit probe for a fixture executed in C:/laragon/www/biztrust_guide as well as in its scratch directory: git add -A swept every untracked file in that checkout into a commit on LOCAL main, and a second commit left it on an orphan branch. Nothing was pushed, origin/main was untouched and no tracked file was modified, but local main was one junk commit ahead for several hours. The operator repaired it; the permission classifier correctly refused to let this session do so. The rule that follows is mechanical, not attitudinal: never run a repository-mutating git command without an explicit `git -C <path>`.",
+    "THAT ACCIDENT PRODUCED THE RUNNER'S BEST GUARD. A clone's origin/main IS the source's refs/heads/main, so a source whose local main has drifted turns every control red on the live-tree test for a reason that has nothing to do with the code - which is exactly how it presented, and the diagnosis cost far more than the check costs. check_source_main_line now refuses such a source and names both refs in one line. It refuses ONLY the direction where local main carries commits origin/main does not; behind is allowed, measured, because behind is the ordinary state of a fetched-but-not-pulled checkout.",
+    "THE CONTROL RUNNER FOUND A DEFECT ON ITS FIRST RUN THAT THE SUITE COULD NOT. The live test corroborated by resolving refs/heads/main outright, and a plain git clone brings origin/main with no local main, so the unmutated clone was RED and the twelve controls behind it established nothing. The suite was green in the worktree the whole time, because a worktree happens to have both refs. A control set that runs somewhere other than where the suite runs is worth having for exactly this reason.",
+    "A DECLARED HOLE PROVED BY A CONTROL THAT EXPECTS GREEN IS WORTH MORE THAN A SENTENCE CLAIMING ONE. Two of the nineteen do that, and two more assert that an unmutated tree survives a situation it must survive - a tree unpacked inside another checkout, and a main line that has moved on by one package. Each of the four is paired with, or measured against, a mutation that shows the same environment go red, so none of them is green by accident.",
+    "THE HOUSE RULE FROM WP-111 HELD AND WAS STILL NOT ENOUGH. 'Write the control first, then the sentence the control proves' was followed for the code and broken repeatedly for the prose, because prose has no control. The practice that actually worked, adopted in the last two rounds, is narrower: before committing, list every sentence touched and name the command that proves it. Three false sentences were caught that way in one round - a Python version claim about CI that nothing pinned, a count of assertions that was off by one, and a limit that contradicted the limit three lines below it.",
+    "ROLLING THIS VERY RECORD FORWARD BROKE THREE OF THE NINETEEN CONTROLS, and that is a finding about the controls rather than about the code. The suite and the validator both stayed green - the round-3 repair that stopped the live test pinning a package name did its job, and the reading moved from LAG_EXPECTED to CONSISTENT exactly as it should. But two controls named the LIVE reading as the test they trip, and the live reading only takes the LAG_EXPECTED branch while the record happens to lag: with WP-112 recorded active and not yet landed, that branch became CONSISTENT and both mutations stopped tripping anything while the defects they inject were as real as ever. A third, the builder that simulates a later package landing on top of the recorded one, synthesised only the LATER commit and relied on the recorded package having already landed, so its own guard fired and the control could not run at all. All three are repaired to be independent of the record's state: the landing control names a FIXTURE test, the fatal control's condition is `verdict in RECONCILIATION_VOCABULARY` which is always true, and the builder synthesises BOTH commits. The rule this leaves: a control whose expectation depends on the record it happens to run against is not a control, and the only way this surfaced was running it after the roll rather than reasoning about it."
+  ],
+  "decisions": [
+    "DEC-118"
+  ],
+  "assumptions": [
+    "That a Work Package lands on the main line as a commit whose subject OPENS with its bracketed id - the convention every merge on this main line has followed. The match is anchored at the start, so a commit that merely MENTIONS the package (a revert, a follow-up) is not read as its landing; a control measures that in isolation. If the convention changes, LAG_EXPECTED silently becomes CONSISTENT for the affected package, and nothing here would say so.",
+    "That refs/remotes/origin/main, or failing that refs/heads/main, names the published main line. A clone that has neither is reported UNKNOWN rather than judged against HEAD. What is genuinely assumed is that whichever of the two resolves is not stale; #353 is open on the case where it is, and until then a never-fetched clone reports DIVERGED for a stale ref.",
+    "That the record's active_work_package.id and source.baseline_commit are the two fields worth reconciling. Their SHAPE is asserted by the suite and their VALUES are read, never pinned - an earlier version hardcoded them and would have failed this very commit."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "scope_note": "One script gains an advisory reader, one test module and one control runner are added, and this package's own bookkeeping is recorded. No design, plan or published claim is edited.",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_111",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python -m unittest discover -s tests -p 'test_resume_reconciliation.py'",
+    "read_first": [
+      "scripts/validate_continuity.py",
+      "tests/test_resume_reconciliation.py",
+      "scripts/wp112_controls.py",
+      "https://github.com/bstBizEra/biztrust_guide/issues/351",
+      "https://github.com/bstBizEra/biztrust_guide/issues/353",
+      "AGENTS.md section 3"
+    ],
+    "stop_if": [
+      "The reconciliation is made able to fail the run - appending to errors, or changing the exit code. CI checks out shallow with no fetch-depth, so the answer there is always UNKNOWN, and a failing UNKNOWN would break every build for a reason that has nothing to do with the repository.",
+      "fetch-depth: 0 is added to .github/workflows/pages.yml to make the verdict decidable in CI. That is a separate change with its own review; it is not a repair to this one.",
+      "A verdict is invented where the history is absent. UNKNOWN with its reason is the answer, and a wrong CONSISTENT is worse than an honest UNKNOWN because the point of the line is that a reader can trust step 8 without re-deriving it.",
+      "A recorded value - a Work Package id, a baseline commit - is hardcoded into tests/test_resume_reconciliation.py. It was, once, and it made merging this package break this package's own test.",
+      "A limit or a reason line is edited without a control or a command that measures it. Every finding in five review rounds was a sentence that did not match a measurement; on this package, name the command before writing the sentence.",
+      "#353 is fixed as a side effect of another change. It is a real defect with its own issue and its own review."
+    ]
+  },
+  "declared_non_coverage": [
+    "#353 IS FILED AND DELIBERATELY NOT IMPLEMENTED HERE. A clone whose main ref has simply not been fetched sits BEHIND the recorded baseline, so the baseline is not an ancestor of it, and the reconciliation returns DIVERGED - the loudest of the four words - for a stale ref rather than a fault. Measured: with origin/main moved to the commit before the baseline, reconcile_safely returns DIVERGED with a reason that is factually true and an implication that is not. The final review's ruling was to file rather than block; the docstring entry, the vocabulary summary and limit 9 all say so, and the fixtures assert the behaviour as it stands rather than as #353 may leave it.",
+    "THE VERDICT IS COMPUTED ONLY ON PASS. It sits in the same block as RESUME_DECISION, which is also PASS-only, so a run that reports CONTINUITY_VALIDATION=FAIL says nothing about step 8. An agent that gets FAIL has a validation defect to fix first; that was judged the smaller surprise, and nothing measures it.",
+    "ONLY TWO FIELDS OF THE RECORD ARE READ - active_work_package.id and source.baseline_commit. A record whose package has LANDED while its own state still reads IN_PROGRESS, or whose resume_decision and stop_reason describe pre-merge work, leaves the suite green. That is limit 5 of the test module and a control demonstrates it by writing exactly that contradiction and expecting GREEN.",
+    "THE DOCSTRING GUARD FORBIDS ABSENCE CLAIMS AND NOT CAUSES, deliberately, and a second declared-hole control demonstrates what that leaves: a DIVERGED docstring entry asserting a cause outright passes. A printed reason may not name a cause, because a reason is one terse assertion in which naming a cause is asserting it; a docstring paragraph may name causes in order to say they cannot be distinguished.",
+    "THE LIVE TEST MEASURES WIRING, NOT RULES. Its branches re-derive the classification from the same three facts the code reads, with the module's own git calls, so it catches the function reading the wrong record, resolving the wrong ref or answering over a history it cannot see - and it cannot catch a rule that is wrong in both places at once. The non-circular half is TestVocabulary, where every word is reached by constructing the condition in a repository built for it.",
+    "THE LIVE TEST IS NO LONGER A RATCHET ON THE CURRENT DIVERGENCE. It takes whichever branch the history puts it in and nothing pins which; if this record rolls forward to a package that has not landed, it asserts CONSISTENT and says nothing about the change. That is the price of not failing ordinary bookkeeping as though it were a code defect, and it is paid on purpose.",
+    "IN CI ONLY THE UNKNOWN BRANCH EVER RUNS, because every CI checkout is shallow. The other three words are exercised only in fixture repositories and by the control runner. The UNKNOWN branch asserts that a reason exists, not that it names the right missing fact; the shallow fixture case is where that wording is held.",
+    "FIVE UNKNOWN-ONLY ASSERTIONS ARE VACUOUS UNDER A CRASH, since reconcile_safely maps any Exception to UNKNOWN: a test asserting only UNKNOWN would pass if the function raised for an unrelated reason. Reviewed and accepted as may-ship, because the controls carry the weight - the control that makes the reconciliation raise trips fifteen tests, not five.",
+    "SEVEN OF THE THIRTEEN RED CONTROLS ARE NOT ISOLATED, and each is declared with what else it trips. The control that makes the reconciliation raise trips fifteen tests by design: it is the one that shows reconcile_safely degrades to UNKNOWN rather than losing the verdict, so the two tests asserting the run SURVIVES stay green under it while every test asserting a READING goes red.",
+    "scripts/wp112_controls.py IS NOT WIRED INTO CI, deliberately: every control makes a fresh clone and all but the two shallow-clone controls then run the whole module suite on top of it, which measured 3m07s for one pass. Its results are evidence of the tree at the commit someone last ran it against, not a standing guarantee, and it must be run against a COMMITTED tree because clones carry committed state. The script says all of this in its own docstring. Nothing detects it rotting.",
+    "THE RECONCILIATION SPENDS SIX GIT PROCESSES ON A JUDGEABLE TREE - measured at 114-139 ms on Windows against a whole-run cost of about 2.1 s - and seven at worst, because the main-ref lookup runs once per entry in MAIN_REFS. Each is bounded at 10 s, so the worst-case budget is 70 s. On a shallow clone it short-circuits early. No performance regression test exists."
+  ]
+}
