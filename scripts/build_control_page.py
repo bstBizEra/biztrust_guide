@@ -20,6 +20,27 @@ the tracked file stays a placeholder.
     python scripts/build_control_page.py                      # in place, to look at locally
     python scripts/build_control_page.py --out _site/control/index.html   # what the workflow runs
 
+RUNNING THE FIRST FORM TURNS THE TEST SUITE RED, ON PURPOSE, AND THE NINTH FAILURE IS A TRAP.
+`python -m unittest discover -s tests` reports NINE failures against a regenerated
+`control/index.html`, measured. Eight are the placeholder ratchet doing its job: seven subtests of
+`test_every_committed_region_says_it_is_not_generated`, one per region, and
+`test_no_committed_region_carries_a_value_read_from_a_record`. They exist to stop a generated page
+being committed and they are supposed to fire.
+
+THE NINTH IS `tests/test_html_adr_citations.py::test_the_same_pages_cite_adrs`, and it is the one
+that will mislead you. NS-041 and NS-042's recorded prose names ADR-001 to ADR-020, the projector
+renders that prose verbatim, and the generated page therefore joins the set of pages citing an ADR -
+a set that module asserts BY NAME against `CITING_PAGES`.
+
+**THE FIX IS `git checkout -- control/index.html`.** Restore the placeholder and all nine go green.
+
+**ADDING `control/index.html` TO `CITING_PAGES` IS THE WRONG REPAIR.** That registry is an exact set
+equality, so a page listed in it must cite an ADR on EVERY run - and the committed page is a
+placeholder that cites none. The moment the placeholder is restored, or CI checks out a fresh tree,
+the same test fails in the opposite direction, and the second failure looks unrelated to the first.
+The page's ADR citations are a property of the RECORDS at the moment of generation, not of the page;
+nothing that is true of the tracked file can be registered about them.
+
 THE RECONCILIATION IS NOT REIMPLEMENTED HERE. `scripts/validate_continuity.py` performs the resume
 protocol's step 8 and prints STATE_RECONCILIATION and its reason (WP-112). This script INVOKES that
 validator and reads its output. Two facts follow and both are deliberate: the integrity panel is

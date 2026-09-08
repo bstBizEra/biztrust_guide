@@ -65,7 +65,8 @@
     "ROLLING THIS RECORD FORWARD WAS AUDITED BEFORE IT WAS DONE, because WP-112 lost three of nineteen controls to exactly that. Three fragilities were found and repaired. The control that writes a record value into the committed placeholder had the literal WAIT_FOR_AUTHORITY in it while the test it aims at compares against whatever the record spells; it now reads the value from badf/current-state.json. test_the_excluded_actions_are_listed_with_their_authority iterates the excluded list and would have passed while measuring nothing if the filter ever admitted every action; a positive control now asserts both lists are non-empty. And the #346 assertion is now paired with test_every_recorded_key_lands_where_the_rule_puts_it, which re-derives the RULE over whatever keys the record holds and cannot go red for a records edit. See declared_non_coverage for the one dependence deliberately kept.",
     "THE ROLL-FORWARD MOVES THE RECONCILIATION FROM LAG_EXPECTED TO CONSISTENT, measured rather than predicted: WP-113 is recorded active, has not landed, and the recorded baseline 67deeb2 is main's tip. tests/test_resume_reconciliation.py - WP-112's live test, rewritten in its round 3 to stop pinning a package name - stayed green across the change, which is the first time that repair has been exercised by a package other than its own.",
     "MY BRIEF DID NOT ASK FOR badf/ RE-ANCHORING AND AGENTS.MD SECTION 6 REQUIRES IT ANYWAY. It was flagged as a concern rather than done, which was right - a record edit on an agent's own initiative is how records drift - and the coordinator corrected the scope. The general form is worth keeping: where a brief and a standing rule disagree, say so in the report and do not resolve it alone.",
-    "A HEREDOC IS NOT A SAFE WAY TO PASS PYTHON CONTAINING BACKSLASHES ON THIS PLATFORM. Two scripted patches silently failed to match strings that were byte-identical in the file, because backslash sequences in the heredoc did not survive the shell. Both were re-done by writing the patch to a file and running it. The rule: never pass code with escapes through a heredoc here; write it to a file first."
+    "A HEREDOC IS NOT A SAFE WAY TO PASS PYTHON CONTAINING BACKSLASHES ON THIS PLATFORM. Two scripted patches silently failed to match strings that were byte-identical in the file, because backslash sequences in the heredoc did not survive the shell. Both were re-done by writing the patch to a file and running it. The rule: never pass code with escapes through a heredoc here; write it to a file first.",
+    "A REGENERATED control/index.html IN THE WORKING TREE TURNS THE SUITE RED BY DESIGN, and one of the nine failures is a trap. See recovery.stop_if's last entry and the docstring of scripts/build_control_page.py before repairing anything: the fix is `git checkout -- control/index.html`, not an edit to tests/test_html_adr_citations.py."
   ],
   "decisions": [
     "DEC-119"
@@ -86,7 +87,7 @@
   },
   "next_action_id": "NS-041",
   "recovery": {
-    "first_safe_command": "python -m unittest discover -s tests -p 'test_control_page.py'",
+    "first_safe_command": "python -m unittest discover -s tests -p 'test_control_page.py'   # and if the suite is already red, run `git status` before anything else: a regenerated control/index.html in the working tree turns it red by design, and `git checkout -- control/index.html` is the whole fix",
     "read_first": [
       "control/index.html",
       "scripts/build_control_page.py",
@@ -107,7 +108,8 @@
       "The page begins reading the tracker, at build time or in the browser. #311 is the open decision about whether anything should, and the projector runs git and the validator and nothing else.",
       "A completion percentage is put on the page without its denominator and its metric beside it. #307, the completion matrix, waits on #302.",
       "The map issues' tickets are listed. The page may link a map; #301 is open on whether maps stay issues at all.",
-      "A limit or a rendered sentence is edited without a control or a command that measures it. Every finding across thirteen review rounds on this repository was a sentence that did not match a measurement; name the command before writing the sentence."
+      "A limit or a rendered sentence is edited without a control or a command that measures it. Every finding across thirteen review rounds on this repository was a sentence that did not match a measurement; name the command before writing the sentence.",
+      "control/index.html is added to CITING_PAGES in tests/test_html_adr_citations.py, or that module is otherwise edited to accommodate the generated page. MEASURED: running `python scripts/build_control_page.py` in a working tree and then the suite gives NINE failures - seven subtests of test_every_committed_region_says_it_is_not_generated, one per region, plus test_no_committed_region_carries_a_value_read_from_a_record, which are the placeholder ratchet firing exactly as intended, and then test_the_same_pages_cite_adrs, because NS-041 and NS-042's recorded prose names ADR-001 to ADR-020 and the projector renders that prose verbatim, so the generated page joins the ADR-citing set. THE FIX IS `git checkout -- control/index.html`; all nine then go green. Registering the page instead is the wrong repair and fails in the opposite direction the moment the placeholder is restored or CI checks out a fresh tree, because CITING_PAGES is an exact set equality and the committed page is a placeholder that cites nothing. Whether the page cites an ADR is a property of the RECORDS at the moment of generation, not of the tracked file, so there is nothing about it a registry can hold."
     ]
   },
   "declared_non_coverage": [
