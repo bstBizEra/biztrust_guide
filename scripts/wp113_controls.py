@@ -17,9 +17,11 @@ TWO KINDS OF CONTROL.
   SCRIPT controls RUN `python scripts/build_control_page.py` in a fresh copy and assert what the
   written page says. They exist because of limit 1 of `tests/test_control_page.py`: that module
   never executes `observe()`, `read_json` or `build` - the git calls, the validator invocation and
-  the file reads - in order to keep `tests/` subprocess-free, so a defect living only there is
-  invisible to it. They come in TWO PAIRS, and in each pair the second member removes the guard
-  that makes the first member's answer what it is, so neither green is green by accident.
+  the file reads - in order to keep THAT MODULE subprocess-free, so a defect living only there is
+  invisible to it. (Not `tests/` as a whole: four modules there do call a subprocess, and the list
+  is in that module's docstring beside the command that measures it.) They come in TWO PAIRS, and
+  in each pair the second member removes the guard that makes the first member's answer what it is,
+  so neither green is green by accident.
 
     THE NO-REPOSITORY PAIR. A fresh copy is made with `shutil.copytree`, which drops `.git`, so the
     copy is NOT a repository: every git fact must degrade to UNKNOWN and the run must still exit 0

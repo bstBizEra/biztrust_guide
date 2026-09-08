@@ -16,11 +16,23 @@ different things, and they are worth naming apart:
   THE WIRING           the marked regions, the injection's fail-closed behaviour, and the workflow
                        step that writes into the staged artifact rather than into the tree.
 
-THIS MODULE RUNS NO SUBPROCESS AND TOUCHES NO NETWORK. `tests/` is subprocess-free apart from
-`tests/test_resume_reconciliation.py` and `tests/test_wp024_fixtures_are_sealed.py`, and that is
-worth keeping. `scripts/build_control_page.py` is split for it: `observe()` runs git and the
-validator, `gather()` is pure, and every test here hands `gather()` a synthetic observation. The
-consequence is limit 1 below.
+THIS MODULE RUNS NO SUBPROCESS AND TOUCHES NO NETWORK. That is a claim about THIS module and it is
+the one worth making: nothing here shells out, so nothing here can go red for an environment reason.
+`scripts/build_control_page.py` is split for it - `observe()` runs git and the validator, `gather()`
+is pure, and every test here hands `gather()` a synthetic observation - and the consequence is
+limit 1 below.
+
+WHAT THE REST OF `tests/` DOES IS A DIFFERENT CLAIM, AND THIS DOCSTRING MADE IT WRONGLY. It said
+`tests/` was subprocess-free "apart from" two named modules. FOUR call a subprocess, measured with
+
+    grep -lnE "subprocess[.](run|Popen|check_output|check_call)" tests/*.py
+
+- `test_resume_reconciliation.py`, `test_resume_schema_identity.py`,
+`test_validator_fails_closed.py` and `test_wp024_fixtures_are_sealed.py`. Two further modules
+mention the word and call nothing, this one and `test_stale_records.py`, so grepping for the WORD
+returns six and is the wrong filter; a count is only as good as its filter. Do not restate that set
+from memory when this docstring is next edited - re-run the command above, which is why it is
+written here rather than the answer alone.
 
 WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
 
