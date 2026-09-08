@@ -23,53 +23,106 @@ TWO CHECKS.
      #165; its last lists #165 among manuals that have not moved. No network is needed to see that
      one section says a ticket is both done and not done.
 
-WHAT THE FIRST VERSION GOT WRONG, because it is the whole reason this module is shaped as it is.
+THE RATCHET IS A DIGEST, and this is the third mechanism this module has had. The first two were
+holed by independent review, both times in the same direction: the ratchet compared a SUMMARY of the
+record - the first word of its first bold run, and a separately registered file tuple - so a repair
+that changed the record without changing that summary left the entry registered and the suite green.
+Measured, on fresh copies, all of these were green while the defect they name was repaired:
 
-  The ratchet did not ratchet. `test_registered_rows_still_fail` asserted `target not in file` - a
-  property of the FILE. But #347's repair is to fix the ROW. Rewriting a row's status from
-  `**Deferred**` to `**Closed**` left the suite green with the entry still registered; deleting the
-  row entirely did too. The registry could outlive the row it described, which is the drift this
-  module exists to stop. Every one of the five negative controls passed because every one exercised
-  the file and none exercised the row.
+  * `**Deferred (closed by b93c701)**`                    - annotation inside the bold run
+  * `**Deferred** - resolved 2026-09-05 by b93c701`       - annotation after it
+  * `index.html` dropped from the `G0...G8` row's files   - the row's files were never read
+  * the ADR row repointed at a file that DOES hold it     - likewise
 
-  So a registration now names WHAT THE ROW SAYS, and the assertion is two-sided: the row must still
-  be present AND still carry its registered status AND its string must still be absent. Repairing the
-  row in any of those ways forces the entry out.
+A ratchet does not need to understand a record; it needs to notice that the record CHANGED. So each
+registration now carries the SHA-256 of the exact registered text, normalised for line ending and
+trailing whitespace and nothing else. Any repair, in any wording, in any of the four shapes above or
+in one nobody has thought of, changes the digest and forces the entry out. The registered `files`
+tuple and the registered status are gone with it: a matched digest fixes the row's whole text, so the
+row supplies its own files and its own target, and the "the defect is still really present" half
+reads THE FILES THE ROW NAMES. The registration says which record is being ratcheted; it is never
+also the source of truth for what to check.
 
-  Check B classified by a three-phrase whitelist and defaulted everything unmatched to "outstanding".
-  That made an ownership sentence in bullet 4 look like a deferral and kept #165 satisfied even when
-  bullet 5 - the bullet #343 actually names - was repaired. Classification is now positive on both
-  sides: a bullet joins "landed" only on completion language and "outstanding" only on deferral
-  language, and a bullet matching neither is UNCLASSIFIED, counted, and its count registered, so new
-  wording surfaces instead of being silently bucketed.
+The digests were computed by running `digest()` over the tree at commit 57ed4d8, not written by hand.
 
-  Both were found by a fresh-context review of PR #350, not by the author.
+CLASSIFICATION IS INDEPENDENT, NOT FIRST-MATCH. Check B's second hole was `if COMPLETION / elif
+DEFERRAL`: a bullet carrying both vocabularies joined only the first set and so could never intersect
+with itself, which is exactly how a reviewer wrote a single bullet calling one ticket both landed and
+outstanding and watched the guard stay green. A bullet now contributes its tickets to `landed` if
+COMPLETION matches AND to `outstanding` if DEFERRAL matches. A bullet matching neither is
+UNCLASSIFIED, counted, and its count registered, so new wording surfaces instead of being bucketed.
 
-RATCHET, as `tests/test_btg1_matrix_reconciles.py` uses it. Every entry below fails TODAY, is
-registered with a reason, and is asserted to still fail at exactly its registered value. Registry
-membership is asserted too, so a new defect cannot be filed in to quiet the guard.
+WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
+
+ 1. The ratchet on REGISTERED defects is exact. The DETECTION OF NEW, UNREGISTERED ones is
+    heuristic: COMPLETION and DEFERRAL are regex vocabularies over English prose, and a
+    contradiction written in wording neither knows is not caught. It lands in the unclassified
+    bucket, whose SIZE is guarded and whose contents are not.
+ 2. Issue states are not read. Whether #35 is closed on GitHub is #311's business and needs the
+    network this suite refuses.
+ 3. Ranges are read as their two literal endpoints. "#165 to #170" contributes #165 and #170, so
+    #169 - which bullet 1 does credit - is not an intersection. Expanding ranges would also invent
+    citations wherever "to" sits between two issue links for another reason.
+ 4. Only the reconciliation table and PLAN-001 section 14 are read. The sweep that found these
+    examined 65 lines across all tracked `.md` and `.html`; other records may carry the class.
+ 5. Check A's unregistered arm has no live subject today. The table's three rows are one
+    "Updated in this change" row, which names no backticked target, and the two registered rows,
+    which the digest skip removes. It is exercised by the controls and by the row-count equality,
+    not by current content.
+ 6. A row is read as making a live claim unless its status names it as `Updated`. A row given some
+    third status - `**Closed**`, say - is still required to hold its string, and would fail loudly.
+    That is deliberate: the table's vocabulary today is exactly `Updated in this change` and
+    `Deferred`, the row count is asserted as an equality, so a third status is a deliberate edit
+    that should re-derive this module rather than pass through it.
 
 CORPUS FLOOR. `test_anchors_exist` asserts a floor near the true corpus size rather than merely
-non-empty, as `test_adr_citations.py` and `test_btg1_matrix_reconciles.py` do. Non-empty was the
-first version's mistake here as well: both Deferred rows are registered, so the unregistered arm
-iterated two rows, skipped both, and asserted nothing while looking alive.
+non-empty, as `test_adr_citations.py` and `test_btg1_matrix_reconciles.py` do. Non-empty was an
+earlier mistake here as well: both Deferred rows are registered, so the unregistered arm iterated two
+rows, skipped both, and asserted nothing while looking alive.
 
-NEGATIVE CONTROLS, re-run 2026-09-08, each failing for the reason it names. Each exercises the ROW or
-the CLASSIFIER, not only the file:
-  * a registered row's status changes Deferred -> Closed  -> test_registered_rows_still_fail FAILS
-  * a registered row is deleted outright                  -> test_registered_rows_still_fail FAILS
-  * a registered row's string returns to its file          -> test_registered_rows_still_fail FAILS
-  * an unregistered row's string vanishes                  -> test_no_unregistered_stale_rows FAILS
-  * bullet 5 is repaired, #165 no longer outstanding       -> test_registered_contradictions_still_fail FAILS
-  * a ticket added to section 14 as both landed and open   -> test_no_unregistered_contradictions FAILS
-  * a bullet is written in wording neither regex knows     -> test_every_bullet_is_classified FAILS
-  * an entry is added to either registry                   -> test_registries_are_exactly_these FAILS
-  * the section 14 anchor is renamed                       -> test_anchors_exist FAILS
+ANCHORS ARE ASSERTED, NOT ASSUMED. `section_14()` and `reconciliation_table()` return empty when
+their anchor is missing rather than raising, as `test_btg1_matrix_reconciles.matrix_rows()` does, so
+`test_anchors_exist` owns the diagnosis and a renamed heading reports the heading rather than a
+`ValueError` from the middle of a reader.
+
+NEGATIVE CONTROLS, eleven of them, run 2026-09-08 by `wp111_controls.py`: each on a fresh copy of
+the worktree, one mutation apiece, `unittest discover -s tests -p test_stale_records.py` from that
+copy's root, with the unmutated copy run first and green. Every mutation asserts that the text it
+replaces was found, so a control cannot quietly become a no-op. The first four are the shapes two
+independent reviews measured as GREEN under the previous mechanism.
+
+ISOLATED - exactly one test fails:
+  * the ADR row repointed at a file that DOES hold the string -> test_registered_rows_still_fail
+  * the string restored to `docs/NEXT_STEPS.md`               -> test_registered_rows_still_fail
+  * one bullet citing #199 as landed AND outstanding          -> test_no_unregistered_contradictions
+  * a bullet in wording neither vocabulary knows              -> test_every_bullet_is_classified
+
+NOT ISOLATED, and declared rather than trimmed, as `tests/test_stale_asks.py` and
+`tests/test_btg1_matrix_reconciles.py` declare of their own. What each breaks really does break more
+than one rule, and saying otherwise would be false precision:
+  * `**Deferred (closed by b93c701)**` on the ADR row        -> test_registered_rows_still_fail and
+  * `**Deferred** - resolved ... by b93c701` after the run   |  test_no_unregistered_stale_rows
+  * `index.html` dropped from the `G0...G8` row              |
+    Each changes the row's digest, so the row stops being skipped as registered, and it still reads
+    `Deferred` over a string its files do not hold. Both failures are true: the registration no
+    longer describes the row, and the row still misinforms a reader. A repair that instead marked
+    the row `Updated` would fire only the first.
+  * a registered row deleted outright     -> test_registered_rows_still_fail and test_anchors_exist,
+                                             whose row count is an equality
+  * an entry added to CONTRADICTED        -> test_registries_are_exactly_these and
+                                             test_registered_contradictions_still_fail, because a
+                                             filed-in entry names no contradiction that exists
+  * the section 14 anchor renamed         -> test_anchors_exist,
+                                             test_registered_contradictions_still_fail and
+                                             test_every_bullet_is_classified
+  * the reconciliation table header renamed -> test_anchors_exist and
+                                               test_registered_rows_still_fail
 
 Stdlib only: no third-party import, no network, no subprocess.
 """
 from __future__ import annotations
 
+import hashlib
 import re
 import unittest
 from pathlib import Path
@@ -78,6 +131,26 @@ ROOT = Path(__file__).resolve().parent.parent
 
 RECONCILIATION = ROOT / "docs/architecture/SOURCE_RECONCILIATION.md"
 PLAN = ROOT / "docs/architecture/BIZTRUST-PLAN-001.md"
+
+# --- the ratchet's primitive -------------------------------------------------------------------
+
+
+def digest(record: str) -> str:
+    """The SHA-256 of a record's exact text.
+
+    Normalised for line ending and trailing whitespace ONLY. Nothing else is touched: not case, not
+    Markdown, not whitespace inside the record. Every earlier version of this module compared a
+    summary of a record - a status word, a file tuple - and every earlier version was holed by a
+    repair that left the summary alone. A digest cannot be repaired around.
+    """
+    return hashlib.sha256(
+        record.replace("\r\n", "\n").replace("\r", "\n").rstrip().encode("utf-8")
+    ).hexdigest()
+
+
+def read(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
 
 # --- check A ---------------------------------------------------------------------------------
 # SCOPED TO ONE TABLE, by its header. SOURCE_RECONCILIATION.md holds five tables and the first
@@ -88,8 +161,12 @@ PLAN = ROOT / "docs/architecture/BIZTRUST-PLAN-001.md"
 # docstring: a reader scoped to nothing reads everything.
 TABLE_HEADER = "| Reconciled claim | Published summary | Status | Owner |"
 TABLE_ROW = re.compile(r"^\|(?!\s*[-: ]+\|).*\|\s*$", re.M)
-STATUS = re.compile(r"\*\*([^*]+)\*\*")
 BACKTICKED = re.compile(r"`([^`]+)`")
+
+# A row whose status names it as `Updated` has already been reconciled and makes no live claim that
+# a file still holds a string. Matched on the whole bold run, not on its first word: the first-word
+# comparison is what `**Deferred (closed by b93c701)**` walked through twice.
+UPDATED_STATUS = re.compile(r"\*\*[^*]*\bUpdated\b[^*]*\*\*")
 
 # The reconciliation table's data rows. Exactly 3 today: one `Updated in this change` naming
 # index.html in prose, and the two `Deferred` rows registered below. Asserted as an equality rather
@@ -97,19 +174,18 @@ BACKTICKED = re.compile(r"`([^`]+)`")
 # claim is exactly the thing this module should be made to read.
 RECONCILIATION_ROWS = 3
 
-# Rows stale TODAY. Key is the target string the row says its files still contain.
-# `status` is what the row's status cell says - registering it is what makes this a ratchet:
-# repair the row and the registration stops describing it.
+# Rows stale TODAY, keyed by the target string each says its files still contain - a label for the
+# reader, since the assertion is the digest. `digest` is the SHA-256 of the row's exact text, so a
+# repair in ANY wording forces the entry out; the row itself then supplies the files to check.
+# Computed by running digest(), not written by hand. An entry may only LEAVE.
 STALE_ROWS: dict[str, dict] = {
     "ADR-001…012": {
-        "files": ("docs/NEXT_STEPS.md",),
-        "status": "Deferred",
+        "digest": "32fae731249eb043000f9116aaa7ae09f4ccfa84f7e8962c327842eeb1217b04",
         "why": ("closed by #35 in b93c701; docs/NEXT_STEPS.md now reads ADR-001…020, the same "
                 "ellipsis notation with the number repaired, so the row's target is really gone"),
     },
     "G0…G8": {
-        "files": ("index.html", "docs/AGENT_CONTINUITY.md"),
-        "status": "Deferred",
+        "digest": "afec2dc8bb35052eca71d6fc9a001685cd872ca88139235740d35c76e3dd24fb",
         "why": ("closed by #34 in 151ca05, which landed a regression guard for the ENG-G* gate "
                 "namespace, so this row describes work that is not merely done but tested"),
     },
@@ -125,80 +201,108 @@ DEFERRAL = re.compile(
     r"|\bwaits on\b|\bremain(?:s)? (?:open|outstanding)\b|\bhas not\b", re.I)
 ISSUE = re.compile(r"(?:issues/|#)(\d{1,4})\b")
 
-# Tickets section 14 cites as landed AND as outstanding.
+# Tickets section 14 cites as landed AND as outstanding, with the digests of the bullets that put
+# them on each side. Registering the bullets by digest is what makes this a ratchet: repairing
+# either bullet, in any wording, changes its digest and forces the entry out - and so does a THIRD
+# bullet joining the argument, because the registered tuple is asserted as the exact set.
 #
 # Only #165. Bullet 5 writes its range as "[#165](…) to [#170](…)", so #169 - which bullet 1 does
-# credit to WP-055 - never appears literally there and is not an intersection. The first version of
-# this module registered #169 as well and its own ratchet refused the entry, which is what asserting
-# that a registered defect still fails is for. Ranges are read as the two endpoints they literally
-# are; expanding them would find #169 and would also invent citations wherever "to" sits between two
-# issue links for another reason.
-CONTRADICTED: dict[str, str] = {
-    "165": ("credited to WP-051 in bullet 1 as a landed pointer, and listed in bullet 5 among the "
-            "manuals that have not moved; the two bullets are four apart in one section"),
+# credit to WP-055 - never appears literally there and is not an intersection.
+CONTRADICTED: dict[str, dict] = {
+    "165": {
+        "digests": (
+            "a1e5ab6b5cb30cb40c4aea6407788ca3ec1a3b442ef58a8bf09feb4f0b3052a6",
+            "d0998aaa07b2611e1651cc0991ab63c828c23cb848013de5f8109a53366d43af",
+        ),
+        "why": ("credited to WP-051 in bullet 1 as a landed pointer, and listed in bullet 5 among "
+                "the manuals that have not moved; the two bullets are four apart in one section"),
+    },
 }
 
 # Bullets in section 14 matching neither vocabulary. Registered so that new wording surfaces here
-# rather than being silently bucketed as outstanding, which is how the first version let bullet 4's
-# ownership sentence keep entry 165 satisfied.
+# rather than being silently bucketed, which is how an earlier version let bullet 4's ownership
+# sentence keep entry 165 satisfied.
 UNCLASSIFIED_BULLETS = 2
 
 
-def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8")
-
-
 def reconciliation_table() -> list[str]:
-    """The data rows of the reconciliation table, and no other table's."""
+    """The data rows of the reconciliation table, and no other table's.
+
+    Empty when the file or the header is missing, rather than raising, so that test_anchors_exist
+    owns the diagnosis. tests/test_btg1_matrix_reconciles.matrix_rows() is the house pattern.
+    """
+    if not RECONCILIATION.is_file():
+        return []
     text = read(RECONCILIATION)
-    start = text.index(TABLE_HEADER) + len(TABLE_HEADER)
-    rest = text[start:]
+    if TABLE_HEADER not in text:
+        return []
+    rest = text.split(TABLE_HEADER, 1)[1]
     end = rest.find("\n\n")
     body = rest[: end if end != -1 else len(rest)]
-    return [r for r in TABLE_ROW.findall(body)]
+    return TABLE_ROW.findall(body)
 
 
 def reconciliation_rows() -> list[dict]:
-    """Those rows that name files and a target string, with the status each carries."""
+    """Those rows naming files and a target string, each carrying the digest of its own text.
+
+    `live` is False for a row whose status says the summary was already updated; such a row makes
+    no claim that a file still holds anything.
+    """
     out = []
     for row in reconciliation_table():
-        status = STATUS.search(row)
         for cell in (c.strip() for c in row.strip().strip("|").split("|")):
             ticks = BACKTICKED.findall(cell)
             if len(ticks) < 2:
                 continue
             files = tuple(t.split(":")[0] for t in ticks[:-1] if "/" in t or t.endswith(".html"))
             if files:
-                out.append({"files": files, "target": ticks[-1],
-                            "status": status.group(1).split()[0] if status else "",
-                            "row": row})
+                out.append({
+                    "files": files,
+                    "target": ticks[-1],
+                    "digest": digest(row),
+                    "live": not UPDATED_STATUS.search(row),
+                })
                 break
     return out
 
 
 def section_14() -> str:
+    """Section 14's text, or "" when its heading is missing. See reconciliation_table()."""
+    if not PLAN.is_file():
+        return ""
     text = read(PLAN)
+    if SECTION_14 not in text:
+        return ""
     start = text.index(SECTION_14)
     nxt = text.find("\n## ", start + 1)
     return text[start: nxt if nxt != -1 else len(text)]
 
 
 def bullets() -> list[str]:
-    return [b for b in section_14().split("\n- ")[1:]]
+    return section_14().split("\n- ")[1:]
 
 
 def classify() -> tuple[set[str], set[str], list[str]]:
-    """(landed, outstanding, unclassified). A bullet joins a set only on positive evidence."""
+    """(landed, outstanding, unclassified). Membership in the two sets is INDEPENDENT.
+
+    Not `if COMPLETION / elif DEFERRAL`. First-match-wins meant a bullet carrying both vocabularies
+    joined one set only and could never intersect with itself, so a single bullet calling one ticket
+    both landed and outstanding - which is a reviewer's control, and a shape a real editor would
+    write - was invisible.
+    """
     landed: set[str] = set()
     outstanding: set[str] = set()
     unclassified: list[str] = []
     for bullet in bullets():
         nums = set(ISSUE.findall(bullet))
+        matched = False
         if COMPLETION.search(bullet):
             landed |= nums
-        elif DEFERRAL.search(bullet):
+            matched = True
+        if DEFERRAL.search(bullet):
             outstanding |= nums
-        else:
+            matched = True
+        if not matched:
             unclassified.append(bullet.strip()[:80])
     return landed, outstanding, unclassified
 
@@ -208,11 +312,21 @@ def contradictions() -> set[str]:
     return landed & outstanding
 
 
+def bullet_digests(number: str) -> tuple[str, ...]:
+    """The digests of the classified bullets citing a ticket - the record of the contradiction."""
+    return tuple(sorted(
+        digest(bullet) for bullet in bullets()
+        if number in set(ISSUE.findall(bullet))
+        and (COMPLETION.search(bullet) or DEFERRAL.search(bullet))
+    ))
+
+
 class TestAnchorsExist(unittest.TestCase):
     """A reader scoped to nothing reads everything, and a floor is not the same as non-empty."""
 
     def test_anchors_exist(self) -> None:
         self.assertTrue(RECONCILIATION.is_file(), RECONCILIATION)
+        self.assertTrue(PLAN.is_file(), PLAN)
         self.assertIn(SECTION_14, read(PLAN),
                       "BIZTRUST-PLAN-001 section 14's heading moved; check B is scoped to it by name")
         self.assertIn(TABLE_HEADER, read(RECONCILIATION),
@@ -233,53 +347,74 @@ class TestStaleRows(unittest.TestCase):
     """Check A: a row saying a file contains a string, where it does not."""
 
     def test_registered_rows_still_fail(self) -> None:
-        """Registered rows STILL say what they were registered as saying, and are STILL wrong.
+        """The registered ROW is still present byte for byte, and its defect is still real.
 
-        Two-sided on purpose. The first version asserted only the file half, so repairing the ROW -
-        changing its status, or deleting it - left the entry registered and the guard silent.
+        Two-sided. The digest is the ratchet: a row repaired in any wording - a status annotated
+        inside or outside its bold run, a file dropped, the row repointed, the row deleted - no
+        longer hashes to its registration and the entry is forced out. The second half then reads
+        THE FILES THE ROW NAMES, never the registration, and asserts the string is still absent.
         """
-        rows = {r["target"]: r for r in reconciliation_rows()}
+        rows = {r["digest"]: r for r in reconciliation_rows()}
         for target, reg in STALE_ROWS.items():
-            self.assertIn(
-                target, rows,
-                f"no reconciliation row now names {target!r}. The row was repaired or removed, so this "
-                f"registration no longer describes the repository. Registered because: {reg['why']}. "
-                f"Remove the entry from STALE_ROWS.")
-            self.assertEqual(
-                reg["status"], rows[target]["status"],
-                f"the row naming {target!r} now reads {rows[target]['status']!r}, not "
-                f"{reg['status']!r}. It has been repaired; remove the entry from STALE_ROWS.")
-            for rel in reg["files"]:
-                self.assertNotIn(
-                    target, read(ROOT / rel),
-                    f"{rel} now contains {target!r}, so the row naming it is no longer stale. "
-                    f"Remove the entry from STALE_ROWS.")
+            with self.subTest(target=target):
+                self.assertIn(
+                    reg["digest"], rows,
+                    f"no reconciliation row now hashes to the text registered for {target!r}. The "
+                    f"row was reworded, repointed, restatused or removed, so this registration no "
+                    f"longer describes the repository. Registered because: {reg['why']}. Remove the "
+                    f"entry from STALE_ROWS - do not re-hash it, which would ratchet nothing.")
+                row = rows[reg["digest"]]
+                self.assertEqual(
+                    target, row["target"],
+                    f"the row registered for {target!r} names {row['target']!r}; the label and the "
+                    f"digest have come apart, so STALE_ROWS is mislabelled")
+                self.assertTrue(row["files"], f"the row naming {target!r} names no file to check")
+                for rel in row["files"]:
+                    self.assertNotIn(
+                        target, read(ROOT / rel),
+                        f"{rel} now contains {target!r}, so the row naming it is no longer stale. "
+                        f"Remove the entry from STALE_ROWS.")
 
     def test_no_unregistered_stale_rows(self) -> None:
-        """Every other row's target string is really in the files it names."""
+        """Every other live row's target string is really in the files it names.
+
+        Registered rows are skipped by DIGEST, so a registered row that is edited at all stops being
+        skipped and is read here too. That is not double-counting: a row edited to annotate its
+        `Deferred` status still tells a reader the string is there, and it is not.
+        """
+        registered = {reg["digest"] for reg in STALE_ROWS.values()}
         for row in reconciliation_rows():
-            if row["target"] in STALE_ROWS or row["status"].lower() != "deferred":
+            if row["digest"] in registered or not row["live"]:
                 continue
             for rel in row["files"]:
-                path = ROOT / rel
-                self.assertTrue(path.is_file(), f"a Deferred row names {rel}, which does not exist")
-                self.assertIn(
-                    row["target"], read(path),
-                    f"SOURCE_RECONCILIATION says {rel} still contains {row['target']!r}, and it does "
-                    f"not. Either the repair landed and the row should say so, or the target is "
-                    f"mistyped. This is the #347 defect, unregistered.")
+                with self.subTest(file=rel, target=row["target"]):
+                    path = ROOT / rel
+                    self.assertTrue(path.is_file(), f"a live row names {rel}, which does not exist")
+                    self.assertIn(
+                        row["target"], read(path),
+                        f"SOURCE_RECONCILIATION says {rel} still contains {row['target']!r}, and it "
+                        f"does not. Either the repair landed and the row should say so, or the "
+                        f"target is mistyped. This is the #347 defect, unregistered.")
 
 
 class TestSection14Contradictions(unittest.TestCase):
     """Check B: one section calling a ticket both landed and outstanding."""
 
     def test_registered_contradictions_still_fail(self) -> None:
+        """The ticket is still contradicted, and by exactly the bullets registered, byte for byte."""
         found = contradictions()
-        for num, why in CONTRADICTED.items():
-            self.assertIn(
-                num, found,
-                f"section 14 no longer cites #{num} as both landed and outstanding. Registered "
-                f"because: {why}. Remove this entry from CONTRADICTED.")
+        for num, reg in CONTRADICTED.items():
+            with self.subTest(ticket=num):
+                self.assertIn(
+                    num, found,
+                    f"section 14 no longer cites #{num} as both landed and outstanding. Registered "
+                    f"because: {reg['why']}. Remove this entry from CONTRADICTED.")
+                self.assertEqual(
+                    tuple(sorted(reg["digests"])), bullet_digests(num),
+                    f"the bullets citing #{num} are no longer the bullets registered for it. One was "
+                    f"reworded or removed, or a third has joined; either way the registration no "
+                    f"longer describes the record. Registered because: {reg['why']}. Remove the "
+                    f"entry from CONTRADICTED - do not re-hash it.")
 
     def test_no_unregistered_contradictions(self) -> None:
         extra = contradictions() - set(CONTRADICTED)
@@ -292,8 +427,10 @@ class TestSection14Contradictions(unittest.TestCase):
     def test_every_bullet_is_classified(self) -> None:
         """A bullet neither vocabulary recognises joins no set, and its count is registered.
 
-        The first version had no third bucket: anything unmatched became 'outstanding', so an
-        ownership sentence propped up a contradiction that had actually been repaired.
+        An earlier version had no third bucket: anything unmatched became 'outstanding', so an
+        ownership sentence propped up a contradiction that had actually been repaired. The count is
+        this module's own honesty check - detection of NEW contradictions is heuristic, and this is
+        the number that says how much prose the heuristic cannot read.
         """
         _, _, unclassified = classify()
         self.assertEqual(
@@ -316,12 +453,20 @@ class TestTheRegistriesAreRatchets(unittest.TestCase):
     def test_every_registration_gives_a_reason(self) -> None:
         """As tests/test_btg1_matrix_reconciles.py requires of its own registry."""
         for target, reg in STALE_ROWS.items():
-            self.assertGreater(len(reg["why"].split()), 12,
-                               f"STALE_ROWS[{target!r}] has no real reason; a registry entry without "
-                               f"one is a suppression")
-        for num, why in CONTRADICTED.items():
-            self.assertGreater(len(why.split()), 12,
-                               f"CONTRADICTED[{num!r}] has no real reason")
+            with self.subTest(target=target):
+                self.assertGreater(len(reg["why"].split()), 12,
+                                   f"STALE_ROWS[{target!r}] has no real reason; a registry entry "
+                                   f"without one is a suppression")
+                self.assertRegex(reg["digest"], r"^[0-9a-f]{64}$",
+                                 f"STALE_ROWS[{target!r}] registers no SHA-256")
+        for num, reg in CONTRADICTED.items():
+            with self.subTest(ticket=num):
+                self.assertGreater(len(reg["why"].split()), 12,
+                                   f"CONTRADICTED[{num!r}] has no real reason")
+                self.assertTrue(reg["digests"], f"CONTRADICTED[{num!r}] registers no bullet")
+                for one in reg["digests"]:
+                    self.assertRegex(one, r"^[0-9a-f]{64}$",
+                                     f"CONTRADICTED[{num!r}] registers a malformed SHA-256")
 
 
 if __name__ == "__main__":
