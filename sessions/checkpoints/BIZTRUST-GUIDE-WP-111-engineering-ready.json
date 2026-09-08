@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "BIZTRUST-GUIDE-WP-111-engineering-ready",
+  "created_at": "2026-09-08T02:49:49Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-111",
+  "state": "ENGINEERING_READY",
+  "objective": "Guard the stale-record class - a governance record asserting that work remains, when it has landed - with two offline checks and a ratchet registry (#349).",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-111-stale-records",
+    "baseline_commit": "372cf217098e2af11db0e786b746a5d583c7705a"
+  },
+  "completed": [
+    "tests/test_stale_records.py: check A reads every Deferred row of SOURCE_RECONCILIATION that names files and a target string, and asserts the string is really in each file.",
+    "Check B reads BIZTRUST-PLAN-001 section 14 and asserts no ticket is cited as both landed and outstanding within it.",
+    "Both registries carry today's known defects with a reason each, are asserted to STILL fail at their registered value, and have their membership asserted so a new defect cannot be filed in.",
+    "Five negative controls declared and run, each firing on the test it names; the unmutated copy passes.",
+    "284 tests OK (278 on main, 6 new); validate_continuity.py PASS."
+  ],
+  "remaining": [
+    "The repairs themselves. #343 and #347 edit records and wait on #316's version rule.",
+    "The third variant of this defect class - a question waiting on a design that now exists and names it - is raised on #326 and not guarded here."
+  ],
+  "files_changed": [
+    "tests/test_stale_records.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-111-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "wp111_controls.py (5 negative controls, fresh copy each)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "The guard refused its own author. CONTRADICTED was first written with #165 AND #169, because bullet 1 credits WP-055 for #169. Bullet 5 writes its range as '#165 to #170', so #169 never appears literally there and is not an intersection. test_registered_contradictions_still_fail rejected the entry, which is exactly what asserting that a registered defect still fails is for.",
+    "Check A was nearly written against the issue each row cites (#35, #34, both closed). That would have needed the network, which #311 forbids in this suite, and it would also have been weaker: an issue can close wontfix or superseded while the published summary it names is untouched. The string is the claim; the issue is only who was asked to change it.",
+    "'ADR-001…012' reads like notation for a range and the first draft skipped it on that basis. docs/NEXT_STEPS.md literally contains 'ADR-001…020' today - the same notation with the number repaired - so the row's target was a real string, verified against the commit that added the row before relying on it. A guard that had treated it as shorthand would have passed on the defect it exists to catch."
+  ],
+  "decisions": [
+    "DEC-113"
+  ],
+  "assumptions": [
+    "That SOURCE_RECONCILIATION's Deferred rows keep naming their target in backticks. The reader asserts at least one such row exists, so a format change fails loudly rather than silently reading nothing."
+  ],
+  "blockers": [],
+  "authority": {
+    "documentation_implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY",
+    "scope_note": "A new test module. No design, record or claim is edited, so this does not wait on #316.",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_110",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python -m unittest discover -s tests -p 'test_stale_records.py'",
+    "read_first": [
+      "tests/test_stale_records.py",
+      "https://github.com/bstBizEra/biztrust_guide/issues/349",
+      "tests/test_btg1_matrix_reconciles.py"
+    ],
+    "stop_if": [
+      "An entry is ADDED to STALE_ROWS or CONTRADICTED. A registry entry may only leave, when its defect is repaired; adding one quiets the guard with the defect it was built to catch.",
+      "The guard is made to read issue states. The suite has no network import and #311 exists to keep it so.",
+      "A registered entry is removed without the corresponding record actually being repaired."
+    ]
+  },
+  "declared_non_coverage": [
+    "Issue states are not checked. That needs the network and belongs to #311's advisory reconciliation.",
+    "Ranges are read as their two literal endpoints. '#165 to #170' contributes #165 and #170 only.",
+    "Only SOURCE_RECONCILIATION's table and PLAN-001 section 14 are read. Other records may carry the same defect and are not covered; the sweep that found these two examined 65 lines across all tracked .md and .html and is recorded on #349."
+  ]
+}
