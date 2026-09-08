@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Control &middot; BizTrust Agentic Engineer Team Guide</title>
+<meta name="description" content="A derived, non-authoritative projection of the guide's own continuity records: the recorded resume decision, the active Work Package, the validator's reconciliation and integrity checks, the actions waiting on a human, and every authority key grouped by the domain it names. Generated at build time; the committed file is an empty placeholder.">
+<link rel="icon" href="../assets/biztrust-symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress"><span id="readingProgress"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html" aria-label="BizTrust guide home">
+    <img src="../assets/biztrust-symbol.svg" alt="">
+    <span class="brand-copy"><strong>Control</strong><small>Derived &middot; non-authoritative</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-button" id="themeButton" type="button" aria-label="Toggle colour theme">&#9689;</button>
+    <a class="github-link" href="../index.html">&larr; Guide</a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="sidebar">Sections</button>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <p class="nav-label">Control &middot; a projection of the records</p>
+  <nav id="sectionNav">
+    <a href="#decision"><span>01</span> Resume decision</a>
+    <a href="#package"><span>02</span> Active Work Package</a>
+    <a href="#reconciliation"><span>03</span> Reconciliation</a>
+    <a href="#queue"><span>04</span> Human action queue</a>
+    <a href="#authority"><span>05</span> Authority</a>
+    <a href="#integrity"><span>06</span> Integrity</a>
+    <a href="#provenance"><span>07</span> Provenance</a>
+    <a href="#limits"><span>08</span> What this page does not do</a>
+  </nav>
+  <div class="sidebar-card">
+    <span class="status-dot"></span>
+    <div><strong>Projection</strong><small>Grants nothing &middot; records nothing</small></div>
+  </div>
+</aside>
+
+<main id="main">
+<section id="control-intro" data-search="control page projection records resume decision active work package reconciliation authority integrity provenance derived non-authoritative badf current-state next-actions">
+  <div class="section-heading"><span>CTL</span><div><p>Derived surface &middot; not a record</p><h2>The records as they are, assembled once</h2></div></div>
+  <p class="lede">The guide is read; it is not operated. An agent resuming, or a human asking what is waiting on them, opens <code>AGENTS.md</code>, then <code>badf/current-state.json</code>, then <code>badf/next-actions.json</code>, then the tracker, and assembles the answer by hand every time. This page assembles it once, from those files and from the validator that reads them.</p>
+  <p class="section-intro">Every value below is copied from a source file in that file's own words. The panels do not re-word <code>state</code>, <code>authority</code> or <code>resume_decision</code>, and they add no status vocabulary of their own; whether the guide should adopt separate status axes is <a href="https://github.com/bstBizEra/biztrust_guide/issues/302">issue #302</a>, which is open and an operator's. The page lists no map's tickets (<a href="https://github.com/bstBizEra/biztrust_guide/issues/301">#301</a>), reads no tracker (<a href="https://github.com/bstBizEra/biztrust_guide/issues/311">#311</a>), and offers no control that writes anything.</p>
+  <div class="invariant">
+    <span>WHAT THIS PAGE IS, AND WHAT IT IS NOT</span>
+    <p>This page is <strong>derived and non-authoritative</strong>. It grants nothing, authorises nothing, accepts nothing and records nothing. The records under <code>badf/</code> and the decisions on the issue tracker remain the only sources of truth; where this page and a record disagree, the record is right and this page is stale. Nothing on it may be cited as authority for doing anything.</p>
+  </div>
+  <div class="callout">
+    <strong>Generated at build time, committed empty</strong>
+    <p>The tracked <code>control/index.html</code> carries an empty, clearly-marked placeholder in every panel. The data is injected into the published copy by <code>.github/workflows/pages.yml</code> after the site artifact is staged and before it is verified, so nothing generated is ever committed. Run <code>python scripts/build_control_page.py</code> to project the records into your own working copy and look at it; a test holds the committed file to its placeholder state, so a regenerated copy must not be committed.</p>
+  </div>
+</section>
+
+<section id="decision" data-search="resume decision primary next action wait for authority current-state json most prominent">
+  <div class="section-heading"><span>01</span><div><p>The first thing to read</p><h2>Resume decision</h2></div></div>
+  <p class="section-intro">The record's own <code>resume_decision</code>, and the primary action it is a conclusion about. The validator prints the same value at <code>RESUME_DECISION=</code>; this panel reads the record rather than the echo, so that a validator that could not run leaves the panel <code>UNKNOWN</code> instead of quoting a file this page never opened.</p>
+<!--BTG-CONTROL:decision--><div class="next-action"><span>RESUME DECISION</span><div><h3>This page has not been generated</h3><p>The committed file is a placeholder and carries no record data at all. Run <code>python scripts/build_control_page.py</code> to project <code>badf/current-state.json</code> into it. The published copy is projected by the Pages workflow.</p></div><b>NOT GENERATED</b></div><!--/BTG-CONTROL:decision-->
+</section>
+
+<section id="package" data-search="active work package identifier title recorded state owner role branch baseline commit issue current-state json">
+  <div class="section-heading"><span>02</span><div><p>What is open</p><h2>Active Work Package</h2></div></div>
+  <p class="section-intro">The <code>active_work_package</code> and <code>source</code> blocks of <code>badf/current-state.json</code>, field for field. <em>Recorded state</em> is the record's own word for its lifecycle position and is not translated here.</p>
+<!--BTG-CONTROL:package--><p class="section-intro">This panel has not been generated. Run <code>python scripts/build_control_page.py</code> to project <code>badf/current-state.json</code> into it.</p><!--/BTG-CONTROL:package-->
+</section>
+
+<section id="reconciliation" data-search="reconciliation state reconciliation consistent lag expected diverged unknown shallow clone step 8 resume protocol validator">
+  <div class="section-heading"><span>03</span><div><p>Step 8, performed</p><h2>Reconciliation</h2></div></div>
+  <p class="section-intro">The resume protocol's step 8 &mdash; reconcile observed state with recorded state &mdash; is performed by <code>scripts/validate_continuity.py</code>, which compares the recorded active Work Package and baseline against the observed main line and prints one of four words: <code>CONSISTENT</code>, <code>LAG_EXPECTED</code>, <code>DIVERGED</code> or <code>UNKNOWN</code>. This page invokes that validator and reads what it printed; it does not reconcile anything itself. The verdict is advisory there and advisory here: it cannot fail a build and it says nothing about whether the work is right.</p>
+  <div class="callout">
+    <strong>An <code>UNKNOWN</code> here is expected, not a defect</strong>
+    <p>The Pages workflow checks out with <code>actions/checkout@v7</code> and no <code>fetch-depth</code>, so every published copy of this page is built from a <strong>shallow</strong> clone in which the history the reconciliation needs is simply absent. On the published page the verdict will normally read <code>UNKNOWN</code> with a reason naming the shallow clone, and that is the honest answer rather than a fault. To see one of the other three words, run the validator, or this projector, against a full clone.</p>
+  </div>
+<!--BTG-CONTROL:reconciliation--><p class="section-intro">This panel has not been generated. Run <code>python scripts/build_control_page.py</code> to invoke <code>scripts/validate_continuity.py</code> and project what it printed into it.</p><!--/BTG-CONTROL:reconciliation-->
+</section>
+
+<section id="queue" data-search="human action queue next-actions json authority human decision required wait for authority priority order owner role filter excluded">
+  <div class="section-heading"><span>04</span><div><p>What is waiting on a person</p><h2>Human action queue</h2></div></div>
+  <p class="section-intro">The actions of <code>badf/next-actions.json</code> whose recorded authority waits on a human, in the record's own priority order. <strong>The filter, stated so that the count can be checked:</strong> an action is admitted when its recorded <code>authority</code> contains <code>HUMAN</code> or <code>WAIT</code>, or its recorded <code>owner_role</code> contains <code>human</code>. Those are substrings of strings the record already spells; the filter renames nothing and adds nothing. The actions it did not admit are listed under the table with the authority string each carries, because a count is only as good as its filter.</p>
+<!--BTG-CONTROL:queue--><p class="section-intro">This panel has not been generated. Run <code>python scripts/build_control_page.py</code> to project <code>badf/next-actions.json</code> into it.</p><!--/BTG-CONTROL:queue-->
+</section>
+
+<section id="authority" data-search="authority keys grouped domain unscoped implementation production platform implementation not granted issue 346 verbatim">
+  <div class="section-heading"><span>05</span><div><p>What is granted, and to what</p><h2>Authority, grouped by the domain each key names</h2></div></div>
+  <p class="section-intro">Every key of the record's <code>authority</code> block, with its value copied verbatim. <strong>The grouping rule:</strong> the key's first underscore-separated segment is the domain it names, and a key that is a single segment names no domain at all and renders under <code>Unscoped</code>.</p>
+  <div class="callout">
+    <strong>Why a key can end up <code>Unscoped</code></strong>
+    <p><code>implementation</code> sits beside <code>production_platform_implementation</code> in the live record, and in a flat list a reader can take the one for the other. That defect is <a href="https://github.com/bstBizEra/biztrust_guide/issues/346">issue #346</a> and it is open. A key that names no domain is not placed under a guessed one here: it renders under <code>Unscoped</code> and says so, because guessing which domain it meant is the whole of the defect. Fixing the key itself is a records edit and is not this page's to make.</p>
+  </div>
+<!--BTG-CONTROL:authority--><p class="section-intro">This panel has not been generated. Run <code>python scripts/build_control_page.py</code> to project the <code>authority</code> block of <code>badf/current-state.json</code> into it.</p><!--/BTG-CONTROL:authority-->
+</section>
+
+<section id="integrity" data-search="integrity continuity validation checks pass fail validator own output exit code required files html pages markdown refs">
+  <div class="section-heading"><span>06</span><div><p>Whether the records hold together</p><h2>Integrity</h2></div></div>
+  <p class="section-intro">The validator's own output, check for check, in the order it printed them. This panel counts nothing itself: every row is a line <code>scripts/validate_continuity.py</code> emitted, so a check that is added, renamed or removed there appears here without this page being edited. A failing run renders its <code>ERROR</code> lines as rows rather than being summarised away.</p>
+<!--BTG-CONTROL:integrity--><p class="section-intro">This panel has not been generated. Run <code>python scripts/build_control_page.py</code> to invoke <code>scripts/validate_continuity.py</code> and project its check list into it.</p><!--/BTG-CONTROL:integrity-->
+</section>
+
+<section id="provenance" data-search="provenance source commit record written projection built generator shallow clone unknown derived non-authoritative">
+  <div class="section-heading"><span>07</span><div><p>Where the numbers came from</p><h2>Provenance</h2></div></div>
+  <p class="section-intro">Every panel above ends with the file it read, the source commit, when that record was written and when this projection was built. This panel gathers the same facts once more in full. A derived surface that cannot say where a number came from is a second source of truth, which is the thing this page exists not to become.</p>
+<!--BTG-CONTROL:provenance--><p class="section-intro">This panel has not been generated. Run <code>python scripts/build_control_page.py</code> to project the source commit, the record timestamps and the build time into it.</p><!--/BTG-CONTROL:provenance-->
+</section>
+
+<section id="limits" data-search="limits what this page does not do no write controls no completion percentage no map index no tracker no new vocabulary">
+  <div class="section-heading"><span>08</span><div><p>Limits</p><h2>What this page does not do</h2></div></div>
+  <ul class="cross-list">
+    <li>It records nothing and grants nothing. There is no Authorize, no Accept, no Record Gate and no Close on it; a decision is recorded where the records and the tracker say it is recorded, and this page only says where that is</li>
+    <li>It adds no status vocabulary. <code>state</code>, <code>authority</code> and <code>resume_decision</code> are rendered exactly as the records spell them; whether the guide should carry separate status axes is <a href="https://github.com/bstBizEra/biztrust_guide/issues/302">#302</a>, open and an operator's</li>
+    <li>It is not a second map index. It lists no map's tickets; <a href="https://github.com/bstBizEra/biztrust_guide/issues/301">#301</a> is open on whether maps stay issues at all</li>
+    <li>It fetches nothing. The projector calls <code>git</code> and the validator against the local checkout and nothing else, no script on this page reads any data source, and no tracker is synchronised at build time or in the browser &mdash; <a href="https://github.com/bstBizEra/biztrust_guide/issues/311">#311</a> is the open decision about whether anything should</li>
+    <li>It shows no completion percentage. A percentage needs a denominator and a metric stated beside it, and neither is settled: the completion matrix is <a href="https://github.com/bstBizEra/biztrust_guide/issues/307">#307</a>, which waits on #302</li>
+    <li>It does not reconcile the record against itself. The verdict in panel 03 reads two recorded fields, the active Work Package and its baseline, and says nothing about whether the rest of the record agrees with them</li>
+    <li>It is not a phase, epic or evidence projection, and it changes no existing page. Those are the rest of <code>BIZTRUST-GUIDE-DYN-001</code>, each worth doing and none needed to prove this surface</li>
+  </ul>
+</section>
+</main>
+
+<footer>
+  <img src="../assets/biztrust-symbol.svg" alt="">
+  <p>BizTrust Agentic Engineer Team &middot; Control &middot; derived, non-authoritative &middot; <a href="../index.html">Back to the guide</a></p>
+  <a href="#main">Back to top &uarr;</a>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
