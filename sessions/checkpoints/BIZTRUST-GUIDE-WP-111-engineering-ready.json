@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "BIZTRUST-GUIDE-WP-111-engineering-ready",
-  "created_at": "2026-09-08T02:49:49Z",
+  "created_at": "2026-09-08T04:32:01Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-111",
   "state": "ENGINEERING_READY",
   "objective": "Guard the stale-record class - a governance record asserting that work remains, when it has landed - with two offline checks and a ratchet registry (#349).",
@@ -11,11 +11,11 @@
     "baseline_commit": "372cf217098e2af11db0e786b746a5d583c7705a"
   },
   "completed": [
-    "tests/test_stale_records.py: check A reads every Deferred row of SOURCE_RECONCILIATION that names files and a target string, and asserts the string is really in each file.",
-    "Check B reads BIZTRUST-PLAN-001 section 14 and asserts no ticket is cited as both landed and outstanding within it.",
-    "Both registries carry today's known defects with a reason each, are asserted to STILL fail at their registered value, and have their membership asserted so a new defect cannot be filed in.",
-    "Five negative controls declared and run, each firing on the test it names; the unmutated copy passes.",
-    "284 tests OK (278 on main, 6 new); validate_continuity.py PASS."
+    "tests/test_stale_records.py: check A reads the reconciliation table SCOPED BY ITS HEADER, and asserts each registered row still carries its registered status AND still names a string absent from the files it names.",
+    "Check B classifies a section-14 bullet positively as landed or outstanding, and counts what it can classify as neither, so unrecognised wording surfaces rather than defaulting.",
+    "Both registries are ratchets: membership asserted, each entry asserted to still fail at its registered value, each required to carry a reason of more than twelve words.",
+    "Nine negative controls, each firing on the test it names; four of them exercise the ROW or the CLASSIFIER, which the first version could not detect at all.",
+    "286 tests OK (278 on main, 8 new); validate_continuity.py PASS."
   ],
   "remaining": [
     "The repairs themselves. #343 and #347 edit records and wait on #316's version rule.",
@@ -40,15 +40,17 @@
       "exit_code": 0
     },
     {
-      "command": "wp111_controls.py (5 negative controls, fresh copy each)",
+      "command": "wp111_controls.py (9 negative controls, fresh copy each)",
       "status": "PASS",
       "exit_code": 0
     }
   ],
   "observations": [
-    "The guard refused its own author. CONTRADICTED was first written with #165 AND #169, because bullet 1 credits WP-055 for #169. Bullet 5 writes its range as '#165 to #170', so #169 never appears literally there and is not an intersection. test_registered_contradictions_still_fail rejected the entry, which is exactly what asserting that a registered defect still fails is for.",
-    "Check A was nearly written against the issue each row cites (#35, #34, both closed). That would have needed the network, which #311 forbids in this suite, and it would also have been weaker: an issue can close wontfix or superseded while the published summary it names is untouched. The string is the claim; the issue is only who was asked to change it.",
-    "'ADR-001…012' reads like notation for a range and the first draft skipped it on that basis. docs/NEXT_STEPS.md literally contains 'ADR-001…020' today - the same notation with the number repaired - so the row's target was a real string, verified against the commit that added the row before relying on it. A guard that had treated it as shorthand would have passed on the defect it exists to catch."
+    "THE FIRST VERSION SHIPPED A FALSE PASS AND A FRESH-CONTEXT REVIEW OF PR #350 CAUGHT IT. test_registered_rows_still_fail asserted `target not in file` - a property of the FILE - while #347's repair is to fix the ROW. Rewriting a row's status from **Deferred** to **Closed** left the suite green with the entry still registered; deleting the row did too. The registry could outlive the row it described, which is the drift this module exists to stop. Reproduced by hand before accepting the finding.",
+    "All five of the first version's negative controls passed for the same reason: every one exercised the file and none exercised the row. A control set that cannot fail in the direction the guard is weak is not evidence. Four of the nine controls now exercise the row or the classifier.",
+    "Check B defaulted every bullet it could not classify to 'outstanding', which let bullet 4's ownership sentence keep entry 165 satisfied even when bullet 5 - the bullet #343 actually names - was repaired. Classification is positive on both sides now, with a third bucket whose size is registered.",
+    "The corpus floor found a defect the review had not: TABLE_ROW was matching 38 rows across every table in SOURCE_RECONCILIATION.md, not the three of the reconciliation table. The reader was scoped to nothing. tests/test_btg1_matrix_reconciles.py records learning the same lesson the same way, which is why its own anchor is asserted rather than assumed.",
+    "A heredoc ate the escapes in '\n\n' while patching the reader, producing a syntax error. That is the failure this session's notes already warn about: never write escape-bearing code through a heredoc."
   ],
   "decisions": [
     "DEC-113"
@@ -82,6 +84,8 @@
   "declared_non_coverage": [
     "Issue states are not checked. That needs the network and belongs to #311's advisory reconciliation.",
     "Ranges are read as their two literal endpoints. '#165 to #170' contributes #165 and #170 only.",
-    "Only SOURCE_RECONCILIATION's table and PLAN-001 section 14 are read. Other records may carry the same defect and are not covered; the sweep that found these two examined 65 lines across all tracked .md and .html and is recorded on #349."
+    "Only the reconciliation table and PLAN-001 section 14 are read. The sweep that found these examined 65 lines across all tracked .md and .html; other records may carry the class and are not covered.",
+    "Check A's unregistered arm has no live subject today: the table's three rows are one 'Updated in this change' with no backticked target and the two registered Deferred rows. It is exercised by control 4 and by the row-count equality, not by current content.",
+    "The vocabularies are word lists. A contradiction written in wording neither recognises lands in the unclassified bucket, whose SIZE is guarded but whose contents are not."
   ]
 }
