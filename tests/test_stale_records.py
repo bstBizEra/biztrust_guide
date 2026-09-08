@@ -69,11 +69,19 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     "Updated in this change" row, which names no backticked target, and the two registered rows,
     which the digest skip removes. It is exercised by the controls and by the row-count equality,
     not by current content.
- 6. A row is read as making a live claim unless its status names it as `Updated`. A row given some
-    third status - `**Closed**`, say - is still required to hold its string, and would fail loudly.
-    That is deliberate: the table's vocabulary today is exactly `Updated in this change` and
-    `Deferred`, the row count is asserted as an equality, so a third status is a deliberate edit
-    that should re-derive this module rather than pass through it.
+ 6. A row is read as making a live claim unless its STATUS CELL names it as `Updated`. A row given
+    some third status - `**Closed**`, say - is still required to hold its string, and would fail
+    loudly. That is deliberate: the table's vocabulary today is exactly `Updated in this change`
+    and `Deferred`, the row count is asserted as an equality, so a third status is a deliberate
+    edit that should re-derive this module rather than pass through it.
+ 7. A file reference is recognised by ONE syntactic form: a backticked path with a dot-extension,
+    optionally suffixed `:line`. That is not complete and cannot be - `Makefile`, `LICENSE` and
+    `.gitattributes` do not match it. What makes an incomplete recogniser safe is that the
+    reader's SILENCE is a failure: `test_every_live_row_is_readable` asserts that every live row
+    yields a file and a target, so an unrecognised reference stops the suite rather than the row.
+    This limit is stated because review found its predecessor - two special cases, `"/" in t` and
+    `.html` - letting a `**Deferred**` row that named `AGENTS.md:12` pass in silence at 6ee0968.
+    Every repo-root record was invisible, and nothing said so.
 
 CORPUS FLOOR. `test_anchors_exist` asserts a floor near the true corpus size rather than merely
 non-empty, as `test_adr_citations.py` and `test_btg1_matrix_reconciles.py` do. Non-empty was an
@@ -85,17 +93,26 @@ their anchor is missing rather than raising, as `test_btg1_matrix_reconciles.mat
 `test_anchors_exist` owns the diagnosis and a renamed heading reports the heading rather than a
 `ValueError` from the middle of a reader.
 
-NEGATIVE CONTROLS, eleven of them, run 2026-09-08 by `wp111_controls.py`: each on a fresh copy of
-the worktree, one mutation apiece, `unittest discover -s tests -p test_stale_records.py` from that
-copy's root, with the unmutated copy run first and green. Every mutation asserts that the text it
-replaces was found, so a control cannot quietly become a no-op. The first four are the shapes two
-independent reviews measured as GREEN under the previous mechanism.
+NEGATIVE CONTROLS, fourteen of them, re-run 2026-09-08 by `wp111_controls.py`: each on a fresh copy
+of the worktree, one mutation apiece, `unittest discover -s tests -p test_stale_records.py` from
+that copy's root, with the unmutated copy run first and green. Every mutation asserts that the text
+it replaces was found, so a control cannot quietly become a no-op. The first four shapes, and the
+one-bullet contradiction, are what two independent reviews measured as GREEN under earlier
+mechanisms; the last three are what a third review measured as GREEN at 6ee0968.
 
 ISOLATED - exactly one test fails:
   * the ADR row repointed at a file that DOES hold the string -> test_registered_rows_still_fail
   * the string restored to `docs/NEXT_STEPS.md`               -> test_registered_rows_still_fail
   * one bullet citing #199 as landed AND outstanding          -> test_no_unregistered_contradictions
   * a bullet in wording neither vocabulary knows              -> test_every_bullet_is_classified
+  * a stale row naming `AGENTS.md:12`, a repo-root file       -> test_no_unregistered_stale_rows
+  * a live row naming `Makefile:3`, which FILE_REFERENCE
+    cannot read - the residual of the case above              -> test_every_live_row_is_readable
+  * a bold `Updated` inside a live row's CLAIM cell           -> test_no_unregistered_stale_rows
+
+Each of the last three swaps the reconciled row for a new `**Deferred**` row waiting on a string no
+tracked file holds, so the row count stays 3 and the corpus floor stays silent: what they measure is
+the reader, not the floor.
 
 NOT ISOLATED, and declared rather than trimmed, as `tests/test_stale_asks.py` and
 `tests/test_btg1_matrix_reconciles.py` declare of their own. What each breaks really does break more
@@ -163,10 +180,32 @@ TABLE_HEADER = "| Reconciled claim | Published summary | Status | Owner |"
 TABLE_ROW = re.compile(r"^\|(?!\s*[-: ]+\|).*\|\s*$", re.M)
 BACKTICKED = re.compile(r"`([^`]+)`")
 
-# A row whose status names it as `Updated` has already been reconciled and makes no live claim that
-# a file still holds a string. Matched on the whole bold run, not on its first word: the first-word
-# comparison is what `**Deferred (closed by b93c701)**` walked through twice.
-UPDATED_STATUS = re.compile(r"\*\*[^*]*\bUpdated\b[^*]*\*\*")
+# SCOPED TO ONE COLUMN, TOO, and derived from the header above so the two cannot drift. A row
+# states which file still carries the superseded claim in its published-summary cell, and whether
+# that claim is still live in its status cell. Reading either from "somewhere in the row" is how
+# this reader went wrong a third time: review found that the word `Updated` appearing inside a
+# CLAIM cell marked the whole row reconciled and dropped it.
+TABLE_COLUMNS = tuple(c.strip() for c in TABLE_HEADER.strip().strip("|").split("|"))
+SUMMARY_COLUMN = TABLE_COLUMNS.index("Published summary")
+STATUS_COLUMN = TABLE_COLUMNS.index("Status")
+
+# A row whose STATUS CELL names it as `Updated` has already been reconciled and makes no live claim
+# that a file still holds a string. Matched on the whole bold run, not on its first word: the
+# first-word comparison is what `**Deferred (closed by b93c701)**` walked through twice.
+RECONCILED = re.compile(r"\*\*[^*]*\bUpdated\b[^*]*\*\*")
+
+# A backticked file reference: a path, optionally with a `:line` suffix. ONE syntactic form.
+#
+# The previous reader kept a token only if it contained "/" or ended ".html" - two special cases -
+# so every repo-root record was invisible: review put a `**Deferred**` row naming `AGENTS.md:12`
+# into the table at 6ee0968 and the suite stayed green, because the row was never parsed at all.
+# Adding a third special case would be the same mistake a third time.
+#
+# No recogniser is complete, so what is actually guarded is the reader's SILENCE:
+# test_every_live_row_is_readable asserts that every live row yields a file AND a target, so a
+# reference written in a form this pattern does not know FAILS rather than vanishing. The pattern
+# fixes the instance; that rule fixes the class.
+FILE_REFERENCE = re.compile(r"^([A-Za-z0-9_.\-/]+\.[A-Za-z0-9]{1,8})(?::\d+)?$")
 
 # The reconciliation table's data rows. Exactly 3 today: one `Updated in this change` naming
 # index.html in prose, and the two `Deferred` rows registered below. Asserted as an equality rather
@@ -242,27 +281,40 @@ def reconciliation_table() -> list[str]:
     return TABLE_ROW.findall(body)
 
 
-def reconciliation_rows() -> list[dict]:
-    """Those rows naming files and a target string, each carrying the digest of its own text.
+def row_cells(row: str) -> list[str]:
+    """A row's cells, or [] when the row does not have the table's shape."""
+    parts = [c.strip() for c in row.strip().strip("|").split("|")]
+    return parts if len(parts) == len(TABLE_COLUMNS) else []
 
-    `live` is False for a row whose status says the summary was already updated; such a row makes
-    no claim that a file still holds anything.
+
+def reconciliation_rows() -> list[dict]:
+    """EVERY data row, parsed as far as this reader can parse it.
+
+    Rows are returned whether or not they parse, which is the point. An earlier version returned
+    only the rows it understood, so a row it could not read simply did not exist - and a stale row
+    naming a repo-root file was skipped in silence. `files` and `target` are empty for such a row
+    and `test_every_live_row_is_readable` turns that emptiness into a failure.
+
+    `live` is False for a row whose STATUS CELL says the summary was already updated; such a row
+    makes no claim that a file still holds anything.
     """
     out = []
     for row in reconciliation_table():
-        for cell in (c.strip() for c in row.strip().strip("|").split("|")):
-            ticks = BACKTICKED.findall(cell)
-            if len(ticks) < 2:
-                continue
-            files = tuple(t.split(":")[0] for t in ticks[:-1] if "/" in t or t.endswith(".html"))
-            if files:
-                out.append({
-                    "files": files,
-                    "target": ticks[-1],
-                    "digest": digest(row),
-                    "live": not UPDATED_STATUS.search(row),
-                })
-                break
+        parts = row_cells(row)
+        files: tuple[str, ...] = ()
+        target = ""
+        if parts:
+            ticks = BACKTICKED.findall(parts[SUMMARY_COLUMN])
+            if len(ticks) >= 2:
+                files = tuple(m.group(1) for m in map(FILE_REFERENCE.match, ticks[:-1]) if m)
+                target = ticks[-1] if files else ""
+        out.append({
+            "files": files,
+            "target": target,
+            "digest": digest(row),
+            "live": not (parts and RECONCILED.search(parts[STATUS_COLUMN])),
+            "row": row.strip(),
+        })
     return out
 
 
@@ -346,6 +398,28 @@ class TestAnchorsExist(unittest.TestCase):
 class TestStaleRows(unittest.TestCase):
     """Check A: a row saying a file contains a string, where it does not."""
 
+    def test_every_live_row_is_readable(self) -> None:
+        """A live row this reader cannot parse is a FAILURE, not a skip.
+
+        This is the rule that makes an incomplete FILE_REFERENCE pattern safe. Review put a
+        `**Deferred**` row naming `AGENTS.md:12` into the table at 6ee0968 and the suite stayed
+        green: the reader kept a token only if it held "/" or ended ".html", so the row was never
+        parsed and therefore never checked. Widening the pattern fixes that instance. Only this
+        rule fixes the class, because no pattern can be complete and a reader that skips what it
+        cannot read is a guard that passes by not looking.
+        """
+        for row in reconciliation_rows():
+            if not row["live"]:
+                continue
+            with self.subTest(digest=row["digest"][:12]):
+                self.assertTrue(
+                    row["files"] and row["target"],
+                    f"this reconciliation row states a live claim and yields no file and target "
+                    f"this reader can use, so nothing checks it. Its {TABLE_COLUMNS[SUMMARY_COLUMN]!r} "
+                    f"cell must name the file it waits on as a backticked path - optionally with a "
+                    f"`:line` suffix - followed by the backticked string that file still holds. "
+                    f"Row: {row['row']}")
+
     def test_registered_rows_still_fail(self) -> None:
         """The registered ROW is still present byte for byte, and its defect is still real.
 
@@ -384,7 +458,7 @@ class TestStaleRows(unittest.TestCase):
         """
         registered = {reg["digest"] for reg in STALE_ROWS.values()}
         for row in reconciliation_rows():
-            if row["digest"] in registered or not row["live"]:
+            if row["digest"] in registered or not row["live"] or not row["files"]:
                 continue
             for rel in row["files"]:
                 with self.subTest(file=rel, target=row["target"]):

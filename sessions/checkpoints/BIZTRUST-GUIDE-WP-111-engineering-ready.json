@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "BIZTRUST-GUIDE-WP-111-engineering-ready",
-  "created_at": "2026-09-08T06:47:04Z",
+  "created_at": "2026-09-08T08:12:33Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-111",
   "state": "ENGINEERING_READY",
   "objective": "Guard the stale-record class - a governance record asserting that work remains, when it has landed - with two offline checks and a ratchet registry (#349).",
@@ -13,11 +13,12 @@
   "completed": [
     "tests/test_stale_records.py: check A reads the reconciliation table SCOPED BY ITS HEADER, and check B reads BIZTRUST-PLAN-001 section 14, scoped by its heading. Both anchors are asserted, and both readers return empty rather than raising when their anchor is missing, so test_anchors_exist owns the diagnosis.",
     "THE RATCHET IS A DIGEST. Each registration carries the SHA-256 of the exact registered text - the reconciliation row, and the two section-14 bullets that make the contradiction - normalised for line ending and trailing whitespace and nothing else. The digests were computed by running the module's own digest(), not written by hand.",
+    "Check A's reader is scoped to the table's named COLUMNS - published summary and status, by index derived from the asserted header - recognises a file reference by one syntactic form rather than by two special cases, and returns EVERY data row. test_every_live_row_is_readable asserts that every live row yields a file and a target, so a row this reader cannot parse is a failure rather than a silent skip.",
     "The registered status word and the registered file tuple are DELETED. A matched digest fixes the row's whole text, so the row supplies its own files and its own target, and the 'defect is still really present' half reads THE FILES THE ROW NAMES. The registration identifies the record being ratcheted; it is never also the source of truth for what to check.",
     "Check B classifies by INDEPENDENT membership, not if/elif: a bullet joins landed if COMPLETION matches and outstanding if DEFERRAL matches, so one bullet carrying both vocabularies contradicts itself. Bullets matching neither are counted and the count registered.",
     "Both registries are ratchets: membership asserted, each entry asserted to still fail at exactly its registered digest, each required to carry a reason of more than twelve words and a well-formed SHA-256.",
     "Eleven negative controls in wp111_controls.py, each on a fresh copy with one mutation, the unmutated copy run first and green. Four are isolated; seven are declared not isolated in the module docstring, with what each additionally trips and why that second failure is also true.",
-    "286 tests OK (278 on main, 8 new); validate_continuity.py CONTINUITY_VALIDATION=PASS."
+    "287 tests OK (278 on main, 9 in this module); validate_continuity.py CONTINUITY_VALIDATION=PASS; 14 negative controls, 0 misbehaving."
   ],
   "remaining": [
     "The repairs themselves. #343 and #347 edit records and wait on #316's version rule.",
@@ -41,7 +42,7 @@
       "exit_code": 0
     },
     {
-      "command": "python wp111_controls.py <worktree> (11 negative controls, fresh copy each, unmutated copy first)",
+      "command": "python wp111_controls.py <worktree> (14 negative controls, fresh copy each, unmutated copy first)",
       "status": "PASS",
       "exit_code": 0
     }
@@ -53,15 +54,19 @@
     "Check B's fifth hole was unrelated and structural: 'if COMPLETION / elif DEFERRAL' is first-match-wins, so a bullet carrying both vocabularies joined one set only and could never intersect with itself. A reviewer wrote exactly that bullet and the guard stayed green. Independent membership fixes it and the control now fires in isolation.",
     "THE CONTROL SET IS RUN AGAINST AN UNMUTATED COPY FIRST. A control set measured against an already-red suite proves nothing, and every mutation asserts that the text it replaces was actually found, so a control cannot quietly become a no-op when the subject record is edited - which is how five controls shipped green in the first version.",
     "Seven of the eleven controls are NOT isolated, and that is declared rather than trimmed. Annotating a registered row's status trips both the registered arm (its digest changed) and the unregistered arm (the row stops being digest-skipped and still reads Deferred over an absent string). Both failures are true; a repair that instead marks the row `Updated` fires only the first, which is the shape of a correct repair.",
-    "A heredoc ate the escapes in a newline literal while patching the reader in an earlier round. That is the failure this session's notes already warn about: never write escape-bearing code through a heredoc."
+    "A heredoc ate the escapes in a newline literal while patching the reader in an earlier round. That is the failure this session's notes already warn about: never write escape-bearing code through a heredoc.",
+    "A THIRD REVIEW FOUND A THIRD BLIND SPOT AT 6ee0968, and it was not in the ratchet - it was in the reader underneath it. A **Deferred** row naming `AGENTS.md:12` over a string that file does not hold parsed into nothing, because a token counted as a file only if it held '/' or ended '.html'. The row did not exist as far as the guard was concerned. The same review found the status pattern searching the whole ROW, so a bold `Updated` in a CLAIM cell dropped a live row. The lesson is the module's own lesson one level down: the first two holes were a ratchet that compared a summary of a record, and this one is a READER that silently discards what it cannot parse. Both are guards that pass by not looking. The pattern fix would have closed the instance; making the reader's silence a failure is what closes the class.",
+    "THE CHECKPOINT ITSELF CARRIED THE OVERCLAIM, which is the finding that matters most here. Its assumptions said the row-count equality and the digest assertions 'both fail loudly if the shape changes', and the reviewer's row changed the shape while both stayed silent - the count was still three and neither registered digest moved. An assumption stated more confidently than the code supports is worse than none, because it tells the next reader not to look."
   ],
   "decisions": [
     "DEC-113",
-    "DEC-114"
+    "DEC-114",
+    "DEC-115"
   ],
   "assumptions": [
-    "That SOURCE_RECONCILIATION's rows keep naming their target in backticks. The row-count equality and the digest assertions both fail loudly if the shape changes, rather than reading nothing.",
-    "That the reconciliation table's status vocabulary stays `Updated in this change` and `Deferred`. A row given a third status is treated as making a live claim and would fail the unregistered arm; the row count is an equality, so a new row is a deliberate edit that should re-derive this module."
+    "That a row names the file it waits on in its published-summary cell, as a backticked path with a dot-extension and an optional `:line` suffix, followed by the backticked string that file still holds. This is NO LONGER load-bearing in the silent direction: test_every_live_row_is_readable asserts that every live row yields a file and a target, so a reference written in a form the reader does not know fails the suite rather than being skipped. An earlier version of this checkpoint claimed the row-count equality and the digest assertions would catch such a change; review showed they do not, because the count is unchanged and no registered digest moves.",
+    "That the reconciliation table's status vocabulary stays `Updated in this change` and `Deferred`. A row given a third status is treated as making a live claim and would fail the unregistered arm; the row count is an equality, so a new row is a deliberate edit that should re-derive this module.",
+    "That the table keeps four columns in the order its asserted header states. The reader takes the summary and status column indices from that header literal, and a row without exactly four cells is unreadable and therefore a failure, not a skip."
   ],
   "blockers": [],
   "authority": {
@@ -90,11 +95,12 @@
   },
   "declared_non_coverage": [
     "THE RATCHET ON REGISTERED DEFECTS IS EXACT - a SHA-256 of the record's text. THE DETECTION OF NEW, UNREGISTERED DEFECTS IS HEURISTIC: COMPLETION and DEFERRAL are regex vocabularies over English prose, and a contradiction written in wording neither knows is not caught. It lands in the unclassified bucket, whose SIZE is guarded and whose CONTENTS are not.",
+    "A STRUCTURAL LIMIT, NOT A PROSE ONE: check A recognises a file reference by one syntactic form - a backticked path with a dot-extension, optionally `:line`. That is incomplete and cannot be completed; `Makefile`, `LICENSE` and `.gitattributes` do not match it. What is guaranteed is not that every reference is recognised but that an unrecognised one in a LIVE row FAILS the suite: test_every_live_row_is_readable. Before this fix the recogniser was two special cases and an unrecognised row was silently dropped, which review demonstrated at 6ee0968 with a **Deferred** row naming `AGENTS.md:12`.",
     "Issue states are not checked. That needs the network and belongs to #311's advisory reconciliation.",
     "Ranges are read as their two literal endpoints. '#165 to #170' contributes #165 and #170 only, so #169 is not an intersection.",
     "Only the reconciliation table and PLAN-001 section 14 are read. The sweep that found these examined 65 lines across all tracked .md and .html; other records may carry the class and are not covered.",
-    "Check A's unregistered arm has no live subject today: the table's three rows are one 'Updated in this change' row with no backticked target and the two registered rows, which the digest skip removes. It is exercised by three of the negative controls and by the row-count equality, not by current content.",
-    "NEGATIVE CONTROLS THAT ARE NOT ISOLATED, seven of eleven, each declared in the module docstring with what else it trips: the three status/file edits to a registered row (registered arm AND unregistered arm), a row deleted (AND the row-count equality), an entry added to CONTRADICTED (AND the registered-contradiction assertion), the section 14 anchor renamed (three tests), and the table header renamed (two).",
+    "Check A's unregistered arm has no live subject today: the table's three rows are one 'Updated in this change' row, which states no live claim, and the two registered rows, which the digest skip removes. It is exercised by six of the negative controls and by the row-count equality, not by current content.",
+    "NEGATIVE CONTROLS THAT ARE NOT ISOLATED, seven of fourteen, each declared in the module docstring with what else it trips: the three status/file edits to a registered row (registered arm AND unregistered arm), a row deleted (AND the row-count equality), an entry added to CONTRADICTED (AND the registered-contradiction assertion), the section 14 anchor renamed (three tests), and the table header renamed (two).",
     "The module reads records, not repositories. It cannot tell whether a repair is CORRECT - only that the record it registered has changed and must be re-examined by a human."
   ]
 }
