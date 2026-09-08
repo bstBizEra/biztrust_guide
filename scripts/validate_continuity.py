@@ -13,12 +13,19 @@ Exit codes:
     130  FAIL - interrupted
 A consumer that treats any non-zero as failure is correct; 1 and 2 differ so
 that a reader knows which artifact to debug.
+
+On PASS the run also prints STATE_RECONCILIATION and its reason: the resume
+protocol's step 8, performed rather than asked for. It is ADVISORY - it reads
+git, reports one of four words about the record, and cannot fail the run. See
+`reconcile_recorded_state`.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
+import subprocess
 import sys
 import traceback
 from html.parser import HTMLParser
@@ -108,6 +115,203 @@ def heading_slug(title: str) -> str:
 def markdown_headings(source: str) -> set[str]:
     """Every anchor a Markdown document offers, from its ATX headings."""
     return {heading_slug(m.group(1)) for m in re.finditer(r"^#{1,6}\s+(.+?)\s*$", source, re.M)}
+
+
+# --- step 8: the recorded active Work Package against observed git ------------------------------
+#
+# AGENTS.md section 3 step 7 hands an agent this script; step 8 says "Reconcile observed state with
+# recorded state" and nothing performed it. Before WP-112 this file made no git call at all, so a
+# record naming BIZTRUST-GUIDE-WP-111 as the active package in a pre-merge state printed PASS while
+# that package's merge commit WAS main's HEAD.
+#
+# THE VERDICT IS ADVISORY AND MUST STAY SO. It never appends to `errors`, never changes the exit
+# code and never changes what this script validates. `.github/workflows/pages.yml` checks out with
+# `actions/checkout@v7` and no `fetch-depth`, so CI runs on a SHALLOW clone in which the recorded
+# baseline is simply not in the object database. A check that failed there would fail for a reason
+# that has nothing to do with the repository - the flakiness #311 keeps out of this suite. Where
+# the history needed to judge is absent the answer is UNKNOWN with the reason, never a convenient
+# guess: a wrong CONSISTENT is worse than an honest UNKNOWN, because the point of the line is that
+# a reader can trust step 8 without re-deriving it.
+RECONCILIATION_VOCABULARY = ("CONSISTENT", "LAG_EXPECTED", "DIVERGED", "UNKNOWN")
+
+# Read in this order. `origin/main` is the published main line; a clone that has it but no local
+# `main` is still judgeable. HEAD is deliberately NOT a fallback: on a Work Package branch HEAD
+# carries that package's own unmerged commits, and reading those as landings would report the
+# ordinary case - an agent working on a branch - as a reconciliation result about main.
+MAIN_REFS = ("refs/remotes/origin/main", "refs/heads/main")
+
+# A hung git must not hold up a workflow that runs on every push and every pull request. Each call
+# is read-only and bounded. SEVEN at worst, not six: there are six call sites, but the main-ref
+# lookup runs once per entry in MAIN_REFS, so a clone with no `origin/main` and a local `main`
+# spends two there. Worst-case budget is therefore 70 seconds, not 60.
+GIT_TIMEOUT_SECONDS = 10
+
+
+def git(root: Path, *args: str) -> tuple[int, str] | None:
+    """Run one read-only git command rooted at `root`.
+
+    Returns (exit code, stripped stdout), or None when git could not be run at all - not
+    installed, not executable, or over time. Every failure mode collapses to a value the caller
+    turns into UNKNOWN; none of them may raise, because this runs inside a validator whose
+    contract is that it prints exactly one verdict line.
+    """
+    try:
+        done = subprocess.run(
+            ["git", "-C", str(root), *args],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=GIT_TIMEOUT_SECONDS,
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return None
+    return done.returncode, done.stdout.strip()
+
+
+def reconcile_recorded_state(root: Path, current: dict) -> tuple[str, str]:
+    """Compare the RECORDED active Work Package against the OBSERVED main line.
+
+    Returns one member of RECONCILIATION_VOCABULARY and a single-line reason.
+
+    The four answers, in the order they are decided:
+
+    UNKNOWN       the history needed to judge is unavailable - no git, no repository, a shallow
+                  clone, no main ref, or a baseline commit this clone does not hold.
+    DIVERGED      the recorded baseline commit IS in this clone but is NOT an ancestor of the
+                  observed main line, so the main line does not descend from it. Nothing
+                  reachable from here says WHY the two parted, so this entry does not say.
+                  THIS WORD OVERSTATES ITS CASE, and issue #353 is open on it. It was written to
+                  mean a disagreement no ordering of merges explains; an ordering does explain
+                  one. A clone whose main ref has simply not been fetched sits BEHIND the
+                  recorded baseline, and that produces DIVERGED - the loudest of the four - for a
+                  stale ref rather than a fault. Measured: with `origin/main` at the commit
+                  before the baseline, this returns DIVERGED. Until #353 is answered, read
+                  DIVERGED as "these two do not line up", never as "something is wrong".
+    LAG_EXPECTED  the recorded package has already LANDED on the main line since that baseline.
+                  `badf/current-state.json` is written on a package's branch BEFORE its merge, so
+                  it cannot record its own merge; every merge leaves this window until the next
+                  package opens it. Normal, not a defect - and explicitly NOT work in progress,
+                  because the branch may still exist and an agent resuming from the record alone
+                  would reopen finished work.
+    CONSISTENT    the baseline is an ancestor and the recorded package has not landed.
+
+    CONSISTENT does not require the main line to be still AT the baseline. Another package
+    merging while this one is in flight is ordinary; what the record claims is that ITS package is
+    active, and that claim is true until that package lands. Reading any movement as lag would
+    make every normal merge look like a fault, which is the reason this vocabulary has four words
+    rather than two.
+    """
+    work_package = current.get("active_work_package")
+    source = current.get("source")
+    wp_id = work_package.get("id") if isinstance(work_package, dict) else None
+    baseline = source.get("baseline_commit") if isinstance(source, dict) else None
+    if not isinstance(wp_id, str) or not wp_id:
+        return "UNKNOWN", "the record carries no active Work Package id to reconcile"
+    if not isinstance(baseline, str) or not SHA40.fullmatch(baseline):
+        return "UNKNOWN", f"{wp_id}: the record carries no 40-character baseline commit"
+
+    top = git(root, "rev-parse", "--show-toplevel")
+    if top is None:
+        return "UNKNOWN", f"{wp_id}: git could not be run, so no history is observable"
+    if top[0] != 0 or not top[1]:
+        return "UNKNOWN", f"{wp_id}: {root} is not inside a git repository"
+    # An enclosing repository is not this one. Without this, a copy of the tree unpacked under
+    # some unrelated checkout would be reconciled against THAT repository's history and the answer
+    # would look authoritative.
+    if os.path.normcase(os.path.realpath(top[1])) != os.path.normcase(os.path.realpath(root)):
+        return "UNKNOWN", f"{wp_id}: {root} is not the root of the git repository that contains it"
+
+    shallow = git(root, "rev-parse", "--is-shallow-repository")
+    if shallow is None or shallow[0] != 0:
+        return "UNKNOWN", f"{wp_id}: git could not report whether this clone is shallow"
+    if shallow[1] == "true":
+        return "UNKNOWN", (
+            f"{wp_id}: this clone is shallow, so the history before HEAD is absent and no "
+            f"ancestry can be established (the Pages workflow checks out without fetch-depth)"
+        )
+
+    tip_ref = tip_sha = ""
+    for ref in MAIN_REFS:
+        resolved = git(root, "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}")
+        if resolved is not None and resolved[0] == 0 and SHA40.fullmatch(resolved[1]):
+            tip_ref, tip_sha = ref, resolved[1]
+            break
+    if not tip_sha:
+        return "UNKNOWN", (
+            f"{wp_id}: neither {' nor '.join(MAIN_REFS)} resolves here, so there is no observed "
+            f"main line to compare against"
+        )
+
+    held = git(root, "cat-file", "-e", f"{baseline}^{{commit}}")
+    if held is None:
+        return "UNKNOWN", f"{wp_id}: git could not be run, so no history is observable"
+    if held[0] != 0:
+        return "UNKNOWN", (
+            f"{wp_id}: the recorded baseline {baseline[:12]} is not in this clone's object "
+            f"database, so its relation to {tip_ref} cannot be established"
+        )
+
+    ancestry = git(root, "merge-base", "--is-ancestor", baseline, tip_sha)
+    if ancestry is None or ancestry[0] not in (0, 1):
+        return "UNKNOWN", f"{wp_id}: git could not decide whether {baseline[:12]} precedes {tip_ref}"
+    if ancestry[0] == 1:
+        # Say only what is known HERE. This branch is reachable only AFTER `cat-file -e` proved the
+        # baseline IS in the object database, so the earlier wording - "the record was branched
+        # from a history this repository does not carry" - was false in every case it could print.
+        # Measured on an orphan-branch fixture whose baseline `cat-file -e` accepts: the reason
+        # printed that clause verbatim. Two facts are established at this point and no others: the
+        # baseline is present, and `merge-base --is-ancestor` says the main line does not descend
+        # from it. Why they parted - a rebase, a force-push, a record from another line of work -
+        # is not something any call made here can distinguish, so it is not claimed.
+        return "DIVERGED", (
+            f"{wp_id}: the recorded baseline {baseline[:12]} is present in this clone but is not "
+            f"an ancestor of {tip_ref} ({tip_sha[:12]}), so the main line does not descend from "
+            f"where the record says it branched"
+        )
+
+    log = git(root, "log", "--format=%s", f"{baseline}..{tip_sha}")
+    if log is None or log[0] != 0:
+        return "UNKNOWN", f"{wp_id}: git could not list the commits between {baseline[:12]} and {tip_ref}"
+    subjects = [line for line in log[1].splitlines() if line.strip()]
+    # A package lands as a commit whose subject OPENS with its bracketed id - the convention every
+    # merge on this main line has followed. Matched at the start rather than anywhere in the
+    # subject, so a commit that merely mentions another package is not read as that package's
+    # landing.
+    landings = [subject for subject in subjects if subject.startswith(f"[{wp_id}]")]
+    if landings:
+        # BOTH numbers, because one of them alone was read as the other. This printed
+        # `len(landings)` inside a sentence ending "since the recorded baseline", so a tree with
+        # five commits since the baseline of which one was this package's merge announced
+        # "1 commit(s) since the recorded baseline" - a true count under a false description.
+        # Measured at 5 against a printed 1.
+        return "LAG_EXPECTED", (
+            f"{wp_id} has already landed on {tip_ref}: {len(landings)} of the {len(subjects)} "
+            f"commit(s) since the recorded baseline {baseline[:12]} land it; the record was "
+            f"written on that package's branch before its own merge and does NOT describe work "
+            f"still in progress"
+        )
+    return "CONSISTENT", (
+        f"{wp_id} has not landed on {tip_ref}; {len(subjects)} commit(s) have landed since the "
+        f"recorded baseline {baseline[:12]} and none of them is this package"
+    )
+
+
+def reconcile_safely(root: Path, current: dict) -> tuple[str, str]:
+    """`reconcile_recorded_state`, with the guarantee that it cannot break the validator.
+
+    An advisory line is not worth a traceback in place of a verdict. Anything unforeseen here
+    becomes UNKNOWN, which is exactly what UNKNOWN is for.
+    """
+    try:
+        verdict, reason = reconcile_recorded_state(root, current)
+    except Exception as exc:  # noqa: BLE001 - advisory output must never fail the run
+        # `Exception`, NOT `BaseException`. This caught BaseException, so a Ctrl-C landing inside
+        # step 8 became UNKNOWN and the run exited 0 - contradicting this file's own documented
+        # `130 FAIL - interrupted`, and reporting a clean pass for a run the operator stopped.
+        # KeyboardInterrupt and SystemExit now travel to the handler at the bottom of this file,
+        # which is where the exit codes are decided.
+        return "UNKNOWN", f"the reconciliation itself failed: {type(exc).__name__}: {exc}"
+    if verdict not in RECONCILIATION_VOCABULARY:
+        return "UNKNOWN", f"the reconciliation returned {verdict!r}, which is not in the vocabulary"
+    return verdict, " ".join(str(reason).split())
 
 
 def main() -> int:
@@ -501,11 +705,24 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
 
+    # COMPUTED BEFORE THE VERDICT LINE, printed after it. Narrowing the catch in
+    # `reconcile_safely` to Exception lets a KeyboardInterrupt out of step 8 - which is the point,
+    # so that an interrupted run exits 130 as this file documents - but when step 8 ran AFTER the
+    # PASS line, that interrupt put a second CONTINUITY_VALIDATION line on stdout and a consumer
+    # grepping for PASS found one on a run the operator had stopped. Measured: PASS then FAIL,
+    # exit 130. Computing here costs nothing on a failing run, which has already returned above.
+    verdict, reason = reconcile_safely(ROOT, current)
+
     print("CONTINUITY_VALIDATION=PASS")
     for check in checks:
         print(f"PASS: {check}")
     print(f"RESUME_DECISION={current.get('resume_decision', 'UNKNOWN')}")
     print(f"PRIMARY_NEXT_ACTION={current.get('primary_next_action_id', 'UNKNOWN')}")
+    # Step 8, beside the two lines an agent already reads at step 7, so it is seen without being
+    # told to look. Below the verdict because it is advisory: it is one of four words about the
+    # RECORD, not a check that can fail.
+    print(f"STATE_RECONCILIATION={verdict}")
+    print(f"STATE_RECONCILIATION_REASON={reason}")
     return 0
 
 
