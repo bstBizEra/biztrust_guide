@@ -120,7 +120,11 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     measures `**Not yet Updated**` failing. The earlier wording called this class "a record
     under-claiming", which was not true of a negation and was not what the code did either.
     Judging whether a correctly-formed status is factually right is the repair judgement #316
-    owns, so it is declared here rather than checked.
+    owns, so it is declared here rather than checked. Two follow-ons are recorded and deliberately
+    not acted on: restatusing the real reconciled row fails `test_every_live_row_is_readable` with
+    a message about file-reference syntax rather than about the status - fail-closed but
+    misdirecting - and this hole is PARTLY closable, since "the target is absent from the file the
+    row names" is the assertion the registered arm already makes.
 
 CORPUS FLOOR. `test_anchors_exist` asserts a floor near the true corpus size rather than merely
 non-empty, as `test_adr_citations.py` and `test_btg1_matrix_reconciles.py` do. Non-empty was an
@@ -141,10 +145,13 @@ CI - nineteen fresh-copy suite runs is too slow for every push, and the sibling 
 not CI-run either - and the script names that rot risk in its own docstring: a control script nothing
 runs looks like evidence and is not.
 
-Five of these shapes were measured GREEN under an earlier version of this module: the first four at
-the first two mechanisms, the one-bullet contradiction at the classifier, `AGENTS.md:12` at 6ee0968,
-`Makefile:3` beside a readable sibling at 5efb267, and the two status shapes at a176856. Every one
-was a sentence in this docstring that turned out to be false. Prefer a claim a control measures.
+Ten of these shapes were measured GREEN under an earlier version of this module: the first four at
+the first two mechanisms, the one-bullet contradiction at the classifier, `AGENTS.md:12` and a bold
+`Updated` in a CLAIM cell at 6ee0968, `Makefile:3` beside a readable sibling at 5efb267, and the two
+status shapes at a176856. Every one was a sentence in this docstring that turned out to be false.
+Prefer a claim a control measures. (The eleventh candidate, a live row naming `Makefile:3` and
+nothing readable, would also have been green then. It is NOT counted here, because nobody ran it:
+it was built after the fix to demonstrate the class. "Measured" is the whole point of the number.)
 
 ISOLATED - exactly one test fails:
   * the ADR row repointed at a file that DOES hold the string -> test_registered_rows_still_fail
