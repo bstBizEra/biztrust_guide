@@ -66,14 +66,24 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
  4. Only the reconciliation table and PLAN-001 section 14 are read. The sweep that found these
     examined 65 lines across all tracked `.md` and `.html`; other records may carry the class.
  5. Check A's unregistered arm has no live subject today. Of the table's three rows, one is
-    exempted by its `Updated` status - on its own word, see rule 8, not on any check - and the two
-    registered rows are removed by the digest skip. The arm is exercised by seven of the fifteen
-    negative controls and by the row-count equality, not by current content.
- 6. A row is read as making a live claim unless its STATUS CELL names it as `Updated`. A row given
-    some third status - `**Closed**`, say - is still required to hold its string, and would fail
-    loudly. That is deliberate: the table's vocabulary today is exactly `Updated in this change`
-    and `Deferred`, the row count is asserted as an equality, so a third status is a deliberate
-    edit that should re-derive this module rather than pass through it.
+    exempted by its `Updated in this change` status - on its own word, see rule 8, not on any
+    check - and the two registered rows are removed by the digest skip. The arm is exercised by ten
+    of the nineteen negative controls and by the row-count equality, not by current content.
+ 6. A row is EXEMPT from check A only when its status cell OPENS with exactly the string
+    `Updated in this change`. Every other status is a live claim and the row must hold its string.
+
+    Each clause of that sentence is written from a control that measures it, because the previous
+    version of this limit was measured FALSE - twice over - while reading as though it were
+    obviously true:
+      * `**Closed**` over an absent string        -> test_no_unregistered_stale_rows FAILS
+      * `**Not yet Updated**`, a NEGATION          -> test_no_unregistered_stale_rows FAILS
+      * `**Deferred**` whose prose adds that
+        `index.html` was `**Updated in this
+        change**` but this file was not            -> test_no_unregistered_stale_rows FAILS
+    The last two were GREEN at a176856 and are the reason this limit is now three properties rather
+    than a claim: the match is ANCHORED to the start of the status cell, compares the WHOLE leading
+    bold run, and tests it for EXACT equality against one registered string. A search anywhere in
+    the cell is what let a negation and a passing mention of another file exempt a stale row.
  7. A file reference is recognised by ONE syntactic form: a backticked path with a dot-extension,
     optionally suffixed `:line`. That is not complete and cannot be - `Makefile`, `LICENSE` and
     `.gitattributes` do not match it.
@@ -83,8 +93,10 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     least one file and a target result. Not "at least one is recognised": a token this pattern
     cannot read fails the suite even when a sibling token in the same cell parses.
 
-    WHAT IS NOT CHECKED. That the recognised path is the RIGHT file - only that the string is
-    absent from it. Backticked tokens anywhere but the published-summary cell; a file reference
+    WHAT IS NOT CHECKED. That the recognised path is the RIGHT file: the two arms assert opposite
+    things about it - a REGISTERED row's target must be ABSENT from the files that row names, an
+    unregistered live row's target must be PRESENT - and neither asks whether the row named the
+    file it meant. Backticked tokens anywhere but the published-summary cell; a file reference
     written in a claim or owner cell is not read at all. And nothing in a row exempted by rule 8.
 
     Both halves of this limit were once written more confidently than the code supported. Review
@@ -94,12 +106,21 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     SOME file, so `Makefile:3` beside a path that parses vanished just as quietly. Each was a
     record promising more than the code delivered, which is the defect class this whole module is
     about, turned on the module itself.
- 8. A row whose status cell says `Updated` is EXEMPT from rule 7 and from check A entirely. Its
-    status is taken at its word and never verified: nothing here reads whether a reconciled row's
-    summary really was reconciled. A row wrongly marked `Updated` is therefore invisible to this
-    module. That is a record UNDER-claiming rather than over-claiming - a different defect class
-    from the one #349 guards - and judging whether a status is correct is the repair judgement
-    #316 owns, so it is declared here rather than checked.
+ 8. THE ONE DECLARED HOLE, and a control demonstrates it rather than this sentence asserting it.
+    A row whose status cell opens with exactly `Updated in this change` is exempt from rule 7 and
+    from check A entirely, and that word is never verified. A row so marked whose file does NOT
+    hold the string - a reconciliation that did not happen - is invisible here:
+      * `**Updated in this change**; it was not`,
+        over a target absent from the file named   -> the suite stays GREEN, by design
+    That control expects green, and `scripts/wp111_controls.py` fails if it ever goes red, because
+    a hole that has closed needs its limit re-derived rather than left standing.
+
+    The exemption is narrow, and the boundary was drawn wrongly once. It covers ONLY a status that
+    is correctly formed and factually wrong. A malformed or NEGATED status exempts nothing: rule 6
+    measures `**Not yet Updated**` failing. The earlier wording called this class "a record
+    under-claiming", which was not true of a negation and was not what the code did either.
+    Judging whether a correctly-formed status is factually right is the repair judgement #316
+    owns, so it is declared here rather than checked.
 
 CORPUS FLOOR. `test_anchors_exist` asserts a floor near the true corpus size rather than merely
 non-empty, as `test_adr_citations.py` and `test_btg1_matrix_reconciles.py` do. Non-empty was an
@@ -111,13 +132,19 @@ their anchor is missing rather than raising, as `test_btg1_matrix_reconciles.mat
 `test_anchors_exist` owns the diagnosis and a renamed heading reports the heading rather than a
 `ValueError` from the middle of a reader.
 
-NEGATIVE CONTROLS, fifteen of them, re-run 2026-09-08 by `wp111_controls.py`: each on a fresh copy
-of the worktree, one mutation apiece, `unittest discover -s tests -p test_stale_records.py` from
-that copy's root, with the unmutated copy run first and green. Every mutation asserts that the text
-it replaces was found, so a control cannot quietly become a no-op. The first four shapes, and the
-one-bullet contradiction, are what two independent reviews measured as GREEN under earlier
-mechanisms; the next three are what a third review measured as GREEN at 6ee0968, and the last is
-what a fourth measured as GREEN at 5efb267.
+NEGATIVE CONTROLS, nineteen of them, run by `scripts/wp111_controls.py` - a committed script, not
+a prose claim. Each control copies the repository to a fresh directory, applies one mutation, runs
+`unittest discover -s tests -p test_stale_records.py` from that copy's root, and asserts the named
+test fails; the unmutated copy is run first and must be green. Every mutation asserts that the text
+it replaces was found, so a control cannot quietly become a no-op. It is deliberately NOT wired into
+CI - nineteen fresh-copy suite runs is too slow for every push, and the sibling guards' controls are
+not CI-run either - and the script names that rot risk in its own docstring: a control script nothing
+runs looks like evidence and is not.
+
+Five of these shapes were measured GREEN under an earlier version of this module: the first four at
+the first two mechanisms, the one-bullet contradiction at the classifier, `AGENTS.md:12` at 6ee0968,
+`Makefile:3` beside a readable sibling at 5efb267, and the two status shapes at a176856. Every one
+was a sentence in this docstring that turned out to be false. Prefer a claim a control measures.
 
 ISOLATED - exactly one test fails:
   * the ADR row repointed at a file that DOES hold the string -> test_registered_rows_still_fail
@@ -131,11 +158,17 @@ ISOLATED - exactly one test fails:
   * `Makefile:3` beside a path that DOES parse, over a target
     that file really holds - the unreadable reference hiding
     behind a readable sibling, with nothing else to fail on   -> test_every_live_row_is_readable
+  * a status reading `**Not yet Updated**` - a NEGATION       -> test_no_unregistered_stale_rows
+  * a `**Deferred**` status whose prose adds that `index.html`
+    was `**Updated in this change**` but this file was not    -> test_no_unregistered_stale_rows
+  * a third status, `**Closed**`, over an absent string       -> test_no_unregistered_stale_rows
 
-Each of the last four swaps the reconciled row for a new `**Deferred**` row, so the row count stays
-3 and the corpus floor stays silent: what they measure is the reader, not the floor. The first three
-wait on a string no tracked file holds; the fourth deliberately does NOT, so that the only thing
-that can fail is the completeness of the reference check itself.
+EXPECTED GREEN - the one declared hole, demonstrated rather than asserted (limit 8):
+  * `**Updated in this change**; it was not`, over a target
+    absent from the file the row names                        -> nothing fails, by design
+
+Each of the last eight swaps the reconciled row for a new row, so the row count stays 3 and the
+corpus floor stays silent: what they measure is the reader, not the floor.
 
 NOT ISOLATED, and declared rather than trimmed, as `tests/test_stale_asks.py` and
 `tests/test_btg1_matrix_reconciles.py` declare of their own. What each breaks really does break more
@@ -146,7 +179,7 @@ than one rule, and saying otherwise would be false precision:
     Each changes the row's digest, so the row stops being skipped as registered, and it still reads
     `Deferred` over a string its files do not hold. Both failures are true: the registration no
     longer describes the row, and the row still misinforms a reader. A repair that instead marked
-    the row `Updated` would fire only the first.
+    the row `Updated in this change` would fire only the first.
   * a registered row deleted outright     -> test_registered_rows_still_fail and test_anchors_exist,
                                              whose row count is an equality
   * an entry added to CONTRADICTED        -> test_registries_are_exactly_these and
@@ -212,10 +245,36 @@ TABLE_COLUMNS = tuple(c.strip() for c in TABLE_HEADER.strip().strip("|").split("
 SUMMARY_COLUMN = TABLE_COLUMNS.index("Published summary")
 STATUS_COLUMN = TABLE_COLUMNS.index("Status")
 
-# A row whose STATUS CELL names it as `Updated` has already been reconciled and makes no live claim
-# that a file still holds a string. Matched on the whole bold run, not on its first word: the
-# first-word comparison is what `**Deferred (closed by b93c701)**` walked through twice.
-RECONCILED = re.compile(r"\*\*[^*]*\bUpdated\b[^*]*\*\*")
+# A row is reconciled - it makes no live claim that a file still holds a string - when its status
+# cell OPENS with exactly the reconciled vocabulary. Three properties, and each was learned from a
+# measured false negative rather than reasoned out:
+#
+#   ANCHORED. `LEADING_STATUS` matches at the start of the status cell. The previous version
+#   SEARCHED the cell, so any bold run anywhere in it holding the word `Updated` exempted the row
+#   from check A entirely. Review measured two: `**Not yet Updated**` - a negation - and a
+#   `**Deferred**` row whose prose said `index.html` was `**Updated in this change**` but this file
+#   was not. Both were rows asserting a string is still in a file that does not hold it, and both
+#   were green at a176856.
+#
+#   WHOLE RUN. The run is compared entire, never by a prefix or a contained word. The first-word
+#   comparison is what `**Deferred (closed by b93c701)**` walked through twice.
+#
+#   EXACT. Equality against one registered string, not a pattern. A status this module does not
+#   know is treated as a LIVE claim and is checked, which is the safe direction: an unrecognised
+#   status gets read, not waved through.
+#
+# The shape of this bug is the shape of the two before it - a reader scoped to the right place but
+# matching loosely inside it. `FILE_REFERENCE` is fully anchored for the same reason. `COMPLETION`,
+# `DEFERRAL` and `ISSUE` remain deliberate SEARCHES: they read running prose for a vocabulary, and
+# limit 1 declares that as heuristic rather than pretending otherwise.
+RECONCILED_STATUS = "Updated in this change"
+LEADING_STATUS = re.compile(r"^\*\*([^*]+)\*\*")
+
+
+def reconciled(status_cell: str) -> bool:
+    """True only when the status cell OPENS with exactly the reconciled vocabulary."""
+    opening = LEADING_STATUS.match(status_cell.strip())
+    return bool(opening) and opening.group(1).strip() == RECONCILED_STATUS
 
 # A backticked file reference: a path, optionally with a `:line` suffix. ONE syntactic form.
 #
@@ -339,7 +398,7 @@ def reconciliation_rows() -> list[dict]:
             "unreadable": unreadable,
             "target": target,
             "digest": digest(row),
-            "live": not (parts and RECONCILED.search(parts[STATUS_COLUMN])),
+            "live": not (parts and reconciled(parts[STATUS_COLUMN])),
             "row": row.strip(),
         })
     return out

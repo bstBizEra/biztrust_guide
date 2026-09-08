@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "checkpoint_id": "BIZTRUST-GUIDE-WP-111-engineering-ready",
-  "created_at": "2026-09-08T09:31:18Z",
+  "created_at": "2026-09-08T11:04:52Z",
   "work_package_id": "BIZTRUST-GUIDE-WP-111",
   "state": "ENGINEERING_READY",
   "objective": "Guard the stale-record class - a governance record asserting that work remains, when it has landed - with two offline checks and a ratchet registry (#349).",
@@ -13,12 +13,13 @@
   "completed": [
     "tests/test_stale_records.py: check A reads the reconciliation table SCOPED BY ITS HEADER, and check B reads BIZTRUST-PLAN-001 section 14, scoped by its heading. Both anchors are asserted, and both readers return empty rather than raising when their anchor is missing, so test_anchors_exist owns the diagnosis.",
     "THE RATCHET IS A DIGEST. Each registration carries the SHA-256 of the exact registered text - the reconciliation row, and the two section-14 bullets that make the contradiction - normalised for line ending and trailing whitespace and nothing else. The digests were computed by running the module's own digest(), not written by hand.",
-    "Check A's reader is scoped to the table's named COLUMNS - published summary and status, by index derived from the asserted header - recognises a file reference by one syntactic form rather than by two special cases, and returns EVERY data row. test_every_live_row_is_readable asserts COMPLETENESS: every backticked token before the target in a live row's summary cell must be recognised, so neither an unparsed row nor an unparsed reference beside a parsed sibling can be skipped in silence.",
+    "Check A's reader is scoped to the table's named COLUMNS and matched exactly inside them: a row is exempt only when its status cell OPENS with exactly `Updated in this change` (anchored, whole leading bold run, exact equality), a file reference is recognised by one fully anchored syntactic form, and test_every_live_row_is_readable asserts COMPLETENESS - every backticked token before the target in a live row must be recognised. Neither an unparsed row, an unparsed reference beside a parsed sibling, nor a negated status can be skipped in silence.",
     "The registered status word and the registered file tuple are DELETED. A matched digest fixes the row's whole text, so the row supplies its own files and its own target, and the 'defect is still really present' half reads THE FILES THE ROW NAMES. The registration identifies the record being ratcheted; it is never also the source of truth for what to check.",
     "Check B classifies by INDEPENDENT membership, not if/elif: a bullet joins landed if COMPLETION matches and outstanding if DEFERRAL matches, so one bullet carrying both vocabularies contradicts itself. Bullets matching neither are counted and the count registered.",
     "Both registries are ratchets: membership asserted, each entry asserted to still fail at exactly its registered digest, each required to carry a reason of more than twelve words and a well-formed SHA-256.",
     "Eleven negative controls in wp111_controls.py, each on a fresh copy with one mutation, the unmutated copy run first and green. Four are isolated; seven are declared not isolated in the module docstring, with what each additionally trips and why that second failure is also true.",
-    "287 tests OK (278 on main, 9 in this module); validate_continuity.py CONTINUITY_VALIDATION=PASS; 15 negative controls, 0 misbehaving."
+    "287 tests OK (278 on main, 9 in this module); validate_continuity.py CONTINUITY_VALIDATION=PASS; scripts/wp111_controls.py 19 controls, 0 misbehaving.",
+    "The negative-control runner is COMMITTED at scripts/wp111_controls.py - not tests/, so discovery does not collect it and the suite keeps its no-subprocess property - and is deliberately not wired into CI. It carries one control that expects the suite to stay GREEN, which demonstrates the module's single declared hole instead of asserting it, and it names its own rot risk: a control script nothing runs looks like evidence and is not."
   ],
   "remaining": [
     "The repairs themselves. #343 and #347 edit records and wait on #316's version rule.",
@@ -26,7 +27,9 @@
   ],
   "files_changed": [
     "tests/test_stale_records.py",
+    "scripts/wp111_controls.py",
     "badf/current-state.json",
+    "badf/next-actions.json",
     "badf/decision-log.jsonl",
     "sessions/checkpoints/BIZTRUST-GUIDE-WP-111-engineering-ready.json"
   ],
@@ -42,7 +45,7 @@
       "exit_code": 0
     },
     {
-      "command": "python wp111_controls.py <worktree> (15 negative controls, fresh copy each, unmutated copy first)",
+      "command": "python scripts/wp111_controls.py (19 negative controls, fresh copy each, unmutated copy first, one expecting GREEN)",
       "status": "PASS",
       "exit_code": 0
     }
@@ -57,17 +60,19 @@
     "A heredoc ate the escapes in a newline literal while patching the reader in an earlier round. That is the failure this session's notes already warn about: never write escape-bearing code through a heredoc.",
     "A THIRD REVIEW FOUND A THIRD BLIND SPOT AT 6ee0968, and it was not in the ratchet - it was in the reader underneath it. A **Deferred** row naming `AGENTS.md:12` over a string that file does not hold parsed into nothing, because a token counted as a file only if it held '/' or ended '.html'. The row did not exist as far as the guard was concerned. The same review found the status pattern searching the whole ROW, so a bold `Updated` in a CLAIM cell dropped a live row. The lesson is the module's own lesson one level down: the first two holes were a ratchet that compared a summary of a record, and this one is a READER that silently discards what it cannot parse. Both are guards that pass by not looking. The pattern fix would have closed the instance; making the reader's silence a failure is what closes the class.",
     "THE CHECKPOINT ITSELF CARRIED THE OVERCLAIM, which is the finding that matters most here. Its assumptions said the row-count equality and the digest assertions 'both fail loudly if the shape changes', and the reviewer's row changed the shape while both stayed silent - the count was still three and neither registered digest moved. An assumption stated more confidently than the code supports is worse than none, because it tells the next reader not to look.",
-    "THREE OVERCLAIMS ON ONE MODULE IN THREE ROUNDS, each smaller than the last, each a record promising more than the code delivered - which is the exact defect class this module exists to guard. The ratchet claimed to notice a repaired row and compared a summary of it. The reader claimed to check the files a row names and silently dropped rows it could not parse. The readability rule claimed an unrecognised reference FAILS and asserted only that some reference parsed, so `Makefile:3` beside a path that parses vanished with the suite green at 5efb267. The through-line is not carelessness about code; it is wording chosen because it read well rather than because it had been measured. The working rule for the next round: write the control first, then write the sentence the control proves."
+    "THREE OVERCLAIMS ON ONE MODULE IN THREE ROUNDS, each smaller than the last, each a record promising more than the code delivered - which is the exact defect class this module exists to guard. The ratchet claimed to notice a repaired row and compared a summary of it. The reader claimed to check the files a row names and silently dropped rows it could not parse. The readability rule claimed an unrecognised reference FAILS and asserted only that some reference parsed, so `Makefile:3` beside a path that parses vanished with the suite green at 5efb267. The through-line is not carelessness about code; it is wording chosen because it read well rather than because it had been measured. The working rule for the next round: write the control first, then write the sentence the control proves.",
+    "FIVE OVERCLAIMS ON ONE MODULE IN FIVE ROUNDS, and the fifth was a live false negative rather than only a wrong sentence: the status match was a SEARCH over the status cell, so `**Not yet Updated**` - a negation - and a `**Deferred**` row whose prose mentioned another file as updated both exempted themselves from check A and passed. The shape repeats exactly: scope the reader correctly, then match loosely inside the scope. Round 3 fixed the column, round 4 fixed the reference set, round 5 fixed the match. Every match in the module was audited in this pass rather than the one review named, and this was the only search that should have been an anchor. The durable answer is not better sentences: the control runner is now committed, and the one limit that cannot be proved by a failing control is proved by a control that expects green."
   ],
   "decisions": [
     "DEC-113",
     "DEC-114",
     "DEC-115",
-    "DEC-116"
+    "DEC-116",
+    "DEC-117"
   ],
   "assumptions": [
     "That a row names the file it waits on in its published-summary cell, as a backticked path with a dot-extension and an optional `:line` suffix, followed by the backticked string that file still holds. This is NOT load-bearing in the silent direction: test_every_live_row_is_readable asserts that EVERY backticked token before the target in a live row is recognised, so a reference written in a form the reader does not know fails the suite - whether it stands alone or beside a sibling that parses. Two earlier statements of this assumption were measured false by review and are recorded in observations.",
-    "That the reconciliation table's status vocabulary stays `Updated in this change` and `Deferred`. A row given a third status is treated as making a live claim and would fail the unregistered arm; the row count is an equality, so a new row is a deliberate edit that should re-derive this module.",
+    "That the table's reconciled status stays exactly `Updated in this change`. This is a narrower assumption than it looks: the string is compared for EXACT equality against the leading bold run of the status cell, so any other status - a third word, a negation, a malformed cell - is read as a LIVE claim and the row is checked. Three controls measure that: `**Closed**`, `**Not yet Updated**`, and a `**Deferred**` cell whose prose says another file was updated, each over an absent string, each failing test_no_unregistered_stale_rows. The earlier statement of this assumption said a third status 'would fail the unregistered arm' and was measured FALSE for the last two shapes at a176856, because the match was a search over the whole cell. What remains genuinely assumed is only that a row whose status opens with that exact string really was reconciled - the hole declared below, demonstrated by a control that expects the suite to stay green.",
     "That the table keeps four columns in the order its asserted header states. The reader takes the summary and status column indices from that header literal, and a row without exactly four cells is unreadable and therefore a failure, not a skip."
   ],
   "blockers": [],
@@ -84,6 +89,7 @@
     "first_safe_command": "python -m unittest discover -s tests -p 'test_stale_records.py'",
     "read_first": [
       "tests/test_stale_records.py",
+      "scripts/wp111_controls.py",
       "https://github.com/bstBizEra/biztrust_guide/issues/349",
       "tests/test_btg1_matrix_reconciles.py",
       "tests/test_stale_asks.py"
@@ -92,18 +98,20 @@
       "An entry is ADDED to STALE_ROWS or CONTRADICTED. A registry entry may only leave, when its defect is repaired; adding one quiets the guard with the defect it was built to catch.",
       "A registered digest is RE-HASHED to match a changed record. That is the same thing as adding an entry, dressed as maintenance: the digest is the ratchet, and re-computing it after a repair retires nothing while pretending the defect is still open.",
       "The guard is made to read issue states. The suite has no network import and #311 exists to keep it so.",
-      "A registered entry is removed without the corresponding record actually being repaired."
+      "A registered entry is removed without the corresponding record actually being repaired.",
+      "A limit in the module docstring is edited without a control that measures it. Five of those sentences have been measured false by review; on this module, write the control first and then the sentence the control proves."
     ]
   },
   "declared_non_coverage": [
     "THE RATCHET ON REGISTERED DEFECTS IS EXACT - a SHA-256 of the record's text. THE DETECTION OF NEW, UNREGISTERED DEFECTS IS HEURISTIC: COMPLETION and DEFERRAL are regex vocabularies over English prose, and a contradiction written in wording neither knows is not caught. It lands in the unclassified bucket, whose SIZE is guarded and whose CONTENTS are not.",
-    "A STRUCTURAL LIMIT, NOT A PROSE ONE. Check A recognises a file reference by one syntactic form - a backticked path with a dot-extension, optionally `:line`. That is incomplete and cannot be completed; `Makefile`, `LICENSE` and `.gitattributes` do not match it. WHAT IS CHECKED: in a LIVE row, every backticked token before the last one in the published-summary cell must be recognised, and at least one file and a target must result - completeness, not 'at least one parsed'. WHAT IS NOT CHECKED: whether a recognised path is the RIGHT file (only that the target string is absent from it); backticked tokens anywhere but the published-summary cell, so a file reference written in a claim or owner cell is not read at all; and any row exempted by the next item. Both halves of this limit were once stated more confidently than the code supported - review found the predecessor recogniser dropping a `**Deferred**` row that named `AGENTS.md:12` at 6ee0968, and then found this rule dropping `Makefile:3` beside a path that parses at 5efb267. The wording here is now what the controls measure.",
-    "A row whose status cell says `Updated` is EXEMPT from check A entirely, and its status is taken at its word: nothing here reads whether a reconciled row's summary really was reconciled. A row WRONGLY marked `Updated` is invisible to this module. That is a record under-claiming rather than over-claiming, a different defect class from the one #349 guards, and judging whether a status is correct is the repair judgement #316 owns - so it is declared here and deliberately not checked. The current table's one reconciled row is exempted on this basis and its status has not been verified by any test.",
+    "A STRUCTURAL LIMIT, NOT A PROSE ONE. Check A recognises a file reference by one syntactic form - a backticked path with a dot-extension, optionally `:line`, fully anchored. That is incomplete and cannot be completed; `Makefile`, `LICENSE` and `.gitattributes` do not match it. WHAT IS CHECKED: in a LIVE row, every backticked token before the last one in the published-summary cell must be recognised, and at least one file and a target must result - completeness, not 'at least one parsed'. WHAT IS NOT CHECKED: whether a recognised path is the RIGHT file - the two arms assert opposite things about it, a registered row's target must be ABSENT from the files that row names and an unregistered live row's target must be PRESENT, and neither asks whether the row named the file it meant; backticked tokens anywhere but the published-summary cell, so a file reference written in a claim or owner cell is not read at all; and any row exempted by the next item. Both halves of this limit were once stated more confidently than the code supported - review found the predecessor recogniser dropping a `**Deferred**` row that named `AGENTS.md:12` at 6ee0968, and then found this rule dropping `Makefile:3` beside a path that parses at 5efb267. The wording here is now what the controls measure.",
+    "THE ONE DECLARED HOLE, and a control demonstrates it rather than this sentence asserting it. A row whose status cell opens with exactly `Updated in this change` is exempt from check A entirely and that word is never verified, so a reconciliation that did not happen is invisible here. scripts/wp111_controls.py runs that case - `**Updated in this change**; it was not`, over a target absent from the file the row names - and EXPECTS the suite to stay green; if it ever goes red the hole has closed and this limit must be re-derived rather than left standing. The exemption is narrow and its boundary was drawn wrongly once: it covers ONLY a status that is correctly formed and factually wrong. A malformed or NEGATED status exempts nothing - `**Not yet Updated**` is measured failing - and the earlier wording calling this class 'a record under-claiming' was true of neither the negation nor the code. Judging whether a correctly-formed status is factually right is the repair judgement #316 owns, so it is declared here and deliberately not checked.",
     "Issue states are not checked. That needs the network and belongs to #311's advisory reconciliation.",
     "Ranges are read as their two literal endpoints. '#165 to #170' contributes #165 and #170 only, so #169 is not an intersection.",
     "Only the reconciliation table and PLAN-001 section 14 are read. The sweep that found these examined 65 lines across all tracked .md and .html; other records may carry the class and are not covered.",
-    "Check A's unregistered arm has no live subject today: of the table's three rows, one is exempted by its Updated status - on its own word, per the item above, not on any check - and the two registered rows are removed by the digest skip. The arm is exercised by seven of the fifteen negative controls and by the row-count equality, not by current content.",
-    "NEGATIVE CONTROLS THAT ARE NOT ISOLATED, seven of fifteen, each declared in the module docstring with what else it trips: the three status/file edits to a registered row (registered arm AND unregistered arm), a row deleted (AND the row-count equality), an entry added to CONTRADICTED (AND the registered-contradiction assertion), the section 14 anchor renamed (three tests), and the table header renamed (two).",
-    "The module reads records, not repositories. It cannot tell whether a repair is CORRECT - only that the record it registered has changed and must be re-examined by a human."
+    "Check A's unregistered arm has no live subject today: of the table's three rows, one is exempted by its `Updated in this change` status - on its own word, per the item above, not on any check - and the two registered rows are removed by the digest skip. The arm is exercised by ten of the nineteen negative controls and by the row-count equality, not by current content.",
+    "NEGATIVE CONTROLS THAT ARE NOT ISOLATED, seven of nineteen, each declared in the module docstring with what else it trips: the three status/file edits to a registered row (registered arm AND unregistered arm), a row deleted (AND the row-count equality), an entry added to CONTRADICTED (AND the registered-contradiction assertion), the section 14 anchor renamed (three tests), and the table header renamed (two).",
+    "The module reads records, not repositories. It cannot tell whether a repair is CORRECT - only that the record it registered has changed and must be re-examined by a human.",
+    "scripts/wp111_controls.py IS NOT RUN BY CI, deliberately: nineteen fresh-copy suite runs is too slow for every push, and the sibling guards' controls are not CI-run either. Its results are therefore evidence of the tree at the commit someone last ran it against, not a standing guarantee. The script says so in its own docstring. Nothing detects it rotting."
   ]
 }
