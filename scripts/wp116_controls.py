@@ -12,21 +12,32 @@ Each control copies the repository, applies ONE mutation, runs
 
     python -m unittest discover -s tests -p test_resume_protocol_command.py -v
 
-from that copy's root, and asserts the NAMED test fails. One control expects the suite to stay
-GREEN and says why in its own docstring - a guard that rejects legitimate dual-platform content
-would get switched off, and that is not optional to demonstrate. The runner fails if that control
-ever goes red, exactly as wp115's runner does for its own GREEN-expecting controls.
+from that copy's root, and asserts the NAMED test fails. Two controls expect the suite to stay
+GREEN and say why in their own docstrings - a guard that rejects legitimate content gets switched
+off, and a false failure is worse than a miss. The runner fails if either goes red, exactly as
+wp115's runner does for its own GREEN-expecting controls.
 
-THREE CONTROLS:
+FIX ROUND 1 added control 3. Review measured that the pre-round-1 guard required the literal word
+"Windows" and the literal bare token "python" on the same line as "python3", and a legitimate
+rewrite of step 7 using `py -m unittest ...` and the word "PowerShell" instead - correct content,
+worded differently - turned it red. Control 3 is that exact rewrite, committed so the guard's
+current looser property (some OTHER interpreter token beside python3, not a fixed vocabulary) stays
+measured rather than merely claimed.
+
+FOUR CONTROLS:
   1. Step 7 reverted to a bare `python3 -m unittest discover -s tests`, the pre-fix text, with no
-     Windows or bare `python` anywhere on that line -> test_no_bare_python3_command FAILS. This is
+     other interpreter token anywhere on that line -> test_no_bare_python3_command FAILS. This is
      the control #348's own brief names by name: "a control that puts `python3 -m unittest` back
      into that section must turn it red."
   2. EXPECTS GREEN: a second, properly-paired POSIX/Windows sentence added elsewhere in section 3,
-     naming `python3`, `python` and `Windows` together on its own line. Proves the guard checks the
-     PAIRING, not the mere presence of the word `python3` anywhere in the section - a guard that
-     flagged every python3 mention regardless of context would also flag the fix itself.
-  3. The section 3 heading renamed -> test_anchors_exist FAILS. Proves the anchor is asserted rather
+     naming `python3` and `python` together on its own line. Proves the guard checks the PAIRING,
+     not the mere presence of the word `python3` anywhere in the section - a guard that flagged
+     every python3 mention regardless of context would also flag the fix itself.
+  3. EXPECTS GREEN, FIX ROUND 1's OWN CONTROL: step 7 rewritten with `py -m unittest ...` /
+     `py scripts/validate_continuity.py` and the word "PowerShell" in place of `python` and
+     "Windows". Proves the guard checks a PROPERTY - some other interpreter token beside python3 -
+     rather than a fixed vocabulary a correct rewrite might reasonably not use.
+  4. The section 3 heading renamed -> test_anchors_exist FAILS. Proves the anchor is asserted rather
      than assumed: a renamed heading must report itself, not raise out of the middle of a reader.
 
 NOT WIRED INTO CI, deliberately, as wp111 to wp115's runners are not: this is a control on a guard
@@ -55,9 +66,23 @@ FIXED_STEP7 = (
     "7. Run the validator's own self-tests, then `scripts/validate_continuity.py`, with a "
     "Python 3 interpreter: `python3 -m unittest discover -s tests` then "
     "`python3 scripts/validate_continuity.py` on POSIX; `python -m unittest discover -s tests` "
-    "then `python scripts/validate_continuity.py` on Windows, where `python3` resolves to a "
-    "non-functional Microsoft Store alias. `.github/workflows/pages.yml` runs on `ubuntu-latest`, "
-    "where `python3` is the real interpreter and is not to be \"fixed\" to match this line."
+    "then `python scripts/validate_continuity.py` on Windows, where `python3` may resolve to a "
+    "Microsoft Store alias that reports Python is absent. `.github/workflows/pages.yml` runs on "
+    "`ubuntu-latest`, where `python3` is the real interpreter and is not to be \"fixed\" to match "
+    "this line."
+)
+
+# FIX ROUND 1's OWN CONTROL, expecting GREEN. The pre-round-1 guard required the literal word
+# "Windows" and the literal bare token "python"; this rewrite is correct dual-invocation content
+# that uses neither, and must not be rejected.
+PY_AND_POWERSHELL_STEP7 = (
+    "7. Run the validator's own self-tests, then `scripts/validate_continuity.py`, with a "
+    "Python 3 interpreter: `python3 -m unittest discover -s tests` then "
+    "`python3 scripts/validate_continuity.py` in a POSIX shell; `py -m unittest discover -s "
+    "tests` then `py scripts/validate_continuity.py` in PowerShell, where `python3` may resolve "
+    "to a Microsoft Store alias that reports Python is absent. `.github/workflows/pages.yml` "
+    "runs on `ubuntu-latest`, where `python3` is the real interpreter and is not to be \"fixed\" "
+    "to match this line."
 )
 
 BARE_STEP7 = (
@@ -103,6 +128,14 @@ def a_paired_sentence_added_elsewhere_in_section_3(root: Path) -> None:
     )
 
 
+def step7_rewritten_with_py_and_powershell(root: Path) -> None:
+    """FIX ROUND 1's OWN CONTROL. EXPECTS GREEN. Correct dual-invocation content, worded with
+    `py` and "PowerShell" instead of `python` and "Windows" - the exact rewrite that held real
+    content and false-reded under the pre-round-1 guard, which required that specific vocabulary
+    rather than the property (some other interpreter token beside python3) the guard now checks."""
+    edit(root, AGENTS, FIXED_STEP7, PY_AND_POWERSHELL_STEP7)
+
+
 def the_section_3_heading_renamed(root: Path) -> None:
     """Proves the anchor is asserted, not assumed: a renamed heading reports itself."""
     edit(root, AGENTS, SECTION_HEADING, "## 3. Resume protocol (renamed by a control)")
@@ -114,6 +147,8 @@ CONTROLS = [
      step7_reverted_to_bare_python3, "test_no_bare_python3_command"),
     ("EXPECTS GREEN: a properly-paired POSIX/Windows sentence added elsewhere in section 3",
      a_paired_sentence_added_elsewhere_in_section_3, None),
+    ("EXPECTS GREEN (FIX ROUND 1): step 7 rewritten with py and PowerShell instead of python "
+     "and Windows", step7_rewritten_with_py_and_powershell, None),
     ("the section 3 heading renamed", the_section_3_heading_renamed, "test_anchors_exist"),
 ]
 

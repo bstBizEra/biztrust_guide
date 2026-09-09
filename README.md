@@ -47,7 +47,7 @@ Agents must resume from repository evidence, not conversation memory. The mandat
 3. Read [`badf/next-actions.json`](badf/next-actions.json).
 4. Inspect the active work package and latest checkpoint.
 5. Verify Git `HEAD`, worktree status and applicable authority.
-6. Run the test suite then the continuity validator with a Python 3 interpreter: `python3 -m unittest discover -s tests` then `python3 scripts/validate_continuity.py` on POSIX; `python -m unittest discover -s tests` then `python scripts/validate_continuity.py` on Windows, where `python3` resolves to a non-functional Microsoft Store alias.
+6. Run the test suite then the continuity validator with a Python 3 interpreter: `python3 -m unittest discover -s tests` then `python3 scripts/validate_continuity.py` on POSIX; `python -m unittest discover -s tests` then `python scripts/validate_continuity.py` on Windows, where `python3` may resolve to a Microsoft Store alias that reports Python is absent.
 7. Continue only if the resume decision is `CONTINUE`; otherwise stop with the recorded reason.
 
 The complete protocol is documented in [Agent Continuity & Recovery](docs/AGENT_CONTINUITY.md).
@@ -85,7 +85,7 @@ python3 scripts/validate_continuity.py
 node --check script.js
 ```
 
-Windows, where `python3` resolves to a non-functional Microsoft Store alias:
+Windows, where `python3` may resolve to a Microsoft Store alias that reports Python is absent:
 
 ```powershell
 python -m unittest discover -s tests

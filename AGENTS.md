@@ -27,7 +27,7 @@ At the beginning of every session, agent handoff or recovery:
 4. Locate the active Work Package, its scope and acceptance criteria.
 5. Read the latest checkpoint and handoff referenced by current state.
 6. Inspect the current Git branch, `HEAD`, worktree and remote divergence.
-7. Run the validator's own self-tests, then `scripts/validate_continuity.py`, with a Python 3 interpreter: `python3 -m unittest discover -s tests` then `python3 scripts/validate_continuity.py` on POSIX; `python -m unittest discover -s tests` then `python scripts/validate_continuity.py` on Windows, where `python3` resolves to a non-functional Microsoft Store alias. `.github/workflows/pages.yml` runs on `ubuntu-latest`, where `python3` is the real interpreter and is not to be "fixed" to match this line.
+7. Run the validator's own self-tests, then `scripts/validate_continuity.py`, with a Python 3 interpreter: `python3 -m unittest discover -s tests` then `python3 scripts/validate_continuity.py` on POSIX; `python -m unittest discover -s tests` then `python scripts/validate_continuity.py` on Windows, where `python3` may resolve to a Microsoft Store alias that reports Python is absent. `.github/workflows/pages.yml` runs on `ubuntu-latest`, where `python3` is the real interpreter and is not to be "fixed" to match this line.
 8. Reconcile observed state with recorded state.
 9. Output one resume decision: `CONTINUE`, `BLOCKED`, `WAIT_FOR_AUTHORITY`, `RECOVERY_REQUIRED` or `COMPLETE`.
 
