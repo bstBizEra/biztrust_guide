@@ -151,16 +151,33 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     GREEN. If that control ever goes red the hole has closed and this limit must be re-derived,
     not deleted.
 
-MEASURED, on fresh clones, by `scripts/wp112_controls.py` - nineteen controls, run only after an
-unmutated clone that must be green first. THIRTEEN mutations each trip the test named for them,
-and SIX of those trip nothing else. Two are the declared holes above, limits 5 and 7, and expect
-the suite to stay GREEN. Two more expect GREEN without mutating anything: an unmutated tree inside
-another checkout of this repository, which is limit 6, and an unmutated tree whose `origin/main`
-carries one more Work Package than the record knows, which is limit 2 - the merge that is coming.
-Each of those two is paired with a mutation that removes the check making it green and shows the
-same tree go red. The last two run the validator itself on a genuinely shallow clone: unmutated it
-prints UNKNOWN and exits 0, and with the shallow guard weakened it prints CONSISTENT and exits 0 -
-which is how the first of the two is known to be produced by the guard rather than by accident.
+MEASURED, on fresh clones, BY TWO RUNNERS. Neither is wired into CI: each control makes a fresh
+clone and runs this suite or the validator on top of it, and `scripts/validate_continuity.py` is
+the instrument every other gate in this repository is read through.
+
+`scripts/wp114_controls.py` - FOURTEEN controls, run only after an unmutated clone that must be
+green first. EIGHT mutations each trip the test named for them and THREE of those trip nothing
+else; one is the declared hole at limit 10 and expects the suite to stay GREEN. Four run the
+validator itself on a clone whose `origin/main` has been moved, in two pairs: a ref set BEHIND the
+recorded baseline prints UNKNOWN and exits 0, and the same clone with the reverse question removed
+prints DIVERGED - which is how the first is known to come from the repair rather than by accident -
+then a ref on a history sharing no commit with the baseline prints DIVERGED, and the same clone
+with the behind test widened prints UNKNOWN. The fourteenth re-measures the subprocess sentence at
+the top of this docstring against the tree it describes.
+
+`scripts/wp112_controls.py` - nineteen controls. Re-run against this branch: EIGHTEEN behave as
+declared, TWELVE mutations trip the test named for them and FIVE of those trip nothing else, two
+are the declared holes at limits 5 and 7 and stay GREEN, the enclosing-repository pair behaves, and
+the two shallow-clone script controls print UNKNOWN and CONSISTENT as they did. THE ONE THAT DOES
+NOT is `the same later merge with the corroboration required to be the TIP`, and the cause is the
+SOURCE rather than either package: that control builds its fixture on the clone's `origin/main`,
+which is the source's `refs/heads/main`, and a checkout that has fetched without pulling has a
+local main BEHIND the recorded baseline - so the fixture lands in the DIVERGED branch and never
+reaches the corroboration the mutation targets. Measured both ways: against the shared checkout
+(local main 67deeb2, origin/main d05afba) it reports BAD; against a source whose local main is at
+the recorded baseline, as a pulled checkout has, it behaves as declared. `check_source_main_line`
+declares exactly this in its own docstring - it allows the behind direction and promises only that
+the run is not measuring drift, never that it will be green.
 
 Run: `python -m unittest discover -s tests -p test_resume_reconciliation.py -v`
 """
