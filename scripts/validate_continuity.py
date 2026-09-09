@@ -178,9 +178,13 @@ def reconcile_recorded_state(root: Path, current: dict) -> tuple[str, str]:
 
     UNKNOWN       the history needed to judge is unavailable - no git, no repository, a shallow
                   clone, no main ref, a baseline commit this clone does not hold, or a main ref
-                  that sits BEHIND the recorded baseline because it has not been fetched, in
-                  which case the record is ahead of the observation and what landed after the
-                  baseline cannot be read from here at all (#353).
+                  that sits BEHIND the recorded baseline, in which case the record is ahead of
+                  the observation and what landed after the baseline cannot be read from here at
+                  all (#353). WHY it sits behind is not established by anything reached here. A
+                  ref that has not been fetched is the common cause and the one the printed
+                  reason offers as common; a baseline recorded from a branch that never merged
+                  gives the same shape with the ref fully current, and fetching would fix
+                  nothing. The reason therefore leads with the relation, not with the cause.
     DIVERGED      the recorded baseline commit IS in this clone but is NOT an ancestor of the
                   observed main line, AND the observed main line is not an ancestor of the
                   baseline either, so neither line contains the other. Nothing reachable from
@@ -285,11 +289,20 @@ def reconcile_recorded_state(root: Path, current: dict) -> tuple[str, str]:
         if behind[0] == 0:
             # The stale-ref case #353 was filed for. Degrade rather than accuse, which is the
             # rule the shallow-clone branch above already follows.
+            #
+            # THE CAUSE IS OFFERED AS COMMON, NEVER ASSERTED AS ESTABLISHED, and that distinction
+            # is a correction rather than a flourish. This reason ended "it has not been fetched"
+            # - a cause, in a sentence whose whole job is to assert what was measured, and the
+            # same rule that forbids DIVERGED from naming a rebase forbids this. It is also not
+            # always true: a baseline recorded from a branch that never merged produces exactly
+            # this shape with `origin/main` fully current, and fetching would fix nothing. What
+            # IS established here is one relation between two commits, so that is what leads.
             return "UNKNOWN", (
                 f"{wp_id}: {tip_ref} ({tip_sha[:12]}) is an ancestor of the recorded baseline "
-                f"{baseline[:12]}, so this clone's main ref is BEHIND the record rather than "
-                f"parted from it - it has not been fetched, and what landed after the baseline "
-                f"cannot be read from here"
+                f"{baseline[:12]}, so the observed main line is BEHIND the record rather than "
+                f"parted from it and does not yet contain it; what landed after the baseline "
+                f"cannot be read from here. A main ref that has not been fetched is the common "
+                f"cause of that shape, not the established one"
             )
         # Say only what is known HERE. This branch is reachable only AFTER `cat-file -e` proved the
         # baseline IS in the object database, so the earlier wording - "the record was branched

@@ -29,12 +29,20 @@ and after it, on the same clone:
 
     STATE_RECONCILIATION=UNKNOWN
     STATE_RECONCILIATION_REASON=... refs/remotes/origin/main ... is an ancestor of the recorded
-    baseline ..., so this clone's main ref is BEHIND the record rather than parted from it - it has
-    not been fetched ...
+    baseline ..., so the observed main line is BEHIND the record rather than parted from it and
+    does not yet contain it; what landed after the baseline cannot be read from here. A main ref
+    that has not been fetched is the common cause of that shape, not the established one
 
 SCRIPT CONTROLS 1 TO 4 ARE THAT MEASUREMENT, run as controls rather than quoted. Each is a pair
 whose second member removes the guard that makes the first member's answer what it is, so neither
 verdict is what it is by accident.
+
+THE LAST CLAUSE OF THAT REASON IS ITS OWN SMALL STORY. It read "it has not been fetched" until this
+package's final review, which is a CAUSE asserted in a sentence whose job is to assert what was
+measured - the rule that keeps `rebase` and `force-push` out of the DIVERGED reason, applied to the
+word this package added a route to. It is also not always true: a baseline recorded from a branch
+that never merged gives the same shape with the ref fully current. Two controls hold the repair, one
+restoring the bare claim and one removing the measured half.
 
 FOUR KINDS OF CONTROL.
 
@@ -102,9 +110,14 @@ REVERSE_QUESTION = (
 BEHIND_CALL = '        behind = git(root, "merge-base", "--is-ancestor", tip_sha, baseline)\n'
 BEHIND_TEST = "        if behind[0] == 0:\n"
 BEHIND_VERDICT = '            return "UNKNOWN", (\n                f"{wp_id}: {tip_ref} ({tip_sha[:12]}) is an ancestor of the recorded baseline "\n'
-BEHIND_STALENESS = (
-    '                f"parted from it - it has not been fetched, and what landed after the baseline "\n'
-    '                f"cannot be read from here"\n'
+BEHIND_MEASURED_HALF = (
+    '                f"parted from it and does not yet contain it; what landed after the baseline "\n'
+    '                f"cannot be read from here. A main ref that has not been fetched is the common "\n'
+    '                f"cause of that shape, not the established one"\n'
+)
+BEHIND_COMMON_CAUSE = (
+    '                f"cannot be read from here. A main ref that has not been fetched is the common "\n'
+    '                f"cause of that shape, not the established one"\n'
 )
 THIRD_OUTCOME = (
     "        if behind is None or behind[0] not in (0, 1):\n"
@@ -126,9 +139,13 @@ DIVERGED_ENTRY_AT_ONE_DIRECTION = (
 )
 UNKNOWN_ENTRY_BEHIND = (
     "                  clone, no main ref, a baseline commit this clone does not hold, or a main ref\n"
-    "                  that sits BEHIND the recorded baseline because it has not been fetched, in\n"
-    "                  which case the record is ahead of the observation and what landed after the\n"
-    "                  baseline cannot be read from here at all (#353).\n"
+    "                  that sits BEHIND the recorded baseline, in which case the record is ahead of\n"
+    "                  the observation and what landed after the baseline cannot be read from here at\n"
+    "                  all (#353). WHY it sits behind is not established by anything reached here. A\n"
+    "                  ref that has not been fetched is the common cause and the one the printed\n"
+    "                  reason offers as common; a baseline recorded from a branch that never merged\n"
+    "                  gives the same shape with the ref fully current, and fetching would fix\n"
+    "                  nothing. The reason therefore leads with the relation, not with the cause.\n"
 )
 REBASED_FIXTURE = (
     '        rebased = build_repo(base / "rebased")\n'
@@ -142,7 +159,10 @@ REBASED_FIXTURE = (
 # The whole #353 block, from its opening comment to the end of the BEHIND return. Deleting it
 # restores the code exactly as it stood before this package: not-an-ancestor, and nothing else,
 # reaching DIVERGED.
-BEHIND_BLOCK_TAIL = '                f"cannot be read from here"\n            )\n'
+BEHIND_BLOCK_TAIL = (
+    '                f"cause of that shape, not the established one"\n'
+    "            )\n"
+)
 
 
 def read(root: Path, rel: str) -> str:
@@ -218,15 +238,30 @@ def the_behind_case_told_correctly_and_named_diverged(root: Path) -> None:
          '                f"{wp_id}: {tip_ref} ({tip_sha[:12]}) is an ancestor of the recorded baseline "\n')
 
 
-def the_staleness_dropped_from_the_behind_reason(root: Path) -> None:
-    """The right word with a reason that does not say what to do about it.
+def the_measured_half_dropped_from_the_behind_reason(root: Path) -> None:
+    """The right word over a reason that stops saying what was measured.
 
-    UNKNOWN covers five distinct unavailabilities and only this one is repaired by fetching. #353
-    requires the reason to name the staleness, not merely the verdict to be UNKNOWN, which is why
-    the wording is asserted for this case and not for the degraded ones.
+    UNKNOWN covers five distinct unavailabilities. #353 requires the reason to say WHICH, not
+    merely the verdict to be UNKNOWN, which is why the wording is asserted for this case and not
+    for the degraded ones. This cuts the reason back to the bare relation, so a reader is told the
+    two commits' order and nothing about what follows from it.
     """
-    edit(root, VALIDATOR, BEHIND_STALENESS,
+    edit(root, VALIDATOR, BEHIND_MEASURED_HALF,
          '                f"parted from it"\n')
+
+
+def the_common_cause_asserted_as_the_established_one(root: Path) -> None:
+    """THE WORDING THIS PACKAGE'S FINAL REVIEW REMOVED, restored.
+
+    The reason ended "it has not been fetched" - a cause, asserted in a sentence whose whole job
+    is to assert what was measured, and forbidden by the same rule that keeps `rebase` and
+    `force-push` out of the DIVERGED reason. It is also not always true: the review constructed a
+    baseline on a branch that never merged, with `origin/main` fully current, and got the same
+    sentence, where fetching would have fixed nothing. A cause may be offered as the common one;
+    it may not be stated as the established one.
+    """
+    edit(root, VALIDATOR, BEHIND_COMMON_CAUSE,
+         '                f"cannot be read from here - it has not been fetched"\n')
 
 
 def the_diverged_docstring_left_at_one_direction(root: Path) -> None:
@@ -290,7 +325,11 @@ SUITE_CONTROLS = [
     ("the behind case diagnosed correctly and still called DIVERGED",
      the_behind_case_told_correctly_and_named_diverged,
      "test_a_main_ref_behind_the_recorded_baseline_is_unknown_and_not_diverged"),
-    ("the staleness dropped from the behind reason", the_staleness_dropped_from_the_behind_reason,
+    ("the measured half dropped from the behind reason",
+     the_measured_half_dropped_from_the_behind_reason,
+     "test_the_behind_reason_names_the_staleness_and_not_a_divergence"),
+    ("the common cause asserted as the established one",
+     the_common_cause_asserted_as_the_established_one,
      "test_the_behind_reason_names_the_staleness_and_not_a_divergence"),
     ("the DIVERGED docstring entry left at one direction",
      the_diverged_docstring_left_at_one_direction,

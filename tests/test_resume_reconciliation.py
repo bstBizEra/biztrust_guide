@@ -129,8 +129,8 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     described. A clone whose main ref has not been fetched sits BEHIND the recorded baseline, so
     the baseline is not an ancestor of it, and until #353 was closed that alone printed DIVERGED -
     the loudest word - for a stale ref. Measured on a clone with `origin/main` at the commit
-    before the recorded baseline: DIVERGED before the repair, UNKNOWN naming the staleness after
-    it, both with the commands in `scripts/wp114_controls.py`'s docstring. The word DIVERGED is
+    before the recorded baseline: DIVERGED before the repair, UNKNOWN naming the BEHIND relation
+    after it, both with the commands in `scripts/wp114_controls.py`'s docstring. The word DIVERGED is
     now reached only where NEITHER line contains the other, which is what the two fixtures here
     construct, and both of them are checked in both directions rather than in one.
 
@@ -140,6 +140,14 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     vocabulary at four and `test_the_vocabulary_is_exactly_four_words` holds it there. A reader
     who wants "behind" told apart from the other four unavailabilities reads the REASON, and the
     reason's wording is asserted for that case here.
+
+    AND IT DOES NOT SETTLE WHY THE REF IS BEHIND, which the reason may therefore not claim. An
+    unfetched ref is the common cause and not the only one: a baseline recorded from a branch
+    that never merged gives the same shape with the main ref fully current, and fetching would
+    fix nothing there. The printed reason offers the cause as common and leads with the relation,
+    under the same rule that forbids the DIVERGED reason from naming a rebase - limit 7's
+    asymmetry, applied to the word this package added a route to. That rule is checkable and is
+    checked: if the reason mentions fetching, it must also say the cause is the common one.
 
 10. THE THIRD OUTCOME OF THE REVERSE CALL IS UNMEASURED, and that is a hole rather than a caveat.
     `git merge-base --is-ancestor` answers 0, 1 or an error. The error branch returns UNKNOWN
@@ -155,14 +163,14 @@ MEASURED, on fresh clones, BY TWO RUNNERS. Neither is wired into CI: each contro
 clone and runs this suite or the validator on top of it, and `scripts/validate_continuity.py` is
 the instrument every other gate in this repository is read through.
 
-`scripts/wp114_controls.py` - FOURTEEN controls, run only after an unmutated clone that must be
-green first. EIGHT mutations each trip the test named for them and THREE of those trip nothing
+`scripts/wp114_controls.py` - FIFTEEN controls, run only after an unmutated clone that must be
+green first. NINE mutations each trip the test named for them and FOUR of those trip nothing
 else; one is the declared hole at limit 10 and expects the suite to stay GREEN. Four run the
 validator itself on a clone whose `origin/main` has been moved, in two pairs: a ref set BEHIND the
 recorded baseline prints UNKNOWN and exits 0, and the same clone with the reverse question removed
 prints DIVERGED - which is how the first is known to come from the repair rather than by accident -
 then a ref on a history sharing no commit with the baseline prints DIVERGED, and the same clone
-with the behind test widened prints UNKNOWN. The fourteenth re-measures the subprocess sentence at
+with the behind test widened prints UNKNOWN. The fifteenth re-measures the subprocess sentence at
 the top of this docstring against the tree it describes.
 
 `scripts/wp112_controls.py` - nineteen controls. Re-run against this branch: EIGHTEEN behave as
@@ -718,17 +726,33 @@ class TestVocabulary(unittest.TestCase):
     def test_the_behind_reason_names_the_staleness_and_not_a_divergence(self) -> None:
         """The verdict alone does not close #353; UNKNOWN with a divergence's reason would not.
 
-        A reader is told WHICH unavailability this is, because UNKNOWN covers five of them and
-        only this one is repaired by fetching. The forbidden half is what the old reason said.
+        A reader is told WHICH unavailability this is, because UNKNOWN covers five of them. What
+        the reason may NOT do is say why, and the last conjunct below is a repair rather than a
+        precaution: this reason ended "it has not been fetched", which is a cause asserted in a
+        sentence whose job is to assert what was measured - the same thing the DIVERGED reason is
+        forbidden from doing with "rebase" and "force-push". It is also not always true. A
+        baseline recorded from a branch that never merged gives exactly this shape with the main
+        ref fully current, and fetching would fix nothing there.
+
+        So the cause may be OFFERED as common and never ASSERTED as established, and the rule is
+        checkable rather than a matter of taste: if the reason mentions fetching at all, it must
+        also say that this is the common cause. Two controls trip this - one restoring the bare
+        claim, one removing the measured half.
         """
         for case in ("behind_local_main", "behind_origin_main"):
             with self.subTest(case=case):
                 reason = self.reason(case)
+                self.assertIn("is an ancestor of the recorded baseline", reason)
                 self.assertIn("BEHIND the record", reason)
-                self.assertIn("has not been fetched", reason)
+                self.assertIn("cannot be read from here", reason)
                 for overclaim in ("is present in this clone but is not",
                                   "neither line contains the other"):
                     self.assertNotIn(overclaim, reason)
+                if "fetched" in reason:
+                    self.assertIn(
+                        "common cause", reason,
+                        "a cause may be offered as the common one and never asserted as the "
+                        "established one; nothing reached here establishes why the ref is behind")
 
     def test_the_behind_fixtures_really_are_behind_and_not_merely_unrelated(self) -> None:
         """Otherwise the two tests above pass on a fixture that reproduces the wrong condition.
