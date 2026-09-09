@@ -74,6 +74,22 @@ jobs:
             cp "$page" "_site/$page"
           done
 
+      # AFTER staging and BEFORE the two verification steps below, on purpose.
+      #
+      # The staging step above already copied the tracked `control/index.html` - a placeholder that
+      # says it has not been generated - to `_site/control/index.html`. This OVERWRITES that one
+      # file in place with the same page carrying the records projected into it. The file is
+      # replaced, never removed, so the "every tracked page reached the artifact" check below still
+      # finds it and the page count it walks is unchanged. Nothing generated is committed: the
+      # tracked file stays a placeholder, and tests/test_control_page.py holds it to that.
+      #
+      # It reads `badf/`, runs `scripts/validate_continuity.py` and calls `git` against this
+      # checkout. It makes NO network call and reads no tracker (#311). The checkout above is
+      # shallow, so the reconciliation will read UNKNOWN here; the page says in its own prose that
+      # this is the expected reading on a published copy and not a defect.
+      - name: Project the records into the staged control page
+        run: python3 scripts/build_control_page.py --out _site/control/index.html
+
       - name: Verify every tracked asset reached the artifact
         run: |
           status=0
