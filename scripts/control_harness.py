@@ -53,6 +53,11 @@ lines; hashing the exact segments gives `edit` FOUR distinct texts (three distin
                                           returns stdout+stderr whole at     only the subprocess
                                           timeout 1800 to search for         call is common
                                           `CONTINUITY_VALIDATION=PASS`       -> run_script()
+                                          LEFTOVER DUPLICATION, NAMED: with  Byte-identical, ten
+                                          `run_script()` taken out, what     lines each. NOT
+                                          remains of wp112's and wp114's     collapsed here, and a
+                                          own `run_validator` is the same    later package could
+                                          in both                            share that pair
   clone                     2 / 2         wp112 carries `depth` and asserts  DRIFT. wp114's body
                                           the shallow clone is really        IS the `depth=0` path
                                           shallow; wp114 has neither         of wp112's -> `depth`
@@ -74,6 +79,13 @@ behaviour is not this package's to alter.
 
 THIS MODULE IS NOT A TEST HELPER. `tests/` imports nothing from here and must not: the suite is
 offline and subprocess-free apart from four declared modules, and everything below shells out.
+`tests/test_harness_parameters.py` READS this file as text with `ast` and never imports it, which
+breaks neither property. What it holds is the one thing this table cannot: that every parameter
+above still has a caller passing something other than its default. A default nobody dissents from
+has stopped expressing a difference between callers and has become the union of two behaviours
+with one deleted - WP-110's failure, arriving through the door this module opened.
+`scripts/wp117_controls.py` is the runner that demonstrates that guard can fail, and is itself the
+first runner built on this harness rather than copied from its predecessor.
 
 Stdlib only.
 """
