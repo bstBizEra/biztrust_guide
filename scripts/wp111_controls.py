@@ -29,18 +29,28 @@ sentences have already been measured false.
 It lives in scripts/ and not tests/ on purpose: `unittest discover -s tests` must not collect it,
 and the test suite's no-subprocess property is a property of tests/, which this file would break.
 
+THE COPY, THE MUTATION HELPER, THE SUITE RUN AND THE REPORTING LOOP now come from
+`scripts/control_harness.py` (#368), which classified every divergence across the six runners as
+need or drift before moving anything. Four of this runner's differences from its siblings survive
+as arguments rather than being flattened into them: a 60-character preview in the mutation
+helper's failure message, Python's own newline translation on the write, a narrower copy-ignore
+tuple, and no timeout on the suite run. Adoption was gated on this runner's full output being
+byte-identical before and after, not on the suite staying green.
+
 Usage:  python scripts/wp111_controls.py [<repository>] [<scratch>]
 """
 from __future__ import annotations
 
-import re
-import shutil
-import subprocess
-import sys
-import tempfile
 from pathlib import Path
 
-PYTHON = sys.executable
+from control_harness import (HOLE_DECLARED, arguments, fresh, report_unmutated, run_suite,
+                             suite_controls, summarise)
+from control_harness import edit as harness_edit
+
+# NARROWER than the harness default, which also drops `_site` and `node_modules`. This runner has
+# always copied those when they exist, and what its controls run over is not this package's to
+# change.
+IGNORE = (".git", "__pycache__", "*.pyc")
 
 REC = "docs/architecture/SOURCE_RECONCILIATION.md"
 PLAN = "docs/architecture/BIZTRUST-PLAN-001.md"
@@ -80,13 +90,14 @@ def stale_row(claim: str, reference: str) -> str:
 
 
 def edit(root: Path, rel: str, old: str, new: str) -> None:
-    """Replace `old` with `new` exactly once, and refuse to be a no-op."""
-    path = root / rel
-    text = path.read_text(encoding="utf-8")
-    found = text.count(old)
-    if found != 1:
-        raise AssertionError(f"{rel}: expected exactly one occurrence of {old[:60]!r}, found {found}")
-    path.write_text(text.replace(old, new), encoding="utf-8")
+    """Replace `old` with `new` exactly once, and refuse to be a no-op.
+
+    Two arguments this runner alone gives the harness: a 60-character preview of `old` in the
+    failure message, and `newline=None`, which lets Python translate every line ending in the file
+    on the way out. The second is a real difference in the bytes written, not a formatting one,
+    which is why it is passed rather than quietly aligned with the other five runners.
+    """
+    harness_edit(root, rel, old, new, preview=60, newline=None)
 
 
 # --- the mutations ------------------------------------------------------------------------------
@@ -297,59 +308,20 @@ CONTROLS = [
      a_correctly_formed_but_factually_wrong_reconciliation, None),
 ]
 
-FAILED = re.compile(r"^(?:FAIL|ERROR): (\w+) ", re.M)
-
-
 def run(root: Path) -> tuple[int, set[str]]:
-    done = subprocess.run(
-        [PYTHON, "-m", "unittest", "discover", "-s", "tests", "-p", "test_stale_records.py", "-v"],
-        cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
-    return done.returncode, set(FAILED.findall(done.stdout + done.stderr))
-
-
-def fresh(source: Path, into: Path, name: str) -> Path:
-    root = into / name
-    shutil.copytree(source, root, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"))
-    return root
+    """The subject module, run inside `root` with NO timeout, as this runner has always run it."""
+    return run_suite(root, "test_stale_records.py", timeout=None)
 
 
 def main() -> int:
-    source = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
-    holder = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path(tempfile.mkdtemp())
-    holder.mkdir(parents=True, exist_ok=True)
-    bad = 0
+    source, holder = arguments(__file__)
 
-    code, failures = run(fresh(source, holder, "control_00_unmutated"))
-    print(f"[{'PASS' if code == 0 else 'BAD '}] unmutated copy: exit {code}, failures {sorted(failures) or 'none'}")
-    if code != 0:
-        print("       the unmutated copy is already red; every control below proves nothing")
-        bad += 1
-
-    for index, (name, mutate, expected) in enumerate(CONTROLS, start=1):
-        root = fresh(source, holder, f"control_{index:02d}")
-        mutate(root)
-        code, failures = run(root)
-        if expected is None:
-            # A DECLARED HOLE. The mutation is a real defect and the suite is expected to stay
-            # green, because nothing here checks it. Stating a limit in prose is cheap; a control
-            # that demonstrates it cannot drift away from the code without this script noticing.
-            ok = code == 0 and not failures
-            bad += 0 if ok else 1
-            print(f"[{'PASS' if ok else 'BAD '}] {name}")
-            print(f"       DECLARED HOLE: expected the suite to stay GREEN; exit {code}; "
-                  f"failed: {sorted(failures) or 'nothing'}"
-                  f"{'' if ok else '  <- the hole has closed; re-derive the limit that declares it'}")
-            continue
-        ok = code != 0 and expected in failures
-        isolated = failures == {expected}
-        bad += 0 if ok else 1
-        print(f"[{'PASS' if ok else 'BAD '}] {name}")
-        print(f"       expected {expected} to fail; exit {code}; "
-              f"failed: {sorted(failures) or 'NOTHING'}"
-              f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
-
-    print(f"\n{len(CONTROLS)} controls, {bad} not behaving as declared")
-    return 1 if bad else 0
+    code, failures = run(fresh(source, holder, "control_00_unmutated", ignore=IGNORE))
+    bad = report_unmutated(code, failures, "copy")
+    bad += suite_controls(CONTROLS,
+                          lambda name: fresh(source, holder, name, ignore=IGNORE), run,
+                          hole=HOLE_DECLARED)
+    return summarise(len(CONTROLS), bad)
 
 
 if __name__ == "__main__":

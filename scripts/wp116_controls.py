@@ -44,20 +44,21 @@ NOT WIRED INTO CI, deliberately, as wp111 to wp115's runners are not: this is a 
 rather than the guard itself, and its result is evidence about the tree at the commit someone last
 ran it against.
 
+THE COPY, THE MUTATION HELPER, THE SUITE RUN AND THE REPORTING LOOP now come from
+`scripts/control_harness.py` (#368), which classified every divergence across the six runners as
+need or drift before moving anything. Adoption was gated on this runner's full output being
+byte-identical before and after, not on the suite staying green.
+
 Stdlib only, no network beyond the subprocess it runs. Run it as:
 
     python scripts/wp116_controls.py [source] [holder]
 """
 from __future__ import annotations
 
-import re
-import shutil
-import subprocess
-import sys
-import tempfile
 from pathlib import Path
 
-PYTHON = sys.executable
+from control_harness import (HOLE_PLAIN, arguments, edit, fresh, report_unmutated, run_suite,
+                             suite_controls, summarise)
 
 MODULE = "tests/test_resume_protocol_command.py"
 AGENTS = "AGENTS.md"
@@ -94,17 +95,6 @@ SECTION_HEADING = "## 3. Mandatory resume protocol"
 
 
 # --- primitives ----------------------------------------------------------------------------------
-
-
-def edit(root: Path, rel: str, old: str, new: str) -> None:
-    """Replace `old` with `new` exactly once, and refuse to be a no-op."""
-    path = root / rel
-    text = path.read_text(encoding="utf-8")
-    found = text.count(old)
-    if found != 1:
-        raise AssertionError(
-            f"{rel}: expected exactly one occurrence of {old[:70]!r}, found {found}")
-    path.write_text(text.replace(old, new), encoding="utf-8", newline="")
 
 
 # --- the mutations -------------------------------------------------------------------------------
@@ -152,60 +142,19 @@ CONTROLS = [
     ("the section 3 heading renamed", the_section_3_heading_renamed, "test_anchors_exist"),
 ]
 
-FAILED = re.compile(r"^(?:FAIL|ERROR): (\w+) ", re.M)
-
-
-def run_suite(root: Path) -> tuple[int, set[str]]:
-    done = subprocess.run(
-        [PYTHON, "-B", "-m", "unittest", "discover", "-s", "tests",
-         "-p", "test_resume_protocol_command.py", "-v"],
-        cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1800)
-    return done.returncode, set(FAILED.findall(done.stdout + done.stderr))
-
-
-def fresh(source: Path, into: Path, name: str) -> Path:
-    root = into / name
-    shutil.copytree(source, root,
-                    ignore=shutil.ignore_patterns(".git", "_site", "node_modules",
-                                                  "__pycache__", "*.pyc"))
-    return root
+def suite(root: Path) -> tuple[int, set[str]]:
+    """The subject module, run inside `root` under `-B` as this runner has always run it."""
+    return run_suite(root, "test_resume_protocol_command.py", no_bytecode=True)
 
 
 def main() -> int:
-    source = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
-    holder = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path(tempfile.mkdtemp())
-    holder.mkdir(parents=True, exist_ok=True)
-    bad = 0
+    source, holder = arguments(__file__)
 
-    code, failures = run_suite(fresh(source, holder, "control_00_unmutated"))
-    print(f"[{'PASS' if code == 0 else 'BAD '}] unmutated copy: exit {code}, "
-          f"failures {sorted(failures) or 'none'}")
-    if code != 0:
-        print("       the unmutated copy is already red; every control below proves nothing")
-        bad += 1
-
-    for index, (name, mutate, expected) in enumerate(CONTROLS, start=1):
-        root = fresh(source, holder, f"control_{index:02d}")
-        mutate(root)
-        code, failures = run_suite(root)
-        if expected is None:
-            ok = code == 0 and not failures
-            bad += 0 if ok else 1
-            print(f"[{'PASS' if ok else 'BAD '}] {name}")
-            print(f"       expected the suite to stay GREEN; exit {code}; "
-                  f"failed: {sorted(failures) or 'nothing'}"
-                  f"{'' if ok else '  <- re-derive the claim this control stands behind'}")
-            continue
-        ok = code != 0 and expected in failures
-        isolated = failures == {expected}
-        bad += 0 if ok else 1
-        print(f"[{'PASS' if ok else 'BAD '}] {name}")
-        print(f"       expected {expected} to fail; exit {code}; "
-              f"failed: {sorted(failures) or 'NOTHING'}"
-              f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
-
-    print(f"\n{len(CONTROLS)} controls, {bad} not behaving as declared")
-    return 1 if bad else 0
+    code, failures = suite(fresh(source, holder, "control_00_unmutated"))
+    bad = report_unmutated(code, failures, "copy")
+    bad += suite_controls(CONTROLS, lambda name: fresh(source, holder, name), suite,
+                          hole=HOLE_PLAIN)
+    return summarise(len(CONTROLS), bad)
 
 
 if __name__ == "__main__":

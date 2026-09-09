@@ -62,19 +62,28 @@ believing any sentence the test module's docstring states about what it catches.
 It lives in `scripts/` and not `tests/` on purpose: `unittest discover -s tests` must not collect
 it, and it clones repositories, which is not a thing `tests/` should do on every push.
 
+THE CLONE, THE MUTATION HELPER, THE SUITE RUN AND THE REPORTING LOOP now come from
+`scripts/control_harness.py` (#368), which classified every divergence across the six runners as
+need or drift before moving anything. Two of this runner's differences survive as arguments rather
+than being flattened: `--depth`, which only this runner passes, and Python's own newline
+translation on the mutation helper's write. `check_source_main_line` below is deliberately NOT
+shared: its docstring is this package's own recorded measurement, wp114's says something different
+about the same guard, and their bodies differ in what happens when `merge-base` returns neither 0
+nor 1. Adoption was gated on this runner's full output being byte-identical before and after, not
+on the suite staying green.
+
 Usage:  python scripts/wp112_controls.py [<repository>] [<scratch>]
 """
 from __future__ import annotations
 
 import json
-import re
 import shutil
 import subprocess
-import sys
-import tempfile
 from pathlib import Path
 
-PYTHON = sys.executable
+from control_harness import (HOLE_DECLARED, VERDICT, arguments, clone, git_out, report_unmutated,
+                             run_script, run_suite, suite_controls, summarise)
+from control_harness import edit as harness_edit
 
 VALIDATOR = "scripts/validate_continuity.py"
 STATE = "badf/current-state.json"
@@ -110,13 +119,14 @@ RECORDED_STATE = '"state": "ENGINEERING_READY",'
 
 
 def edit(root: Path, rel: str, old: str, new: str) -> None:
-    """Replace `old` with `new` exactly once, and refuse to be a no-op."""
-    path = root / rel
-    text = path.read_text(encoding="utf-8")
-    found = text.count(old)
-    if found != 1:
-        raise AssertionError(f"{rel}: expected exactly one occurrence of {old[:70]!r}, found {found}")
-    path.write_text(text.replace(old, new), encoding="utf-8")
+    """Replace `old` with `new` exactly once, and refuse to be a no-op.
+
+    `newline=None` is the argument this runner alone shares with wp111: Python translates every
+    line ending in the file on the way out, not just the ones inside the replacement. That is a
+    real difference in the bytes written, which is why it is passed rather than quietly aligned
+    with the four runners that write `newline=""`.
+    """
+    harness_edit(root, rel, old, new, newline=None)
 
 
 # --- the mutations -------------------------------------------------------------------------------
@@ -323,40 +333,6 @@ SCRIPT_CONTROLS = [
      "CONSISTENT"),
 ]
 
-FAILED = re.compile(r"^(?:FAIL|ERROR): (\w+) ", re.M)
-VERDICT = re.compile(r"^STATE_RECONCILIATION=(\w+)$", re.M)
-
-
-def clone(source: Path, into: Path, name: str, depth: int = 0) -> Path:
-    root = into / name
-    command = ["git", "clone", "--quiet"]
-    if depth:
-        # `--depth` is IGNORED on a plain local path; only the file:// transport honours it, and a
-        # control that silently produced a full clone would demonstrate the opposite of its name.
-        command += ["--depth", str(depth), source.as_uri()]
-    else:
-        command += [str(source)]
-    done = subprocess.run(command + [str(root)], capture_output=True, text=True, timeout=600)
-    if done.returncode != 0:
-        raise AssertionError(f"clone of {source} failed: {done.stdout}{done.stderr}")
-    if depth:
-        shallow = subprocess.run(["git", "-C", str(root), "rev-parse", "--is-shallow-repository"],
-                                 capture_output=True, text=True, timeout=60)
-        if shallow.stdout.strip() != "true":
-            raise AssertionError(f"clone --depth {depth} did not produce a shallow repository")
-    return root
-
-
-def git_out(root: Path, *args: str) -> str:
-    """One git command at `root`, refusing to return silence on failure."""
-    done = subprocess.run(["git", "-C", str(root), *args],
-                          capture_output=True, text=True, encoding="utf-8", errors="replace",
-                          timeout=120)
-    if done.returncode != 0:
-        raise AssertionError(f"git {' '.join(args)} failed in {root}: {done.stdout}{done.stderr}")
-    return done.stdout.strip()
-
-
 def nested_inside_a_clone(source: Path, into: Path, name: str) -> Path:
     """A working tree of `source` sitting in a SUBDIRECTORY of a clone of `source`.
 
@@ -486,64 +462,37 @@ ENVIRONMENT_CONTROLS = [
 ]
 
 
-def run_suite(root: Path) -> tuple[int, set[str]]:
-    done = subprocess.run(
-        [PYTHON, "-m", "unittest", "discover", "-s", "tests",
-         "-p", "test_resume_reconciliation.py", "-v"],
-        cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1800)
-    return done.returncode, set(FAILED.findall(done.stdout + done.stderr))
+def suite(root: Path) -> tuple[int, set[str]]:
+    """The subject module, run inside `root` as this runner has always run it."""
+    return run_suite(root, "test_resume_reconciliation.py")
 
 
 def run_validator(root: Path) -> tuple[int, str]:
-    done = subprocess.run([PYTHON, "-B", str(root / VALIDATOR)], cwd=root,
-                          capture_output=True, text=True, encoding="utf-8", errors="replace",
-                          timeout=600)
-    found = VERDICT.findall(done.stdout)
-    return done.returncode, found[0] if len(found) == 1 else f"<{len(found)} verdict lines>"
+    """The validator inside `root`, reduced to its ONE reconciliation verdict.
+
+    STDOUT ONLY, and `VERDICT` is anchored with `re.M`: searching stderr as well would let a
+    traceback's echo of the line count as a verdict. wp115's runner joins the two streams because
+    it is looking for something else; see `scripts/control_harness.py`'s table.
+    """
+    code, out, _ = run_script(root, VALIDATOR, timeout=600)
+    found = VERDICT.findall(out)
+    return code, found[0] if len(found) == 1 else f"<{len(found)} verdict lines>"
 
 
 def main() -> int:
-    source = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
-    holder = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path(tempfile.mkdtemp())
-    holder.mkdir(parents=True, exist_ok=True)
+    source, holder = arguments(__file__)
     check_source_main_line(source)
-    bad = 0
 
-    code, failures = run_suite(clone(source, holder, "control_00_unmutated"))
-    print(f"[{'PASS' if code == 0 else 'BAD '}] unmutated clone: exit {code}, "
-          f"failures {sorted(failures) or 'none'}")
-    if code != 0:
-        print("       the unmutated clone is already red; every control below proves nothing")
-        bad += 1
-
-    for index, (name, mutate, expected) in enumerate(SUITE_CONTROLS, start=1):
-        root = clone(source, holder, f"control_{index:02d}")
-        mutate(root)
-        code, failures = run_suite(root)
-        if expected is None:
-            # A DECLARED HOLE. The mutation is a real contradiction and the suite is expected to
-            # stay green, because nothing here reads the field it changes. A control that
-            # demonstrates a limit cannot drift away from the code without this script noticing.
-            ok = code == 0 and not failures
-            bad += 0 if ok else 1
-            print(f"[{'PASS' if ok else 'BAD '}] {name}")
-            print(f"       DECLARED HOLE: expected the suite to stay GREEN; exit {code}; "
-                  f"failed: {sorted(failures) or 'nothing'}"
-                  f"{'' if ok else '  <- the hole has closed; re-derive the limit that declares it'}")
-            continue
-        ok = code != 0 and expected in failures
-        isolated = failures == {expected}
-        bad += 0 if ok else 1
-        print(f"[{'PASS' if ok else 'BAD '}] {name}")
-        print(f"       expected {expected} to fail; exit {code}; "
-              f"failed: {sorted(failures) or 'NOTHING'}"
-              f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
+    code, failures = suite(clone(source, holder, "control_00_unmutated"))
+    bad = report_unmutated(code, failures, "clone")
+    bad += suite_controls(SUITE_CONTROLS, lambda name: clone(source, holder, name), suite,
+                          hole=HOLE_DECLARED)
 
     for index, (name, build, mutate, expected) in enumerate(ENVIRONMENT_CONTROLS, start=1):
         root = build(source, holder, f"environment_{index:02d}")
         if mutate is not None:
             mutate(root)
-        code, failures = run_suite(root)
+        code, failures = suite(root)
         if expected is None:
             ok = code == 0 and not failures
             bad += 0 if ok else 1
@@ -574,9 +523,7 @@ def main() -> int:
         print(f"       shallow clone: expected STATE_RECONCILIATION={expected} and exit 0; "
               f"got {verdict} and exit {code}")
 
-    total = len(SUITE_CONTROLS) + len(ENVIRONMENT_CONTROLS) + len(SCRIPT_CONTROLS)
-    print(f"\n{total} controls, {bad} not behaving as declared")
-    return 1 if bad else 0
+    return summarise(len(SUITE_CONTROLS) + len(ENVIRONMENT_CONTROLS) + len(SCRIPT_CONTROLS), bad)
 
 
 if __name__ == "__main__":

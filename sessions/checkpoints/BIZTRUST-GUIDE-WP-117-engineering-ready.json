@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "BIZTRUST-GUIDE-WP-117-engineering-ready",
+  "created_at": "2026-09-10T12:00:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-117",
+  "state": "ENGINEERING_READY",
+  "objective": "Six negative-control runners, scripts/wp111_controls.py through scripts/wp116_controls.py, were written by copying one another and totalled 2,943 lines (#368). #368 measured the result and found exactly ONE shared function byte-identical across its copies, which makes the obvious reading - six duplicates, extract them - the wrong one. The subjects genuinely differ: wp112 and wp114 mutate git history and therefore CLONE, the other four mutate tracked files and therefore COPY, and `fresh` differing from `clone` is the right answer for each caller rather than drift. This package classified every divergence as NEED (a caller genuinely requires it; it survives as a parameter with a live caller on each side) or DRIFT (nothing depended on it) BEFORE extracting anything, put the classification in the new module's own docstring, and extracted only what the classification called common into scripts/control_harness.py. Nothing was resolved by taking the union of two behaviours or the more lenient of them - that is what WP-110 did to four private normalisers, after which the suite passed, four re-run controls passed, and review found eight real divergences that were caught before and missed after. Because each runner is the evidence its own package shipped, adoption was gated per runner on its FULL OUTPUT being byte-identical before and after - every control, the test each trips, every isolation declaration - captured on both sides and diffed, not on the suite staying green.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "refactor/biztrust-guide-wp-117-control-harness",
+    "baseline_commit": "f34891ae1e0feb9add0bc386ad30505e5c871002"
+  },
+  "completed": [
+    "THE CHARACTERISATION WAS DONE FIRST AND IS THE DELIVERABLE THE REST RESTS ON. Every top-level function body in the six runners was hashed with `ast.get_source_segment` and grouped by name at f34891a, and each shared name's differences were classified as need or drift one at a time. The table is written into scripts/control_harness.py's module docstring so a reader can disagree with a specific row rather than with the extraction as a whole. Verdicts: `edit` 6 copies / 4 distinct texts / 3 distinct behaviours - preview width 60 in wp111 against 70 in the other five (drift, but it prints, so a parameter), `newline=\"\"` on the write absent in wp111 and wp112 (drift, but it writes different bytes, so a parameter), line wrapping of the `raise` (drift, dropped); `main` 6 / 6 - argv preamble and closing count line COMMON, \"copy\" vs \"clone\" and `fresh` vs `clone` NEED, the declared-hole wording two variants over four and two callers (drift, but it prints, so a parameter), the second and third loops per-package NEED and left where they are; `run_suite` including wp111's differently-named `run` 6 / 5 - discovery pattern NEED, `-B` in wp115 and wp116 only and `timeout=1800` absent in wp111 both drift but both observable, so parameters; `fresh` 4 / 3 - wp111 does not ignore `_site` or `node_modules`, drift but it copies different trees, so a parameter; `run_validator` 3 / 2 - TWO RIGHT ANSWERS, ONE PER CALLER, NOT UNIFIED; `clone` 2 / 2 - wp114's body is exactly wp112's `depth=0` path, so drift, one function with `depth`; `git_out` 2 / 1 - the one byte-identical pair, extracted as it stands; `check_source_main_line` 2 / 2 - NOT EXTRACTED, see declared_non_coverage.",
+    "#368's OWN TABLE WAS RE-MEASURED AND TWO OF ITS ROWS DO NOT REPRODUCE. The issue reports `edit` as SIX distinct bodies with line counts 10, 11, 13, 13, 14, 59 and `main` at 39-79 lines. Hashing the exact source segments gives `edit` FOUR distinct texts at 8, 8, 8, 9, 9, 9 lines and `main` at 35, 37, 47, 50, 58, 75 - the conclusion #368 draws is unchanged and if anything understated for `main`, but the `edit` row is not reproducible as written and the 59-line outlier does not exist in any of the six. This is recorded rather than quietly corrected because the brief for this package repeated the table and told its implementer to verify it first. The measuring script is `ast.get_source_segment` over every `FunctionDef` in `scripts/wp11?_controls.py`, grouped by name, digested with SHA-256.",
+    "scripts/control_harness.py IS THE EXTRACTION AND IT IS DELIBERATELY SMALL. It carries PYTHON, the FAILED regex (identical in all six) and the VERDICT regex (identical in the two that have it); `edit`, `fresh`, `clone`, `git_out`, `run_suite` and `run_script`; and the four pieces of `main` that were byte-identical or one word apart - `arguments`, `report_unmutated`, `suite_controls` and `summarise`. It is 258 lines, of which a 78-line module docstring carries the classification table. The six runners fall from 2,943 lines to 2,661; with the harness the tree carries 2,919, a net saving of 24 lines. THE SAVING IS NOT THE POINT AND IS REPORTED HONESTLY: what the package buys is one reporting loop instead of six that had already drifted into two wordings, and a written classification that says which of the remaining differences are real.",
+    "EVERY DIVERGENCE THE CLASSIFICATION CALLED NEED-OR-OBSERVABLE IS A PARAMETER WITH A LIVE CALLER ON EACH SIDE, not a default nobody exercises. `edit(preview=)`: wp111 passes 60, the other five take 70. `edit(newline=)`: wp111 and wp112 pass None, the other four take \"\". `fresh(ignore=)`: wp111 passes its narrower tuple, the other three take COPY_IGNORE. `run_suite(no_bytecode=)`: wp115 and wp116 pass True, wp111-114 take False. `run_suite(timeout=)`: wp111 passes None, the other five take 1800. `clone(depth=)`: wp112's shallow controls pass 1, every other clone takes 0. `suite_controls(hole=)`: wp111-114 pass HOLE_DECLARED, wp115 and wp116 pass HOLE_PLAIN. `report_unmutated(noun)`: wp111, wp113, wp115 and wp116 pass \"copy\", wp112 and wp114 pass \"clone\".",
+    "PER-RUNNER OUTPUT EQUALITY WAS CAPTURED AND DIFFED, WHICH IS THE BAR THIS PACKAGE WAS SET AND NOT A GREEN SUITE. Each runner was run from the same source checkout and an explicit holder before and after the change, its whole stdout+stderr written to a file, and the two files diffed with `diff -u`: `python -B scripts/wpNNN_controls.py <source> <holder> > <label>/wpNNN.txt 2>&1` then `diff -u before/wpNNN.txt after/wpNNN.txt`. wp111 (19 controls, 9s on both passes), wp113 (35 controls, 22s then 20s), wp115 (24 controls, 10s on both passes) and wp116 (4 controls, 1s then 2s) are byte-identical, empty diff, exit 0 both sides. wp114 (15 controls, 160s before / 175s after) is byte-identical, empty diff, exit 0 both sides. wp112 (19 controls, 240s before / 260s after) is byte-identical, empty diff, exit 1 BOTH SIDES - see remaining and declared_non_coverage for the one control that is BAD on both, which is open defect #360 and not this package's doing.",
+    "THE FOUR COPY-BASED RUNNERS WERE COMPARED OVER A TREE THAT ALREADY CARRIED THE CHANGE, WHICH IS THE STRONGER TEST. `fresh` copies the WORKING tree, so the after-capture of wp111, wp113, wp115 and wp116 ran their controls over copies containing the new harness and the rewritten runners; the output still did not move. The two clone-based runners clone the repository, so their after-capture cloned f34891a's committed tree on both sides - the same subject tree, with only the runner code executing over it changed, which is exactly the comparison the rule asks for.",
+    "THE RECORD ROLL WAS DELIBERATELY KEPT OUT OF THE COMPARISON. badf/current-state.json names the active work package and the baseline commit, and wp112's controls read both. Rolling those records in the same tree the before/after diff runs over would have conflated this package's code change with the ordinary re-anchoring every package does. All ten comparison runs were made with badf/ untouched; the records were written afterwards. The suite and the validator were then re-run over the rolled tree.",
+    "396 tests OK, skipped=1 - the same 396 as on main today, since this package adds no test and removes none; `python scripts/validate_continuity.py` CONTINUITY_VALIDATION=PASS, exit 0.",
+    "tests/ GAINED NOTHING AND IMPORTS NOTHING FROM THE HARNESS. The suite is offline and subprocess-free apart from four declared modules, measured with `grep -lnE \"subprocess[.](run|Popen|check_output|check_call)\" tests/*.py`, which still returns exactly test_resume_reconciliation.py, test_resume_schema_identity.py, test_validator_fails_closed.py and test_wp024_fixtures_are_sealed.py. scripts/control_harness.py shells out by nature and lives in scripts/ for the same reason the runners do; `grep -rn control_harness tests/` returns nothing.",
+    "NO RUNNER WAS WIRED INTO CI. #368 records why they are deliberately out - a fresh copy or clone per control, and most then run the whole suite on top of it - and each runner's own docstring says so. Nothing in .github/ was touched."
+  ],
+  "remaining": [
+    "wp112's control `the same later merge with the corroboration required to be the TIP` reports BAD on this machine, IDENTICALLY BEFORE AND AFTER this package's change, so the runner exits 1 on both sides of the comparison. It is open defect #360: the control's fixture is built by `clone_with_a_later_package`, which synthesises its commits on the CLONE's tip, and the clone's origin/main is the source checkout's local `main` - several commits behind origin/main on the checkout this was run against. So the control's verdict depends on whether the source has been pulled. Not fixed here, per this package's brief, and named so that a reader does not read the non-zero exit as a regression.",
+    "check_source_main_line still exists twice, in wp112 and wp114. Their bodies are behaviourally equivalent and their docstrings are not: wp112's records the incident that produced the guard and both directions as measured, wp114's records what #353 made of the allowed direction. Sharing one function means choosing one docstring or merging two records of two different measurements, which is the documentation version of the flattening this package exists to avoid. Left as two, named in the harness's table as not extracted.",
+    "Nothing detects these runners rotting. They are not in CI by design, so the harness can break and no push will notice until someone runs a runner by hand. This package does not change that and does not propose changing it; wiring them in is a separate change with its own review, as #368 says.",
+    "stop_reason in badf/current-state.json still describes WP-112 and its first sentence is still false. known_divergence records that, now for the fifth package running. Rewriting it is the operator's and is untouched here.",
+    "#346 - authority.implementation names no domain and sits beside production_platform_implementation - is untouched. This package cites the key that exists rather than minting one, which is #364's rule, and takes no position on whether the key is well named."
+  ],
+  "files_changed": [
+    "scripts/control_harness.py",
+    "scripts/wp111_controls.py",
+    "scripts/wp112_controls.py",
+    "scripts/wp113_controls.py",
+    "scripts/wp114_controls.py",
+    "scripts/wp115_controls.py",
+    "scripts/wp116_controls.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-117-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff -u before/wp111.txt after/wp111.txt (whole-output equality, 19 controls)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff -u before/wp113.txt after/wp113.txt (whole-output equality, 35 controls)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff -u before/wp114.txt after/wp114.txt (whole-output equality, 15 controls, clone-based)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff -u before/wp115.txt after/wp115.txt (whole-output equality, 24 controls)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff -u before/wp116.txt after/wp116.txt (whole-output equality, 4 controls)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff -u before/wp112.txt after/wp112.txt (whole-output equality, 19 controls, clone-based)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "grep -lnE \"subprocess[.](run|Popen|check_output|check_call)\" tests/*.py (still exactly four modules)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "THE ISSUE'S OWN MEASUREMENT WAS THE FIRST THING RE-MEASURED, AND IT PARTLY DID NOT HOLD. #368's table is the reason this package exists and its `edit` row is not reproducible: six distinct bodies at 10-59 lines against a measured four distinct texts at 8-9 lines. The direction of the finding survives - `edit` HAS drifted, in two ways that matter - but a package that had taken the table on trust would have written a false sentence into its own records on the first line. Re-measure the number the brief hands you, every time.",
+    "THE TWO DIFFERENCES IN `edit` ARE NOT THE SAME KIND OF THING AND SEPARATING THEM WAS THE WHOLE JUDGEMENT. The preview width (60 against 70) only ever appears inside an AssertionError that no green run prints; the `newline` argument decides whether `write_text` rewrites EVERY line ending in the file or only the span the mutation touched. On a Windows checkout that is a different file on disk. Unifying the first would have been invisible; unifying the second would have changed what four of the six controls' copies contain. Both are parameters, because output equality does not distinguish them and the bar was output equality.",
+    "SIX COPIES OF THE REPORTING LOOP HAD ALREADY DRIFTED INTO TWO WORDINGS AND NOBODY NOTICED. wp111 through wp114 print `DECLARED HOLE: expected the suite to stay GREEN` and warn `the hole has closed; re-derive the limit that declares it`; wp115 and wp116 print neither prefix and warn `re-derive the claim this control stands behind`. Nothing is wrong with either, and a reader comparing two runners' output would reasonably conclude the two branches mean different things. They do not. That is what six copies with no shared definition costs, and it is the concrete argument for this package that is not a line count.",
+    "THE COPY-BASED RUNNERS ARE NOT SLOW AND THE BRIEF'S COST ESTIMATE WAS HIGH BY AN ORDER OF MAGNITUDE FOR FOUR OF THE SIX. Measured, the before pass: wp116 1s, wp111 9s, wp115 10s, wp113 22s, wp114 160s, wp112 240s. The two clone-based runners carry essentially all of the cost, because a clone is a clone and their suites are the large ones. Anyone planning the same comparison should budget for the clone-based pair and stop worrying about the other four.",
+    "ADDING A FILE TO scripts/ WAS CHECKED AGAINST THE SUITE RATHER THAN ASSUMED SAFE. `grep -rn \"rglob\\|iterdir\\|glob(\" tests/*.py` shows no test enumerates scripts/*.py, and validate_continuity.py's required-files list is explicit rather than a directory walk, so a new module there is inert to both. That was measured before the module was written, not discovered afterwards by the suite going red.",
+    "IMPORTING WORKS BECAUSE OF HOW THE RUNNERS ARE INVOKED, AND THAT IS WORTH SAYING OUT LOUD. `python scripts/wpNNN_controls.py` puts scripts/ on sys.path as sys.path[0], so `from control_harness import ...` resolves without any package plumbing, any __init__.py or any sys.path manipulation. The harness is imported from the SOURCE checkout in every case; the copies and clones the runners build carry their own inert copy of it and never import it."
+  ],
+  "decisions": [
+    "DEC-123"
+  ],
+  "assumptions": [
+    "That a difference which changes only an AssertionError message no green run prints - `edit`'s 60-against-70 preview width - is still worth a parameter rather than a unification. The bar this package was set is whole-output equality, and under a fault the two messages differ; keeping the parameter costs one keyword argument and removes the need to argue that the fault path does not count. A reviewer who thinks that is over-cautious is disagreeing with a specific row of the table rather than with the extraction.",
+    "That the two `run_validator` shapes are a question with two right answers rather than a divergence to resolve. wp112 and wp114 parse ONE anchored STATE_RECONCILIATION= line out of stdout; wp115 searches stdout and stderr joined for a different string entirely. Only the subprocess call is shared, as run_script. If a reviewer reads these as one function that drifted, the repair is not to unify the return values - it is to say which of the two readings each caller needs, which is what the current split already records.",
+    "That leaving `check_source_main_line` in both runners is right. Its two docstrings record two different measurements made at two different times about the same guard, and its behaviour is stated as something this package must not alter. The duplication is real and is declared rather than removed."
+  ],
+  "blockers": [],
+  "authority": {
+    "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "scope_note": "One new module under scripts/ holding the part of the six negative-control runners that measurement showed is genuinely common, and the six runners rewritten to call it. No runner's behaviour changes; each was proven unchanged by whole-output comparison before and after. No test is added, removed or edited; nothing under tests/ imports the harness; no runner is wired into CI. AGENTS.md, docs/ and every design are untouched. badf/ and sessions/ are re-anchored and nothing more.",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_116",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python -m unittest discover -s tests",
+    "read_first": [
+      "scripts/control_harness.py, whose module docstring carries the need-vs-drift table this package rests on",
+      "https://github.com/bstBizEra/biztrust_guide/issues/368",
+      "scripts/wp112_controls.py and scripts/wp114_controls.py, the two that clone and the two that still each carry check_source_main_line",
+      "https://github.com/bstBizEra/biztrust_guide/issues/360",
+      "AGENTS.md section 6"
+    ],
+    "stop_if": [
+      "A divergence between two runners is resolved by taking the union of the two behaviours, or the more lenient of them, instead of by a parameter with a live caller on each side. That is exactly what WP-110 did to four private normalisers: the suite passed, four re-run controls passed, and review then found eight real divergences that had been caught before the change and were missed after it. A question can have two right answers, one per caller.",
+      "A runner is migrated on the strength of the test suite staying green. The suite does not run these files; it cannot tell you a control stopped tripping the test it names. The only evidence that a migration is behaviour-preserving is the runner's OWN whole output, captured before and after and diffed - every control, the test each trips, and every isolation declaration.",
+      "A before/after comparison is made over a tree whose badf/ records have been rolled in between. wp112's controls read active_work_package and baseline_commit out of badf/current-state.json, so re-anchoring the package inside the comparison window changes the subject and the diff stops measuring the code change. Capture both sides with badf/ untouched, then roll.",
+      "check_source_main_line is deleted, weakened, or shared between wp112 and wp114 by merging their docstrings. It refuses to run when the source checkout's local `main` carries commits its `origin/main` does not, and it exists because an accident once made every clone-based control red for a reason unrelated to the code. One direction only: AHEAD is refused, BEHIND is allowed, and widening it to both was already measured as a false failure and repaired once.",
+      "wp112's `the same later merge with the corroboration required to be the TIP` control reporting differently from one run to the next is treated as a regression in whatever change is in flight. It is open defect #360: that control's fixture is synthesised on the clone's tip, so its verdict depends on whether the source checkout's local main has been pulled. Check the source's refs before blaming the code.",
+      "A sentence in these files is written without a command that measures it. Every finding across the review rounds on this repository was a sentence that did not match a measurement, and this package's own first act was finding that the issue's headline table did not reproduce.",
+      "Anything under tests/ imports scripts/control_harness.py, or a fifth module under tests/ starts calling a subprocess. The suite is offline and subprocess-free apart from four declared modules, measured with `grep -lnE \"subprocess[.](run|Popen|check_output|check_call)\" tests/*.py`; the bare-word grep returns more and is the wrong filter.",
+      "A runner is wired into CI as part of a refactor. #368 records why they are out - a fresh copy or clone per control, and most then run the whole suite over it - and putting them in is a separate change with its own review.",
+      "resume_decision, primary_next_action_id, stop_reason or any key under badf/current-state.json's authority block is changed, or a new authority key is minted and then cited. A package that mints one and cites it passes every check, which is open defect #364."
+    ]
+  },
+  "declared_non_coverage": [
+    "wp112 EXITS 1 ON BOTH SIDES OF ITS COMPARISON and this package does not repair that. One of its nineteen controls is BAD before the change and BAD after it, identically; the diff is empty, which is the property this package was required to demonstrate, but the runner is not green and was not green before. The cause is open defect #360 and the fix is somebody else's. What this means for a reviewer: wp112's migration is proven to change nothing, and is NOT proven over a run in which every control behaves as declared, because no such run was available on this checkout.",
+    "check_source_main_line IS NOT EXTRACTED, and the duplication is left standing rather than removed. wp112's and wp114's copies differ in one edge case - wp114 routes the ancestor question through its own `ancestry()` helper, which raises when `merge-base --is-ancestor` returns an exit code other than 0 or 1, where wp112 inlines the subprocess and lets any other code fall through to the refusal - and in their docstrings, which record two different measurements. Neither difference is repaired here and no test covers either.",
+    "NOTHING GUARDS THE HARNESS ITSELF. There is no test that scripts/control_harness.py imports, no test that its parameters still have a live caller on each side, and no test that a seventh runner written tomorrow uses it rather than copying wp116 for the seventh time. The only thing that would catch a broken harness is someone running a runner by hand, which is the same exposure the six copies had and which this package does not improve. Building that guard means deciding whether these runners belong in CI, which #368 explicitly puts outside this change.",
+    "THE OUTPUT-EQUALITY PROOF IS A PROOF ABOUT ONE TREE AT ONE COMMIT, NOT ABOUT THE FUNCTIONS. Each runner was compared over the same source checkout at f34891a. That shows the migration did not change what these controls report about THIS tree; it does not show that the parameterised harness is equivalent to the six originals over every possible tree. In particular no comparison exercised `edit`'s AssertionError path, since no control's fixture failed to match, so the preview-width parameter is carried on reasoning rather than on a measurement.",
+    "NO RUNNER'S CONTROLS WERE READ FOR CORRECTNESS. This package moved code and proved the reports did not change; it did not ask whether any control is measuring the right thing, whether a DECLARED HOLE is still a hole, or whether a NOT ISOLATED declaration is still true of the tree. A control whose verdict was already wrong before this change is still wrong after it, and the diff would show nothing.",
+    "THE LINE-COUNT SAVING IS 24 LINES AND IS NOT AN ARGUMENT FOR THE PACKAGE. Six runners fall from 2,943 to 2,661 lines and the harness adds 258. If the case for this change is measured in duplication removed, it barely makes one; the case is the single reporting loop and the written classification, and this record says so rather than quoting the larger of the two numbers."
+  ]
+}
