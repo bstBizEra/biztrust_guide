@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "BIZTRUST-GUIDE-WP-116-engineering-ready",
+  "created_at": "2026-09-10T00:00:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-116",
+  "state": "ENGINEERING_READY",
+  "objective": "AGENTS.md carried two false statements about itself. Section 3 step 7 (#348) instructed a bare `python3` command; on Windows that resolves to a non-functional Microsoft Store alias, so an agent executing the mandatory resume protocol literally there must silently substitute a command the record never names. Section 10.3 (#361) asserted 'Twenty-seven of the twenty-eight tracked pages' under four named directories; `control/index.html` landed under `control/` in WP-113 and the true count is 29, so both halves were wrong. Step 7 now names the requirement - a Python 3 interpreter - and shows both invocations, `python3` on POSIX and `python` on Windows, with one sentence recording that `.github/workflows/pages.yml`'s own `python3` is correct on `ubuntu-latest` and is not to be 'fixed' to match. Section 10.3's count is deleted rather than corrected to 29, naming the command and the validator's existing live output instead.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "docs/biztrust-guide-wp-116-charter-facts",
+    "baseline_commit": "3d36d80da386a10e42415f558f0691f0b34380c7"
+  },
+  "completed": [
+    "DEFECT 1 (#348) REPAIRED. AGENTS.md section 3 step 7 no longer instructs a bare `python3` command. It now reads: 'Run the validator's own self-tests, then `scripts/validate_continuity.py`, with a Python 3 interpreter: `python3 -m unittest discover -s tests` then `python3 scripts/validate_continuity.py` on POSIX; `python -m unittest discover -s tests` then `python scripts/validate_continuity.py` on Windows, where `python3` resolves to a non-functional Microsoft Store alias.' - naming the requirement and showing both invocations, per #348's first option, with no runner script added and no path hardcoded to one machine.",
+    "STEP 7 WAS EXECUTED AS NEWLY WRITTEN, ON THIS MACHINE, BOTH COMMANDS. `python -m unittest discover -s tests` ran 396 tests OK (skipped=1); `python scripts/validate_continuity.py` printed CONTINUITY_VALIDATION=PASS. Both use the interpreter this machine actually has; neither prints the Store-alias sentence #348 measured.",
+    ".github/workflows/pages.yml WAS READ, NOT EDITED, AND VERIFIED RATHER THAN TAKEN ON TRUST. Its `python3` invocations sit at lines 46 ('Prove the validator fails closed'), 49 ('Validate continuity contracts') and 91 ('Project the records into the staged control page'), all on `run: ubuntu-latest`, where `python3` is the real interpreter and the build is green. AGENTS.md step 7 now says so in one sentence, so the next reader does not 'fix' CI to match the old wording.",
+    "DEFECT 2 (#361) REPAIRED BY DELETION, NOT CORRECTION. AGENTS.md section 10.3 no longer states a page count. `git ls-files '*.html' | wc -l` on this branch is 29 (measured after every edit in this package, since none add or remove a tracked *.html file); section 10.3 now names that command and notes that `scripts/validate_continuity.py` already prints the same figure as `PASS: html-pages:<n>` on every run - verified: this run printed `PASS: html-pages:29`. Correcting the sentence to 'twenty-nine' would have been true today and stale at the next page, exactly as #361 itself went stale once already; deleting the hand-maintained number is the ruling the brief already made.",
+    "THE GUARD, tests/test_resume_protocol_command.py, covers defect 1 only, scoped to the command string rather than the sentence: a line in section 3 naming `python3` without also naming the bare `python` form and the word `Windows` on that same line fails. test_anchors_exist asserts the section-3 heading is present and that the section still mentions python3 or python at all, so the guard cannot pass by finding nothing. Defect 2 gets no guard, by design: its repair deletes the hand-maintained number, and a deleted claim cannot drift - there is nothing left to ratchet.",
+    "THREE CONTROLS in scripts/wp116_controls.py, on fresh copies, unmutated copy first and green: (1) step 7 reverted to the pre-fix bare `python3 -m unittest discover -s tests` text turns test_no_bare_python3_command red, isolated - the exact control #348's own brief names by name; (2) a second, correctly-paired POSIX/Windows sentence added elsewhere in section 3 leaves the suite GREEN, proving the guard checks the pairing rather than rationing every mention of the word python3; (3) renaming the section-3 heading turns test_anchors_exist red, isolated, proving the anchor is asserted rather than assumed. None of the three trips more than the test named for it.",
+    "THE OTHER 18 OCCURRENCES SURVEYED, CLASSIFIED, NOT LEFT UNEXAMINED. `git grep -o \"python3 \" -- '*.md' '*.html' | wc -l` is 19, measured before AND after this package's edits (19 both times, since no edit removes or duplicates the substring `python3 ` - wording was added around existing occurrences, not multiplied). Per file: README.md 5, docs/LIVE_PREVIEW.md 6, index.html 2, docs/experiments/fixtures/README.md 2, docs/NEXT_STEPS.md 1, .github/pull_request_template.md 1, AGENTS.md 2. The two on AGENTS.md's own line 30 are defect 1, fixed above. Of the other 17: FIVE CHANGED to match section 3's resolution, each a bare, platform-unqualified instruction with no Windows sibling anywhere nearby, mirroring the exact defect shape - README.md's 'Agent continuity' step 6 (2 occurrences), README.md's 'Validate before every handoff' fenced block (2 occurrences, now split into a POSIX block and a Windows block), and .github/pull_request_template.md's Continuity row (1 occurrence, now naming both forms in one cell). TWELVE LEFT, explicitly, each for its own reason: README.md line 24 and five of docs/LIVE_PREVIEW.md's six (lines 105, 120, 144, 181, 202) are already OS-branched, each paired with a working `py`/`python` Windows alternative shown in the same section, OR (lines 181 and 202 specifically) already resolved by that same document's own Troubleshooting entry '### `python3: command not found`' two subsections above, which already tells a Windows reader to use `py` or `python`; docs/LIVE_PREVIEW.md line 241 and docs/NEXT_STEPS.md line 38 are evidence-record fields (one a forward template, one a specific dated past verification already executed) rather than instructions to execute now; docs/experiments/fixtures/README.md's two occurrences invoke a different tool entirely (the WP-024 fixtures' `build.py`, unrelated to the resume protocol); index.html's two occurrences (the local-preview demo and the 'First safe command for every new session' display) are left as a published-artifact scope boundary - the brief's own caution against a blanket rewrite touching a published HTML page, weighed against the fact that index.html carries no Windows alternative anywhere on the page for either command, which is recorded here as an open tension rather than resolved silently. Full per-line reasoning is in the session report.",
+    "NO RULE CHANGED. Both defects were statements of fact that were false; making a false statement true is not a policy change. No obligation in AGENTS.md sections 1-12 was added, removed or reworded in substance - section 3's nine steps are still the same nine steps, and section 10's seven steps are still the same seven steps, one of them now naming a command instead of a number.",
+    "396 tests OK, skipped=1 (394 measured on main at 3d36d80, 2 added here); validate_continuity.py CONTINUITY_VALIDATION=PASS with STATE_RECONCILIATION=CONSISTENT after the badf roll, html-pages:29, exit 0; scripts/wp116_controls.py: 3 controls, 0 not behaving as declared."
+  ],
+  "remaining": [
+    "THE TENSION ON index.html IS RECORDED, NOT RESOLVED. Both of its python3 occurrences are bare, platform-unqualified instructions - the same shape as the five changed elsewhere - but neither is corrected here, on the judgement that editing the published site's own prose is a larger and separately-reviewable change than a charter-wording fix, and the brief that opened this package named touching a published HTML page as a cost to weigh. If that judgement is wrong, the fix is the same pattern already applied three other places: name both invocations, on POSIX and on Windows.",
+    "stop_reason in badf/current-state.json still describes WP-112 and its first sentence is still false. known_divergence records that, now for the fourth package running. Rewriting it is the operator's.",
+    "#357's ratchet - which modules under tests/ call a subprocess - is still not built. This package's own module names the measured four in its docstring with the command beside them, the fifth file to carry that sentence by being copied, and does not become a fifth subprocess-calling module itself.",
+    "scripts/wp116_controls.py is the fifth copy of the same harness (`edit`, `fresh`, `run_suite`) after wp112 through wp115. WP-115's checkpoint already recorded that the case for a shared runner is one instance stronger; this package copies again for the same reason WP-115 did - a shared runner is a change to four other packages' committed evidence and not this package's to make."
+  ],
+  "files_changed": [
+    "AGENTS.md",
+    "README.md",
+    ".github/pull_request_template.md",
+    "tests/test_resume_protocol_command.py",
+    "scripts/wp116_controls.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-116-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/wp116_controls.py (3 controls on fresh copies, unmutated copy first, one expecting GREEN)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests (Windows form of step 7, re-run to prove the newly-written instruction is followable as written on this machine)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "THE DEFECT WAS MEASURED BEFORE THE GUARD, ON THIS MACHINE. `command -v python3` resolves to `/c/Users/ounkh/AppData/Local/Microsoft/WindowsApps/python3`, and running it prints the Store-listing sentence #348 quotes, reproducing the issue exactly. After the fix, step 7's Windows invocation (`python -m unittest discover -s tests` then `python scripts/validate_continuity.py`) runs cleanly with the interpreter this machine actually has.",
+    "THE HTML-PAGE COUNT WAS RE-MEASURED AFTER THE LAST EDIT, NOT BEFORE. This package's own commit touches AGENTS.md, README.md, .github/pull_request_template.md, one new test module and one new script - none of them a tracked *.html file - so `git ls-files '*.html' | wc -l` stayed 29 throughout. It was re-run after every edit rather than assumed, because the previous package produced two false sentences exactly this way: a count about a population its own commit joined, measured before the last edit rather than after.",
+    "THE python3-OCCURRENCE COUNT WAS ALSO RE-MEASURED AFTER THE LAST EDIT. `git grep -o \"python3 \" -- '*.md' '*.html' | wc -l` is 19 both before and after this package's changes: the fix rewords existing occurrences (adding the bare `python` and `Windows` forms beside them) rather than adding or removing any `python3 ` substring, so the total this package could have silently moved did not move.",
+    "THE SUBPROCESS FLOOR WAS CHECKED, NOT ASSUMED. `grep -lnE \"subprocess[.](run|Popen|check_output|check_call)\" tests/*.py` still returns exactly the same four files it did before this package: test_resume_reconciliation.py, test_resume_schema_identity.py, test_validator_fails_closed.py and test_wp024_fixtures_are_sealed.py. tests/test_resume_protocol_command.py is not the fifth.",
+    "THE RECORD ROLL WAS AUDITED AGAINST THE CONTROLS AND TOUCHES NONE OF THEM. scripts/wp116_controls.py reads and writes only AGENTS.md and runs one test module; nothing in it reads badf/current-state.json, badf/next-actions.json or badf/decision-log.jsonl, so rolling those files for this package changes nothing the controls measure."
+  ],
+  "decisions": [
+    "DEC-122"
+  ],
+  "assumptions": [
+    "That 'an instruction a reader is told to execute' is the right line between the five python3 occurrences changed and the twelve left. The ruling was made in the brief that opened this package; this package applied it to each of the 19 occurrences individually rather than re-deriving the rule, and recorded its reasoning per occurrence so a reviewer can disagree with a specific classification rather than the rule itself.",
+    "That leaving index.html's two occurrences unrepaired is the right side of that same line, given the brief's caution against a blanket rewrite touching a published HTML page. This is recorded as an open tension in 'remaining' rather than resolved by assumption, because the occurrences are, on their own wording, the same unqualified-instruction shape as the five that were changed.",
+    "That AGENTS.md sections 1-12 were not altered in substance by either repair. Both changes replace a false factual claim with a true one inside an existing numbered step; no step was added, removed, renumbered or reworded as an obligation. If a reviewer reads either change as narrowing or widening what an agent MUST do, that reading should stop this package rather than be argued past, per the brief's own instruction."
+  ],
+  "blockers": [],
+  "authority": {
+    "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "scope_note": "Two false statements in AGENTS.md are corrected to true ones; one guard and one control runner are added under tests/ and scripts/; five other python3 occurrences outside AGENTS.md are brought into the same wording and twelve are left, classified. No rule in AGENTS.md sections 1-12 is added, removed or reworded. badf/ is re-anchored and nothing more.",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_115",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python -m unittest discover -s tests -p 'test_resume_protocol_command.py'",
+    "read_first": [
+      "AGENTS.md sections 3 and 10",
+      "tests/test_resume_protocol_command.py",
+      "scripts/wp116_controls.py",
+      "tests/test_stale_records.py",
+      "https://github.com/bstBizEra/biztrust_guide/issues/348",
+      "https://github.com/bstBizEra/biztrust_guide/issues/361",
+      "AGENTS.md section 6"
+    ],
+    "stop_if": [
+      "A rule in AGENTS.md sections 1-12 is added, removed or reworded rather than a false factual statement being corrected. Both #348 and #361 are factual defects; the brief that opened this package was explicit that a rewritten obligation is out of scope and should stop the package rather than be argued past.",
+      "AGENTS.md section 10.3's page count is corrected to a number (twenty-nine, or any other) instead of being deleted. That is #361's own lesson: a count about a population that keeps growing goes stale again at the next page, silently, exactly as this one did once already.",
+      "`.github/workflows/pages.yml` is edited to remove or requalify its `python3` invocations. Its runner is `ubuntu-latest`, where `python3` is the real interpreter and the build is green; AGENTS.md step 7 now says so in one sentence for exactly this reason.",
+      "A runner script is added so that step 7 can name one command that works everywhere, or any path is hardcoded to one machine. #348's acceptance criteria forbid both outright, and the brief repeats the prohibition.",
+      "tests/test_resume_protocol_command.py is pinned to the exact wording of step 7 rather than to the command-string pairing rule (python3 requires a same-line bare python and Windows mention). The section's prose will change again; a guard pinned to a sentence fails for the wrong reason when it does.",
+      "A subprocess call is added to tests/test_resume_protocol_command.py. Four modules under tests/ call one by declared precedent, measured with `grep -lnE \"subprocess[.](run|Popen|check_output|check_call)\" tests/*.py`, and this must not become the fifth. Everything the guard needs is one file read as text.",
+      "A count in these files is written without re-measuring it after the last edit in the same commit. Two false sentences in the previous package were exactly this fault: a count about a population the commit itself joined, measured before the edit rather than after. This package's own html-page and python3-occurrence counts were both re-measured after the last edit for that reason.",
+      "resume_decision, primary_next_action_id, stop_reason or any key under badf/current-state.json's authority block is changed. They express the operator's authority; this package's scope is AGENTS.md's own prose, and badf/ is touched only to re-anchor.",
+      "A sentence in AGENTS.md, the checkpoint or the decision log is written without a command that measures it. Every finding across the last several review rounds on this repository was a sentence that did not match a measurement."
+    ]
+  },
+  "declared_non_coverage": [
+    "index.html's two python3 occurrences (the local-preview demo and the 'First safe command for every new session' display) are the same bare, platform-unqualified shape as the five occurrences this package did change, and neither is repaired here. The judgement, recorded in 'remaining' rather than hidden, is that editing the published site's own prose is a larger and separately-reviewable change than a charter-wording fix, and the brief that opened this package named touching a published HTML page as a cost to weigh against a blanket rewrite. If that judgement is wrong, the repair is the same pattern already used three other places.",
+    "Five of docs/LIVE_PREVIEW.md's six occurrences and README.md's one http.server occurrence are left because they are already OS-branched with a working `py`/`python` alternative shown beside them, or (two of the six) because that same document's own Troubleshooting entry already tells a Windows reader to substitute `py` or `python`. Nothing checks that these documents stay internally consistent if a future edit removes that nearby alternative; this package reads them as consistent today and does not add a guard for staying so.",
+    "docs/LIVE_PREVIEW.md's verification-evidence template field and docs/NEXT_STEPS.md's dated past-verification record both still show the literal text `python3 scripts/validate_continuity.py` as the value to write down. Neither is an instruction to execute at that location, so neither was changed; but a report written on Windows following this package's own fixed AGENTS.md would truthfully write `python scripts/validate_continuity.py`, and these two fields do not say so. That is a latent inconsistency this package identified and left, rather than one it did not see.",
+    "docs/experiments/fixtures/README.md's two `build.py` invocations are untouched. They are a different tool for a sealed experiment, not the resume-protocol subject either issue names, and this package did not weigh the same command's Windows behaviour there.",
+    "No guard exists for section 10.3's directory list (stages/, phases/, reference/, landing/) failing to name a fifth directory again, the way it failed to name control/. The repair removes the count and the enumeration together rather than replacing the enumeration with a live one; a guard for 'every directory holding a tracked *.html page is named in this sentence' was not built, because the sentence itself is gone."
+  ]
+}

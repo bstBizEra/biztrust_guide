@@ -20,7 +20,7 @@
 
 | Check | Command / run | Result | Source SHA |
 |---|---|---|---|
-| Continuity | `python3 scripts/validate_continuity.py` | | |
+| Continuity | `python3 scripts/validate_continuity.py` (POSIX) / `python scripts/validate_continuity.py` (Windows) | | |
 | JavaScript | `node --check script.js` | | |
 | Site assets | | | |
 
