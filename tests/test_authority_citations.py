@@ -130,6 +130,32 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     the registry's membership and size. A qualified citation may be ADDED freely - Rule A checks it
     - and that is the whole point of freezing the other form.
 
+ 8. THE GUARD ASKS WHETHER A CITATION RESOLVES, NOT WHETHER THE GRANT WAS GIVEN - AND RULE A
+    RESOLVES AGAINST A RECORD THE CITING PACKAGE MAY EDIT IN THE SAME COMMIT. Nothing in this
+    repository freezes `badf/current-state.json`'s `authority` block. A package can add a key to it,
+    cite that key from its own entry in the same tree, and the pointer resolves: a self-minted grant
+    is indistinguishable here from one an operator gave.
+
+    MEASURED, NOT REASONED, and on the whole tree rather than on this module alone. With
+    `authority.self_minted_grant` added to the record and one entry citing it:
+
+        python -m unittest discover -s tests      -> Ran 394 tests, OK (skipped=1)
+        python scripts/validate_continuity.py     -> CONTINUITY_VALIDATION=PASS, exit 0
+
+    Two controls hold that reading: `a_key_minted_and_cited_in_the_same_tree` expects this module to
+    stay GREEN, and a validator control runs `scripts/validate_continuity.py` over the same copy and
+    expects PASS. `scripts/wp115_controls.py` fails if either ever goes red, because a hole that has
+    closed needs its limit re-derived rather than left standing.
+
+    THE GUARD FOR IT IS DELIBERATELY NOT BUILT HERE, and the reason is timing rather than appetite.
+    Freezing the authority block is a different rule with a different subject - the record, not the
+    log - and it must not be designed before #363 settles which authority vocabulary is canonical,
+    because a freeze designed now would freeze the wrong key set. Filed as #364.
+
+    LIMIT 1 IS THE NEIGHBOUR AND NOT THE SAME LIMIT. That one says nothing here judges WHICH grant an
+    entry should have cited (#346). This one says nothing here judges whether the grant it did cite
+    was ever given by anybody but the citing package.
+
 Stdlib only: no third-party import, no network, no subprocess. Four modules under `tests/` do call a
 subprocess and this is not a fifth; the four are `test_resume_reconciliation.py`,
 `test_resume_schema_identity.py`, `test_validator_fails_closed.py` and

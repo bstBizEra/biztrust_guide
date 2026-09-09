@@ -13,8 +13,10 @@ Each control copies the repository, applies ONE mutation, runs
 
     python -m unittest discover -s tests -p test_authority_citations.py -v
 
-from that copy's root, and asserts the NAMED test fails. Three controls expect the suite to stay
-GREEN and say why in their own docstrings; the runner fails if one of those goes red. Every
+from that copy's root, and asserts the NAMED test fails. Four controls expect the suite to stay
+GREEN and say why in their own docstrings, and one runs the validator instead of the suite; the
+runner fails if any of those goes red, because a control that demonstrates a limit cannot drift
+away from the code without this script noticing. Every
 mutation asserts that what it replaces was really there - the exact string, or the exact field
 value on the exact entry - so a control cannot become a no-op when the tree moves under it.
 
@@ -35,9 +37,19 @@ member's answer what it is, so neither green is green by accident.
   eleven keys and the suite is GREEN over a record that no longer holds the grant. That is what a
   guard carrying its own copy of the keys buys, measured rather than asserted.
 
-TWENTY-TWO CONTROLS. Nineteen expect a named test to fail; three expect the suite to stay GREEN -
-the two pair members above, and a resolvable qualified citation being added, which is not optional
-because a guard that rejects legitimate content gets switched off.
+THE DECLARED HOLE, and it is demonstrated rather than asserted - the pattern WP-113 and WP-114 both
+used for theirs. Rule A resolves a citation against `badf/current-state.json`, a record the citing
+package may edit in the SAME COMMIT, and nothing freezes that block. `a_key_minted_and_cited_in_the
+_same_tree` adds a key and cites it, and expects the suite to stay GREEN; a VALIDATOR control runs
+`scripts/validate_continuity.py` over the same copy and expects `CONTINUITY_VALIDATION=PASS`, because
+limit 8 claims both and a limit's claim needs a control per half. If either goes red the hole has
+closed and limit 8 must be re-derived rather than deleted. The guard for it is #364 and waits on
+#363, which settles which authority vocabulary is canonical.
+
+TWENTY-FOUR CONTROLS. Nineteen expect a named test to fail; four expect the suite to stay GREEN -
+the two pair members above, limit 8's declared hole, and a resolvable qualified citation being
+added, which is not optional because a guard that rejects legitimate content gets switched off. One
+runs the validator rather than the suite.
 
 ISOLATED - exactly one test fails. Twelve of the nineteen:
   * DEC-118's citation copied into a new entry       -> test_no_unregistered_unresolvable_citations
@@ -357,6 +369,26 @@ def a_resolvable_qualified_citation_added(root: Path) -> None:
     append(root, entry("DEC-900", "badf/current-state.json authority.wayfinder_charting"))
 
 
+def a_key_minted_and_cited_in_the_same_tree(root: Path) -> None:
+    """THE DECLARED HOLE, and this control asserts the suite stays GREEN. Limit 8.
+
+    Rule A resolves a citation against a record the citing package may edit in the same commit, and
+    nothing in this repository freezes that block. A key is added to `badf/current-state.json` and
+    an entry citing it is appended in the same tree: the pointer resolves, and a self-minted grant
+    is indistinguishable here from one an operator gave.
+
+    If this control ever goes RED the hole has closed and limit 8 must be re-derived rather than
+    deleted. The guard for it is #364 and must wait on #363, which settles which authority
+    vocabulary is canonical; a freeze designed before that would freeze the wrong key set.
+    """
+    block = authority_block(root)
+    if "self_minted_grant" in block:
+        raise AssertionError(f"{STATE} already holds self_minted_grant")
+    block["self_minted_grant"] = "GRANTED_BY_THIS_VERY_COMMIT"
+    rewrite_authority(root, block)
+    append(root, entry("DEC-900", "badf/current-state.json authority.self_minted_grant"))
+
+
 def a_granted_key_removed_from_the_record(root: Path) -> None:
     """THE READ-FROM-THE-RECORD PAIR, first member. Five entries cite guide_v2_records_drafting.
 
@@ -434,9 +466,32 @@ CONTROLS = [
      a_granted_key_removed_with_the_keys_hardcoded, None),
     ("EXPECTS GREEN: a resolvable qualified citation added", a_resolvable_qualified_citation_added,
      None),
+    ("DECLARED HOLE (limit 8): a key minted and cited in the same tree",
+     a_key_minted_and_cited_in_the_same_tree, None),
+]
+
+# (name, how to prepare the copy, what the validator's stdout must carry)
+#
+# ONE CONTROL, and it exists because limit 8 makes a claim about the VALIDATOR and not only about
+# this module. A limit that says "the suite is green and the validator PASSes" needs both halves
+# measured; the suite half is the control above, and this is the other half.
+#
+# The copy has no `.git`, so STATE_RECONCILIATION reads UNKNOWN there - WP-113's declared shape for
+# a copy rather than a defect, and advisory in any case, since the reconciliation never changes the
+# exit code. What is asserted is the verdict the gates are read through.
+VALIDATOR_CONTROLS = [
+    ("DECLARED HOLE (limit 8): the validator over the same minted tree",
+     a_key_minted_and_cited_in_the_same_tree, "CONTINUITY_VALIDATION=PASS"),
 ]
 
 FAILED = re.compile(r"^(?:FAIL|ERROR): (\w+) ", re.M)
+
+
+def run_validator(root: Path) -> tuple[int, str]:
+    done = subprocess.run(
+        [PYTHON, "-B", str(root / "scripts/validate_continuity.py")],
+        cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1800)
+    return done.returncode, done.stdout + done.stderr
 
 
 def run_suite(root: Path) -> tuple[int, set[str]]:
@@ -488,7 +543,19 @@ def main() -> int:
               f"failed: {sorted(failures) or 'NOTHING'}"
               f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
 
-    print(f"\n{len(CONTROLS)} controls, {bad} not behaving as declared")
+    for index, (name, mutate, expected) in enumerate(VALIDATOR_CONTROLS, start=1):
+        root = fresh(source, holder, f"validator_{index:02d}")
+        mutate(root)
+        code, out = run_validator(root)
+        ok = code == 0 and expected in out
+        bad += 0 if ok else 1
+        print(f"[{'PASS' if ok else 'BAD '}] {name}")
+        print(f"       expected exit 0 and the validator to print {expected!r}; got exit {code} "
+              f"and {'it' if expected in out else 'it NOT'} present"
+              f"{'' if ok else '  <- the hole has closed; re-derive the limit that declares it'}")
+
+    total = len(CONTROLS) + len(VALIDATOR_CONTROLS)
+    print(f"\n{total} controls, {bad} not behaving as declared")
     return 1 if bad else 0
 
 
