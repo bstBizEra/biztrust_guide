@@ -35,11 +35,11 @@ member's answer what it is, so neither green is green by accident.
   eleven keys and the suite is GREEN over a record that no longer holds the grant. That is what a
   guard carrying its own copy of the keys buys, measured rather than asserted.
 
-TWENTY CONTROLS. Seventeen expect a named test to fail; three expect the suite to stay GREEN - the
-two pair members above, and a resolvable qualified citation being added, which is not optional
+TWENTY-TWO CONTROLS. Nineteen expect a named test to fail; three expect the suite to stay GREEN -
+the two pair members above, and a resolvable qualified citation being added, which is not optional
 because a guard that rejects legitimate content gets switched off.
 
-ISOLATED - exactly one test fails. Ten of the seventeen:
+ISOLATED - exactly one test fails. Twelve of the nineteen:
   * DEC-118's citation copied into a new entry       -> test_no_unregistered_unresolvable_citations
   * a new unresolvable qualified citation            |
   * this package's own DEC-121 made unresolvable     |
@@ -50,6 +50,11 @@ ISOLATED - exactly one test fails. Ten of the seventeen:
   * one more entry on an existing bare form          -> test_the_legacy_population_is_frozen
   * one legacy form respelled as another             |
   * a new unresolvable citation filed in             -> test_the_registry_is_exactly_this
+  * an authority that is a dict                      -> test_every_entry_carries_a_string_authority
+  * an authority that is null                        |
+    Both are APPENDED, so no count moves and the type assertion is the only thing that can fail.
+    Without it each of these raises TypeError out of a reader and the module reports an ERROR
+    rather than naming the entry - the same exit code, and less for a reader to act on.
 
 NOT ISOLATED, and declared rather than trimmed, as `tests/test_stale_records.py` and
 `scripts/wp114_controls.py` declare of theirs. What each breaks really does break more than one
@@ -312,6 +317,25 @@ def a_new_unresolvable_citation_filed_into_the_registry(root: Path) -> None:
          '    },\n')
 
 
+def an_authority_that_is_a_dict(root: Path) -> None:
+    """A citation of the wrong TYPE must fail by name, not crash a reader.
+
+    `re.match` raises TypeError on a dict, which would report the module as an ERROR from the middle
+    of a reader rather than as a failure naming the entry. The entry is APPENDED, so the corpus
+    counts are untouched and the only thing that can fail is the type assertion itself.
+    """
+    row = entry("DEC-900", RESOLVES)
+    row["authority"] = {"key": "implementation"}
+    append(root, row)
+
+
+def an_authority_that_is_null(root: Path) -> None:
+    """The other shape of the same defect, and the one a hand-edited record produces."""
+    row = entry("DEC-900", RESOLVES)
+    row["authority"] = None
+    append(root, row)
+
+
 def the_authority_block_emptied(root: Path) -> None:
     """The record read as empty. NOT ISOLATED, and that is the point.
 
@@ -398,6 +422,10 @@ CONTROLS = [
      "test_the_qualified_arm_reads_a_real_corpus"),
     ("a new unresolvable citation filed into the registry",
      a_new_unresolvable_citation_filed_into_the_registry, "test_the_registry_is_exactly_this"),
+    ("an authority that is a dict rather than a string", an_authority_that_is_a_dict,
+     "test_every_entry_carries_a_string_authority"),
+    ("an authority that is null", an_authority_that_is_null,
+     "test_every_entry_carries_a_string_authority"),
     ("the record's authority block emptied", the_authority_block_emptied, "test_anchors_exist"),
     ("the decision log truncated to five entries", the_log_truncated, "test_anchors_exist"),
     ("A GRANT REMOVED FROM THE RECORD, first of the read-from-the-record pair",

@@ -104,8 +104,10 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
  4. ONE SYNTACTIC FORM IS QUALIFIED: exactly `badf/current-state.json authority.<key>`, anchored at
     both ends. A citation of the same grant written any other way - a URL, `current-state.json
     authority.x`, a nested path - is NOT qualified and is not resolved. It does not vanish, though:
-    everything QUALIFIED does not match falls into Rule B's arm, whose set is an EQUALITY, so
-    `test_the_legacy_forms_are_exactly_these` fails on it. An unreadable citation is loud rather
+    every STRING that QUALIFIED does not match falls into Rule B's arm, whose set is an EQUALITY, so
+    `test_the_legacy_forms_are_exactly_these` fails on it. (A citation that is not a string at all
+    cannot be matched against either pattern and is limit 6's bucket, named there rather than here.)
+    An unreadable citation is loud rather
     than silent, which is what makes an incomplete pattern safe - the same rule
     `tests/test_stale_records.py` limit 7 rests on. There is deliberately no second test asserting
     the same set operation under a different name.
@@ -114,7 +116,15 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     why `authority` is an open string there: nothing in the repository declares its vocabulary, and
     closing it in the schema would invent one. This module declares part of it instead, from the
     corpus rather than from a design.
- 6. THE ENTRY FLOOR IS A FLOOR, NOT AN EQUALITY, because the log grows by one entry per package and
+ 6. A CITATION OF THE WRONG TYPE IS EXCLUDED FROM BOTH RULES, AND IS NAMED FOR IT. `malformed()`
+    is a third bucket, not a third shape: an `authority` that is a dict or `null` cannot be matched
+    against a pattern at all, so neither rule reads it, and
+    `test_every_entry_carries_a_string_authority` turns that exclusion into a named failure rather
+    than a `TypeError` out of the middle of a reader. The schema and
+    `tests/test_badf_match_schemas.py` own the rule that it must be a string; what is owned here is
+    that being unreadable is never a way out of the corpus. Limit 4 refuses that for a citation
+    whose SHAPE is unknown; this is the same refusal for one whose TYPE is.
+ 7. THE ENTRY FLOOR IS A FLOOR, NOT AN EQUALITY, because the log grows by one entry per package and
     an equality would make every future package edit this file for no reason. The equalities that
     matter are elsewhere and are real equalities: the legacy per-form counts, the legacy total and
     the registry's membership and size. A qualified citation may be ADDED freely - Rule A checks it
@@ -127,7 +137,13 @@ subprocess and this is not a fifth; the four are `test_resume_reconciliation.py`
 
     grep -lnE "subprocess[.](run|Popen|check_output|check_call)" tests/*.py
 
-and grepping for the WORD returns six, which is the wrong filter.
+GREPPING FOR THE WORD IS THE WRONG FILTER, and the reason is a property rather than a number: it
+matches every module that merely NAMES `subprocess` - THIS ONE INCLUDED, in the sentence you are
+reading - so it returns a strict superset of the modules that call one, and the gap between the two
+widens every time a docstring mentions it. At this commit `grep -l subprocess tests/*.py` returns 7
+against the 4 above, and 7 is not a fact about the suite. WP-114 recorded the same correction as
+"a count is only as good as its filter" and it reached a fourth file by being copied; this is the
+fifth, and it is written as an inequality so that copying it cannot make it false.
 """
 from __future__ import annotations
 
@@ -159,7 +175,7 @@ UNRESOLVED_CITATIONS: dict[str, dict] = {
                 "entry reads as governed while naming no grant; the log is append-only and #356 "
                 "item 1 puts the repair behind the records judgement in #316, so it is registered "
                 "here rather than edited. The key it names is the checkpoints' own vocabulary - 85 "
-                "of 95 carry it - written against this record's path, which is limit 3"),
+                "of 96 carry it - written against this record's path, which is limit 3"),
     },
 }
 
@@ -177,7 +193,7 @@ LEGACY_CITATIONS: dict[str, int] = {
 LEGACY_ENTRIES = 110
 
 # Corroborating floors. The qualified floor is what stops the Rule A arm reading nothing and
-# reporting success: 8 at 8adda10 plus DEC-121, appended by this package. The entry floor is limit 6.
+# reporting success: 8 at 8adda10 plus DEC-121, appended by this package. The entry floor is limit 7.
 QUALIFIED_CITATIONS_FLOOR = 9
 ENTRIES_FLOOR = 119
 AUTHORITY_KEYS_FLOOR = 11
@@ -205,24 +221,47 @@ def authority_keys() -> frozenset[str]:
     return frozenset(block) if isinstance(block, dict) else frozenset()
 
 
-def citations() -> list[tuple[str, str]]:
-    """(decision id, authority string) for every entry, in log order."""
+def citations() -> list[tuple[object, object]]:
+    """(decision id, authority) for every entry, in log order, WHATEVER TYPE THE RECORD HOLDS.
+
+    Nothing is coerced here. `schemas/decision-record.schema.json` requires `authority` to be a
+    non-empty string and `tests/test_badf_match_schemas.py` enforces it, so a non-string is a defect
+    a sibling guard already reports - but a guard that CRASHES where a sibling would fail cleanly
+    tells its reader less than one that names what it found. `malformed()` is that named answer, and
+    the two readers below skip anything that is not a string rather than handing it to `re.match`.
+    """
     return [(entry.get("id", ""), entry.get("authority", "")) for entry in entries()]
+
+
+def malformed() -> list[tuple[object, object]]:
+    """Entries whose id or authority is not a non-empty string, which NEITHER rule can read.
+
+    Excluded from `qualified()` and `legacy()` alike, so this is a third bucket rather than a third
+    shape of citation - and `test_every_entry_carries_a_string_authority` is what stops the
+    exclusion being silent. Without it, an entry could leave the corpus by being unreadable, which
+    is the failure mode limit 4 exists to refuse for citations written in an unknown SHAPE; a
+    citation of the wrong TYPE is the same defect one level down.
+    """
+    return [(dec, value) for dec, value in citations()
+            if not (isinstance(dec, str) and dec and isinstance(value, str) and value)]
 
 
 def qualified() -> list[tuple[str, str, str]]:
     """(decision id, citation, key) for every citation of the qualified form."""
     out = []
     for dec, citation in citations():
+        if not isinstance(citation, str):
+            continue
         found = QUALIFIED.match(citation)
         if found:
-            out.append((dec, citation, found.group(1)))
+            out.append((str(dec), citation, found.group(1)))
     return out
 
 
 def legacy() -> list[tuple[str, str]]:
-    """(decision id, citation) for every citation that is NOT of the qualified form."""
-    return [(dec, citation) for dec, citation in citations() if not QUALIFIED.match(citation)]
+    """(decision id, citation) for every STRING citation that is NOT of the qualified form."""
+    return [(str(dec), citation) for dec, citation in citations()
+            if isinstance(citation, str) and not QUALIFIED.match(citation)]
 
 
 class TestAnchorsExist(unittest.TestCase):
@@ -237,7 +276,7 @@ class TestAnchorsExist(unittest.TestCase):
             f"badf/decision-log.jsonl holds {len(rows)} entries, against a floor of "
             f"{ENTRIES_FLOOR}. Entries are appended and never removed, so a count below the floor "
             f"means the log was truncated or is not being read - either way this module is "
-            f"checking less than it should. A floor rather than an equality: limit 6.")
+            f"checking less than it should. A floor rather than an equality: limit 7.")
         keys = authority_keys()
         self.assertGreaterEqual(
             len(keys), AUTHORITY_KEYS_FLOOR,
@@ -245,10 +284,30 @@ class TestAnchorsExist(unittest.TestCase):
             f"{AUTHORITY_KEYS_FLOOR}. Rule A resolves against this block and the registry asserts "
             f"one key is ABSENT from it, so an empty or unread block would let BOTH pass while "
             f"checking nothing. Removing an authority key is the operator's and is not routine.")
-        for dec, citation in citations():
-            with self.subTest(decision=dec):
-                self.assertTrue(dec, f"an entry carries no id: {citation!r}")
-                self.assertTrue(citation, f"{dec} carries no authority string")
+
+    def test_every_entry_carries_a_string_authority(self) -> None:
+        """A citation of the wrong TYPE fails by name here rather than crashing a reader.
+
+        `re.match` raises `TypeError` on a dict or on `None`, which would report this module as an
+        ERROR from the middle of a reader instead of as a failure naming the entry. That is not a
+        loophole - the exit code is 1 either way and nothing gets past the guard - but a guard that
+        crashes tells a reader less than one that fails, and the entries excluded from both rules
+        are exactly the ones a reader most needs named.
+
+        It is not this module's job to enforce the schema: `schemas/decision-record.schema.json`
+        requires a non-empty string and `tests/test_badf_match_schemas.py` holds the log to it. This
+        assertion exists so that the two guards fail in the same register, and its message says
+        which one owns the rule.
+        """
+        broken = malformed()
+        self.assertFalse(
+            broken,
+            f"these entries carry an id or an authority that is not a non-empty string: "
+            f"{[(dec, type(value).__name__) for dec, value in broken]}. Neither Rule A nor Rule B "
+            f"can read them, so they are in the corpus and checked by nothing. "
+            f"schemas/decision-record.schema.json requires a non-empty string for both and "
+            f"tests/test_badf_match_schemas.py enforces it; this assertion is here so that a "
+            f"wrong-typed entry is NAMED rather than raising TypeError out of a reader.")
 
 
 class TestQualifiedCitationsResolve(unittest.TestCase):
