@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "BIZTRUST-GUIDE-WP-115-engineering-ready",
+  "created_at": "2026-09-09T16:20:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-115",
+  "state": "ENGINEERING_READY",
+  "objective": "Every entry in badf/decision-log.jsonl carries an authority field - the pointer a reader follows to check that a decision was made under a grant that exists - and nothing in the repository resolved it, so an entry could name no grant at all and still read as governed. DEC-118 does (#356), and the string was copied into a WP-113 draft because DEC-118 was the model. tests/test_authority_citations.py holds two rules: a citation of the qualified form 'badf/current-state.json authority.<key>' must name a key the record holds, with the keys read from the record; and the three legacy bare forms are frozen by their exact set and their exact per-form counts, which freezes a legacy population rather than validating it. DEC-118 is registered as a ratchet and not repaired - the log is append-only and #356 item 1 puts the repair behind #316 - and the registration is asserted STILL BROKEN on four counts rather than merely listed.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "test/biztrust-guide-wp-115-authority-citations",
+    "baseline_commit": "8adda1064267faf848a3bb0a5ab38b675b754589"
+  },
+  "completed": [
+    "THE DEFECT MEASURED BEFORE THE GUARD AND CAUGHT AFTER IT, on the same tree rather than on two descriptions of one. BEFORE, at 8adda10: `python -m unittest discover -s tests` is 385 OK and `python scripts/validate_continuity.py` prints CONTINUITY_VALIDATION=PASS, while a five-line reader over the two records - load badf/current-state.json's authority keys, scan badf/decision-log.jsonl for a qualified citation whose key is not among them - prints [('DEC-118', 'badf/current-state.json authority.documentation_implementation')]. `grep -rn \"authority\\.\" tests/*.py scripts/validate_continuity.py` at that commit returns two hits and neither resolves a citation: one is prose in tests/test_validator_fails_closed.py and one is `authority.startswith(\"GRANTED\")`, a string method on a next-actions value. AFTER: control 4 of scripts/wp115_controls.py empties the registry on a fresh copy and test_no_unregistered_unresolvable_citations fails naming DEC-118 and the key it cites, and control 1 - DEC-118's citation copied into a NEW entry, which is #356's own scenario and what happened in the WP-113 draft - fails the same test with nothing else red.",
+    "RULE A: a qualified citation must resolve. The keys are READ FROM badf/current-state.json, never listed in the module, and the two-member read-from-the-record control pair is what makes that a measurement: remove `guide_v2_records_drafting` from the record and the five entries citing it stop resolving, loudly; do the same with authority_keys() replaced by a literal copy of today's eleven keys and the suite is GREEN over a record that no longer holds the grant.",
+    "RULE B: the three legacy bare forms - IMPLEMENTATION_SCOPE (106), REPOSITORY_CHARTER (2), OPERATOR_INSTRUCTION (2) - are frozen by their exact set and their exact per-form counts, and the module docstring states plainly that this FREEZES A LEGACY POPULATION RATHER THAN VALIDATING IT. Those strings name no file, no block and no key, so nothing can resolve them and nothing tries; what the counts buy is that a new bare-form citation fails and its author is pushed onto the form Rule A can check. Three controls measure the three ways it can be broken: a new spelling, one more entry on an existing spelling, and one form respelled as another.",
+    "THE REGISTERED ENTRY IS PROVEN STILL-BROKEN ON FOUR COUNTS, not listed. The entry is still in the log; its authority is still exactly the registered string; the key it names is still absent from the record; and no later entry supersedes it. Each has its own control. The fourth clause exists because superseding is the repair route #356 item 1 actually names, and it does not touch DEC-118's own line at all - without it this ratchet would survive the very repair it is waiting for.",
+    "THE ABSENCE PAIR, which is the whole reason a ratchet needs controls. A registry entry that would pass when its subject is simply absent is worthless, and this repository was holed that way once already. Control 8 replaces DEC-118's line with a well-formed unrelated entry - a replacement rather than a deletion, so the corpus floor is not what fails - and test_registered_citations_still_fail goes red on its own. Control 9 applies the same removal with one `continue` added, so the test skips an entry it cannot find, and the suite runs GREEN. The first control proves the assertion fires; the pair proves the weak form of the same registry really is useless rather than merely described as such.",
+    "AN EXACT STRING RATHER THAN A SHA-256, and the reason is stated rather than assumed. tests/test_stale_records.py registers a digest because its subjects are prose - a table row, a bullet - where a repair can move text the registration never read. Here the registered subject is ONE FIELD holding ONE value, so the exact value IS the record and equality over it leaves nothing out. The supersedes clause covers the one repair route that does not change that field.",
+    "AN UNREADABLE CITATION IS LOUD RATHER THAN SILENT. QUALIFIED matches one syntactic form, anchored at both ends, and cannot be complete. What makes that safe is that everything it does not match falls into Rule B's arm, whose set is an EQUALITY - so `current-state.json authority.implementation`, a real grant written in a shape Rule A does not read, fails there. A control measures it. There is deliberately no second test asserting the same set operation under a different name: an earlier draft of this module had one and it was removed rather than kept for the better failure message.",
+    "TWENTY CONTROLS in scripts/wp115_controls.py, on fresh COPIES - a copy and not a clone, because the subject is two tracked JSON files and one test module and nothing here reads a git ref; scripts/wp113_controls.py is the model and scripts/wp114_controls.py cloned only because its subject was history. The unmutated copy runs first and green. Seventeen expect a named test to fail and ten of those are isolated; three expect the suite to stay GREEN - the two pair members and a resolvable qualified citation being added, which is not optional, because a guard that rejects legitimate content gets switched off. The runner names what else each non-isolated control trips and the docstring declares all seven rather than trimming them.",
+    "DEC-121 CITES badf/current-state.json authority.implementation - the key that exists - so this package's own entry satisfies the rule it introduces, and control 3 mutates that entry to an unresolvable key and shows the guard read it.",
+    "NO PRODUCTION CODE IS CHANGED. scripts/validate_continuity.py is untouched: the gap was a missing check and tests/ is where this repository puts one. No page, no schema, no design, no AGENTS.md, and no record value expressing the operator's authority is moved - resume_decision, primary_next_action_id, stop_reason and every authority key are as they were, and authority.implementation is left as it stands because repairing it is open defect #346.",
+    "393 tests OK, skipped=1 (385 measured on main at 8adda10, 8 added here); validate_continuity.py CONTINUITY_VALIDATION=PASS with STATE_RECONCILIATION=CONSISTENT, exit 0; scripts/wp115_controls.py 20 controls, 0 not behaving as declared; scripts/build_control_page.py runs and writes its page over the rolled records."
+  ],
+  "remaining": [
+    "DEC-118 IS NOT REPAIRED. #356 item 1 puts the repair behind the records judgement in #316, and the append-only log means the repair is a superseding entry rather than an edit. When it lands, the registration in UNRESOLVED_CITATIONS stops matching on its fourth clause and must be REMOVED, not re-registered.",
+    "#346 is untouched: whether authority.implementation is even the right target for work of this kind is a judgement about grants, not about whether a pointer resolves, and the module declares it as limit 1 rather than checking it.",
+    "TWO AUTHORITY VOCABULARIES COEXIST AND NOTHING RECONCILES THEM. 85 of the 96 session checkpoints carry an authority.documentation_implementation of their own against 4 for implementation, so DEC-118's citation is a checkpoint's key written against this record's path. Rule A reads the decision log alone; extending it to checkpoints or to badf/next-actions.json would be checking a second vocabulary against a record that does not hold it, which is a records decision nobody has taken.",
+    "THE KEY'S VALUE IS NOT READ, so an entry citing production_platform_implementation (NOT_GRANTED) or architecture_drafting_ahead_of_s01 (WAIT_FOR_OPERATOR_WAIVER_ISSUE_92) resolves and passes. A resolving pointer is not a granted authority. Making that judgement checkable would need a vocabulary for what a grant's value means, and nothing in the repository declares one - schemas/decision-record.schema.json says so of authority itself.",
+    "#357's ratchet - which modules under tests/ call a subprocess - is still not built. WP-114 declared it and this package did not widen into it; this module states the measured four in its own docstring with the command beside them, which is the fourth file to carry that sentence by being copied.",
+    "stop_reason in badf/current-state.json still describes WP-112 and its first sentence is still false. known_divergence records that, now for the third package running. Rewriting it is the operator's.",
+    "scripts/wp115_controls.py is the fourth copy of the same harness - wp112, wp113, wp114 and now this one each carry their own `edit`, `fresh` and `run_suite`. WP-114's checkpoint recorded that the next runner should probably import rather than copy; this one copied, because a shared runner is a change to three other packages' committed evidence and not this package's to make. The case for consolidating is now one instance stronger."
+  ],
+  "files_changed": [
+    "tests/test_authority_citations.py",
+    "scripts/wp115_controls.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-115-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python -m unittest discover -s tests",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/validate_continuity.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/wp115_controls.py (20 controls on fresh copies, unmutated copy first, three expecting GREEN)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/build_control_page.py --out <scratch>/control.html",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "THE DEFECT'S SOURCE IS MEASURABLE AND IT IS NOT A TYPO. `python -c \"import json,glob,collections;c=collections.Counter();[c.update(list(json.load(open(p,encoding='utf-8')).get('authority') or {})) for p in glob.glob('sessions/checkpoints/*.json')];print(c.most_common(4))\"` reports documentation_implementation in 85 of the 96 checkpoints and implementation in 4. The checkpoints run a second authority vocabulary, badf/current-state.json runs the first, and DEC-118's citation is what you get when a checkpoint's key is written against the record's path - a defect that was waiting for anyone who read the last checkpoint before writing the next decision. That is why Rule A reads the record rather than accepting any plausible key, and why the two vocabularies are recorded in `remaining` rather than reconciled here.",
+    "AN EARLIER DRAFT OF THIS MODULE HAD NINE TESTS AND TWO OF THEM ASSERTED THE SAME SET OPERATION. test_every_citation_is_one_of_the_two_known_forms computed `legacy_strings - LEGACY_CITATIONS` and test_the_legacy_forms_are_exactly_these asserted set equality, of which the first is the subset direction of the second. It read as two rules because it had two names and two failure messages. It was removed rather than kept: a second test that cannot fail unless the first does is a count of guards rather than a guard, and this repository has a rule about a sentence that does not match a measurement.",
+    "A CONTROL'S DOCSTRING WAS FALSE FOR ONE RUN AND THE RUNNER SAID SO. `one_more_of_an_existing_bare_form` was written as 'a new entry joining a form already in the set', and the mutation retargeted DEC-121 instead of appending - which also dropped the qualified count and tripped a second test. The isolation line in the runner's output is what showed it. The mutation now appends, the control is isolated, and the sentence is true; the lesson is that the isolation report is not decoration, it is the thing that catches a control describing something other than what it does.",
+    "THE RECORD ROLL WAS AUDITED AGAINST THE CONTROLS AND TOUCHES NONE OF THEM. STATE_RECONCILIATION moves from LAG_EXPECTED to CONSISTENT with this roll - measured before and after - and three of WP-112's nineteen controls broke the first time its record rolled. Nothing here reads a git ref, the validator's stdout or the reconciliation verdict: the controls read two JSON files and one test module. The only record-dependent values in the module are two FLOORS over an append-only log, which the record can only ever move away from, and the frozen legacy counts, which this roll does not touch because DEC-121 is qualified.",
+    "THE GUARD HAD TO BE WRITTEN NOT TO REJECT THE RECORD IT WAS WRITTEN AGAINST, AND THAT IS A CONTROL RATHER THAN A HOPE. Rule A checks qualified citations; it never rations them, and control 20 adds a resolvable one and expects GREEN. The brief called that control not optional and it is right: a guard that rejects legitimate content gets switched off, and Rule B's counts are frozen precisely because the legacy form is the one nobody should add to.",
+    "scripts/build_control_page.py WAS RUN OVER THE ROLLED RECORDS RATHER THAN REASONED ABOUT. WP-113's projector reads both files this package edits, and a records edit that broke it would be a real defect. It exits 0 and writes a page naming BIZTRUST-GUIDE-WP-115 and baseline 8adda106. Note for the next reader: the page it writes into the TREE turns the suite red by design, which is WP-113's declared behaviour - `git checkout -- control/index.html` is the whole fix, and running it with `--out` into a scratch path avoids it."
+  ],
+  "decisions": [
+    "DEC-121"
+  ],
+  "assumptions": [
+    "That an entry's `authority` field is meant to be resolvable at all. Nothing declares it: schemas/decision-record.schema.json calls type and authority open strings because 'nothing in the repository declares their vocabulary, and closing them here would invent one'. #356 asserts the intent - the field is 'the pointer a reader follows to check that a decision was made under a grant that exists' - and this module rests on that reading. If the field were only ever meant as a free-text note, Rule A would be enforcing a convention that was never agreed, and Rule B's silence about 110 entries would be the honest position for all 118.",
+    "That the legacy counts are frozen at values worth freezing. 106, 2 and 2 were measured at 8adda10 and are asserted as equalities, which means a future package adding a bare-form citation must either edit this file or write a qualified one. That is the intended cost. What is assumed is that no legitimate reason to add a bare form remains - if one appears, the count moves and the failure message says to write the qualified form, which would be the wrong instruction rather than a wrong measurement.",
+    "That `badf/current-state.json`'s authority block is the right register to resolve against. It is the one the citation names, so within one entry the assumption is airtight. Across the repository it is not: the checkpoints hold their own authority objects and badf/next-actions.json holds an authority string per action, and neither is read here. A grant recorded only in a checkpoint is invisible to Rule A, and an entry citing it fails - correctly, in that the citation names a file that does not hold the key, and arguably not, in that the grant may really have been given.",
+    "That the corpus floors are floors of the right kind. ENTRIES_FLOOR and QUALIFIED_CITATIONS_FLOOR are set to today's counts including DEC-121, and both are asserted with assertGreaterEqual on the argument that entries are only ever appended. If an entry were ever removed - which the extend-only principle forbids and nothing enforces - the floor is what would notice, and it would report a truncated log rather than the removal."
+  ],
+  "blockers": [],
+  "authority": {
+    "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "scope_note": "One test module is added and one control runner beside it. No production code, no page, no schema, no design and no AGENTS.md section is edited; badf/ is re-anchored and nothing more. DEC-118 is registered rather than repaired, and no record value expressing the operator's authority is moved.",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_114",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python -m unittest discover -s tests -p 'test_authority_citations.py'   # and if the whole suite is red, run `git status` before anything else: a regenerated control/index.html in the working tree turns it red by design, and `git checkout -- control/index.html` is the whole fix",
+    "read_first": [
+      "tests/test_authority_citations.py",
+      "scripts/wp115_controls.py",
+      "tests/test_stale_records.py",
+      "badf/decision-log.jsonl",
+      "badf/current-state.json",
+      "https://github.com/bstBizEra/biztrust_guide/issues/356",
+      "https://github.com/bstBizEra/biztrust_guide/issues/346",
+      "https://github.com/bstBizEra/biztrust_guide/issues/316",
+      "AGENTS.md section 6"
+    ],
+    "stop_if": [
+      "DEC-118 is edited. The log is append-only under the extend-only principle, DEC-118 is merged on main, and #356 item 1 puts its repair behind the records judgement in #316. The repair is a later entry that supersedes or corrects it, and when that lands the registration must be REMOVED from UNRESOLVED_CITATIONS rather than re-registered at the new value - re-registering ratchets nothing.",
+      "A NEW unresolvable citation is filed into UNRESOLVED_CITATIONS. The registry is a ratchet on one merged entry, not a waiver: its membership is asserted as exactly {\"DEC-118\"} and its size as an equality, and a control measures both. If a new entry cannot cite a key the record holds, the grant belongs in the record first.",
+      "The registered entry is asserted to be merely LISTED rather than STILL BROKEN. Four clauses, and each has a control: the entry present, its citation exactly the registered string, its key absent from the record, and no later entry superseding it. A registry satisfied by its subject's absence is worthless and this repository has already paid for that once; the paired control that runs GREEN with one `continue` added is what keeps the fix from being quietly undone.",
+      "The record's authority keys are copied into the module instead of read from badf/current-state.json. A guard carrying its own copy goes on passing after the record changes, and the read-from-the-record control pair measures exactly that: with the keys hardcoded and a grant removed, five citations name a grant the record no longer holds and the suite is green.",
+      "Rule B is described as validating the legacy forms. It freezes a population. IMPLEMENTATION_SCOPE, REPOSITORY_CHARTER and OPERATOR_INSTRUCTION name no file, no block and no key; nothing can resolve them and nothing here tries. The counts exist so that a NEW bare form fails, and that is the entire claim.",
+      "A check is added for WHICH grant an entry should have cited. That is #346 and it is a judgement about grants, not about whether a pointer resolves; the module declares it as limit 1. The same goes for the key's VALUE - an entry citing production_platform_implementation (NOT_GRANTED) resolves and passes, and saying otherwise would need a vocabulary the repository has not declared.",
+      "The module is widened to badf/next-actions.json or to the session checkpoints without a decision reconciling the two authority vocabularies. 85 of the 96 checkpoints carry documentation_implementation and badf/current-state.json holds no such key; checking one register against the other would fail 85 checkpoints for a defect that is a naming question nobody has answered.",
+      "scripts/validate_continuity.py is edited to carry this check. The gap #356 names is a missing check and tests/ is where this repository puts one; moving it into the validator would put it on the path of every gate, every CI run and the control page's integrity panel, which is a change with its own review.",
+      "A subprocess is called from tests/test_authority_citations.py. Four modules under tests/ call one by declared precedent - test_resume_reconciliation.py, test_resume_schema_identity.py, test_validator_fails_closed.py and test_wp024_fixtures_are_sealed.py, measured with `grep -lnE \"subprocess[.](run|Popen|check_output|check_call)\" tests/*.py` - and this must not become the fifth. Everything it needs is in two JSON files.",
+      "A sentence in any of these files is edited without a command that measures it. Every finding across the last sixteen review rounds on this repository was a sentence that did not match a measurement, and one of this package's own control docstrings was false for a run before the isolation report caught it. Name the command before writing the sentence."
+    ]
+  },
+  "declared_non_coverage": [
+    "THE POINTER IS RESOLVED; THE GRANT IS NOT JUDGED. An entry citing authority.implementation passes whatever it decided, and whether that key is even a sensible target is open defect #346 - it names no domain and sits beside production_platform_implementation, so a reader can take one for the other. #356's closing paragraph raises it and this package deliberately builds no check for it: it is a judgement about grants, and this module is about pointers.",
+    "THE KEY'S VALUE IS NEVER READ. production_platform_implementation reads NOT_GRANTED and architecture_drafting_ahead_of_s01 reads WAIT_FOR_OPERATOR_WAIVER_ISSUE_92. An entry citing either RESOLVES and passes. A resolving pointer is not a granted authority, and nothing here says otherwise.",
+    "RULE B FREEZES A LEGACY POPULATION RATHER THAN VALIDATING IT, and 110 of the 119 entries are in it. Nothing checks that any of those decisions was made under a real grant, because the strings point nowhere - the bare forms name no file, no block and no key. What is guarded is the population's exact spellings and exact size, so a NEW bare-form citation fails. The count of a form that is checked by nothing is the only thing about it that can be guarded.",
+    "ONLY badf/decision-log.jsonl IS READ. badf/next-actions.json gives every action an authority string - HUMAN_DECISION_REQUIRED, WAIT_FOR_AUTHORITY_ON_ASSERTED_KEYS_ISSUE_52, the dated operator instructions - and every session checkpoint carries an authority object. Neither is checked, and the omission has a measured edge: 85 of 96 checkpoints carry documentation_implementation, which is where DEC-118's string came from.",
+    "ONE SYNTACTIC FORM IS RECOGNISED AS QUALIFIED, anchored at both ends. That cannot be complete. What is guarded instead is the reader's SILENCE: everything QUALIFIED does not match falls into Rule B's arm, whose set is an equality, so a citation written in a third shape FAILS rather than vanishing. A control measures it. The pattern fixes the instance; that rule fixes the class.",
+    "THE ENTRY AND QUALIFIED-CITATION COUNTS ARE FLOORS, NOT EQUALITIES, because the log grows by one entry per package and an equality would make every future package edit this module for no reason. A qualified citation may be ADDED freely - Rule A checks it - which is the whole point of freezing the other form. The equalities that matter are the legacy counts, the legacy total and the registry's membership and size.",
+    "NOTHING HERE CHECKS ID UNIQUENESS, ORDERING OR SCHEMA. scripts/validate_continuity.py and tests/test_badf_match_schemas.py own those. A control's fixture entries are given ids that would sit out of order in the real log, and this module is right not to notice, because a second implementation of another guard's rule is a second place for it to drift.",
+    "scripts/wp115_controls.py IS NOT WIRED INTO CI, deliberately, as wp111 to wp114's runners are not - and unlike theirs the reason is not runtime, since the whole run is under a minute. It is that these are controls on a guard rather than the guard itself: the results are evidence about the tree at the commit someone last ran them against, not a standing guarantee, and nothing detects them rotting."
+  ]
+}
