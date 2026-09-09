@@ -52,19 +52,22 @@ about what it catches.
 It lives in `scripts/` and not `tests/` on purpose: `unittest discover -s tests` must not collect
 it, and the suite's no-subprocess property is a property of `tests/`, which this file would break.
 
+THE COPY, THE MUTATION HELPER, THE SUITE RUN AND THE REPORTING LOOP now come from
+`scripts/control_harness.py` (#368), which classified every divergence across the six runners as
+need or drift before moving anything. `run_projector` stays here - it is the only runner that runs
+a page build and reads the file the build wrote - and takes only the subprocess call from the
+harness. Adoption was gated on this runner's full output being byte-identical before and after,
+not on the suite staying green.
+
 Usage:  python scripts/wp113_controls.py [<repository>] [<scratch>]
 """
 from __future__ import annotations
 
 import json
-import re
-import shutil
-import subprocess
-import sys
-import tempfile
 from pathlib import Path
 
-PYTHON = sys.executable
+from control_harness import (HOLE_DECLARED, arguments, edit, fresh, report_unmutated, run_script,
+                             run_suite, suite_controls, summarise)
 
 PROJECTOR = "scripts/build_control_page.py"
 PAGE = "control/index.html"
@@ -154,17 +157,6 @@ WORKFLOW_STEP = (
     "        run: python3 scripts/build_control_page.py --out _site/control/index.html\n"
 )
 WORKFLOW_CONFIGURE = "      - name: Configure Pages\n"
-
-
-def edit(root: Path, rel: str, old: str, new: str) -> None:
-    """Replace `old` with `new` exactly once, and refuse to be a no-op."""
-    path = root / rel
-    text = path.read_text(encoding="utf-8")
-    found = text.count(old)
-    if found != 1:
-        raise AssertionError(
-            f"{rel}: expected exactly one occurrence of {old[:70]!r}, found {found}")
-    path.write_text(text.replace(old, new), encoding="utf-8", newline="")
 
 
 # --- the mutations -------------------------------------------------------------------------------
@@ -533,72 +525,31 @@ SCRIPT_CONTROLS = [
      "badf/next-actions.json is not available and no reason was recorded"),
 ]
 
-FAILED = re.compile(r"^(?:FAIL|ERROR): (\w+) ", re.M)
-
-
-def run_suite(root: Path) -> tuple[int, set[str]]:
-    done = subprocess.run(
-        [PYTHON, "-m", "unittest", "discover", "-s", "tests", "-p", "test_control_page.py", "-v"],
-        cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1800)
-    return done.returncode, set(FAILED.findall(done.stdout + done.stderr))
+def suite(root: Path) -> tuple[int, set[str]]:
+    """The subject module, run inside `root` as this runner has always run it."""
+    return run_suite(root, "test_control_page.py")
 
 
 def run_projector(root: Path) -> tuple[int, str]:
-    """Run the projector into a scratch path inside the copy and return (exit code, page)."""
+    """Run the projector into a scratch path inside the copy and return (exit code, page).
+
+    The page is read back off DISK rather than off stdout, which is why this is the one runner
+    whose script call keeps a body of its own.
+    """
     out = root / "_site" / "control" / "index.html"
-    done = subprocess.run(
-        [PYTHON, "-B", str(root / PROJECTOR), "--out", str(out)],
-        cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1800)
-    if done.returncode != 0 or not out.is_file():
-        return done.returncode, ""
-    return done.returncode, out.read_text(encoding="utf-8")
-
-
-def fresh(source: Path, into: Path, name: str) -> Path:
-    """A copy WITHOUT `.git`. That is a property the script controls depend on: the copy is not a
-    repository, so every git fact must degrade rather than be answered from somewhere else."""
-    root = into / name
-    shutil.copytree(source, root,
-                    ignore=shutil.ignore_patterns(".git", "_site", "node_modules",
-                                                  "__pycache__", "*.pyc"))
-    return root
+    code, _, _ = run_script(root, PROJECTOR, "--out", str(out), timeout=1800)
+    if code != 0 or not out.is_file():
+        return code, ""
+    return code, out.read_text(encoding="utf-8")
 
 
 def main() -> int:
-    source = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
-    holder = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path(tempfile.mkdtemp())
-    holder.mkdir(parents=True, exist_ok=True)
-    bad = 0
+    source, holder = arguments(__file__)
 
-    code, failures = run_suite(fresh(source, holder, "control_00_unmutated"))
-    print(f"[{'PASS' if code == 0 else 'BAD '}] unmutated copy: exit {code}, "
-          f"failures {sorted(failures) or 'none'}")
-    if code != 0:
-        print("       the unmutated copy is already red; every control below proves nothing")
-        bad += 1
-
-    for index, (name, mutate, expected) in enumerate(SUITE_CONTROLS, start=1):
-        root = fresh(source, holder, f"control_{index:02d}")
-        mutate(root)
-        code, failures = run_suite(root)
-        if expected is None:
-            # A DECLARED HOLE. The mutation is a real defect and the suite is expected to stay
-            # green, because nothing in it reads what the mutation changes. A control that
-            # demonstrates a limit cannot drift away from the code without this script noticing.
-            ok = code == 0 and not failures
-            bad += 0 if ok else 1
-            print(f"[{'PASS' if ok else 'BAD '}] {name}")
-            print(f"       DECLARED HOLE: expected the suite to stay GREEN; exit {code}; "
-                  f"failed: {sorted(failures) or 'nothing'}"
-                  f"{'' if ok else '  <- the hole has closed; re-derive the limit that declares it'}")
-            continue
-        ok = code != 0 and expected in failures
-        isolated = failures == {expected}
-        bad += 0 if ok else 1
-        print(f"[{'PASS' if ok else 'BAD '}] {name}")
-        print(f"       expected {expected} to fail; exit {code}; "
-              f"failed: {sorted(failures) or 'NOTHING'}"
-              f"{'' if isolated else '  <- NOT ISOLATED' if ok else ''}")
+    code, failures = suite(fresh(source, holder, "control_00_unmutated"))
+    bad = report_unmutated(code, failures, "copy")
+    bad += suite_controls(SUITE_CONTROLS, lambda name: fresh(source, holder, name), suite,
+                          hole=HOLE_DECLARED)
 
     for index, (name, mutate, expected) in enumerate(SCRIPT_CONTROLS, start=1):
         root = fresh(source, holder, f"script_{index:02d}")
@@ -611,9 +562,7 @@ def main() -> int:
         print(f"       copy with no .git: expected exit 0 and the written page to carry "
               f"{expected!r}; got exit {code} and {'it' if expected in page else 'it NOT'} present")
 
-    total = len(SUITE_CONTROLS) + len(SCRIPT_CONTROLS)
-    print(f"\n{total} controls, {bad} not behaving as declared")
-    return 1 if bad else 0
+    return summarise(len(SUITE_CONTROLS) + len(SCRIPT_CONTROLS), bad)
 
 
 if __name__ == "__main__":
