@@ -32,6 +32,20 @@ local-preview sections) - so that the line is never a bare, single-path instruct
 require the word "Windows", "POSIX" or "PowerShell" anywhere; those are prose choices, and pinning to
 them is the exact mistake FIX ROUND 1 corrected.
 
+A LIMIT, DECLARED RATHER THAN CHASED. The property is "some other interpreter token on the same
+line," not "a second, actually-runnable invocation." A line reading "Run python3 -m unittest
+discover -s tests; any python interpreter of 3.11 or later will do" passes this guard: the word
+"python" inside that prose satisfies ALTERNATIVE_INTERPRETER_TOKEN even though the sentence never
+shows a second command a Windows reader could run. That is a real false-green, found by the final
+whole-branch review, and it is declared here rather than fixed by widening the pattern to demand a
+backticked command, a leading verb, or some other shape: every such widening this module's own fix
+round 1 tried first turned out to reject legitimate prose the reviewer or a future author could
+reasonably write (see FIX ROUND 1 above - a vocabulary requirement traded a false red for nothing
+and had to be removed). Chasing this hole would very likely trade it for a new false red; declaring
+it, and trusting that AGENTS.md section 3's own review keeps prose honest, is the safer choice. See
+`declared_non_coverage` in this package's checkpoint for the same limit recorded against the guard's
+evidence.
+
 WHY A LINE, NOT THE WHOLE SECTION. AGENTS.md's mandatory-resume-protocol steps are each one Markdown
 list line with no internal wrapping - true of every step in section 3 today, checked by
 test_anchors_exist below. Scoping the check to one line rather than "anywhere in section 3" is what

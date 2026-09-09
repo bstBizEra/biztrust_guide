@@ -140,7 +140,7 @@ Before handoff or pull request:
 
 1. Run deterministic validation.
 2. Confirm no broken local asset references.
-3. Confirm every tracked `*.html` reaches the publishing artifact — CI step *Verify every tracked page reached the artifact* — not only root `index.html`. Count them with `git ls-files '*.html' | wc -l`; `scripts/validate_continuity.py` already prints the same figure on every run as `PASS: html-pages:<n>`, so the number a reader confirms is never a hand-maintained count here.
+3. Confirm every tracked `*.html` reaches the publishing artifact — CI step *Verify every tracked page reached the artifact*, which iterates `git ls-files '*.html'` — not only root `index.html`. Count them with `git ls-files '*.html' | wc -l`. `scripts/validate_continuity.py` also prints a page count, as `PASS: html-pages:<n>`, but it walks the filesystem rather than the tracked set and so names a different population that matches the tracked count only on a clean tree with no untracked `*.html` file present; use the tracked count, not the validator's, to confirm this step.
 4. Update `badf/current-state.json` and `badf/next-actions.json`.
 5. Create a checkpoint from `templates/session-checkpoint.json`.
 6. Summarize risks, non-coverage and next action.
