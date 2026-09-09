@@ -10,10 +10,20 @@ makes - it stops being true the moment anything merges after it, which is exactl
 live test was repaired for.
 
 THIS MODULE SHELLS OUT. It runs `git` to build fixture repositories, and `sys.executable` to run
-the validator. The rest of `tests/` is subprocess-free and that is worth saying out loud;
-`tests/test_wp024_fixtures_are_sealed.py` is the precedent. Nothing here touches the network - no
-`requests`, `urllib` or `socket`, and every `git` invocation names a local path. #311 keeps the
-suite offline and this module stays inside that rule.
+the validator. FOUR modules under `tests/` call a subprocess - `test_resume_reconciliation.py`,
+`test_resume_schema_identity.py`, `test_validator_fails_closed.py` and
+`test_wp024_fixtures_are_sealed.py`, the last being this module's precedent - measured with
+
+    grep -lnE "subprocess[.](run|Popen|check_output|check_call)" tests/*.py
+
+This sentence said "the rest of `tests/` is subprocess-free", which was false when it was written:
+both unaccounted modules predate this one and were calling subprocesses at its own baseline. That
+is #357, and the phrase propagated by being copied into three further places before it was caught.
+Grepping for the WORD `subprocess` returns SIX, because two modules only mention it in prose, so
+re-run the command above rather than restating the set from memory - a count is only as good as
+its filter. Nothing here touches the network - no `requests`, `urllib` or `socket`, and every
+`git` invocation names a local path. #311 keeps the suite offline and this module stays inside
+that rule.
 
 WHY THE FIXTURES ARE REAL REPOSITORIES. Each vocabulary value below is reached by CONSTRUCTING the
 condition - a repository with the commits that produce it - and not by mocking a return. A mocked
@@ -30,10 +40,13 @@ THE FOUR WORDS, and the rule each one is measured against:
                 before its merge, so it cannot record its own merge. Normal - and never to be read
                 as work in progress, because the branch may still exist and an agent resuming from
                 the record alone would reopen finished work.
-  DIVERGED      the recorded baseline is not an ancestor of the main line. It was meant to be the
-                disagreement no ordering explains, and it is not: a main ref that has simply not
-                been fetched sits behind the baseline and lands here too. Issue #353, limit 9.
-  UNKNOWN       the history needed to judge is unavailable.
+  DIVERGED      the recorded baseline is not an ancestor of the main line AND the main line is
+                not an ancestor of the baseline: neither line contains the other, which is the
+                disagreement no ordering explains. The second half of that test is #353's
+                repair; until it landed, a main ref that had simply not been fetched sat behind
+                the baseline and got this word too. Limit 9.
+  UNKNOWN       the history needed to judge is unavailable - including a main ref that sits
+                BEHIND the recorded baseline, which is #353's case and is measured here.
 
 WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
 
@@ -41,13 +54,16 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     by this module's own `git` calls rather than asked of the code under test. Where the history
     needed to judge is absent - CI checks out with `actions/checkout@v7` and no `fetch-depth`, so
     every CI run is shallow - the verdict must be exactly UNKNOWN and must carry a non-empty
-    reason. Where it is present, the verdict must be the word the three measured facts imply, one
-    branch per word. No branch is a skip: every one of them asserts.
-    Two things follow, and both are limits rather than caveats. In CI only the UNKNOWN branch ever
-    runs, which is why the other three words are constructed in fixture repositories that CI can
-    run. And the UNKNOWN branch checks only that a reason exists, not that it names the right
-    missing fact; the fixture case
-    `test_unknown_on_a_shallow_clone_and_the_reason_says_shallow` is where that wording is held.
+    reason. Where it is present, the verdict must be the word the measured facts imply - FOUR
+    facts since #353, the reverse ancestry being the fourth - across five branches, because
+    UNKNOWN is reached two ways and only one of them is a degraded environment. No branch is a
+    skip: every one of them asserts.
+    Two things follow, and both are limits rather than caveats. In CI only the degraded-UNKNOWN
+    branch ever runs, which is why the other words are constructed in fixture repositories that CI
+    can run. And that branch checks only that a reason exists, not that it names the right missing
+    fact; the fixture case `test_unknown_on_a_shallow_clone_and_the_reason_says_shallow` is where
+    that wording is held. The BEHIND branch is the exception and does assert its wording, because
+    a stale ref reported with a divergence's reason is the whole of #353.
  2. The live reading takes whichever branch the history puts it in, and NOTHING here pins which
     branch that is. It is therefore no longer a ratchet on the current divergence: if the record
     rolls forward to a package that has not landed, this test asserts CONSISTENT and says
@@ -109,13 +125,31 @@ WHAT THIS DOES NOT DO. Every item is a limit, not a caveat.
     The non-circular half is `TestVocabulary`, where every word is reached by constructing the
     condition in a repository built for it.
 
- 9. DIVERGED IS NOT ALWAYS A FAULT, and nothing here treats it as one. A clone whose main ref has
-    not been fetched sits BEHIND the recorded baseline, and the baseline is then not an ancestor
-    of it, so the reconciliation returns DIVERGED - the loudest word - for a stale ref. Measured:
-    with `origin/main` moved to the commit before the baseline, `reconcile_safely` returns
-    DIVERGED with a reason that is factually true and an implication that is not. Filed as #353
-    and deliberately NOT fixed in this package; the fixtures here construct the not-an-ancestor
-    condition and assert the word, which is the behaviour as it stands, not as #353 may leave it.
+ 9. DIVERGED NOW REQUIRES BOTH DIRECTIONS, and what it no longer covers is measured rather than
+    described. A clone whose main ref has not been fetched sits BEHIND the recorded baseline, so
+    the baseline is not an ancestor of it, and until #353 was closed that alone printed DIVERGED -
+    the loudest word - for a stale ref. Measured on a clone with `origin/main` at the commit
+    before the recorded baseline: DIVERGED before the repair, UNKNOWN naming the staleness after
+    it, both with the commands in `scripts/wp114_controls.py`'s docstring. The word DIVERGED is
+    now reached only where NEITHER line contains the other, which is what the two fixtures here
+    construct, and both of them are checked in both directions rather than in one.
+
+    WHAT THIS STILL DOES NOT SETTLE: a fifth word. UNKNOWN is what a behind main ref reports, and
+    UNKNOWN means "the history needed to judge is unavailable" - accurate for an unfetched clone,
+    because what landed after the baseline genuinely cannot be read from there. #353 fixed the
+    vocabulary at four and `test_the_vocabulary_is_exactly_four_words` holds it there. A reader
+    who wants "behind" told apart from the other four unavailabilities reads the REASON, and the
+    reason's wording is asserted for that case here.
+
+10. THE THIRD OUTCOME OF THE REVERSE CALL IS UNMEASURED, and that is a hole rather than a caveat.
+    `git merge-base --is-ancestor` answers 0, 1 or an error. The error branch returns UNKNOWN
+    rather than falling through to DIVERGED, and it is reachable only by a timeout or an
+    unrunnable git - the same call in the opposite direction has already succeeded by then. No
+    fixture here constructs it and none can without mocking, which this module does not do.
+    `scripts/wp114_controls.py` DEMONSTRATES the hole instead of this sentence asserting it: it
+    replaces that branch's UNKNOWN with a fall-through to DIVERGED and expects the suite to stay
+    GREEN. If that control ever goes red the hole has closed and this limit must be re-derived,
+    not deleted.
 
 MEASURED, on fresh clones, by `scripts/wp112_controls.py` - nineteen controls, run only after an
 unmutated clone that must be green first. THIRTEEN mutations each trip the test named for them,
@@ -377,6 +411,19 @@ class TestTheLiveTree(unittest.TestCase):
         ancestry = git(REPO, "merge-base", "--is-ancestor", baseline, tip).returncode
         self.assertIn(ancestry, (0, 1), f"git could not decide whether {baseline[:12]} precedes {ref}")
         if ancestry == 1:
+            # BOTH DIRECTIONS, because one of them alone is two different states. This branch
+            # asserted DIVERGED outright until #353, and the case that made that wrong is not
+            # hypothetical here: `git clone` of this repository takes its `origin/main` from the
+            # source's `refs/heads/main`, so a clone made while the source's local main is behind
+            # its own origin/main lands in exactly this branch with the record ahead of the ref.
+            # Every control run in `scripts/wp114_controls.py` is such a clone.
+            behind = git(REPO, "merge-base", "--is-ancestor", tip, baseline).returncode
+            self.assertIn(behind, (0, 1),
+                          f"git could not decide whether {ref} precedes {baseline[:12]}")
+            if behind == 0:
+                self.assertEqual("UNKNOWN", verdict, reason)
+                self.assertIn("BEHIND the record", reason)
+                return
             self.assertEqual("DIVERGED", verdict, reason)
             self.assertIn("is present in this clone", reason)
             return
@@ -447,6 +494,8 @@ class TestVocabulary(unittest.TestCase):
     verdicts: dict[str, tuple[str, str]] = {}
     # The DIVERGED fixtures, kept so the reason can be checked against what git says about them.
     diverged_repositories: dict[str, tuple[Path, str]] = {}
+    # The #353 fixtures - a main ref BEHIND the recorded baseline - kept for the same reason.
+    behind_repositories: dict[str, tuple[Path, str]] = {}
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -515,6 +564,47 @@ class TestVocabulary(unittest.TestCase):
         cls.verdicts["orphan_history"] = reconcile(
             orphan, record("BIZTRUST-GUIDE-WP-901", orphan_baseline))
         cls.diverged_repositories["orphan_history"] = (orphan, orphan_baseline)
+
+        # DIVERGED after a REBASE, which is the other ordering #353 names. The recorded baseline
+        # is the pre-rebase commit; main carries the rewritten one. Neither contains the other,
+        # and no call made by the reconciliation can tell this apart from the orphan case - which
+        # is why the reason says nothing about the cause.
+        rebased = build_repo(base / "rebased")
+        add_commit(rebased, "[BIZTRUST-GUIDE-WP-900] the root")
+        git_ok(rebased, "checkout", "--quiet", "-b", "before")
+        rebased_baseline = add_commit(rebased, "[BIZTRUST-GUIDE-WP-901] the commit as it was")
+        git_ok(rebased, "checkout", "--quiet", "main")
+        add_commit(rebased, "[BIZTRUST-GUIDE-WP-901] the commit as it was, rewritten")
+        cls.verdicts["rebased"] = reconcile(
+            rebased, record("BIZTRUST-GUIDE-WP-901", rebased_baseline))
+        cls.diverged_repositories["rebased"] = (rebased, rebased_baseline)
+
+        # #353: A MAIN REF THAT IS MERELY BEHIND. Two fixtures, one per entry in MAIN_REFS,
+        # because the stale ref in the field is `origin/main` and the one a bare fixture has is
+        # `refs/heads/main`; the reconciliation reads the first that resolves and both must
+        # answer the same way. The baseline stays REACHABLE from a second branch, so it is in the
+        # object database rather than merely unreferenced and still findable - `cat-file -e` has
+        # to accept it or the run stops one branch earlier, at a different UNKNOWN entirely.
+        behind_local = build_repo(base / "behind_local")
+        behind_local_first = add_commit(behind_local, "[BIZTRUST-GUIDE-WP-900] the baseline's parent")
+        behind_local_baseline = add_commit(behind_local, "[BIZTRUST-GUIDE-WP-901] the recorded baseline")
+        git_ok(behind_local, "branch", "fetched", behind_local_baseline)
+        git_ok(behind_local, "update-ref", "refs/heads/main", behind_local_first)
+        cls.verdicts["behind_local_main"] = reconcile(
+            behind_local, record("BIZTRUST-GUIDE-WP-901", behind_local_baseline))
+        cls.behind_repositories = {
+            "behind_local_main": (behind_local, behind_local_baseline)}
+
+        behind_origin = build_repo(base / "behind_origin")
+        behind_origin_first = add_commit(behind_origin, "[BIZTRUST-GUIDE-WP-900] the baseline's parent")
+        behind_origin_baseline = add_commit(behind_origin, "[BIZTRUST-GUIDE-WP-901] the recorded baseline")
+        # `origin/main` is set to the older commit and `main` is left at the newer one, so the
+        # fixture also proves the verdict is about the ref MAIN_REFS picks first and not about
+        # whichever ref happens to be stale.
+        git_ok(behind_origin, "update-ref", "refs/remotes/origin/main", behind_origin_first)
+        cls.verdicts["behind_origin_main"] = reconcile(
+            behind_origin, record("BIZTRUST-GUIDE-WP-901", behind_origin_baseline))
+        cls.behind_repositories["behind_origin_main"] = (behind_origin, behind_origin_baseline)
 
         # UNKNOWN, four ways.
         plain = base / "plain"
@@ -593,6 +683,54 @@ class TestVocabulary(unittest.TestCase):
     def test_diverged_from_an_orphan_history_too(self) -> None:
         self.assertEqual("DIVERGED", self.verdict("orphan_history"), self.reason("orphan_history"))
 
+    def test_diverged_after_a_rebase_too(self) -> None:
+        """The other ordering #353 names, and it must still reach the loud word."""
+        self.assertEqual("DIVERGED", self.verdict("rebased"), self.reason("rebased"))
+
+    def test_a_main_ref_behind_the_recorded_baseline_is_unknown_and_not_diverged(self) -> None:
+        """#353's first acceptance criterion, on both refs the reconciliation will read.
+
+        This is not a rare shape: it is a checkout that has not fetched, and until #353 was
+        closed it produced DIVERGED - the loudest of the four - which an agent following the
+        resume protocol would read as the record being untrustworthy.
+        """
+        for case in ("behind_local_main", "behind_origin_main"):
+            with self.subTest(case=case):
+                self.assertEqual("UNKNOWN", self.verdict(case), self.reason(case))
+
+    def test_the_behind_reason_names_the_staleness_and_not_a_divergence(self) -> None:
+        """The verdict alone does not close #353; UNKNOWN with a divergence's reason would not.
+
+        A reader is told WHICH unavailability this is, because UNKNOWN covers five of them and
+        only this one is repaired by fetching. The forbidden half is what the old reason said.
+        """
+        for case in ("behind_local_main", "behind_origin_main"):
+            with self.subTest(case=case):
+                reason = self.reason(case)
+                self.assertIn("BEHIND the record", reason)
+                self.assertIn("has not been fetched", reason)
+                for overclaim in ("is present in this clone but is not",
+                                  "neither line contains the other"):
+                    self.assertNotIn(overclaim, reason)
+
+    def test_the_behind_fixtures_really_are_behind_and_not_merely_unrelated(self) -> None:
+        """Otherwise the two tests above pass on a fixture that reproduces the wrong condition.
+
+        Three facts are measured with this module's own git calls: the baseline is in the object
+        database, so the run reaches the ancestry branch at all rather than stopping earlier; the
+        baseline is NOT an ancestor of the main ref, which is what used to print DIVERGED; and
+        the main ref IS an ancestor of the baseline, which is the fact that separates the two.
+        """
+        for case, (root, baseline) in self.behind_repositories.items():
+            with self.subTest(case=case):
+                ref, tip = main_line_tip(root)
+                self.assertEqual(0, git(root, "cat-file", "-e", f"{baseline}^{{commit}}").returncode,
+                                 f"{case}: the baseline must be in the object database")
+                self.assertEqual(1, git(root, "merge-base", "--is-ancestor", baseline, tip).returncode,
+                                 f"{case}: the baseline must NOT be an ancestor of {ref}")
+                self.assertEqual(0, git(root, "merge-base", "--is-ancestor", tip, baseline).returncode,
+                                 f"{case}: {ref} must be an ancestor of the baseline")
+
     def test_the_diverged_reason_is_true_of_the_condition_that_reaches_it(self) -> None:
         """The sentence is held to what git says about the fixture, not to what it sounds like.
 
@@ -608,12 +746,21 @@ class TestVocabulary(unittest.TestCase):
                 present = git(root, "cat-file", "-e", f"{baseline}^{{commit}}")
                 self.assertEqual(0, present.returncode,
                                  f"{case}: DIVERGED can only be reached with the baseline present")
-                ancestry = git(root, "merge-base", "--is-ancestor", baseline,
-                               main_line_tip(root)[1])
+                tip = main_line_tip(root)[1]
+                ancestry = git(root, "merge-base", "--is-ancestor", baseline, tip)
                 self.assertEqual(1, ancestry.returncode,
                                  f"{case}: the fixture must not be an ancestor of the main line")
+                # THE SECOND DIRECTION, added with #353. Not-an-ancestor alone is also true of a
+                # main ref that is merely behind, and asserting only the first direction let a
+                # fixture that reproduced THAT condition satisfy a test named for divergence.
+                # Both fixtures must be genuinely two-way, or the word is being checked against
+                # the wrong history.
+                self.assertEqual(1, git(root, "merge-base", "--is-ancestor", tip, baseline).returncode,
+                                 f"{case}: the main line must not be an ancestor of the baseline "
+                                 f"either, or this fixture is a stale ref rather than a divergence")
                 self.assertIn("is present in this clone", self.reason(case))
                 self.assertIn("is not an ancestor of", self.reason(case))
+                self.assertIn("neither line contains the other", self.reason(case))
                 # The two facts above are all the code has established at that point. Anything
                 # about WHY they parted - a rebase, a force-push, an unrelated line of work - is
                 # not distinguishable by any call this function makes, so it may not be claimed.
@@ -635,8 +782,22 @@ class TestVocabulary(unittest.TestCase):
         self.assertIn("IS in this clone", entry,
                       "the entry must state that the baseline is PRESENT, which is what "
                       "`cat-file -e` established before this branch can be reached")
+        self.assertIn("neither line contains the other", entry,
+                      "the entry must state BOTH directions, because not-an-ancestor alone is "
+                      "also true of a main ref that is merely behind - which is #353")
         for overclaim in ABSENCE_CLAIMS:
             self.assertNotIn(overclaim, entry)
+
+    def test_the_unknown_entry_of_the_docstring_names_the_behind_case(self) -> None:
+        """The word a stale ref now reports must document that it covers a stale ref.
+
+        UNKNOWN carries five distinct unavailabilities and a reader meeting it needs the entry to
+        name the one #353 moved here, or the repair is invisible in the prose that documents it.
+        """
+        entry = vocabulary_entry("UNKNOWN")
+        self.assertTrue(entry, "the UNKNOWN entry of the docstring could not be read at all")
+        self.assertIn("BEHIND", entry)
+        self.assertIn("#353", entry)
 
     def test_the_docstring_reader_can_tell_the_entries_apart(self) -> None:
         """Without this the check above passes hardest when the reader stops finding anything."""

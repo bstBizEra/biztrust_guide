@@ -141,9 +141,12 @@ RECONCILIATION_VOCABULARY = ("CONSISTENT", "LAG_EXPECTED", "DIVERGED", "UNKNOWN"
 MAIN_REFS = ("refs/remotes/origin/main", "refs/heads/main")
 
 # A hung git must not hold up a workflow that runs on every push and every pull request. Each call
-# is read-only and bounded. SEVEN at worst, not six: there are six call sites, but the main-ref
-# lookup runs once per entry in MAIN_REFS, so a clone with no `origin/main` and a local `main`
-# spends two there. Worst-case budget is therefore 70 seconds, not 60.
+# is read-only and bounded. SEVEN INVOCATIONS at worst, from SEVEN call sites, and the two numbers
+# agree here by coincidence rather than by construction. The main-ref lookup runs once per entry in
+# MAIN_REFS, so a clone with no `origin/main` and a local `main` spends two there; against that,
+# `log` and #353's reverse `merge-base` sit on opposite branches of the same `if` and no run can
+# make both. Worst-case budget is therefore 70 seconds - unchanged by #353, which added a call site
+# without adding an invocation.
 GIT_TIMEOUT_SECONDS = 10
 
 
@@ -174,17 +177,20 @@ def reconcile_recorded_state(root: Path, current: dict) -> tuple[str, str]:
     The four answers, in the order they are decided:
 
     UNKNOWN       the history needed to judge is unavailable - no git, no repository, a shallow
-                  clone, no main ref, or a baseline commit this clone does not hold.
+                  clone, no main ref, a baseline commit this clone does not hold, or a main ref
+                  that sits BEHIND the recorded baseline because it has not been fetched, in
+                  which case the record is ahead of the observation and what landed after the
+                  baseline cannot be read from here at all (#353).
     DIVERGED      the recorded baseline commit IS in this clone but is NOT an ancestor of the
-                  observed main line, so the main line does not descend from it. Nothing
-                  reachable from here says WHY the two parted, so this entry does not say.
-                  THIS WORD OVERSTATES ITS CASE, and issue #353 is open on it. It was written to
-                  mean a disagreement no ordering of merges explains; an ordering does explain
-                  one. A clone whose main ref has simply not been fetched sits BEHIND the
-                  recorded baseline, and that produces DIVERGED - the loudest of the four - for a
-                  stale ref rather than a fault. Measured: with `origin/main` at the commit
-                  before the baseline, this returns DIVERGED. Until #353 is answered, read
-                  DIVERGED as "these two do not line up", never as "something is wrong".
+                  observed main line, AND the observed main line is not an ancestor of the
+                  baseline either, so neither line contains the other. Nothing reachable from
+                  here says WHY the two parted, so this entry does not say. The second half of
+                  that test is #353's repair: not-an-ancestor ALONE is also true of a main ref
+                  that has simply not been fetched - it sits behind the baseline - and this
+                  word, the loudest of the four, was printed for a stale ref rather than a
+                  fault. Measured before the repair, with `origin/main` set to the commit
+                  before the recorded baseline: DIVERGED. Measured after it, on the same
+                  clone: UNKNOWN, naming the staleness.
     LAG_EXPECTED  the recorded package has already LANDED on the main line since that baseline.
                   `badf/current-state.json` is written on a package's branch BEFORE its merge, so
                   it cannot record its own merge; every merge leaves this window until the next
@@ -253,18 +259,50 @@ def reconcile_recorded_state(root: Path, current: dict) -> tuple[str, str]:
     if ancestry is None or ancestry[0] not in (0, 1):
         return "UNKNOWN", f"{wp_id}: git could not decide whether {baseline[:12]} precedes {tip_ref}"
     if ancestry[0] == 1:
+        # #353: NOT-AN-ANCESTOR IS TWO CASES AND ONLY ONE OF THEM IS A FAULT, so ask the reverse
+        # question before reaching for the loudest word in the vocabulary. A main ref that has
+        # simply not been fetched sits BEHIND the recorded baseline - the commonest state of a
+        # long-lived checkout - and the baseline is then not its ancestor for a reason that says
+        # nothing at all about the record.
+        behind = git(root, "merge-base", "--is-ancestor", tip_sha, baseline)
+        if behind is None or behind[0] not in (0, 1):
+            # THE THIRD OUTCOME, and UNKNOWN is the answer to it rather than a fall-through to
+            # DIVERGED. Exactly one fact is established when this line is reached - the baseline
+            # is not an ancestor of the main line - and that fact alone is true of BOTH cases;
+            # the call that separates them is the one that just failed. Returning DIVERGED here
+            # would assert the fault reading on evidence that does not exist, which is the defect
+            # #353 is about, and returning it silently would hide a broken git behind a confident
+            # word. UNKNOWN already means "the history needed to judge is unavailable" and a git
+            # call that could not be made is exactly that. This branch is reachable only by a
+            # timeout or an unrunnable git: the identical call in the other direction succeeded
+            # a few lines above.
+            return "UNKNOWN", (
+                f"{wp_id}: the recorded baseline {baseline[:12]} is not an ancestor of {tip_ref} "
+                f"({tip_sha[:12]}), but git could not decide whether {tip_ref} is an ancestor of "
+                f"the baseline, so a main line merely BEHIND the record cannot be told apart "
+                f"from one that has parted from it"
+            )
+        if behind[0] == 0:
+            # The stale-ref case #353 was filed for. Degrade rather than accuse, which is the
+            # rule the shallow-clone branch above already follows.
+            return "UNKNOWN", (
+                f"{wp_id}: {tip_ref} ({tip_sha[:12]}) is an ancestor of the recorded baseline "
+                f"{baseline[:12]}, so this clone's main ref is BEHIND the record rather than "
+                f"parted from it - it has not been fetched, and what landed after the baseline "
+                f"cannot be read from here"
+            )
         # Say only what is known HERE. This branch is reachable only AFTER `cat-file -e` proved the
         # baseline IS in the object database, so the earlier wording - "the record was branched
         # from a history this repository does not carry" - was false in every case it could print.
         # Measured on an orphan-branch fixture whose baseline `cat-file -e` accepts: the reason
-        # printed that clause verbatim. Two facts are established at this point and no others: the
-        # baseline is present, and `merge-base --is-ancestor` says the main line does not descend
-        # from it. Why they parted - a rebase, a force-push, a record from another line of work -
-        # is not something any call made here can distinguish, so it is not claimed.
+        # printed that clause verbatim. THREE facts are established at this point and no others:
+        # the baseline is present, it is not an ancestor of the main line, and the main line is
+        # not an ancestor of it. Why they parted - a rebase, a force-push, a record from another
+        # line of work - is not something any call made here can distinguish, so it is not claimed.
         return "DIVERGED", (
             f"{wp_id}: the recorded baseline {baseline[:12]} is present in this clone but is not "
-            f"an ancestor of {tip_ref} ({tip_sha[:12]}), so the main line does not descend from "
-            f"where the record says it branched"
+            f"an ancestor of {tip_ref} ({tip_sha[:12]}), and {tip_ref} is not an ancestor of the "
+            f"baseline either, so neither line contains the other"
         )
 
     log = git(root, "log", "--format=%s", f"{baseline}..{tip_sha}")
