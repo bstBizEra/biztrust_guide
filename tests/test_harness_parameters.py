@@ -17,7 +17,7 @@ from it is exact: A QUESTION CAN HAVE TWO RIGHT ANSWERS, ONE PER CALLER - and a 
 live caller on each side is how you say so. One with a caller on only one side says nothing.
 
 THIS MODULE READS SOURCE, IT DOES NOT RUN ANYTHING. It parses `scripts/control_harness.py` and
-every `scripts/wp1??_controls.py` with `ast` and asks four questions of the text. It does not
+every `scripts/wp*_controls.py` with `ast` and asks four questions of the text. It does not
 import the harness and does not start a process, because the harness shells out by nature and the
 suite is offline: exactly four modules under `tests/` call a subprocess, measured with
 
@@ -39,7 +39,7 @@ FOUR CHECKS.
      the check would report a violation that is not there, or miss one that is.
 
   C  EVERY DEFAULTED PARAMETER HAS A DISSENTING CALLER. For each parameter of each imported
-     harness function that carries a default, at least one call site in `scripts/wp1??_controls.py`
+     harness function that carries a default, at least one call site in `scripts/wp*_controls.py`
      must pass that keyword with an argument whose source text differs from the default's source
      text. Import aliases are followed: `wp111_controls.py` does
      `from control_harness import edit as harness_edit`, and its `preview=60` counts.
@@ -72,7 +72,7 @@ WHAT THIS DOES NOT DO. Every item is a real limit, not a caveat.
     make no difference to behaviour passes every check. Whether a difference is real is the
     classification in the harness's own docstring, which is prose a human wrote and this module
     does not check.
- 5. ONLY `scripts/wp1??_controls.py` IS SEARCHED FOR CALL SITES. A dissenting caller written
+ 5. ONLY `scripts/wp*_controls.py` IS SEARCHED FOR CALL SITES. A dissenting caller written
     anywhere else - another script, a notebook, a future package's own file - does not count.
     That is deliberate: the harness exists for these runners, and a parameter kept alive only by
     something outside them is a parameter these runners no longer need.
@@ -123,8 +123,13 @@ SUBPROCESS_CALLS = ("run", "Popen", "check_output", "check_call")
 
 
 def runner_paths() -> list[Path]:
-    """The runner scripts, in name order. `wp1??` matches wp111 to wp117 and anything after."""
-    return sorted((ROOT / "scripts").glob("wp1??_controls.py"))
+    """The runner scripts, in name order.
+
+    The glob is `wp*_controls.py` and not `wp1??_controls.py`, which was what this read first:
+    `wp1??` stops at wp199, so a wp200-series runner would have fallen out of every check below
+    in silence. Measured at the time of the change, both patterns match the same seven files.
+    """
+    return sorted((ROOT / "scripts").glob("wp*_controls.py"))
 
 
 def parsed(path: Path) -> ast.Module:
@@ -214,7 +219,7 @@ class HarnessParameters(unittest.TestCase):
         this file being edited, but it may not lose all of them and leave the checks vacuous.
         """
         self.assertTrue(HARNESS.is_file(), f"{HARNESS} is missing")
-        self.assertTrue(self.runners, "no scripts/wp1??_controls.py runner was found")
+        self.assertTrue(self.runners, "no scripts/wp*_controls.py runner was found")
         total = sum(len(defaulted_parameters(function))
                     for function in self.functions.values())
         self.assertGreater(total, 0, "the harness exposes no defaulted parameter at all, so "

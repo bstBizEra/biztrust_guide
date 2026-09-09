@@ -138,15 +138,21 @@ def edit(root: Path, rel: str, old: str, new: str, *,
 
 def fresh(source: Path, into: Path, name: str, *,
           ignore: Iterable[str] = COPY_IGNORE) -> Path:
-    """A copy of `source` at `into/name`, WITHOUT `.git`.
+    """A copy of `source` at `into/name`, WITHOUT `.git`. ENFORCED, not relied upon.
 
     That absence is a property the script controls depend on: the copy is not a repository, so
-    every git fact must degrade rather than be answered from somewhere else. `.git` is in every
-    caller's ignore tuple; the rest of the tuple is the caller's, because wp111's omits `_site` and
-    `node_modules` and copying those would change what its controls run over.
+    every git fact must degrade rather than be answered from somewhere else. `.git` used to be
+    excluded only because every caller's tuple happened to contain it, which made the sentence
+    above an assertion about the callers rather than a promise of this function - a seventh runner
+    passing its own tuple would have got a repository copy in silence, and a wp113-style control
+    expecting a git fact to degrade would have had it answered instead: green, and meaningless. So
+    `.git` is prepended here and the rest of the tuple is still the caller's, because wp111's omits
+    `_site` and `node_modules` and copying those would change what its controls run over. Both
+    tuples in the tree already carry `.git`, so this is a no-op for every current caller and
+    `shutil.ignore_patterns` does not mind the duplicate.
     """
     root = into / name
-    shutil.copytree(source, root, ignore=shutil.ignore_patterns(*ignore))
+    shutil.copytree(source, root, ignore=shutil.ignore_patterns(".git", *ignore))
     return root
 
 
