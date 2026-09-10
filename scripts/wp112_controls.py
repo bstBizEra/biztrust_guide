@@ -377,11 +377,24 @@ def check_source_main_line(source: Path) -> str:
                                                and did refuse it; review measured that, and this
                                                is the repair.
 
-    WHAT IT DOES NOT PROMISE. It is not a guarantee that the run will be green. A local `main` far
-    enough behind - before the merge the record's package landed in - satisfies this check and
-    still fails the live-tree corroboration. That case is not checked here, because pinning it
-    would mean this runner deciding which commit the record's package landed in, which is the
-    tests' business and not the harness's.
+    WHAT IT DOES NOT PROMISE. It is not a guarantee that the run will be green: it reads two refs
+    and says nothing about the record the controls are built against. This paragraph used to say
+    more - that a local `main` far enough behind, before the merge the record's package landed in,
+    satisfies this check and STILL FAILS the live-tree corroboration - and #360 is the measurement
+    that retired that sentence. Such a source does fail one control, and the cause is not the
+    source: it was the fixture builder below synthesising its commits on THIS ref rather than on
+    the recorded baseline. Measured at WP-118 on a source whose local `main` sat one commit behind
+    the recorded baseline, before and after that repair with everything else held identical: the
+    one control moved from BAD to behaving and no other line of this runner's output changed. NO
+    COUNT OF THIS RUNNER'S OWN CONTROLS IS RESTATED HERE, because a count written into the file it
+    counts goes stale the day someone adds a control to it; `scripts/wp118_controls.py` is the
+    standing evidence and runs the comparison as a grid. What a behind `main` costs the ordinary
+    controls is nothing, because #353 gave a main ref behind the record its own UNKNOWN verdict
+    and the live-tree test asserts it.
+
+    The check stays this narrow all the same. Pinning which commit the record's package landed in
+    is the tests' business and not this runner's, and a fixture that has to be told is a fixture
+    that can be told wrong.
     """
     def ref(name: str) -> str:
         done = subprocess.run(["git", "-C", str(source), "rev-parse", "--verify", "--quiet",
@@ -408,26 +421,54 @@ def clone_with_a_later_package(source: Path, into: Path, name: str) -> Path:
     """A clone whose `origin/main` has ONE MORE Work Package on it than the record knows.
 
     This is the merge that is coming: when this package lands, main's tip is its merge and no
-    longer the recorded package's. The commit is made with `commit-tree` over the existing tip's
-    own tree, so the WORKING TREE is untouched and the clone still carries the module under test -
-    a checkout of the older tip would have thrown the module away and measured nothing.
+    longer the recorded package's. Both commits are made with `commit-tree` and NOTHING IS CHECKED
+    OUT, so the clone's working tree is still the tree under test - the module and the record this
+    run is about. Checking either commit out would replace it with the baseline's tree, which is
+    the PREVIOUS package's, and the run would measure that instead.
 
-    Two things are asserted before the control is allowed to mean anything: the new tip's subject
-    must NOT open with the recorded package's id, and the recorded package's landing must still be
-    somewhere in the range. Without both, a green result would prove only that the fixture failed
-    to reproduce the case.
+    THE CHAIN IS SYNTHESISED ON THE RECORDED BASELINE, and that is #360's repair. It used to be
+    synthesised on the clone's `origin/main`, which IS the source checkout's `refs/heads/main` -
+    so the fixture varied with how recently the source had been pulled. Measured on a source
+    whose local `main` sat one commit behind the recorded baseline: the baseline was not an
+    ancestor of the two new commits, the reading went DIVERGED rather than LAG_EXPECTED, the
+    mutation this builder is paired with was therefore never reached, and the control reported BAD
+    for a reason that had nothing to do with the code it measures. The baseline is in the record,
+    it is the thing the reconciliation is measured against, and it does not move when someone
+    pulls. `scripts/wp118_controls.py` holds the controls.
+
+    WHAT THE THREE ASSERTIONS ARE WORTH, AND #360 CHANGED NONE OF IT. Only the first can fail for
+    a reason outside this function: a source whose record names a baseline its object database
+    does not hold - a shallow source, or a baseline recorded on a branch this repository never
+    received - cannot have a fixture built on it at all, and must say so rather than surface as a
+    raw `git commit-tree` error. The other two are CONSTRUCTION CHECKS, and have been since the
+    two-commit repair above rather than since #360: both commits are synthesised here in a fixed
+    order, so the tip's subject is the later package's and the recorded package's landing is in
+    the range BY CONSTRUCTION. The second of those was MEASURED on the pre-repair builder against
+    a PARTED history, which is the one case that could have falsified it, and it held anyway -
+    `baseline..origin/main` is reachability and not descent, so a freshly synthesised commit is in
+    that range whether or not the two lines contain one another. They are kept because the order
+    of the two subjects, or a start that is not the baseline, would both make this fixture stop
+    reproducing the case - but neither reports anything about the source, and neither did before.
     """
     root = clone(source, into, name)
     record = json.loads((root / STATE).read_text(encoding="utf-8"))
     work_package = record["active_work_package"]["id"]
     baseline = record["source"]["baseline_commit"]
 
-    # BOTH commits are synthesised, and that is a repair. This first built only the later package
-    # and relied on the recorded one having already landed - true while the record named WP-111,
-    # and false the moment the record rolled forward to WP-112, at which point the builder's own
-    # guard fired and the control could not run at all. A fixture for "a later package lands on
-    # top of the recorded one" must not depend on whether the recorded one has landed yet.
-    tip = git_out(root, "rev-parse", "refs/remotes/origin/main")
+    held = subprocess.run(["git", "-C", str(root), "cat-file", "-e", f"{baseline}^{{commit}}"],
+                          capture_output=True, text=True, timeout=60)
+    if held.returncode != 0:
+        raise AssertionError(
+            f"the recorded baseline {baseline[:12]} is not in this clone, so no fixture can be "
+            f"built on it: the source's history does not reach the commit its own record names")
+
+    # BOTH commits are synthesised, and that is the earlier repair. This first built only the
+    # later package and relied on the recorded one having already landed - true while the record
+    # named WP-111, and false the moment the record rolled forward to WP-112, at which point the
+    # builder's own guard fired and the control could not run at all. A fixture for "a later
+    # package lands on top of the recorded one" must not depend on whether the recorded one has
+    # landed yet.
+    tip = baseline
     for subject in (f"[{work_package}] the recorded package lands (#351) (#998)",
                     "[BIZTRUST-GUIDE-WP-999] a later package lands on the main line (#351) (#999)"):
         tip = git_out(root, "-c", "user.name=WP-112 control",
