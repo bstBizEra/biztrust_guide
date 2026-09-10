@@ -27,21 +27,34 @@ on each, so that no control here measures a source the real runner would refuse 
   AHEAD        both refs at a commit synthesised ON TOP of the baseline - the world after some
                other package merges. The fixture must be the same tree in all three.
 
-TWO BUILDERS, SO TWELVE CONTROLS: the repaired builder and the builder AS IT STOOD BEFORE THE
-REPAIR, each against all three sources. A copy of the repository has the one repaired line put
-back to what it was and the pre-repair builder is loaded from that copy. The mutation asserts the
-repaired line is present before replacing it, so a revert of #360, or a rewording of it, fails
-here rather than passing quietly.
+TWO BUILDERS, SO SIX CELLS AND TWELVE CONTROLS: three sources by the repaired builder and the
+builder AS IT STOOD BEFORE THE REPAIR, each cell running the pair above. A copy of the repository
+has the one repaired line put back to what it was and the pre-repair builder is loaded from that
+copy. The mutation asserts the repaired line is present before replacing it, so a revert of #360,
+or a rewording of it, fails here rather than passing quietly.
 
-ONLY ONE COLUMN OF THAT GRID DISCRIMINATES, AND RUNNING THE WHOLE GRID IS HOW THAT IS MEASURED
-RATHER THAN CLAIMED. Five of the six pre-repair cells behave exactly as the repaired ones do: on a
-source whose `main` is AT the recorded baseline the old start point IS the baseline, and on one
+FIVE OF THE SIX CELLS BEHAVE THE SAME WAY, AND RUNNING THE WHOLE GRID IS HOW THAT IS MEASURED
+RATHER THAN CLAIMED. Two of the three PRE-REPAIR cells behave exactly as the repaired ones do: on
+a source whose `main` is AT the recorded baseline the old start point IS the baseline, and on one
 AHEAD of it the baseline is still an ancestor of the old start point, so the fixture reproduces
-LAG_EXPECTED either way. The sixth cell - PRE-REPAIR against the BEHIND source - is the defect:
-both halves stay GREEN, and the mutated half staying green is the whole of it, because green there
-means the mutation was never reached. So the BEHIND column and the pre-repair row are what tell
-the repaired builder from the broken one; the other two columns establish INVARIANCE, which is a
-different thing and is easy to mistake for a repair being measured three times.
+LAG_EXPECTED either way. The third - PRE-REPAIR against the BEHIND source - is the defect: both
+halves stay GREEN, and the mutated half staying green is the whole of it, because green there
+means the mutation was never reached. So the BEHIND source and the pre-repair builder together are
+what tell the repaired builder from the broken one.
+
+WHICH MAKES FOUR OF THE SIX REPAIRED CONTROLS INVARIANCE INSURANCE RATHER THAN EVIDENCE, and that
+is worth saying because six controls look like six measurements. After the repair the builder
+reads NO REF, so the three REPAIRED cells build ONE IDENTICAL HISTORY three times: `git log
+--format='%T|%s'` over `baseline..origin/main` in all three prints the same tree and the same two
+subjects. The AT BASELINE and AHEAD pairs therefore assert a property rather than measure the
+repair - a fixture that no longer varies with the source does not vary with the source - at the
+price of four clones and four suite runs. They are kept because that property is exactly what #360
+bought and is worth asserting once the builder stops reading refs.
+
+THE PRE-REPAIR ROW IS WHERE THE HISTORIES ACTUALLY DIFFER, so all six of its controls carry
+information: AT BASELINE matches the repaired history exactly, AHEAD carries a THIRD commit in the
+range - the source's own later package, which the old start point picked up - and still reads
+LAG_EXPECTED, and BEHIND is built on a parted line and reads DIVERGED.
 
 WHAT COMES FROM THE COPY IS ONE FUNCTION. `sys.path[0]` is this script's own directory, so the
 copy's own `from control_harness import ...` binds THIS tree's harness; the copy supplies the
@@ -186,10 +199,10 @@ def main() -> int:
 
     # THE WHOLE GRID, and not only the cell the defect lives in. Running the pre-repair builder
     # against all three sources is what turns "the AT BASELINE and AHEAD pairs cannot see this
-    # defect" from a sentence into a measurement: those four cells behave IDENTICALLY under both
-    # builders, so the BEHIND column is the only one that tells the repaired builder from the
-    # broken one, and a reader who assumed all three columns were measuring the repair can see
-    # from the output that they are not.
+    # defect" from a sentence into a measurement: those two sources behave IDENTICALLY under both
+    # builders, so only the BEHIND one tells the repaired builder from the broken one, and a
+    # reader who assumed all three sources were measuring the repair can see from the output that
+    # they are not.
     total = 0
     for builder_label, build in (("REPAIRED", clone_with_a_later_package),
                                  ("PRE-REPAIR", the_builder_before_the_repair(source, holder))):

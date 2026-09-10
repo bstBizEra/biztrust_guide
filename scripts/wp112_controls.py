@@ -384,10 +384,13 @@ def check_source_main_line(source: Path) -> str:
     that retired that sentence. Such a source does fail one control, and the cause is not the
     source: it was the fixture builder below synthesising its commits on THIS ref rather than on
     the recorded baseline. Measured at WP-118 on a source whose local `main` sat one commit behind
-    the recorded baseline, before and after that repair, with everything else held identical:
-    19 controls 1 not behaving, then 19 controls 0 not behaving, and no other line of the output
-    changed. What a behind `main` costs the ordinary controls is nothing, because #353 gave a main
-    ref behind the record its own UNKNOWN verdict and the live-tree test asserts it.
+    the recorded baseline, before and after that repair with everything else held identical: the
+    one control moved from BAD to behaving and no other line of this runner's output changed. NO
+    COUNT OF THIS RUNNER'S OWN CONTROLS IS RESTATED HERE, because a count written into the file it
+    counts goes stale the day someone adds a control to it; `scripts/wp118_controls.py` is the
+    standing evidence and runs the comparison as a grid. What a behind `main` costs the ordinary
+    controls is nothing, because #353 gave a main ref behind the record its own UNKNOWN verdict
+    and the live-tree test asserts it.
 
     The check stays this narrow all the same. Pinning which commit the record's package landed in
     is the tests' business and not this runner's, and a fixture that has to be told is a fixture
