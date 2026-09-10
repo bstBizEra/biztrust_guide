@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "checkpoint_id": "BIZTRUST-GUIDE-WP-118-engineering-ready",
+  "created_at": "2026-09-10T20:00:00Z",
+  "work_package_id": "BIZTRUST-GUIDE-WP-118",
+  "state": "ENGINEERING_READY",
+  "objective": "scripts/wp112_controls.py's fixture builder `clone_with_a_later_package` synthesised its two commits on the CLONE's refs/remotes/origin/main, and a clone's origin/main IS the source checkout's refs/heads/main (#360). So the fixture varied with how recently the source had been pulled. Reproduced by construction rather than by waiting for it, because the shared checkout had been fast-forwarded that morning and the symptom no longer showed there: a source checkout whose local main sat one commit before the recorded baseline with origin/main at it - the ordinary state of a checkout that has fetched and not pulled - made the recorded baseline a non-ancestor of the synthesised line, so the live reading went DIVERGED rather than LAG_EXPECTED, the test branch the paired mutation edits was never reached, and the control `the same later merge with the corroboration required to be the TIP` reported BAD for a reason that has nothing to do with the code it measures. 19 controls, 1 not behaving. The chain is now synthesised on the RECORDED BASELINE, which is in the clone, is the thing the reconciliation is measured against, and does not move when someone pulls: 19 controls, 0 not behaving, on the same source, with every other line of the runner's output byte-identical. Both synthesised commits are kept - that was WP-112's own earlier repair against a different failure and it is untouched. scripts/wp118_controls.py is the evidence, eight controls built on scripts/control_harness.py rather than copied from a sibling: the repaired builder against three source checkouts whose local main sits BEHIND the baseline, AT it and AHEAD of it, each running the pair WP-112 declares - green unmutated, test_the_live_reading_agrees_with_the_history_measured_here failing under the corroboration-required-to-be-the-TIP mutation - and the builder AS IT STOOD BEFORE THE REPAIR against the behind source, where BOTH halves stay green, the mutated half staying green being the defect itself. check_source_main_line is NOT weakened: it still refuses only a source whose local main carries commits its origin/main does not, and still allows behind, which #360 says is the right decision. Its WHAT IT DOES NOT PROMISE paragraph claimed that a local main far enough behind still fails the live-tree corroboration; the one control that failed on such a source failed because of this fixture and not because of the source, and the paragraph now carries that measurement instead of the claim.",
+  "source": {
+    "repository": "bstBizEra/biztrust_guide",
+    "branch": "fix/biztrust-guide-wp-118-control-source-independence",
+    "baseline_commit": "6958e84b3f8273036ab36bf22ac6323ee8d9d783"
+  },
+  "completed": [
+    "THE DEFECT WAS REPRODUCED BEFORE ANYTHING WAS EDITED, AND BY CONSTRUCTION RATHER THAN BY LUCK. The brief recorded that the shared checkout's local `main` had been fast-forwarded to `origin/main` that morning, so the symptom would not reproduce against it as it stood, and that #348 in this repository was implemented against a premise that had expired and wrote records claiming a reproduction that never happened. So a source was BUILT: a clone of this worktree with `git branch -f main 3d36d80`, which puts its local `main` one commit before the recorded baseline f34891ae1e0f while its own `origin/main` stays at it - the ordinary state of a checkout that has fetched and not pulled, and a state `check_source_main_line` explicitly allows. `python scripts/wp112_controls.py <that source> <holder>` before any edit: 19 controls, 1 not behaving, the one being `the same later merge with the corroboration required to be the TIP`, which printed `expected test_the_live_reading_agrees_with_the_history_measured_here to fail; exit 0; failed: NOTHING`.",
+    "THE MECHANISM WAS READ OUT OF THE FIXTURE THE FAILING RUN LEFT BEHIND, AND IT IS NOT THE ONE THE BRIEF NAMED. The brief said the builder's own `landings` assertion fires. It does not, and cannot: `baseline..refs/remotes/origin/main` lists what is reachable from the ref and not from the baseline, so the two synthesised commits are inside that range even when the two lines have parted. What actually happened, measured in the leftover clone: `git log refs/remotes/origin/main` shows the synthesised pair sitting on 3d36d80; `merge-base --is-ancestor` answers 1 in both directions between the baseline and that tip; and `python -B scripts/validate_continuity.py` inside the clone prints STATE_RECONCILIATION=DIVERGED. So the live-tree test returns from its DIVERGED branch before it reaches the `landings` line that the paired mutation edits - the mutation is never reached, nothing fails, and the control reports BAD. Recorded here because the record must match the measurement rather than the brief.",
+    "THE REPAIR IS THE START POINT AND NOTHING ELSE. In `clone_with_a_later_package`, `tip = git_out(root, \"rev-parse\", \"refs/remotes/origin/main\")` becomes `tip = baseline`, where `baseline` is already read from the clone's own `badf/current-state.json` two lines above. The loop, the two subjects, the `commit-tree` calls and the `update-ref` are untouched; the fixture's `origin/main` is now the recorded baseline plus the recorded package's landing plus one later package, whatever the source's refs say.",
+    "BOTH SYNTHESISED COMMITS ARE KEPT AND THE COMMENT RECORDING WHY IS STILL TRUE. Building only the later package was WP-112's original shape and broke the moment its record rolled forward to a package that had not landed; that repair is a different one from this, it is not disturbed, and the comment that records it now says `the earlier repair` so that two repairs to one function are not read as one.",
+    "ONE ASSERTION WAS ADDED AND THE OTHER TWO ARE DECLARED FOR WHAT THEY ARE NOW WORTH. The new one refuses a source whose record names a baseline the clone's object database does not hold - reachable in practice, from a shallow source or a baseline recorded on a branch this repository never received - and it is the only assertion in the builder that can still fail for a reason outside the builder. The two that were there are KEPT and their docstring now says plainly that they became construction checks: with both commits synthesised on the baseline in a fixed order, the tip's subject and the recorded package's landing hold BY CONSTRUCTION. The brief asked for this to be said rather than left, and it is said in the function's own docstring, in DEC-124 and here.",
+    "THE SIBLING PACKAGE'S OTHER EIGHTEEN CONTROLS WERE PROVED UNAFFECTED THE WAY WP-117 PROVED ITS MIGRATION. The whole runner was run before and after against THE SAME constructed source, with the source's own bytes unchanged between the two - only the runner differs, because the clones execute the tests and the validator and never the runner. The diff of the two full outputs is three lines: the named control's `[BAD ]` becoming `[PASS]`, its detail line, and the closing count moving from `19 controls, 1 not behaving as declared` to `19 controls, 0 not behaving as declared`. The repaired control is also ISOLATED - it trips exactly `test_the_live_reading_agrees_with_the_history_measured_here` and nothing else.",
+    "scripts/wp118_controls.py IS THE COMMITTED EVIDENCE: EIGHT CONTROLS, BUILT ON THE HARNESS RATHER THAN COPIED FROM A SIBLING. It constructs three source checkouts of the tree under test whose local `main` sits BEHIND the recorded baseline, AT it, and AHEAD of it, calls `check_source_main_line` on each so that no control measures a source the real runner would refuse, and runs the pair WP-112 declares against each: the fixture unmutated must leave the suite GREEN, and the same fixture with `the_corroboration_required_to_be_the_tip` must fail `test_the_live_reading_agrees_with_the_history_measured_here`. Measured: 8 controls, 0 not behaving as declared, unmutated clone first and green, every failing half isolated to the one named test.",
+    "THE BUILDER AS IT STOOD BEFORE THE REPAIR IS THE SEVENTH AND EIGHTH CONTROL, AND WITHOUT THEM THE OTHER SIX ARE SIX GREEN LIGHTS WITH NOTHING TO COMPARE THEM TO. A copy of the repository has the one repaired line put back by `edit`, which refuses to be a no-op - so a revert of #360, or a rewording of that line, fails this control rather than passing quietly - and the builder is loaded out of that copy with `importlib`. Both halves of the pair are then expected GREEN against the BEHIND source, and the mutated half staying green IS the defect. `sys.path[0]` is the script's own directory, so the copy's `from control_harness import ...` binds this tree's harness and the only thing that differs between the two builders is the line the mutation put back.",
+    "THE BUILDER AND THE MUTATION ARE IMPORTED FROM scripts/wp112_controls.py, NOT COPIED. A control on a fixture builder that measured its own copy of that builder would measure nothing. The one deliberate copy is the reverted line, and it is written as a mutation of the real file for exactly that reason.",
+    "EVERY OTHER FIXTURE BUILDER IN THE SEVEN RUNNERS WAS ENUMERATED BEFORE THE EDIT, NOT AFTER. `grep -n 'update-ref|commit-tree|rev-parse' scripts/wp1*_controls.py scripts/control_harness.py` returns every place a runner synthesises or moves history. wp114's two builders, `clone_with_a_stale_main_ref` and `clone_with_a_divergent_main_ref`, both start from `recorded_baseline(root)` and were already independent of the source; wp111, wp113, wp115, wp116 and wp117 copy rather than clone and synthesise no history at all. wp112's `clone_with_a_later_package` was the only start point taken from a ref, so this repair is not one of N-1 of N places.",
+    "THE FALSE PARAGRAPH IN check_source_main_line's DOCSTRING WAS CORRECTED, AND IT IS THIS PACKAGE'S ONLY EDIT OUTSIDE THE BUILDER. `WHAT IT DOES NOT PROMISE` claimed that a local `main` far enough behind satisfies the check and STILL FAILS the live-tree corroboration. Measured: the one control that failed on such a source failed because of this fixture, and after the repair the same source gives 19 controls, 0 not behaving. The paragraph now carries that before-and-after measurement instead of the claim, and keeps the narrowness argument that followed it.",
+    "check_source_main_line's BEHAVIOUR IS UNTOUCHED, WHICH IS WHAT #360 ASKED FOR. It still refuses only a source whose local `main` carries commits its `origin/main` does not, still allows behind, and its measured AHEAD/BEHIND table is unchanged. The fixture was made independent of the source; what the guard refuses was not changed.",
+    "401 tests OK, skipped=1 - the same 401 as on main today, because this package adds no test module and changes none. CONTINUITY_VALIDATION=PASS, exit 0. `python scripts/wp118_controls.py` exits 0 with 8 controls, 0 not behaving. No runner is wired into CI, and nothing under tests/ or in scripts/validate_continuity.py was edited: `git status --porcelain` names six files, four modified and two added, and none of them is a test module or the validator.",
+    "BOTH RUNNERS WERE RE-RUN AFTER THE COMMIT, BECAUSE A CLONE CARRIES COMMITTED STATE. wp112's own docstring says it: run this against a committed tree or it measures the previous commit. The eight controls above were first measured with the repair in the working tree and the previous commit in every clone - valid, since no test module or validator line changed - and were then re-measured on the committed tree, where the record the clones carry is this package's own. `python scripts/wp118_controls.py`: 8 controls, 0 not behaving. `python scripts/wp112_controls.py` against a source rebuilt one commit behind the new baseline 6958e84b3f82: 19 controls, 0 not behaving."
+  ],
+  "remaining": [
+    "NOTHING DETECTS THESE RUNNERS ROTTING, and this package is the second demonstration of the cost. They are out of CI by design - twelve clones, a full copy and nine suite runs here alone - so their results are evidence about the tree at the commit someone last ran them against. #360 was found only because WP-114 happened to touch the files wp112's runner measures, and it went unrepaired through WP-115, WP-116 and WP-117.",
+    "THE TWO KEPT ASSERTIONS IN THE BUILDER ARE NOW CONSTRUCTION CHECKS AND NOTHING REPLACES WHAT THEY USED TO BE WORTH. A fixture built entirely from the record needs no assertion about the source; whether it should instead assert something about the READING it produces - that the clone answers LAG_EXPECTED before the control runs - is a real question this package did not answer, because that is what the test the control names already asserts and duplicating it in the builder would make the fixture judge its own subject.",
+    "check_source_main_line still exists twice, in wp112 and wp114, carried from WP-117's remaining. Their bodies differ in one edge case and their docstrings are each package's own measurement; this package edited wp112's and left wp114's alone, so the two now record different amounts about the same guard.",
+    "stop_reason in badf/current-state.json still describes WP-112 and its five review rounds. It is untouched here because the brief forbids changing it, as WP-113 to WP-117 each recorded.",
+    "#346 - authority.implementation names no domain and sits beside production_platform_implementation: NOT_GRANTED. DEC-124 cites it because it is the key that exists, not because the citation is well formed, and #364 records that nothing freezes the record's authority block against a package minting a key and citing it.",
+    "wp112's and wp114's `run_validator` are byte-identical to each other and are not shared, carried from WP-117's remaining and named in the harness's own table as leftover duplication. This package touched neither."
+  ],
+  "files_changed": [
+    "scripts/wp112_controls.py",
+    "scripts/wp118_controls.py",
+    "badf/current-state.json",
+    "badf/next-actions.json",
+    "badf/decision-log.jsonl",
+    "sessions/checkpoints/BIZTRUST-GUIDE-WP-118-engineering-ready.json"
+  ],
+  "validation": [
+    {
+      "command": "python scripts/wp112_controls.py <a source whose local main is one commit before the recorded baseline> (BEFORE the repair: 19 controls, 1 not behaving - the reproduction)",
+      "status": "FAIL",
+      "exit_code": 1
+    },
+    {
+      "command": "python scripts/wp112_controls.py <the same source, unchanged> (AFTER the repair: 19 controls, 0 not behaving)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "diff wp118_before.txt wp118_after.txt (expected difference and no other: the named control's two lines and the closing count; exit 1 is the difference itself)",
+      "status": "PASS",
+      "exit_code": 1
+    },
+    {
+      "command": "python scripts/wp118_controls.py (8 controls, 0 not behaving as declared; unmutated clone first and green)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests (401 tests, OK, skipped=1)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/validate_continuity.py (CONTINUITY_VALIDATION=PASS)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "grep -n 'update-ref|commit-tree|rev-parse' scripts/wp1*_controls.py scripts/control_harness.py (the enumeration: wp112's builder is the only start point taken from a ref)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git status --porcelain (six files, four modified and two added; no test module, no scripts/validate_continuity.py, no workflow)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/wp118_controls.py (final, on the committed tree: 8 controls, 0 not behaving as declared)",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python scripts/wp112_controls.py <a source built from the committed tree with local main one commit behind the new baseline> (final: 19 controls, 0 not behaving as declared)",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "observations": [
+    "THE BRIEF'S STATEMENT OF THE MECHANISM DID NOT SURVIVE MEASUREMENT, AND THAT IS WORTH MORE THAN THE REPAIR. It said the builder's own `landings` assertion fires against a stale source. It does not: the range `baseline..origin/main` is defined by reachability, not by descent, so the synthesised commits are in it even when the baseline and the tip have parted. The symptom is one branch further on - the reading is DIVERGED, so the test returns before the line the mutation edits. Same conclusion, different reason, and a package that had copied the brief's sentence into its record would have shipped a false one.",
+    "THE DEFECT IS INVISIBLE IN THE STATE A READER WOULD MOST LIKELY CHECK IT IN, WHICH IS WHY IT SURVIVED FOUR PACKAGES. The record the builder reads comes from the CLONE's working tree, which is a checkout of the source's HEAD. Run from a checkout standing ON `main`, the record and the ref move together and the fixture is right however stale `main` is. Run from a Work Package WORKTREE - which is how every one of these runners is actually invoked - HEAD is the feature branch, its record names a baseline that is on `origin/main`, and local `main` is wherever the last pull left it. So the defect is absent exactly where someone would go looking for it and present exactly where the runner is used.",
+    "A CONSTRUCTED SOURCE NEEDS ITS OWN BRANCH, AND THAT IS NOT COSMETIC. Each constructed source is left standing on `wp118-tree-under-test`. Without it, a source whose HEAD happened to BE `main` would hand the fixture builder the record of whatever commit `main` was pointed at, so the three sources would differ in their RECORDS as well as in their refs - two variables and one measurement. The branch keeps the working tree, and therefore the record, identical across all three.",
+    "THE AHEAD SOURCE IS THE HALF OF THE QUESTION THE ISSUE DID NOT ASK, AND IT COST TWO CONTROLS. #360 and the brief are about a source that is BEHIND. A source AHEAD of the baseline - the world after some other package merges - is the other direction the fixture must not care about, and a repair that had accidentally pinned the fixture to `baseline` in a way that broke once main moved past it would show up only there.",
+    "THE HARNESS CARRIED AN EIGHTH RUNNER WITH NO NEW PARAMETER AND NO EFFECT ON ITS GUARD. scripts/wp118_controls.py passes NO keyword argument to any defaulted harness parameter - the only keyword it passes at all is `hole=`, which carries no default and is therefore not in the set `tests/test_harness_parameters.py` reads - so it can neither create nor remove a dissenter. The guard's glob is `wp*_controls.py` and now matches eight files; 401 tests OK is the measurement that it did not mind.",
+    "THE ONE COPIED LINE IS WRITTEN AS A MUTATION SO THAT IT CANNOT GO STALE IN SILENCE. The pre-repair builder could have been transcribed into wp118_controls.py as a second function; then a later edit to the real builder would leave the copy measuring a version of the defect nobody has any more. Written as `edit(copy, WP112, REPAIRED, BEFORE_THE_REPAIR)` it asserts the repaired line is still present, so the control fails loudly the day the repair is reworded.",
+    "THE FIXTURE'S COMMITS NOW CARRY THE BASELINE'S TREE RATHER THAN THE TIP'S, AND NOTHING READS IT. `commit-tree` is given `{tip}^{tree}` and `tip` starts at the baseline, so the synthesised commits carry the baseline's tree. Nothing is checked out, so the clone's WORKING TREE is still the source's HEAD and still carries the module under test, which is the property the docstring promised and still promises. The reconciliation and its test read subjects and ancestry only.",
+    "THE `AT BASELINE` SOURCE IS ALSO WHAT THIS WORKTREE IS, WHICH IS WHY THE SYMPTOM COULD NOT BE FOUND BY RUNNING THE RUNNER PLAINLY. `refs/heads/main` here is 6958e84, the recorded baseline this package rolls to, so a plain `python scripts/wp112_controls.py` from this worktree exercises the AT BASELINE case and passes on both sides of the repair. The reproduction had to be constructed, and the constructed source is the one the before/after diff was taken on."
+  ],
+  "decisions": [
+    "DEC-124"
+  ],
+  "assumptions": [
+    "That a fixture built entirely from the record is better than one built from a ref, even though it costs two of the builder's three assertions their ability to report on anything outside the builder. The alternative - keeping a source-dependent start point and asserting harder about it - was rejected because #360 asks for independence, and because an assertion that fires on the ordinary state of a fetched-but-not-pulled checkout is a false failure of the kind check_source_main_line already exists to prevent.",
+    "That behind, at and ahead span what matters about a source's main line for this fixture. Nothing here constructs a source with no `main` ref at all, a shallow source, or a source whose record names a baseline it does not hold. The last of those is what the builder's new assertion answers and it is declared as uncovered below rather than measured.",
+    "That correcting the WHAT IT DOES NOT PROMISE paragraph is inside this package's scope. It is in the file this package edits, its claim is measurably false, and this package's own change is what removes the last reading under which it could have been true - leaving it beside a repair of the thing it described seemed worse than the widening. #357's precedent, that a package does not widen its diff into a sibling's prose, points the other way, and a reviewer may rule that it should have been filed instead."
+  ],
+  "blockers": [],
+  "authority": {
+    "implementation": "GRANTED_BY_USER_REQUEST_2026_09_03",
+    "scope_note": "One line of a sibling package's fixture builder, the docstring paragraphs that describe it, and one new control runner under scripts/. No test module, no line of scripts/validate_continuity.py, no CI wiring, no design and nothing under docs/.",
+    "repository_publish": "GRANTED_VIA_PULL_REQUEST",
+    "merge": "AFTER_REVIEW_AS_FOR_WP_029_TO_117",
+    "gate_recording": "HUMAN_ONLY_PER_GATE_OWNER"
+  },
+  "next_action_id": "NS-041",
+  "recovery": {
+    "first_safe_command": "python -m unittest discover -s tests",
+    "read_first": [
+      "scripts/wp112_controls.py, `clone_with_a_later_package` - the subject, and its docstring carries what each of its three assertions is now worth",
+      "https://github.com/bstBizEra/biztrust_guide/issues/360",
+      "scripts/wp118_controls.py - the eight controls, and the only place the pre-repair builder still exists",
+      "scripts/control_harness.py, whose docstring carries the need-vs-drift table every runner is held to",
+      "AGENTS.md section 6"
+    ],
+    "stop_if": [
+      "check_source_main_line is weakened to refuse a source whose local `main` is merely BEHIND its origin/main. That is the ordinary state of a fetched-but-not-pulled checkout, #360 says allowing it is right, and its first version did refuse it and was repaired for that reason. The fixture was made independent of the source; the guard was not changed.",
+      "The fixture builder's start point is moved back to a ref - `refs/remotes/origin/main`, `HEAD`, or the clone's default branch. A clone's origin/main IS the source checkout's refs/heads/main, so any of them reintroduces #360.",
+      "One of the two synthesised commits is deleted because the recorded package `has already landed anyway`. That is WP-112's earlier failure and its repair is a different one from this package's.",
+      "A control in scripts/wp118_controls.py is satisfied by transcribing the builder or the mutation into that file instead of importing it. A control on a fixture builder that measures its own copy measures nothing.",
+      "The pre-repair line in scripts/wp118_controls.py is updated to `match` a reworded repair rather than the repair being reconsidered. That mutation failing is the control working.",
+      "A sentence in these files is written without a command that measures it. Every finding across this repository's review rounds was a sentence that did not match a measurement, and the brief's own account of this defect's mechanism was one of them.",
+      "Any runner is wired into CI. #368 and #345 both record why they are deliberately out, and this one clones eight times.",
+      "resume_decision, primary_next_action_id, stop_reason or any key under authority in badf/current-state.json is changed. A package that mints an authority key and cites it passes every check today - open defect #364."
+    ]
+  },
+  "declared_non_coverage": [
+    "NO CONTROL EXERCISES THE BUILDER'S NEW ASSERTION. A source whose record names a baseline the clone's object database does not hold - a shallow source, or a baseline recorded on a branch this repository never received - is the one thing that assertion can still catch, and no control constructs it. It is reachable and it is untested here.",
+    "THE BEFORE/AFTER PROOF IS A PROOF ABOUT ONE SOURCE AT ONE COMMIT. The whole-runner diff was taken on a single constructed source, one commit behind the baseline. `far enough behind` is a range and only one point of it was measured; the eight controls widen it to three points and no further.",
+    "NOTHING MEASURES WP-112's RUNNER AGAINST THE SHARED CHECKOUT ITSELF. Its local `main` was fast-forwarded before this package started, so it is now the AT BASELINE case. The state #360 was originally reported against - local main at 67deeb2, origin/main at d05afba - was not reproduced literally, only in shape.",
+    "NO CONTROL HERE MEASURES THE OTHER EIGHTEEN CONTROLS OF WP-112's RUNNER. They were proved unaffected by diffing the runner's whole output before and after, which is a comparison rather than a control: it shows that nothing else moved on that source, not that they would not move on another.",
+    "scripts/wp118_controls.py IS NOT IN CI AND NOTHING DETECTS IT ROTTING. It is the same declared cost every runner in scripts/ carries, and this package is evidence that the cost is real rather than theoretical.",
+    "NO RUNNER'S CONTROLS WERE READ FOR CORRECTNESS BEYOND THE ONE REPAIRED. wp111, wp113, wp115, wp116 and wp117 were enumerated for the defect class - a fixture built from a ref rather than from the record - and none of them synthesises history at all. Nothing else about them was checked.",
+    "THE CORRECTED DOCSTRING PARAGRAPH IS PROSE AND NO TEST HOLDS IT. Its two numbers - 19 controls 1 not behaving, then 19 controls 0 not behaving - are this session's measurement on one source, and the only thing that would catch them going stale is someone running the runner again.",
+    "THE `AHEAD` SOURCE'S SYNTHESISED COMMIT IS NOT A MERGE AND CARRIES THE BASELINE'S TREE. Real main-line commits in this repository are squash merges of a branch with a different tree; nothing in the reconciliation or its test reads a tree, so the difference is declared rather than removed."
+  ]
+}

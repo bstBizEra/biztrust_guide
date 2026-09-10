@@ -2,33 +2,26 @@
   "schema_version": "1.0.0",
   "project_id": "BIZTRUST-GUIDE",
   "repository": "bstBizEra/biztrust_guide",
-  "updated_at": "2026-09-10T16:00:00Z",
+  "updated_at": "2026-09-10T20:00:00Z",
   "active_work_package": {
-    "id": "BIZTRUST-GUIDE-WP-117",
-    "title": "Six control runners share a harness that has diverged in every copy - issue #368",
+    "id": "BIZTRUST-GUIDE-WP-118",
+    "title": "A control's fixture must not depend on how recently the source was pulled - issue #360",
     "state": "ENGINEERING_READY",
-    "objective": "Six negative-control runners, scripts/wp111_controls.py through scripts/wp116_controls.py, were written by copying one another and totalled 2,943 lines (#368). #368 measured the result and found exactly ONE shared function byte-identical across its copies, which makes the obvious reading - six duplicates, extract them - the wrong one. The subjects genuinely differ: wp112 and wp114 mutate git history and therefore CLONE, the other four mutate tracked files and therefore COPY, and `fresh` differing from `clone` is the right answer for each caller rather than drift. This package classified every divergence as NEED (a caller genuinely requires it; it survives as a parameter with a live caller on each side) or DRIFT (nothing depended on it) BEFORE extracting anything, put the classification in the new module's own docstring, and extracted only what the classification called common into scripts/control_harness.py. Nothing was resolved by taking the union of two behaviours or the more lenient of them - that is what WP-110 did to four private normalisers, after which the suite passed, four re-run controls passed, and review found eight real divergences that were caught before and missed after. Because each runner is the evidence its own package shipped, adoption was gated per runner on its FULL OUTPUT being byte-identical before and after - every control, the test each trips, every isolation declaration - captured on both sides and diffed, not on the suite staying green. FIX ROUND 1 ADDED THE GUARD THE PACKAGE WAS MISSING. Every parameter had a live caller on each side when the harness was written and review proved it by hand, and nothing kept it true: the next edit can give a parameter a default no caller ever dissents from, at which point the parameter stops expressing a difference and becomes the union of two behaviours with one deleted - WP-110's failure re-entering through the door this package built. tests/test_harness_parameters.py reads scripts/control_harness.py and every scripts/wp*_controls.py with `ast` and refuses a defaulted parameter no runner dissents from. It READS the harness as text and never imports it and starts no process, so the suite's offline and subprocess-free properties are untouched; the coordinator ruled that the brief's `tests/ gains nothing from the harness` was aimed at the import and the process rather than at a reader. scripts/wp117_controls.py demonstrates the guard can fail, and is the first runner built on the harness rather than copied from its predecessor.",
-    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/368",
+    "objective": "scripts/wp112_controls.py's fixture builder `clone_with_a_later_package` synthesised its two commits on the CLONE's refs/remotes/origin/main, and a clone's origin/main IS the source checkout's refs/heads/main (#360). So the fixture varied with how recently the source had been pulled. Reproduced by construction rather than by waiting for it, because the shared checkout had been fast-forwarded that morning and the symptom no longer showed there: a source checkout whose local main sat one commit before the recorded baseline with origin/main at it - the ordinary state of a checkout that has fetched and not pulled - made the recorded baseline a non-ancestor of the synthesised line, so the live reading went DIVERGED rather than LAG_EXPECTED, the test branch the paired mutation edits was never reached, and the control `the same later merge with the corroboration required to be the TIP` reported BAD for a reason that has nothing to do with the code it measures. 19 controls, 1 not behaving. The chain is now synthesised on the RECORDED BASELINE, which is in the clone, is the thing the reconciliation is measured against, and does not move when someone pulls: 19 controls, 0 not behaving, on the same source, with every other line of the runner's output byte-identical. Both synthesised commits are kept - that was WP-112's own earlier repair against a different failure and it is untouched. scripts/wp118_controls.py is the evidence, eight controls built on scripts/control_harness.py rather than copied from a sibling: the repaired builder against three source checkouts whose local main sits BEHIND the baseline, AT it and AHEAD of it, each running the pair WP-112 declares - green unmutated, test_the_live_reading_agrees_with_the_history_measured_here failing under the corroboration-required-to-be-the-TIP mutation - and the builder AS IT STOOD BEFORE THE REPAIR against the behind source, where BOTH halves stay green, the mutated half staying green being the defect itself. check_source_main_line is NOT weakened: it still refuses only a source whose local main carries commits its origin/main does not, and still allows behind, which #360 says is the right decision. Its WHAT IT DOES NOT PROMISE paragraph claimed that a local main far enough behind still fails the live-tree corroboration; the one control that failed on such a source failed because of this fixture and not because of the source, and the paragraph now carries that measurement instead of the claim.",
+    "issue_url": "https://github.com/bstBizEra/biztrust_guide/issues/360",
     "owner_role": "documentation-engineer",
     "scope": [
-      "scripts/control_harness.py",
-      "scripts/wp111_controls.py",
       "scripts/wp112_controls.py",
-      "scripts/wp113_controls.py",
-      "scripts/wp114_controls.py",
-      "scripts/wp115_controls.py",
-      "scripts/wp116_controls.py",
+      "scripts/wp118_controls.py",
       "badf/current-state.json",
       "badf/next-actions.json",
       "badf/decision-log.jsonl",
-      "sessions/checkpoints/BIZTRUST-GUIDE-WP-117-engineering-ready.json",
-      "tests/test_harness_parameters.py",
-      "scripts/wp117_controls.py"
+      "sessions/checkpoints/BIZTRUST-GUIDE-WP-118-engineering-ready.json"
     ]
   },
   "source": {
-    "branch": "refactor/biztrust-guide-wp-117-control-harness",
-    "baseline_commit": "f34891ae1e0feb9add0bc386ad30505e5c871002",
+    "branch": "fix/biztrust-guide-wp-118-control-source-independence",
+    "baseline_commit": "6958e84b3f8273036ab36bf22ac6323ee8d9d783",
     "baseline_kind": "main",
     "expected_remote": "https://github.com/bstBizEra/biztrust_guide"
   },
@@ -51,7 +44,7 @@
     "p0_design_pack_drafting": "OPERATOR_INSTRUCTION_2026_09_05_PROCEED_ON_YOUR_CALL_PROPOSED_ONLY",
     "guide_v2_records_drafting": "OPERATOR_INSTRUCTION_2026_09_06_PROCEED_PROPOSED_ONLY"
   },
-  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-117-engineering-ready.json",
+  "latest_checkpoint": "sessions/checkpoints/BIZTRUST-GUIDE-WP-118-engineering-ready.json",
   "latest_handoff": null,
   "primary_next_action_id": "NS-041",
   "resume_decision": "WAIT_FOR_AUTHORITY",
