@@ -433,17 +433,19 @@ def clone_with_a_later_package(source: Path, into: Path, name: str) -> Path:
     it is the thing the reconciliation is measured against, and it does not move when someone
     pulls. `scripts/wp118_controls.py` holds the controls.
 
-    WHAT THE THREE ASSERTIONS ARE WORTH, now that the fixture is BUILT rather than found. Only the
-    first can still fail for a reason outside this function: a source whose record names a
-    baseline its object database does not hold - a shallow source, or a baseline recorded on a
-    branch this repository never received - cannot have a fixture built on it at all, and must say
-    so rather than surface as a raw `git commit-tree` error. The other two are now CONSTRUCTION
-    CHECKS and the honest reading is that they are worth less than they were: with both commits
-    synthesised on the baseline in a fixed order, the tip's subject is the later package's and the
-    recorded package's landing is in the range BY CONSTRUCTION, so each can only fail if that
-    construction is edited. They are kept because that is a real thing to catch - the order of the
-    two subjects, or a start that is not the baseline, would both make this fixture stop
-    reproducing the case - but neither can any longer report anything about the source.
+    WHAT THE THREE ASSERTIONS ARE WORTH, AND #360 CHANGED NONE OF IT. Only the first can fail for
+    a reason outside this function: a source whose record names a baseline its object database
+    does not hold - a shallow source, or a baseline recorded on a branch this repository never
+    received - cannot have a fixture built on it at all, and must say so rather than surface as a
+    raw `git commit-tree` error. The other two are CONSTRUCTION CHECKS, and have been since the
+    two-commit repair above rather than since #360: both commits are synthesised here in a fixed
+    order, so the tip's subject is the later package's and the recorded package's landing is in
+    the range BY CONSTRUCTION. The second of those was MEASURED on the pre-repair builder against
+    a PARTED history, which is the one case that could have falsified it, and it held anyway -
+    `baseline..origin/main` is reachability and not descent, so a freshly synthesised commit is in
+    that range whether or not the two lines contain one another. They are kept because the order
+    of the two subjects, or a start that is not the baseline, would both make this fixture stop
+    reproducing the case - but neither reports anything about the source, and neither did before.
     """
     root = clone(source, into, name)
     record = json.loads((root / STATE).read_text(encoding="utf-8"))

@@ -173,19 +173,25 @@ then a ref on a history sharing no commit with the baseline prints DIVERGED, and
 with the behind test widened prints UNKNOWN. The fifteenth re-measures the subprocess sentence at
 the top of this docstring against the tree it describes.
 
-`scripts/wp112_controls.py` - nineteen controls. Re-run against this branch: EIGHTEEN behave as
-declared, TWELVE mutations trip the test named for them and FIVE of those trip nothing else, two
-are the declared holes at limits 5 and 7 and stay GREEN, the enclosing-repository pair behaves, and
-the two shallow-clone script controls print UNKNOWN and CONSISTENT as they did. THE ONE THAT DOES
-NOT is `the same later merge with the corroboration required to be the TIP`, and the cause is the
-SOURCE rather than either package: that control builds its fixture on the clone's `origin/main`,
-which is the source's `refs/heads/main`, and a checkout that has fetched without pulling has a
-local main BEHIND the recorded baseline - so the fixture lands in the DIVERGED branch and never
-reaches the corroboration the mutation targets. Measured both ways: against the shared checkout
-(local main 67deeb2, origin/main d05afba) it reports BAD; against a source whose local main is at
-the recorded baseline, as a pulled checkout has, it behaves as declared. `check_source_main_line`
-declares exactly this in its own docstring - it allows the behind direction and promises only that
-the run is not measuring drift, never that it will be green.
+`scripts/wp112_controls.py` - nineteen controls, ALL NINETEEN behaving as declared since #360 was
+repaired. THIRTEEN mutations trip the test named for them and SIX of those trip nothing else, two
+are the declared holes at limits 5 and 7 and stay GREEN, two are unmutated trees in environments
+they must survive and stay GREEN, and the two shallow-clone script controls print UNKNOWN and
+CONSISTENT. It was twelve and five while the nineteenth control could not reach its mutation.
+
+IT WAS EIGHTEEN OF NINETEEN WHEN WP-114 RE-RAN IT, and what that cost is worth recording. The one
+that did not behave was `the same later merge with the corroboration required to be the TIP`, and
+WP-114 read the cause as the SOURCE: that control built its fixture on the clone's `origin/main`,
+which is the source's `refs/heads/main`, so a checkout that had fetched without pulling had a local
+main BEHIND the recorded baseline, the fixture landed in the DIVERGED branch, and the reading
+returned there without ever reaching the corroboration the mutation targets. The mechanism was
+right and the attribution was not. The cause was the FIXTURE: WP-118 (#360) synthesises that chain
+on the RECORDED BASELINE, which no pull moves, and the control now behaves on a source whose local
+main is behind the baseline, at it, or ahead of it. Measured before and after on one such source
+with nothing else changed - nineteen controls one not behaving, then nineteen controls none - and
+the grid that separates the two builders is `scripts/wp118_controls.py`. `check_source_main_line`
+is unchanged by that repair: it allows the behind direction and promises only that the run is not
+measuring drift, never that it will be green.
 
 Run: `python -m unittest discover -s tests -p test_resume_reconciliation.py -v`
 """

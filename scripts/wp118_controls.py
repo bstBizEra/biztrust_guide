@@ -27,13 +27,21 @@ on each, so that no control here measures a source the real runner would refuse 
   AHEAD        both refs at a commit synthesised ON TOP of the baseline - the world after some
                other package merges. The fixture must be the same tree in all three.
 
-AND THE CONTROL THAT MAKES THE OTHER SIX MEAN SOMETHING: the builder AS IT STOOD BEFORE THE
-REPAIR, run against the BEHIND source. A copy of the repository has the one repaired line put back
-to what it was, the builder is loaded from that copy, and BOTH halves of the pair are then
-expected GREEN - the mutated half staying green IS the defect, because green there means the
-mutation was never reached. Without it the six above would be six green lights with nothing to
-compare them against. The mutation asserts the repaired line is present before replacing it, so a
-revert of #360, or a rewording of it, fails here rather than passing quietly.
+TWO BUILDERS, SO TWELVE CONTROLS: the repaired builder and the builder AS IT STOOD BEFORE THE
+REPAIR, each against all three sources. A copy of the repository has the one repaired line put
+back to what it was and the pre-repair builder is loaded from that copy. The mutation asserts the
+repaired line is present before replacing it, so a revert of #360, or a rewording of it, fails
+here rather than passing quietly.
+
+ONLY ONE COLUMN OF THAT GRID DISCRIMINATES, AND RUNNING THE WHOLE GRID IS HOW THAT IS MEASURED
+RATHER THAN CLAIMED. Five of the six pre-repair cells behave exactly as the repaired ones do: on a
+source whose `main` is AT the recorded baseline the old start point IS the baseline, and on one
+AHEAD of it the baseline is still an ancestor of the old start point, so the fixture reproduces
+LAG_EXPECTED either way. The sixth cell - PRE-REPAIR against the BEHIND source - is the defect:
+both halves stay GREEN, and the mutated half staying green is the whole of it, because green there
+means the mutation was never reached. So the BEHIND column and the pre-repair row are what tell
+the repaired builder from the broken one; the other two columns establish INVARIANCE, which is a
+different thing and is easy to mistake for a repair being measured three times.
 
 WHAT COMES FROM THE COPY IS ONE FUNCTION. `sys.path[0]` is this script's own directory, so the
 copy's own `from control_harness import ...` binds THIS tree's harness; the copy supplies the
@@ -44,9 +52,9 @@ file. A control on a fixture builder that measured its own copy of that builder 
 nothing. The one deliberate copy is the reverted line above, and it is written as a mutation of
 the real file for exactly that reason.
 
-NOT WIRED INTO CI, deliberately, as wp111 to wp117's runners are not: twelve clones of this
-repository - one unmutated, three source checkouts and eight fixtures - a full copy of it for
-the pre-repair builder, and nine runs of the module suite on top. Minutes of work on every push. A
+NOT WIRED INTO CI, deliberately, as wp111 to wp117's runners are not: sixteen clones of this
+repository - one unmutated, three source checkouts and twelve fixtures - a full copy of it for the
+pre-repair builder, and thirteen runs of the module suite on top. Minutes of work on every push. A
 control script that nothing runs looks like evidence and is not - run this before touching
 `clone_with_a_later_package`, and before believing anything WP-112's runner reports about a source
 that is not the one it was last run against.
@@ -135,25 +143,27 @@ def the_builder_before_the_repair(source: Path, holder: Path) -> Callable[..., P
     return module.clone_with_a_later_package
 
 
-def pair(label: str) -> list[tuple[str, Callable[[Path], None], str | None]]:
-    """The two controls WP-112 declares for its later-merge fixture, named for one source."""
+def pair(source_label: str, builder_label: str,
+         *, defect_cell: bool) -> list[tuple[str, Callable[[Path], None], str | None]]:
+    """The two controls WP-112 declares, named for one cell of the source-by-builder grid.
+
+    `defect_cell` is the ONE cell #360 is about, and it inverts the second control's expectation:
+    everywhere else the mutation must fail the test it targets, and there it must not, because the
+    reading never reaches the line the mutation edits.
+    """
+    head = f"{source_label} SOURCE, {builder_label} BUILDER"
+    tail = (" - GREEN, and THAT is the defect: the mutation is never reached"
+            if defect_cell else "")
     return [
-        (f"{label} SOURCE: the later-merge fixture, unmutated", unmutated, None),
-        (f"{label} SOURCE: the same fixture with the corroboration required to be the TIP",
-         the_corroboration_required_to_be_the_tip, LIVE_TEST),
+        (f"{head}: the later-merge fixture, unmutated", unmutated, None),
+        (f"{head}: the same fixture with the corroboration required to be the TIP{tail}",
+         the_corroboration_required_to_be_the_tip, None if defect_cell else LIVE_TEST),
     ]
 
 
-# Both halves expect GREEN, and the second one is the whole point: with the pre-repair builder the
-# mutation is never reached, so the control that is supposed to bite reports nothing failing.
-DEFECT_PAIR = [
-    ("THE BUILDER BEFORE THE REPAIR, BEHIND SOURCE: the fixture unmutated - green here too, which "
-     "is why the green half of the pair never caught this",
-     unmutated, None),
-    ("THE BUILDER BEFORE THE REPAIR, BEHIND SOURCE: the same fixture with the corroboration "
-     "required to be the TIP - green, and THAT is the defect: the mutation is never reached",
-     the_corroboration_required_to_be_the_tip, None),
-]
+def slug(*parts: str) -> str:
+    """A directory-safe tag, so two cells never build a fixture at the same path."""
+    return "_".join(part.lower().replace(" ", "_").replace("-", "_") for part in parts)
 
 
 def main() -> int:
@@ -174,21 +184,26 @@ def main() -> int:
                     "commit-tree", f"{baseline}^{{tree}}", "-p", baseline, "-m", LATER_IN_SOURCE)
     point_main(ahead, local=later, published=later)
 
+    # THE WHOLE GRID, and not only the cell the defect lives in. Running the pre-repair builder
+    # against all three sources is what turns "the AT BASELINE and AHEAD pairs cannot see this
+    # defect" from a sentence into a measurement: those four cells behave IDENTICALLY under both
+    # builders, so the BEHIND column is the only one that tells the repaired builder from the
+    # broken one, and a reader who assumed all three columns were measuring the repair can see
+    # from the output that they are not.
     total = 0
-    for label, built_from in (("BEHIND", behind), ("AT BASELINE", at_baseline), ("AHEAD", ahead)):
-        controls = pair(label)
-        total += len(controls)
-        bad += suite_controls(
-            controls,
-            lambda name, root=built_from, tag=label.lower().replace(" ", "_"):
-                clone_with_a_later_package(root, holder, f"{tag}_{name}"),
-            suite, hole=HOLE_PLAIN)
-
-    before = the_builder_before_the_repair(source, holder)
-    total += len(DEFECT_PAIR)
-    bad += suite_controls(DEFECT_PAIR,
-                          lambda name: before(behind, holder, f"before_the_repair_{name}"),
-                          suite, hole=HOLE_PLAIN)
+    for builder_label, build in (("REPAIRED", clone_with_a_later_package),
+                                 ("PRE-REPAIR", the_builder_before_the_repair(source, holder))):
+        for source_label, built_from in (("BEHIND", behind), ("AT BASELINE", at_baseline),
+                                         ("AHEAD", ahead)):
+            defect_cell = builder_label == "PRE-REPAIR" and source_label == "BEHIND"
+            controls = pair(source_label, builder_label, defect_cell=defect_cell)
+            total += len(controls)
+            bad += suite_controls(
+                controls,
+                lambda name, root=built_from, builder=build,
+                tag=slug(builder_label, source_label):
+                    builder(root, holder, f"{tag}_{name}"),
+                suite, hole=HOLE_PLAIN)
 
     return summarise(total, bad)
 
